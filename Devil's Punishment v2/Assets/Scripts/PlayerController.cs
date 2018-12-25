@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Climbable")
         {
             isClimbing = true;
+            rigidbody.useGravity = false;
         }
     }
 
@@ -140,7 +141,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Climbable")
         {
+            transform.position += transform.forward * 0.5f;
             isClimbing = false;
+            rigidbody.useGravity = true;
         }
     }
 }
