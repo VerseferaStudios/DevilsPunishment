@@ -1,0 +1,144 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Guns : MonoBehaviour
+{
+    //Animation times
+    public float[] idleTime;
+    public float[] fireTime;
+    public float[] reloadingTime;
+    public float[] sightTime;
+
+    //Gun statistics
+    public float reloadRate;
+    public float fireRate;
+    public float damage;
+    public float range;
+    public float clipSize;
+    public float ammo;
+
+    //Time tracking
+    private float fire;
+    private float reloadTime;
+
+    public string gunType;
+
+    private bool downSight;
+    private bool reloading = false;
+    private bool idle = true;
+
+    public Text screenDisplay;
+
+    private RaycastHit hit;
+
+    public GameObject muzzleFlash;
+    public GameObject scuffMark;
+    public GameObject bloodSplatter;
+    public GameObject firePoint;
+
+    public Animator anim;
+
+    //Temp
+    public float invatoryAmmo;
+
+    void Update()
+    {
+        Debug.DrawRay(firePoint.transform.position, transform.TransformDirection(Vector3.forward), new Vector4(0, 0, 0, 1));
+
+        //Show ammo
+        screenDisplay.text = ammo + "/" + invatoryAmmo;
+
+        if (Input.GetMouseButtonDown(0) && Time.realtimeSinceStartup - fire > fireRate && ammo > 0 && gunType == "Manual" || Input.GetMouseButton(0) && Time.realtimeSinceStartup - fire > fireRate && ammo > 0 && gunType == "Automatic" || Input.GetMouseButtonDown(0) && Time.realtimeSinceStartup - fire > fireRate && ammo > 0 && gunType == "Spread")
+        {
+            ammo -= 1;
+            muzzleFlash.SetActive(true);
+            fire = Time.realtimeSinceStartup;
+            idle = false;
+
+            //Cut off reloading
+            if (reloading == true)
+            {
+                reloading = false;
+            }
+
+            if (downSight == false)
+                anim.Play("prisonner armature|prisonner armatureAction_001", 0, fireTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+
+            //Fire bullet
+            if (Physics.Raycast(firePoint.transform.position, transform.TransformDirection(Vector3.forward), out hit, 100) && hit.transform.tag == "Enemy")
+            {
+                hit.transform.GetComponent<EnemyStats>().hp -= damage;
+                Instantiate(bloodSplatter, hit.point, hit.transform.rotation);
+            }
+            else if (Physics.Raycast(firePoint.transform.position, transform.TransformDirection(Vector3.forward), out hit, 100))
+            {
+                Instantiate(scuffMark, hit.point, hit.transform.rotation);
+            }
+        }
+
+        //Start reloading
+        if (Input.GetKeyDown(KeyCode.R) && ammo < clipSize && invatoryAmmo > 0 && reloading == false)
+        {
+            reloading = true;
+            reloadTime = Time.realtimeSinceStartup;
+            idle = false;
+
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, reloadingTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+
+        //Use scope
+        if (Input.GetMouseButton(1) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length < sightTime[0] && downSight == false && Time.realtimeSinceStartup - fire > fireRate)
+        {
+            downSight = true;
+            idle = false;
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, sightTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+        if (Input.GetMouseButton(1) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length > sightTime[1] && downSight == true)
+        {
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, sightTime[1] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+        else if (Input.GetMouseButton(1) == false && downSight == true && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length > sightTime[2])
+        {
+            idle = true;
+            downSight = false;
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, idleTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+
+        //Calculate new ammo
+        if (Time.realtimeSinceStartup - reloadTime > reloadRate && reloading == true)
+        {
+            invatoryAmmo -= (clipSize - ammo);
+            ammo = clipSize;
+
+            if (invatoryAmmo < 0)
+            {
+                ammo += invatoryAmmo;
+                invatoryAmmo = 0;
+            }
+
+            reloading = false;
+        }
+
+        //Remove muzzle flash
+        if (Time.realtimeSinceStartup - fire > 0.1 && muzzleFlash.activeSelf == true)
+            muzzleFlash.SetActive(false);
+
+        //Keep animation in idle
+        if (idle == true && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length >= idleTime[1] && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length <= (idleTime[1] + 0.1))
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, idleTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+
+        //Rest Idle
+        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length >= fireTime[1] && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length <= (fireTime[1] + 0.1))
+        {
+            idle = true;
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, idleTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length >= reloadingTime[1] && anim.GetCurrentAnimatorStateInfo(0).normalizedTime * anim.GetCurrentAnimatorStateInfo(0).length <= (reloadingTime[1] + 0.1))
+        {
+            idle = true;
+            anim.Play("prisonner armature|prisonner armatureAction_001", 0, idleTime[0] / anim.GetCurrentAnimatorStateInfo(0).length);
+        }
+    }
+}
