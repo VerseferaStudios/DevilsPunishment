@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Health : MonoBehaviour
+{
+
+    public float hp = 100;
+    public float lowHp = 5;
+
+    private float xScale;
+
+    public GameObject redScreen;
+    public GameObject hpBar;
+
+    void Awake()
+    {
+        xScale = hpBar.transform.localScale.x;
+    }
+
+    void Update()
+    {
+        //Just a fail safe
+        if (hp > 100)
+            hp = 100;
+
+        //Set the hp bars scale
+        hpBar.transform.localScale = new Vector3((hp/100 * xScale), hpBar.transform.localScale.y, hpBar.transform.localScale.z);
+
+        //Making screen red
+        if (hp <= lowHp && redScreen.activeSelf == false)
+            redScreen.SetActive(true);
+
+        //Clearing screen up
+        else if (hp > lowHp && redScreen.activeSelf == true)
+            redScreen.SetActive(false);
+
+        //Don't have the spectate code but it should look somethinng like this
+        //if (hp <= 0)
+            //Anim.Setbool("Dead", true);
+            //alive = false;
+            //spectateCamOne.setActive(true);
+
+    }
+}
