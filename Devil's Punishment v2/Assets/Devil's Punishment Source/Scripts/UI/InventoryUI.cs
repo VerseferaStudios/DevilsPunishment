@@ -1,0 +1,104 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class InventoryUI : MonoBehaviour
+{
+
+    public Inventory inventory;
+
+    private int selectedItemIndex;
+
+    public TextMeshProUGUI itemNameText;
+    public TextMeshProUGUI itemDescriptionText;
+
+    public static InventoryUI instance;
+
+    public InventorySlotUI[] inventorySlots;
+
+    private RectTransform rectTransform;
+
+    void Awake() {
+        instance = this;
+        rectTransform = GetComponent<RectTransform>();
+    }
+
+    void Start() {
+    }
+
+    void Update() {
+        DrawInventory();
+    }
+
+    public void SetSelectedItemIndex(int i) {
+        selectedItemIndex = i;
+        UpdateTooltip();
+    }
+
+    public void Show() {
+        rectTransform.anchoredPosition = new Vector3(64,0,0);
+    }
+
+    public void Hide() {
+        rectTransform.anchoredPosition = new Vector3(-3000,0,0);
+    }
+
+    private string QuantityTextGenerator(int stack, int maxStackSize) {
+
+        string ret = "";
+        if(stack == 0) {ret="<color=red>";}
+        else if(stack == maxStackSize) {ret="<color=green>";}
+
+        ret += stack;
+        return ret;
+    }
+
+    private void DrawInventory() {
+        for(int i = 0; i < inventory.inventory.Count; i++) {
+            if(inventory.inventory[i] != null && inventory.inventory[i].item != null) {
+                inventorySlots[i].SetItemContained(true);
+                inventorySlots[i].itemImage.sprite = inventory.inventory[i].item.itemIcon;
+                inventorySlots[i].itemImage.color = inventory.inventory[i].item.color;
+                inventorySlots[i].quantityText.text = QuantityTextGenerator(inventory.inventory[i].stack, inventory.inventory[i].item.maxStackSize);
+            } else {
+                inventorySlots[i].SetItemContained(false);
+            }
+
+        }
+
+        if(inventory.equippedGun != null) {
+            inventorySlots[inventory.inventory.Count].SetItemContained(true);
+            inventorySlots[inventory.inventory.Count].itemImage.sprite = inventory.equippedGun.itemIcon;
+            inventorySlots[inventory.inventory.Count].quantityText.text = QuantityTextGenerator(inventory.GetEquippedGunAmmo(), -1);
+
+
+        } else {
+            inventorySlots[inventory.inventory.Count].SetItemContained(false);
+        }
+    }
+
+    public void ClearSelection() {
+        selectedItemIndex = -1;
+        itemNameText.text = "";
+        itemDescriptionText.text = "--";
+    }
+
+    private void UpdateTooltip() {
+        Item item = inventory.GetItemFromIndex(selectedItemIndex);
+
+        if(item != null) {
+
+            itemNameText.text = item.name;
+            itemDescriptionText.text = item.description;
+            return;
+        }
+
+        itemNameText.text = "";
+        itemDescriptionText.text = "--";
+    }
+
+
+
+}
