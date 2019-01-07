@@ -14,8 +14,8 @@ public class MedkitItem : Item
         Debug.Log("Medkit used! Player healed by " + healAmount + " health points.");
 
         Player player = Player.instance;
-        HealthScript healthScript = player.GetComponent<HealthScript>();
-        healthScript.IncreaseHealth(healAmount, timeToApply);
+        Health health = player.GetComponent<Health>();
+        health.IncreaseHealth(healAmount, timeToApply);
 
         return true; //Medkits are consumed upon usage
     }
