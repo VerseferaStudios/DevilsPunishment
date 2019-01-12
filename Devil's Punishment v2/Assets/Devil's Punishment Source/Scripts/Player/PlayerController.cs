@@ -9,8 +9,13 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
 
+    public ToggleHold sprintTH;
+    public ToggleHold crouchTH;
+
     [Range(.1f, 1.0f)]
     public float lookSensitivity = 1.0f;
+    [Range(.1f, 1.0f)]
+    public float lookSensitivityAimingMultiplier = .5f;
     public float lookSensitivityHorizontal = 3.0f;
     public float lookSensitivityVertical = 4.0f;
     public bool invertY;
@@ -30,11 +35,14 @@ public class PlayerController : MonoBehaviour
     private float animationSpeed;
     private bool isCrouching;
     private bool isSprinting;
+    private bool isMoving;
 
     private float horizontalAngle;
     private float verticalAngle;
 
     private float verticalAngleSubtractive;
+
+    private GunController gunController;
 
     public static PlayerController instance;
 
@@ -46,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
+        gunController = GunController.instance;
 
     }
 
@@ -74,6 +83,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool IsSprinting() {return isSprinting;}
+    public bool IsCrouching() {return isCrouching;}
+    public bool IsMoving() {return isMoving;}
 
     public void ToggleCrouch() {
         isCrouching = !isCrouching;
@@ -86,15 +97,38 @@ public class PlayerController : MonoBehaviour
         if(inputEnabled) {
             movementInputRaw = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-            if(Input.GetButtonDown("Crouch")) {
-                ToggleCrouch();
+            switch(sprintTH) {
+                case ToggleHold.TOGGLE:
+                    if(Input.GetButtonDown("Crouch")){
+                        ToggleCrouch();
+                    }
+                break;
+                default:
+                case ToggleHold.HOLD:
+                    isCrouching = Input.GetButton("Crouch");
+                break;
             }
 
-            isSprinting = Input.GetButton("Sprint") && (movementInputRaw.y > 0);
 
 
-            horizontalAngle += Input.GetAxisRaw("Mouse X") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal;
-            verticalAngle += (invertY? 1.0f : -1.0f) * Input.GetAxisRaw("Mouse Y") * Time.deltaTime * lookSensitivity * lookSensitivityVertical;
+            switch(sprintTH) {
+                case ToggleHold.TOGGLE:
+                    if(Input.GetButtonDown("Sprint")){
+                        ToggleSprinting();
+                    }
+                break;
+                default:
+                case ToggleHold.HOLD:
+                    isSprinting = Input.GetButton("Sprint");
+                break;
+            }
+
+            if(movementInputRaw.y <= 0) { isSprinting = false; }
+
+            float aimMultiplier = Mathf.Lerp(1.0f, lookSensitivityAimingMultiplier, gunController.GetAimingCoefficient());
+
+            horizontalAngle += Input.GetAxisRaw("Mouse X") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal * aimMultiplier;
+            verticalAngle += (invertY? 1.0f : -1.0f) * Input.GetAxisRaw("Mouse Y") * Time.deltaTime * lookSensitivity * lookSensitivityVertical * aimMultiplier;
         } else {
             movementInputRaw = Vector2.zero;
         }
@@ -105,7 +139,8 @@ public class PlayerController : MonoBehaviour
         Vector2 movementDirection = movementInputRaw.normalized;
         float generalSpeedMultiplier = 1.0f *
             (isCrouching? .5f : 1.0f) *
-            (isSprinting? 2f : 1.0f);
+            (isSprinting? 2f : 1.0f) *
+            (1.0f - .5f * gunController.GetAimingCoefficient());
 
         float targetSpeed = movementSpeed * generalSpeedMultiplier;
         float targetAnimationSpeed = movementDirection.sqrMagnitude * (isSprinting? 2.0f : 1.0f) * Mathf.Sign(movementInputRaw.y);
@@ -116,6 +151,10 @@ public class PlayerController : MonoBehaviour
         Vector3 velocity =
         ((movementDirection.y * transform.forward) + (movementDirection.x * transform.right))
          * speed * Time.deltaTime;
+
+         Debug.Log(velocity.sqrMagnitude);
+
+        isMoving = (velocity.sqrMagnitude > 0f);
 
         controller.Move(velocity);
 
