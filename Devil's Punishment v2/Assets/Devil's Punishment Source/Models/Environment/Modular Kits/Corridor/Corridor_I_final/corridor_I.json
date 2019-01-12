@@ -1,0 +1,70 @@
+{
+    "format": {
+        "version": "1.0"
+    },
+    "shaders": {
+        "Main shader": {
+            "parameters": {
+                "Common Parameters": {
+                    "ao_intensity": 0.75,
+                    "emissive_intensity": 1,
+                    "horizonFade": 1.2999999523162842,
+                    "nbSamples": 16
+                },
+                "Parallax Occlusion Mapping": {
+                    "maxPOMSamples": 16,
+                    "minPOMSamples": 4,
+                    "pomStrength": 1,
+                    "usePOM": false
+                },
+                "Subsurface Scattering Parameters": {
+                    "sssColor": [
+                        0.7009999752044678,
+                        0.3009999990463257,
+                        0.3050000071525574
+                    ],
+                    "sssEnabled": true,
+                    "sssScale": 0.5,
+                    "sssType": 1
+                }
+            },
+            "shader": "pbr-metal-rough",
+            "shaderInstance": "Main shader"
+        }
+    },
+    "texturesets": {
+        "Floor.002": {
+            "shader": "Main shader"
+        },
+        "Pipe1L.001": {
+            "shader": "Main shader"
+        },
+        "Pipe1M.002": {
+            "shader": "Main shader"
+        },
+        "Roof.016": {
+            "shader": "Main shader"
+        },
+        "RoofSupp1.016": {
+            "shader": "Main shader"
+        },
+        "Vent.002": {
+            "shader": "Main shader"
+        },
+        "Vent2.016": {
+            "shader": "Main shader"
+        },
+        "Wall1.002": {
+            "shader": "Main shader"
+        },
+        "Wall2.002": {
+            "shader": "Main shader"
+        },
+        "WallProp1.002": {
+            "shader": "Main shader"
+        },
+        "WallSkirt1": {
+            "shader": "Main shader"
+        }
+    }
+}
