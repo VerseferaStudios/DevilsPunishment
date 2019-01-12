@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         }
         VerticalLocomotion();
         Turning();
-        Animation();
+        //Animation();
         CameraUpdate();
     }
 
@@ -151,8 +151,6 @@ public class PlayerController : MonoBehaviour
         Vector3 velocity =
         ((movementDirection.y * transform.forward) + (movementDirection.x * transform.right))
          * speed * Time.deltaTime;
-
-         Debug.Log(velocity.sqrMagnitude);
 
         isMoving = (velocity.sqrMagnitude > 0f);
 

@@ -6,8 +6,10 @@ public class GunController : MonoBehaviour
 {
 
     public LayerMask hittableMask;
+    public Transform targetPoint;
 
     public Animator animator;
+    public Animator handsAnimator;
     public ParticleSystem muzzleFlashParticles;
     public ParticleSystem ejectionParticles;
     public GameObject hitParticles;
@@ -22,7 +24,6 @@ public class GunController : MonoBehaviour
 
     public float swayAmount = 2.0f;
     public float swaySpeed = 3.0f;
-
 
     bool trigger = false;
     bool fire = false;
@@ -45,10 +46,11 @@ public class GunController : MonoBehaviour
 
     float bulletSpreadCoefficient;
 
-    float sprintShootTimer;
+    float shootResetTimer;
 
     private Vector2 recoil;
-    private new AudioSource audioSource;
+
+    private SoundManager soundManager;
 
     public static GunController instance;
 
@@ -60,7 +62,7 @@ public class GunController : MonoBehaviour
         defaultFOV = Camera.main.fieldOfView;
         playerController = PlayerController.instance;
         timeBetweenShots = 1.00f/fireRate;
-        audioSource = GetComponent<AudioSource>();
+        soundManager = SoundManager.instance;
     }
 
     void Update() {
@@ -83,7 +85,9 @@ public class GunController : MonoBehaviour
         crouching = playerController.IsCrouching();
         trigger = Input.GetButton("Fire1");
         triggerReload = Input.GetButtonDown("Reload");
-        aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+        if(running) {aiming = 0f; } else {
+            aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+        }
     }
 
     void Shooting() {
@@ -97,19 +101,20 @@ public class GunController : MonoBehaviour
         recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
         bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 
-        if(!running) {
-            sprintShootTimer -= Time.deltaTime;
+        if(!running && !reloading) {
+            shootResetTimer -= Time.deltaTime;
         } else {
-            sprintShootTimer = .3f;
+            shootResetTimer = .3f;
         }
 
-        if(!reloading && triggerReload && sprintShootTimer <= 0f) {
+        if(!reloading && triggerReload && shootResetTimer <= 0f) {
 
             StartCoroutine(Reload());
             animator.SetTrigger("Reload");
+            handsAnimator.SetTrigger("Reload");
         }
 
-        if(shootTimer <= 0f && trigger && sprintShootTimer <= 0f) {
+        if(shootTimer <= 0f && trigger && shootResetTimer <= 0f) {
             Fire();
         }
 
@@ -146,7 +151,10 @@ public class GunController : MonoBehaviour
     void Animation() {
         animator.SetFloat("Aiming", aiming);
         animator.SetBool("Running", running);
+        handsAnimator.SetFloat("Aiming", aiming);
+        handsAnimator.SetBool("Running", running);
         animator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+        handsAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
     }
 
     void CameraUpdate() {
@@ -155,10 +163,8 @@ public class GunController : MonoBehaviour
 
     void Fire() {
         animator.SetTrigger("Fire");
+        handsAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
-        muzzleFlashParticles.Play();
-        ejectionParticles.Play();
-        recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
 
         Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
@@ -166,12 +172,20 @@ public class GunController : MonoBehaviour
         RaycastHit hit;
 
         if(Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value)) {
+            targetPoint.position = hit.point;
             Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
+        } else {
+            targetPoint.position = transform.position + transform.forward * 50f;
         }
 
-        bulletSpreadCoefficient += 1.0f - aiming;
+        muzzleFlashParticles.Play();
+        ejectionParticles.Play();
+        soundManager.PlaySound("AssaultRifle", "Shot");
 
-        audioSource.Play();
+
+        recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
+
+        bulletSpreadCoefficient += 1.0f - aiming;
     }
 
     IEnumerator Reload() {
