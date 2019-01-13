@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GunControllerDisplayUI : MonoBehaviour
 {
     public RectTransform crosshairsParent;
     public Color crosshairColor;
+
+    public TextMeshProUGUI clipText;
+    public TextMeshProUGUI clipStockText;
 
     Image[] crosshairs;
     GunController gunController;
@@ -20,6 +24,24 @@ public class GunControllerDisplayUI : MonoBehaviour
 
     void Update() {
         Crosshairs();
+        Ammo();
+    }
+
+    void Ammo() {
+
+        int clip = gunController.GetClip();
+
+        if(clip == 0) {
+            clipText.color = Color.red;
+        } else if(clip == gunController.GetClipSize()) {
+            clipText.color = Color.green;
+        } else {
+            clipText.color = Color.white;
+        }
+        clipText.text = clip + "";
+
+        clipStockText.text = gunController.GetClipStock() + "";
+
     }
 
     void Crosshairs() {

@@ -8,13 +8,18 @@ public class GunController : MonoBehaviour
     public LayerMask hittableMask;
     public Transform targetPoint;
 
-    public Animator animator;
+    public Gun equippedGun;
+
+
     public Animator handsAnimator;
     public ParticleSystem muzzleFlashParticles;
     public ParticleSystem ejectionParticles;
     public GameObject hitParticles;
     public Light muzzleFlashLight;
     PlayerController playerController;
+
+    public Transform muzzle;
+    public Transform ejector;
 
     [Range(1f, 20f)]
     public float fireRate = 10f;
@@ -25,6 +30,13 @@ public class GunController : MonoBehaviour
     public float swayAmount = 2.0f;
     public float swaySpeed = 3.0f;
 
+    [HideInInspector]
+    public bool inputEnabled;
+
+
+    Gun[] guns;
+
+
     bool trigger = false;
     bool fire = false;
     bool reloading = false;
@@ -32,6 +44,7 @@ public class GunController : MonoBehaviour
     bool running = false;
     bool moving = false;
     bool crouching = false;
+    bool raised = false;
     float aiming = 0;
 
     Vector3 standardPosition = new Vector3(0, -1.55f, 0);
@@ -54,6 +67,15 @@ public class GunController : MonoBehaviour
 
     public static GunController instance;
 
+    private Inventory inventory;
+
+    private Animator gunAnimator;
+
+    private int clipStock;
+    private int clipSize;
+    private int clip;
+    private string ammoName;
+
     void Awake() {
         instance = this;
     }
@@ -61,16 +83,75 @@ public class GunController : MonoBehaviour
     void Start() {
         defaultFOV = Camera.main.fieldOfView;
         playerController = PlayerController.instance;
-        timeBetweenShots = 1.00f/fireRate;
+        InitTimeBetweenShots();
         soundManager = SoundManager.instance;
+        guns = GetComponentsInChildren<Gun>();
+        foreach(Gun gun in guns) {
+            gun.gameObject.SetActive(false);
+        }
+        inventory = Inventory.instance;
+    }
+
+    void InitTimeBetweenShots() {
+        timeBetweenShots = 1.00f/fireRate;
     }
 
     void Update() {
         GatherInput();
-        Shooting();
-        Sway();
+        if(equippedGun != null) {
+            Shooting();
+            Sway();
+        }
         Animation();
         CameraUpdate();
+    }
+
+    public int GetClip() {
+        return clip;
+    }
+
+    public int GetClipSize() {
+        return clipSize;
+    }
+
+    public int GetClipStock() {
+        return clipStock;
+    }
+
+    public void InitGun() {
+
+        raised = false;
+
+        equippedGun = null;
+
+        foreach(Gun gun in guns) {
+            gun.gameObject.SetActive(false);
+        }
+
+        if(inventory.equippedGun != null) {
+
+            string gunName = inventory.equippedGun.name;
+
+            foreach(Gun gun in guns) {
+                if(gun.gunItem.name == gunName) {
+                    equippedGun = gun;
+                    equippedGun.gameObject.SetActive(true);
+                    raised = true;
+                    recoilAmount = equippedGun.gunItem.recoilAmount;
+                    fireRate = equippedGun.gunItem.fireRate;
+                    clip = 0;
+                    clipSize = equippedGun.gunItem.clipSize;
+                    clipStock = inventory.GetEquippedGunAmmo();
+                    ammoName = equippedGun.gunItem.ammunitionType.name;
+                    gunAnimator = equippedGun.GetComponent<Animator>();
+                    if(equippedGun.gunItem.overrideController != null) {
+                        handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 
     public float GetAimingCoefficient() {return aiming;}
@@ -80,17 +161,27 @@ public class GunController : MonoBehaviour
     }
 
     void GatherInput() {
-        running = playerController.IsSprinting();
-        moving = playerController.IsMoving();
-        crouching = playerController.IsCrouching();
-        trigger = Input.GetButton("Fire1");
-        triggerReload = Input.GetButtonDown("Reload");
-        if(running) {aiming = 0f; } else {
-            aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+        if(inputEnabled) {
+            running = playerController.IsSprinting();
+            moving = playerController.IsMoving();
+            crouching = playerController.IsCrouching();
+            trigger = Input.GetButton("Fire1");
+            triggerReload = Input.GetButtonDown("Reload");
+            if(running||reloading) {aiming = 0f; } else {
+                aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+            }
         }
     }
 
     void Shooting() {
+
+        clipStock = inventory.GetEquippedGunAmmo();
+
+        //Debug.Log(clip + "/" + clipStock + "===" + clipSize);
+        //Debug.Log(reloading);
+
+        muzzle.position = equippedGun.muzzle.position;
+        ejector.position = equippedGun.ejector.position;
 
         float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
 
@@ -107,20 +198,25 @@ public class GunController : MonoBehaviour
             shootResetTimer = .3f;
         }
 
-        if(!reloading && triggerReload && shootResetTimer <= 0f) {
+        if(inputEnabled) {
 
-            StartCoroutine(Reload());
-            animator.SetTrigger("Reload");
-            handsAnimator.SetTrigger("Reload");
-        }
+            if(!reloading && (triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
 
-        if(shootTimer <= 0f && trigger && shootResetTimer <= 0f) {
-            Fire();
+                Debug.Log("ReloadTriggered!");
+
+                StartCoroutine(Reload());
+                gunAnimator.SetTrigger("Reload");
+                handsAnimator.SetTrigger("Reload");
+                shootResetTimer = .3f;
+            }
+
+            if(shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
+                Fire();
+            }
+
         }
 
         shootTimer -= Time.deltaTime;
-
-
 
         muzzleFlashLight.intensity = 2f*Mathf.Clamp01(shootTimer * fireRate);
 
@@ -130,7 +226,7 @@ public class GunController : MonoBehaviour
 
         float swayLimit = 10.0f;
 
-        if(aiming<.5f) {
+        if(aiming<.5f && inputEnabled) {
             swayOffset = new Vector3(
                 Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x*2.0f,
                 Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
@@ -149,11 +245,13 @@ public class GunController : MonoBehaviour
     }
 
     void Animation() {
-        animator.SetFloat("Aiming", aiming);
-        animator.SetBool("Running", running);
+        gunAnimator.SetFloat("Aiming", aiming);
+        gunAnimator.SetBool("Running", running);
+        gunAnimator.SetBool("Raised", raised);
         handsAnimator.SetFloat("Aiming", aiming);
         handsAnimator.SetBool("Running", running);
-        animator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+        handsAnimator.SetBool("Raised", raised);
+        gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
         handsAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
     }
 
@@ -162,7 +260,7 @@ public class GunController : MonoBehaviour
     }
 
     void Fire() {
-        animator.SetTrigger("Fire");
+        gunAnimator.SetTrigger("Fire");
         handsAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
 
@@ -184,7 +282,7 @@ public class GunController : MonoBehaviour
 
 
         recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
-
+        clip--;
         bulletSpreadCoefficient += 1.0f - aiming;
     }
 
@@ -192,11 +290,28 @@ public class GunController : MonoBehaviour
 
         reloading = true;
 
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(1.5f);
 
-        while (animator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
-        {
-            yield return null;
+        bool reloadAnimationPlayed = false;
+
+        //while(!reloadAnimationPlayed) {
+
+            while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
+            {
+                reloadAnimationPlayed = true;
+                yield return null;
+            }
+
+        //}
+
+        if(clipStock >= clipSize-clip) {
+            Debug.Log("reloading with stock left: " + ammoName);
+            inventory.DropItem(ammoName, clipSize-clip);
+            clip = clipSize;
+        } else {
+            Debug.Log("almost empty!");
+            clip = clipStock;
+            inventory.DropItemAll(ammoName);
         }
 
         reloading = false;

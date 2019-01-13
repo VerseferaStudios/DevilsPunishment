@@ -54,12 +54,15 @@ public class Inventory : MonoBehaviour
     public static Inventory instance;
     public static SortType sortType;
 
+    private GunController gunController;
+
     private void Awake() {
         instance = this;
     }
 
     private void Start() {
         Sort();
+        gunController = GunController.instance;
     }
 
     public Item GetItemFromIndex(int index) {
@@ -72,7 +75,13 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(Item item, int stack) {
+    public void AddItem(Item item, int stack=1) {
+
+        if(item is GunItem) {
+            equippedGun = item as GunItem;
+            gunController.InitGun();
+            return;
+        }
 
         for(int k = 0; k < stack; k++) {
 
@@ -98,9 +107,18 @@ public class Inventory : MonoBehaviour
 
     }
 
+    public void DropItemAll(string name) {
+        int[] indexes = GetIndexesOfItem(name);
+
+        foreach(int i in indexes) {
+            DropItemAll(i);
+        }
+    }
+
     public void DropItemAll(int index) {
         if(index>=inventory.Count) {
             equippedGun = null;
+            gunController.InitGun();
         } else if(index > -1) {
             if(inventory[index].item != null) {
                 inventory.RemoveAt(index);
@@ -110,23 +128,45 @@ public class Inventory : MonoBehaviour
 
     }
 
+    public void DropItem(string name, int amount = 1) {
+
+        int x = amount;
+
+        while(x > 0) {
+
+            int index = GetIndexOfItem(name);
+
+            if(index > -1) {
+                DropItem(index, 1);
+                x--;
+            } else {
+                break;
+            }
+
+        }
+
+        Sort();
+
+    }
+
     public void DropItem(int index, int amount = 1) {
 
-        //for(int i = 0; i < amount; i++) {
+        for(int i = 0; i < amount; i++) {
 
             if(index>=inventory.Count) {
                 equippedGun = null;
-                //break;
+                gunController.InitGun();
+                return;
             } else if(index > -1) {
-                if(inventory[index].item != null&&inventory[index].stack > 1) {
+                if(inventory[index].item != null && inventory[index].stack > 1) {
                     inventory[index].stack--;
                 } else {
                     DropItemAll(index);
-            //        break;
+                    return;
                 }
             }
 
-        //}
+        }
 
     }
 

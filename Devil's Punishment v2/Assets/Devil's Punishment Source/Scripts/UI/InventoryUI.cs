@@ -7,9 +7,8 @@ using TMPro;
 public class InventoryUI : MonoBehaviour
 {
 
-    public Inventory inventory;
-
     private int selectedItemIndex;
+
 
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI itemDescriptionText;
@@ -20,12 +19,17 @@ public class InventoryUI : MonoBehaviour
 
     private RectTransform rectTransform;
 
+    Inventory inventory;
+    GunController gunController;
+
     void Awake() {
         instance = this;
         rectTransform = GetComponent<RectTransform>();
     }
 
     void Start() {
+        gunController = GunController.instance;
+        inventory = Inventory.instance;
     }
 
     void Update() {
@@ -71,7 +75,7 @@ public class InventoryUI : MonoBehaviour
         if(inventory.equippedGun != null) {
             inventorySlots[inventory.inventory.Count].SetItemContained(true);
             inventorySlots[inventory.inventory.Count].itemImage.sprite = inventory.equippedGun.itemIcon;
-            inventorySlots[inventory.inventory.Count].quantityText.text = QuantityTextGenerator(inventory.GetEquippedGunAmmo(), -1);
+            inventorySlots[inventory.inventory.Count].quantityText.text = QuantityTextGenerator(gunController.GetClip(), -1);
 
 
         } else {

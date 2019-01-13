@@ -6,6 +6,15 @@ using UnityEngine;
 public class GunItem : Item
 {
     public Item ammunitionType;
-    public float damage;
+
+    public int clipSize;
+
+    [Range(1f, 20f)]
+    public float fireRate = 10f;
+
+    [Range(25, 45)]
+    public float recoilAmount = 32f;
+
+    public RuntimeAnimatorController overrideController;
 
 }
