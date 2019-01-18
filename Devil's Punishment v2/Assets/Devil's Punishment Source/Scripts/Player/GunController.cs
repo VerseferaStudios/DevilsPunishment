@@ -92,6 +92,11 @@ public class GunController : MonoBehaviour
         inventory = Inventory.instance;
     }
 
+    void SetFireRate(float f) {
+        fireRate = f;
+        InitTimeBetweenShots();
+    }
+
     void InitTimeBetweenShots() {
         timeBetweenShots = 1.00f/fireRate;
     }
@@ -101,8 +106,8 @@ public class GunController : MonoBehaviour
         if(equippedGun != null) {
             Shooting();
             Sway();
+            Animation();
         }
-        Animation();
         CameraUpdate();
     }
 
@@ -138,7 +143,7 @@ public class GunController : MonoBehaviour
                     equippedGun.gameObject.SetActive(true);
                     raised = true;
                     recoilAmount = equippedGun.gunItem.recoilAmount;
-                    fireRate = equippedGun.gunItem.fireRate;
+                    SetFireRate(equippedGun.gunItem.fireRate);
                     clip = 0;
                     clipSize = equippedGun.gunItem.clipSize;
                     clipStock = inventory.GetEquippedGunAmmo();
