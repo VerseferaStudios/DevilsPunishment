@@ -9,7 +9,7 @@ public class Health : MonoBehaviour
 
     void Awake()
     {
-        HP = 5;
+        HP = 50;
     }
 
     public float GetHP()
