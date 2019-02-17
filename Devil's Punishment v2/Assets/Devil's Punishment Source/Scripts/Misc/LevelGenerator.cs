@@ -8,8 +8,6 @@ public class LevelGenerator : MonoBehaviour {
 	public float offsetMultiplier = 2.0f;
 	public Vector3 offset = Vector3.zero;
 
-    private CorridorGenerator corridorGenerator;
-
 	[System.Serializable]
 	public class TileData {
 
@@ -33,17 +31,7 @@ public class LevelGenerator : MonoBehaviour {
 
 		Debug.Log("Generated");
 
-        //Image Generation
-
-        corridorGenerator = GetComponent<CorridorGenerator>();
-
-        corridorGenerator.GenerateMap();
-
-        map = corridorGenerator.mapTexture;
-
-        //Generation
-
-        foreach (TileData t in tileData) {
+		foreach(TileData t in tileData) {
 			Debug.Log(t.prefab.name + "a/b/l/r" + t.above + t.below + t.left + t.right);
 		}
 
@@ -79,7 +67,7 @@ public class LevelGenerator : MonoBehaviour {
 		for(int x = 0; x < map.width; x++) {
 			for(int y = 0; y < map.height; y++) {
 
-				mapArray[x,y] = !(map.GetPixel(x,y).r>0);
+				mapArray[x,y] = map.GetPixel(x,y).r>0;
 			}
 		}
 	}
