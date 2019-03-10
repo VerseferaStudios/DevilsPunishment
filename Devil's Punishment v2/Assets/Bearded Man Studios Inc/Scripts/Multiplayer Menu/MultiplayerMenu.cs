@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class MultiplayerMenu : MonoBehaviour
 {
+    public InputField userName = null;
 	public InputField ipAddress = null;
 	public InputField portNumber = null;
 	public bool DontChangeSceneOnConnect = false;
@@ -37,6 +38,7 @@ public class MultiplayerMenu : MonoBehaviour
 
 	private void Start()
 	{
+        userName.text = "Default";
 		ipAddress.text = "127.0.0.1";
 		portNumber.text = "15937";
 
@@ -180,6 +182,7 @@ public class MultiplayerMenu : MonoBehaviour
 
 	public void Connected(NetWorker networker)
 	{
+        GameObject.Find("JustForDebugging").GetComponent<DebugVariables>().Username = userName.text;
 		if (!networker.IsBound)
 		{
 			Debug.LogError("NetWorker failed to bind");
