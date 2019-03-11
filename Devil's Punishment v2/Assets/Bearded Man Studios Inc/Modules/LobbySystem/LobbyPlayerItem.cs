@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 {
@@ -11,7 +15,7 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 		public GameObject KickButton;
 		public Image AvatarBG;
 		public Text AvatarID;
-		public InputField PlayerName;
+        public string PlayerName;
 		public Text PlayerTeamID;
 
         public Button[] Buttons;
@@ -23,9 +27,83 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 		public GameObject ThisGameObject;
 
 		public LobbyPlayer AssociatedPlayer { get; private set; }
-		private LobbyManager _manager;
+        [HideInInspector]
+        public LobbyManager _manager;
+/// <summary>
+/// ///////////////////////////
+/// </summary>
+        public string username = "Matt";
+        public string password = "Matt";
+        public string LoginURL = "http://crystalclearsecurity.com/DevilPunishment/login.php";
 
-		public void Init(LobbyManager manager)
+        void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+        }
+
+        // called first
+        void OnEnable()
+        {
+            Debug.Log("OnEnable called");
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            
+            if (scene.name == "Lobby")
+            {
+                StartCoroutine(NetworkConnect());
+                Debug.Log("LOADDDDEEEDDD");
+                //RequestChangeName(PlayerName);
+            }
+            Debug.Log("OnSceneLoaded: " + scene.name);
+            Debug.Log(mode);
+        }
+
+        IEnumerator NetworkConnect()
+        {
+            Debug.Log("Starting Form");
+            WWWForm form = new WWWForm();
+            form.AddField("username", username);
+            form.AddField("password", password);
+            Debug.Log("Requesting");
+            UnityWebRequest www = UnityWebRequest.Post(LoginURL, form);
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("POST successful!");
+                /*StringBuilder sb = new StringBuilder();
+                foreach (System.Collections.Generic.KeyValuePair<string, string> dict in www.GetResponseHeaders())
+                {
+                    sb.Append(dict.Key).Append(": \t[").Append(dict.Value).Append("]\n");
+                }
+
+                Debug.Log(sb.ToString());*/
+
+                Debug.Log(www.downloadHandler.text);
+                string[] tempPlayerName = Regex.Split(www.downloadHandler.text, "\r\n|\r|\n");
+
+                //string tempPlayerName = Regex.Replace(www.downloadHandler.text, @"[^0-9a-zA-Z:,]+", "");
+                RequestChangeName(tempPlayerName);
+            }
+
+        }
+
+/// <summary>
+/// ////////////////
+/// </summary>
+/// <param name="manager"></param>
+        public void Init(LobbyManager manager)
 		{
 			ThisGameObject = gameObject;
 			ThisTransform = transform;
@@ -71,9 +149,9 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 			_manager.ChangeAvatarID(this, nextID);
 		}
 
-		public void RequestChangeName()
+		public void RequestChangeName(string username)
 		{
-			_manager.ChangeName(this, PlayerName.text);
+			_manager.ChangeName(this, username);
 		}
 
 		public void ChangeAvatarID(int id)
@@ -91,7 +169,7 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 
 		public void ChangeName(string name)
 		{
-			PlayerName.text = name;
+			PlayerName = name;
 		}
 
 		public void ChangeTeam(int id)
@@ -106,7 +184,6 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
 
             AvatarBG.raycastTarget = value;
 			PlayerTeamID.raycastTarget = value;
-			PlayerName.interactable = value;
 		}
 
 		public void ToggleObject(bool value)

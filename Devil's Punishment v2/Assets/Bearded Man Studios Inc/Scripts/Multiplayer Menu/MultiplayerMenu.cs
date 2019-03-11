@@ -182,7 +182,6 @@ public class MultiplayerMenu : MonoBehaviour
 
 	public void Connected(NetWorker networker)
 	{
-        GameObject.Find("JustForDebugging").GetComponent<DebugVariables>().Username = userName.text;
 		if (!networker.IsBound)
 		{
 			Debug.LogError("NetWorker failed to bind");
