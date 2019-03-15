@@ -30,12 +30,18 @@ public class LevelGeneratorEditor : Editor {
                 new Rect (rect.x + 80, rect.y, 15, EditorGUIUtility.singleLineHeight),
                 element.FindPropertyRelative ("right"), GUIContent.none);
             EditorGUI.PropertyField (
-				new Rect (rect.x + 100, rect.y, rect.width - 180, EditorGUIUtility.singleLineHeight),
+				new Rect (rect.x + 100, rect.y, rect.width - 250, EditorGUIUtility.singleLineHeight),
 				element.FindPropertyRelative ("prefab"), GUIContent.none);
             EditorGUI.PropertyField (
 				new Rect (rect.width-40, rect.y, 60, EditorGUIUtility.singleLineHeight),
 				element.FindPropertyRelative ("yRotation"), GUIContent.none);
-        };
+            EditorGUI.PropertyField(
+               new Rect(rect.width - 80, rect.y, 40, EditorGUIUtility.singleLineHeight),
+               element.FindPropertyRelative("xRotation"), GUIContent.none);
+            EditorGUI.PropertyField(
+               new Rect(rect.width - 120, rect.y, 40, EditorGUIUtility.singleLineHeight),
+               element.FindPropertyRelative("ID"), GUIContent.none);            
+            };
 	}
 
 	public override void OnInspectorGUI() {
@@ -50,7 +56,7 @@ public class LevelGeneratorEditor : Editor {
 
 		generator.map = EditorGUILayout.ObjectField ("Map Texture", generator.map, typeof(Texture2D), true) as Texture2D;
 
-        GUILayout.Label("N/S/E/W/Prefab/YRotation");
+        GUILayout.Label("N/S/E/W/Prefab/ID/YRotation");
 		list.DoLayoutList ();
 
 
