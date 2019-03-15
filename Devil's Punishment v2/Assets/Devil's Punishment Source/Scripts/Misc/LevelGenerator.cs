@@ -16,10 +16,13 @@ public class LevelGenerator : MonoBehaviour {
 		public bool below;
 		public bool left;
 		public bool right;
+        
 
 		public float yRotation;
+        public float xRotation;
+        public int ID;
 
-		public bool CheckSurroundings(bool a, bool b, bool l, bool r) {
+		public bool CheckSurroundings(bool a, bool b, bool l, bool r) {           
 			return above == a && below == b && left == l && right == r;
 		}
 
@@ -101,18 +104,25 @@ public class LevelGenerator : MonoBehaviour {
 		bool below = mapArray[x, y-1];
 		bool left = mapArray[x-1, y];
 		bool right = mapArray[x+1, y];
+        int ID = 1;
+        print(map.GetPixel(x, y).r *100f);
+        if (map.GetPixel(x, y).r*100f < 50f) {
+            ID = 0;
+        }
 
 		int i = 0;
 
 		foreach(TileData t in tileData) {
-
 			if (t.CheckSurroundings(above,below,left,right)) {
-
-				Debug.Log("fired!");
+                Debug.Log("tile ID/ map ID: "+ t.ID+" "+ ID);
+                if (t.ID == ID) {
+                    continue;
+                }
+                Debug.Log("fired!");
 
 				Vector3 position = offset + t.prefab.transform.position + new Vector3 (x * offsetMultiplier, 0.0f, y * offsetMultiplier);
 
-				GameObject g = Instantiate (t.prefab, position, Quaternion.Euler(new Vector3(0, t.yRotation, 0)));
+				GameObject g = Instantiate (t.prefab, position, Quaternion.Euler(new Vector3(t.xRotation, t.yRotation, 0)));
 				g.name = t.prefab.name.ToLower () + " ( " + x + " , " + y + " )";
 				g.transform.SetParent (transform.GetChild(i));
 			}
