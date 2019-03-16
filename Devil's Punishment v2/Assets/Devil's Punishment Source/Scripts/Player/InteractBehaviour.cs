@@ -24,10 +24,15 @@ public class InteractBehaviour : MonoBehaviour
         InteractableUnFocus();
     }
 
+    private void FixedUpdate()
+    {
+        //SearchForInteractablesInVicinity(); Skitz:: Didn't work to move it here
+    }
+
     void Update() {
 
         SearchForInteractablesInVicinity();
-        if(interactableInVicinity) {
+        if (interactableInVicinity) {
             WhileInteractableFocused();
         }
 
@@ -42,12 +47,12 @@ public class InteractBehaviour : MonoBehaviour
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2.0f, interactableLayer.value);
         if(hitColliders.Length > 0) {
-
+            
             float maxDot = -1.0f;
 
             IInteractable interactableToFocus = null;
-
-            foreach(Collider col in hitColliders) {
+            
+            foreach (Collider col in hitColliders) {
 
                 IInteractable nearbyInteractable = col.GetComponent<IInteractable>();
                 if(nearbyInteractable != null) {
@@ -58,21 +63,22 @@ public class InteractBehaviour : MonoBehaviour
                     float dot = Vector3.Dot(pickupToCam.normalized, camForward.normalized);
 
                     if (dot > maxDot)
-                    {
+                    {                       
                         maxDot = dot;
                         interactableToFocus = nearbyInteractable;
                     }
-
                 }
 
             }
 
-            if (maxDot>.7f) {
+            if (maxDot > .7f) {
                 if(interactableToFocus != null && interactableToFocus != focusedInteractable) {
                     focusedInteractable = interactableToFocus;
                     InteractableFocus();
                 }
-            } else if(interactableInVicinity) {
+            }
+            else if (interactableInVicinity)
+            {
                 InteractableUnFocus();
             }
 
