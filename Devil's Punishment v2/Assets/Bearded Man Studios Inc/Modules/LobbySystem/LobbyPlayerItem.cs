@@ -94,7 +94,7 @@ namespace BeardedManStudios.Forge.Networking.Unity.Lobby
                 string[] tempPlayerName = Regex.Split(www.downloadHandler.text, "\r\n|\r|\n");
 
                 //string tempPlayerName = Regex.Replace(www.downloadHandler.text, @"[^0-9a-zA-Z:,]+", "");
-                RequestChangeName(tempPlayerName);
+                RequestChangeName(tempPlayerName[0]);
             }
 
         }
