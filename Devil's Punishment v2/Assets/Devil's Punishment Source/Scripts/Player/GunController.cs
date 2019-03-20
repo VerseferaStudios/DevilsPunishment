@@ -277,13 +277,21 @@ public class GunController : MonoBehaviour
         if(Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value)) {
             targetPoint.position = hit.point;
             Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
+
+            //This is just for testing a thing in the elimination system, can be removed later / SkitzFist
+            IfEnemyHit(hit);
+
         } else {
             targetPoint.position = transform.position + transform.forward * 50f;
         }
 
         muzzleFlashParticles.Play();
         ejectionParticles.Play();
-        soundManager.PlaySound("AssaultRifle", "Shot");
+        if(soundManager != null)
+        {
+            soundManager.PlaySound("AssaultRifle", "Shot");
+        }
+        
 
 
         recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
@@ -323,4 +331,13 @@ public class GunController : MonoBehaviour
 
     }
 
+    //This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
+    private void IfEnemyHit(RaycastHit hit)
+    {
+        TestEnemy enemyHit = hit.transform.GetComponent<TestEnemy>();
+        if(enemyHit != null)
+        {
+            enemyHit.TakeDamage(2);
+        }
+    }
 }
