@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 102186298}
   m_Layer: 0
-  m_Name: Enemies List
+  m_Name: Enemies Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,6 +334,7 @@ MonoBehaviour:
   amount: 1
   prefab: {fileID: 1466928242125083766, guid: e53358cd2bfbf224086b47d5c831171a, type: 3}
   parent: {fileID: 102186298}
+  enemyList: {fileID: 11400000, guid: b805edabe35696b41906391bd1ae5b85, type: 2}
 --- !u!4 &1418794772
 Transform:
   m_ObjectHideFlags: 0
@@ -1158,7 +1159,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2084899911}
-        m_MethodName: OnPlayerDeath
+        m_MethodName: EngageSystem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1182,9 +1183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3bb3908449c704ea844a74dabe0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creatureHealthDatas:
-  - {fileID: 11400000, guid: a97c831ea03b8e542820470b70c0b5fd, type: 2}
-  enemyList: []
+  enemyList: {fileID: 11400000, guid: b805edabe35696b41906391bd1ae5b85, type: 2}
 --- !u!4 &2084899912
 Transform:
   m_ObjectHideFlags: 0
