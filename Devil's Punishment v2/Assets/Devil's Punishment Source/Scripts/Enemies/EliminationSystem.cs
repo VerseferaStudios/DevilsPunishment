@@ -3,8 +3,7 @@ using System.Collections;
 
 public class EliminationSystem : MonoBehaviour
 {
-    [SerializeField] EnemyList enemyList = null;
-
+    [SerializeField] EliminationSystemEnemyList enemyList = null;
 
     public void EngageSystem()
     {

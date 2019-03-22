@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 public class CreatureHealth : MonoBehaviour
 {
-    [SerializeField] EnemyList eliminationSystem = null;
+    [SerializeField] EliminationSystemEnemyList eliminationSystem = null;
     private TestEnemy thisEnemy = null;
     [SerializeField] CreatureHealthData HealthData = null;
     int maxHealth = 0;
@@ -12,6 +12,16 @@ public class CreatureHealth : MonoBehaviour
 
     public UnityEvent onPlayerDeath = null; //This was just for testing Elimination system. Should be on player instead / SkitzFist
 
+    #region Setters & Getters
+
+    public int GetCurrentHealth() { return currentHealth;  }
+    public void SetCurrentHealth(int value) { currentHealth = value; RefreshText(); }
+
+    public int GetMaxHealth() { return maxHealth; }
+    public void SetMaxHealth(int value) { maxHealth = value; RefreshText(); }
+
+    public CreatureHealthData GetCreatureHealthData() { return HealthData; }
+    #endregion Setters & Getters
 
     private void Start()
     {

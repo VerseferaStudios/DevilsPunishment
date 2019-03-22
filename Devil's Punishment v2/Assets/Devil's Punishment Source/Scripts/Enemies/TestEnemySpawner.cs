@@ -9,7 +9,7 @@ public class TestEnemySpawner : MonoBehaviour
     Vector3 startPos = new Vector3(0f,0f,0f);
     [SerializeField] Transform parent = null;
     [Header("Elimination System")]
-    [SerializeField] EnemyList enemyList = null; //when creating a new spawner, make sure to include this!
+    [SerializeField] EliminationSystemEnemyList enemyList = null; //when creating a new spawner, make sure to include this!
     public void SpawnEnemies()
     {
         for (int i = 0; i < amount; ++i)
