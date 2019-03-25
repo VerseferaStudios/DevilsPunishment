@@ -80,24 +80,10 @@ public class SWLobbyManager : MonoBehaviour {
     {
         SteamAPI.RunCallbacks();
 
-
-        // Command - Join lobby at index 0 (testing purposes)
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Debug.Log("Trying to join FIRST listed lobby ...");
-
-        }
-
         // Command - List lobby members
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            int numPlayers = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
 
-            Debug.Log("\t Number of players currently in lobby : " + numPlayers);
-            for (int i = 0; i < numPlayers; i++)
-            {
-                Debug.Log("\t Player(" + i + ") == " + SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i)));
-            }
         }
     }
 
@@ -151,9 +137,22 @@ public class SWLobbyManager : MonoBehaviour {
             Debug.Log("Lobby joined!");
             CSteamID myownID = SteamUser.GetSteamID();
 
+            ////////////////////////
+            //////GET THE AVATAR////
+            ////////////////////////
             Texture2D m_MediumAvatarTexture = GetSteamImageAsTexture2D(SteamFriends.GetLargeFriendAvatar(myownID));
             //Rect rec = new Rect(0, 0, m_MediumAvatarTexture.width, m_MediumAvatarTexture.height);
             lobby.GetComponentInChildren<RawImage>().texture = m_MediumAvatarTexture;
+
+            int numPlayers = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
+            lobby.GetComponentInChildren<Text>().text = "\n"+ "\t Number of players currently in lobby : " + numPlayers;
+
+            for (int i = 0; i < numPlayers; i++)
+            {
+                lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + "\t Player(" + i + ") == " + SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
+            }
+
+
         }
         else
         {
