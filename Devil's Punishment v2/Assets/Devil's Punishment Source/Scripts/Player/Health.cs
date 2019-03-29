@@ -1,11 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
     public float maxHP = 100;
     public float HP;
+    public UnityEvent onPlayerDeath = null;
     
     public float GetHP()
     {
@@ -62,5 +63,10 @@ public class Health : MonoBehaviour
         HP = Mathf.Floor(HP);
         HP = Mathf.Min(HP, maxHP);
         HP = Mathf.Max(HP, 0);
+    }
+
+    public void OnPlayerDeath()
+    {
+        onPlayerDeath.Invoke();
     }
 }
