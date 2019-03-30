@@ -7,12 +7,13 @@ public class Infection : MonoBehaviour
     [Header("Settings")]
     public bool infected = false;
     public float infection_Amount = 0f;
+    public float infection_DamageAmount = 2f;
     public float infection_MaxAmount = 100f;
     public float infection_Multiplier = 1f;
 
-    PlayerController playerController;
-
     public static Infection instance;
+
+    private Health health;
 
     void Awake()
     {
@@ -21,6 +22,7 @@ public class Infection : MonoBehaviour
 
     void Start()
     {
+        health = Player.instance.GetComponent<Health>();
         InvokeRepeating("UpdateInfection", 0f, 1f);
     }
 
@@ -44,8 +46,7 @@ public class Infection : MonoBehaviour
             }
             else
             {
-                // TO DO:
-                // Kill Player
+                health.InflictDamage(infection_DamageAmount);
             }
         }
         else
