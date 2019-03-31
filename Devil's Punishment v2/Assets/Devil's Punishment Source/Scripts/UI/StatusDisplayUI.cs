@@ -56,7 +56,7 @@ public class StatusDisplayUI : MonoBehaviour
     private void UpdateInfectionDisplay()
     {
         float infectionAmount = infection.GetInfectionAmount();
-        Debug.Log(infectionAmount.ToString());
+
         if (infectionDisplay.activeSelf == false && infectionAmount > 0f) 
         {
             infectionDisplay.SetActive(true);
