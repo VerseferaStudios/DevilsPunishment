@@ -7,8 +7,10 @@ public class Player : MonoBehaviour
     PlayerController controller;
     GunController gunController;
     Inventory inventory;
+    InGameMenuUI gameMenu;
 
     private bool inventoryOpen = true;
+    private bool gameMenuOpen = true;
 
     public static Player instance;
 
@@ -20,13 +22,33 @@ public class Player : MonoBehaviour
         controller = GetComponent<PlayerController>();
         gunController = GunController.instance;
         inventory = Inventory.instance;
+        gameMenu = InGameMenuUI.instance;
         ToggleInventory();
+        ToggleGameMenu();
     }
 
     void Update() {
         if(Input.GetButtonDown("Open Inventory")) {
-            ToggleInventory();
+            if (gameMenuOpen == false)
+                ToggleInventory();
         }
+        if(Input.GetButtonDown("Cancel"))
+        {
+            if (inventoryOpen == false)
+                ToggleGameMenu();
+        }
+    }
+
+    public void ToggleGameMenu()
+    {
+        gameMenuOpen = !gameMenuOpen;
+        gameMenu.gameObject.SetActive(gameMenuOpen);
+
+        Cursor.visible = gameMenuOpen;
+        Cursor.lockState = (gameMenuOpen ? CursorLockMode.None : CursorLockMode.Locked);
+
+        controller.inputEnabled = !gameMenuOpen;
+        gunController.inputEnabled = !gameMenuOpen;
     }
 
     void ToggleInventory() {
@@ -38,12 +60,18 @@ public class Player : MonoBehaviour
         Cursor.visible = inventoryOpen;
         Cursor.lockState = (inventoryOpen? CursorLockMode.None : CursorLockMode.Locked);
 
-        SetControllerEnabled();
-    }
-
-    void SetControllerEnabled() {
         controller.inputEnabled = !inventoryOpen;
         gunController.inputEnabled = !inventoryOpen;
+    }
+
+    public void ToggleOptionsMenu()
+    {
+
+    }
+
+    public void ExitGame()
+    {
+
     }
 
 }
