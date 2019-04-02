@@ -247,6 +247,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1037555619 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1037555619, guid: 1ea93d5d737332e429397722586a9494,
+    type: 3}
+  m_PrefabInstance: {fileID: 2216783643995501746}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1054390383 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2216783643570326749, guid: 1ea93d5d737332e429397722586a9494,
@@ -377,6 +383,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2216783644694104693, guid: 1ea93d5d737332e429397722586a9494,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2216783644887926628, guid: 1ea93d5d737332e429397722586a9494,
         type: 3}
       propertyPath: m_IsActive
@@ -497,20 +508,49 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1503925625}
-    - target: {fileID: 2216783645158132101, guid: 1ea93d5d737332e429397722586a9494,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.990566
+    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2216783645158132101, guid: 1ea93d5d737332e429397722586a9494,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.97654855
+    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2216783645158132101, guid: 1ea93d5d737332e429397722586a9494,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.97654855
+    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555620, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_Spacing
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831894576, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831894576, guid: 1ea93d5d737332e429397722586a9494, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ea93d5d737332e429397722586a9494, type: 3}
@@ -546,6 +586,17 @@ PrefabInstance:
       propertyPath: lobbyAreaContent
       value: 
       objectReference: {fileID: 1448598829}
+    - target: {fileID: 5711885727975101500, guid: 39a361d7712eaf84f9cac49750a4121b,
+        type: 3}
+      propertyPath: lobbyPlayerAreaContent
+      value: 
+      objectReference: {fileID: 1037555619}
+    - target: {fileID: 5711885727975101500, guid: 39a361d7712eaf84f9cac49750a4121b,
+        type: 3}
+      propertyPath: lobbyPlayerPrefab
+      value: 
+      objectReference: {fileID: 5703489334078687239, guid: 6a228ebd1b531d740926a87eb55715ea,
+        type: 3}
     - target: {fileID: 5711885727975101503, guid: 39a361d7712eaf84f9cac49750a4121b,
         type: 3}
       propertyPath: m_LocalPosition.x
