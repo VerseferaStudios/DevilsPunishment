@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         }
         VerticalLocomotion();
         Turning();
-        //Animation();
+        Animation();
         CameraUpdate();
     }
 
