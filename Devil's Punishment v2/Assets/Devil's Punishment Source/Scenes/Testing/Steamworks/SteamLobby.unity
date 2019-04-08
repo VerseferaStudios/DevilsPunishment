@@ -259,6 +259,42 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2216783643995501746}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1112636223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1112636224}
+  m_Layer: 0
+  m_Name: SteamNetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1112636224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112636223}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 501.7593, y: 250.32692, z: 179.29004}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1281352413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2216783644249945933, guid: 1ea93d5d737332e429397722586a9494,
+    type: 3}
+  m_PrefabInstance: {fileID: 2216783643995501746}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1297069014 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2216783644887926628, guid: 1ea93d5d737332e429397722586a9494,
@@ -522,26 +558,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1037555620, guid: 1ea93d5d737332e429397722586a9494, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_Padding.m_Top
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_Padding.m_Bottom
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_Padding.m_Right
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_Padding.m_Left
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555621, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_Spacing
       value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 1831894576, guid: 1ea93d5d737332e429397722586a9494, type: 3}
@@ -597,6 +613,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5703489334078687239, guid: 6a228ebd1b531d740926a87eb55715ea,
         type: 3}
+    - target: {fileID: 5711885727975101500, guid: 39a361d7712eaf84f9cac49750a4121b,
+        type: 3}
+      propertyPath: chatInput
+      value: 
+      objectReference: {fileID: 1281352413}
     - target: {fileID: 5711885727975101503, guid: 39a361d7712eaf84f9cac49750a4121b,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -101,14 +101,31 @@ public class SWLobbyManager : MonoBehaviour {
             Debug.Log(SteamMatchmaking.GetLobbyOwner((CSteamID)current_lobbyID));
         }
         if (Input.GetKeyDown(KeyCode.Return) && current_lobbyID != 0) {
-            string chattext = chatInput.GetComponent<Text>().text;
-            SteamMatchmaking.SendLobbyChatMsg((CSteamID)current_lobbyID, Encoding.ASCII.GetBytes(chattext), chattext.Length + 1);
+
+            byte[] MsgBody = System.Text.Encoding.UTF8.GetBytes(chatInput.GetComponent<InputField>().text + char.MinValue);
+            bool ret = SteamMatchmaking.SendLobbyChatMsg((CSteamID)current_lobbyID, MsgBody, MsgBody.Length+1);
+            chatInput.GetComponent<InputField>().text = " ";
+            
         }
     }
 
     void OnChatMsgRec(LobbyChatMsg_t result)
     {
-        lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + "\t" + result.m_ulSteamIDUser + ":" + result.m_iChatID;
+
+        CSteamID SteamIDUser;
+        byte[] Data = new byte[4096];
+        EChatEntryType ChatEntryType;
+        SteamMatchmaking.GetLobbyChatEntry((CSteamID)result.m_ulSteamIDLobby, (int)result.m_iChatID, out SteamIDUser, Data, Data.Length, out ChatEntryType);
+        byte[] dataResized = new byte[Data.Length];
+        int ret = SteamMatchmaking.GetLobbyChatEntry((CSteamID)result.m_ulSteamIDLobby, (int)result.m_iChatID, out SteamIDUser, dataResized, dataResized.Length, out ChatEntryType);
+        Debug.Log("GetLobbyChatEntry(" + (CSteamID)result.m_ulSteamIDLobby + ", " + (int)result.m_iChatID + ", out SteamIDUser, Data, Data.Length, out ChatEntryType) : ret " + ret + " --iduser " + SteamIDUser + " -- data" + System.Text.Encoding.UTF8.GetString(Data) + " --" + ChatEntryType);
+        string message = Encoding.UTF8.GetString(Data) + "\0";
+        if ((int)ChatEntryType == 1)
+        {
+            lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + SteamFriends.GetFriendPersonaName(SteamIDUser) + ":" + message;
+        }
+
+
     }
 
     void OnLobbyCreated(LobbyCreated_t result)
@@ -186,7 +203,7 @@ public class SWLobbyManager : MonoBehaviour {
             newPlayer.transform.SetParent(lobbyPlayerAreaContent.transform, false);
             newPlayer.GetComponentInChildren<Text>().text = SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
             newPlayer.GetComponentInChildren<RawImage>().texture = m_smallavatar;
-            lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + "\t Player(" + i + ") == " + SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
+            lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + "\t Player(" + i + "): " + SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
         }
         numberOfPlayersInLobby = numPlayers;
     }
