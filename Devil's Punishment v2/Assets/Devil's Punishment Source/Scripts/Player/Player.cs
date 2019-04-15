@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     PlayerController controller;
     GunController gunController;
+    CuffController cuffController;
     Inventory inventory;
     InGameMenuUI gameMenu;
 
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
 
     void Start() {
         controller = GetComponent<PlayerController>();
+        cuffController = CuffController.instance;
         gunController = GunController.instance;
         inventory = Inventory.instance;
         gameMenu = InGameMenuUI.instance;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
             if (inventoryOpen == false)
                 ToggleGameMenu();
         }
+        cuffController.ToggleCuffs();
     }
 
     public void ToggleGameMenu()
