@@ -42,8 +42,8 @@ public class MapGen2 : MonoBehaviour
             arr[0] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
             arr[1] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
 
-            arr[0] = (int)(Mathf.Round(((float)arr[0])/10f) * 10);
-            arr[1] = (int)(Mathf.Round(((float)arr[1])/10f) * 10);
+            arr[0] = (int)(Mathf.Round(((float)arr[0])/zSize) * zSize);
+            arr[1] = (int)(Mathf.Round(((float)arr[1])/xSize) * xSize);
             
 
             if (noCollisions(arr))

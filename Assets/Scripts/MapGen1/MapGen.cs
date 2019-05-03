@@ -11,7 +11,7 @@ public class MapGen : MonoBehaviour
     public ArrayList allRooms = new ArrayList();
     public ArrayList roomsInARow = new ArrayList();
     private int allRoomsLength;
-    private Room room;
+    private Room1 room;
 
     public GameObject roomIndicator, wideDoor, narrowDoor, noDoor, mainRoom;
 
@@ -46,7 +46,7 @@ public class MapGen : MonoBehaviour
             roomsInARow = new ArrayList();
             for (int j = 0; j < n; j++)
             {
-                room = new Room();
+                room = new Room1();
                 allRoomsLength = allRooms.Count;
 
 
@@ -67,7 +67,7 @@ public class MapGen : MonoBehaviour
                 */
                 else
                 {
-                    room.doorType[3] = ((Room)roomsInARow[j - 1]).doorType[1];
+                    room.doorType[3] = ((Room1)roomsInARow[j - 1]).doorType[1];
                     
                 }
 
@@ -85,7 +85,7 @@ public class MapGen : MonoBehaviour
                 */
                 else
                 {
-                    room.doorType[0] = ((Room)((ArrayList)allRooms[i - 1])[j]).doorType[2];
+                    room.doorType[0] = ((Room1)((ArrayList)allRooms[i - 1])[j]).doorType[2];
                     
                 }
 
@@ -169,23 +169,23 @@ public class MapGen : MonoBehaviour
         {
             for (int l = 0; l < n - 1; l++)
             {
-                if (((Room)((ArrayList)allRooms[k])[l]).doorType[1] == 0)
+                if (((Room1)((ArrayList)allRooms[k])[l]).doorType[1] == 0)
                 {
                     ctr++;
                     a = true;
                 }
-                if(((Room)((ArrayList)allRooms[k])[l]).doorType[2] == 0)
+                if(((Room1)((ArrayList)allRooms[k])[l]).doorType[2] == 0)
                 {
                     ctr++;
                     b = true;
                 }
 
-                if (((Room)((ArrayList)allRooms[k + 1])[l + 1]).doorType[0] == 0)
+                if (((Room1)((ArrayList)allRooms[k + 1])[l + 1]).doorType[0] == 0)
                 {
                     ctr++;
                     c = true;
                 }
-                if (((Room)((ArrayList)allRooms[k + 1])[l + 1]).doorType[3] == 0)
+                if (((Room1)((ArrayList)allRooms[k + 1])[l + 1]).doorType[3] == 0)
                 {
                     ctr++;
                     d = true;
@@ -217,7 +217,7 @@ public class MapGen : MonoBehaviour
             for (int j = 0; j < n; j++)
             {
                 Debug.Log("+++++++++++++++" + j + "+++++++++++++++");
-                int[] ddd = ((Room)((ArrayList)allRooms[i])[j]).doorType;
+                int[] ddd = ((Room1)((ArrayList)allRooms[i])[j]).doorType;
                 Debug.Log(ddd[0]);
                 Debug.Log(ddd[1]);
                 Debug.Log(ddd[2]);

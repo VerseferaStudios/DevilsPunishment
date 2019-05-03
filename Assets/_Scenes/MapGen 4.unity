@@ -120,7 +120,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &174619961
+--- !u!1 &328835226
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,23 +128,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 174619962}
+  - component: {fileID: 328835227}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Corridors
   m_TagString: Untagged
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &174619962
+--- !u!4 &328835227
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 174619961}
+  m_GameObject: {fileID: 328835226}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.2, y: 0, z: -30.2}
+  m_LocalPosition: {x: -50, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -162,7 +162,6 @@ GameObject:
   - component: {fileID: 436700724}
   - component: {fileID: 436700723}
   - component: {fileID: 436700722}
-  - component: {fileID: 436700726}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -243,19 +242,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &436700726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436700721}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a585cb9019cfdd4f82c399c374fbbf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainRoom: {fileID: 387599941757743402, guid: 7d53faeac5f130f43b94d536112e86a8, type: 3}
 --- !u!1 &1414926032
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 174619962}
+  target: {fileID: 0}
   mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
     type: 3}
   room4: {fileID: 387599941757743402, guid: fc2f11d54a915bb4ea08bab5bdaef7a7, type: 3}

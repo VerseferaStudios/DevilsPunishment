@@ -6,8 +6,10 @@ public class MapGen3 : MonoBehaviour
 {
     //first we'll see the ground floor
     //10 x 10 cube
-    private int n = 10;
-    private ArrayList allRooms = new ArrayList();
+    private int n = 2;
+    public ArrayList allRooms = new ArrayList();
+    private ArrayList gameObjectDetails = new ArrayList();
+    public Transform target;
     //private Room room;
 
     public GameObject mainRoomIndicator, room4, room1, roomI, roomL, roomT;
@@ -22,9 +24,9 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("1");
+        //Debug.Log("1");
         rooms();
-        Debug.Log("5");
+        //Debug.Log("5");
     }
 
     public void rooms()
@@ -35,7 +37,7 @@ public class MapGen3 : MonoBehaviour
         int k = 0, l = 0;
         while (k < n && l < 1000)
         {
-            Debug.Log("2");
+            //Debug.Log("2");
             int[] arr = new int[2];
             arr[0] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
             arr[1] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
@@ -46,7 +48,7 @@ public class MapGen3 : MonoBehaviour
 
             if (noCollisions(arr))
             {
-                Debug.Log("3----------------------------");
+                //Debug.Log("3----------------------------");
                 allRooms.Add(arr);
                 ++k;
             }
@@ -58,7 +60,7 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             //roomsInARow = new ArrayList();
-            Debug.Log("4");
+            //Debug.Log("4");
             GameObject roomToSpawn = room4;
             switch ((int)Mathf.Round(Random.Range(-0.49f, 4.49f)))
             {
@@ -78,8 +80,11 @@ public class MapGen3 : MonoBehaviour
                     roomToSpawn = room4;
                     break;
             }
-            Instantiate(roomToSpawn , new Vector3(-((int[])allRooms[i])[1], 0, -((int[])allRooms[i])[0]), Quaternion.identity);
+            Room roomScript = roomToSpawn.GetComponent<Room>();
+            //roomScript.index = i;
+            GameObject spawnedRoom = Instantiate(roomToSpawn , new Vector3(-((int[])allRooms[i])[1], 0, -((int[])allRooms[i])[0]), Quaternion.identity, transform);
 
+            gameObjectDetails.Add(roomScript);
             //allRooms.Add(roomsInARow);
 
         }
@@ -89,10 +94,10 @@ public class MapGen3 : MonoBehaviour
 
         for (int i = 0; i < n; i++)
         {
-            Debug.Log("_________________" + i + "___________________");
+            ////Debug.Log("_________________" + i + "___________________");
             int[] ddd = ((int[])allRooms[i]);
-            Debug.Log(ddd[0]);
-            Debug.Log(ddd[1]);
+            //Debug.Log(ddd[0]);
+            //Debug.Log(ddd[1]);
         }
     }
 
