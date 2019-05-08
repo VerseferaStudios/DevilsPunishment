@@ -27,27 +27,30 @@ public class FlashlightScript : MonoBehaviour
     [SerializeField]
     [Tooltip("Option to flicker the lights")]
     private bool isFlickerEnabled = false;//Flickering
-    [SerializeField]
+    [HideInInspector]
     [Tooltip("Upgrade boolean used to determine if player picked up flashlight")]
-    private bool isUpgraded = false;//Has the player picked up the flashlight?
+    public bool isUpgraded;//Has the player picked up the flashlight?
     [SerializeField]
     private float range = 0.1f;
-    private Light glowLight;//GlowLight GameObject
-    private Light flashLight;//FlashLight GameObject
+    [HideInInspector]
+    public Light glowLight;//GlowLight GameObject
+    [HideInInspector]
+    public Light flashLight;//FlashLight GameObject
     private float currentIntensity;//Light Intensity
+    private GameObject flashlightobj;
+    private GameObject glowlightobj;
 
     void Start()
     {
-        glowLight = this.gameObject.transform.Find("Lights/GlowLight").GetComponent<Light>();
-        flashLight = this.gameObject.transform.Find("Lights/Flashlight").GetComponent<Light>();
+        glowLight = this.gameObject.transform.Find("Camera/Lights/glowstick/GlowLight").GetComponent<Light>();
+        flashLight = this.gameObject.transform.Find("Camera/Lights/flashlight/Flashlight").GetComponent<Light>();
+        flashlightobj = flashLight.transform.parent.gameObject;
+        glowlightobj = glowLight.transform.parent.gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //isUpgraded will be coming from the player scripts
-        //isUpgraded == player.isUpgraded();
-
         if (Input.GetKeyDown(flashlightButton))
         {
             if(isUpgraded)
@@ -59,7 +62,6 @@ public class FlashlightScript : MonoBehaviour
                 turnGlowLight();
             }
         }
-
         if (isFlickerEnabled)
         {
             turnFlicker();
@@ -68,21 +70,22 @@ public class FlashlightScript : MonoBehaviour
 
     public void turnFlashLight()
     {
-        flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
-        flashLight.intensity = flashLightInsensity;
-        flashLight.range = flashLightRange;
-        flashLight.spotAngle = flashLightAngle;
-        flashLight.color = flashColor;
-        flashLight.enabled = !flashLight.enabled;
+        flashlightobj.SetActive(!flashlightobj.activeInHierarchy);//Set flashlight object to active
+        flashLight.intensity = flashLightInsensity;//set intensity of flashlight light.
+        flashLight.range = flashLightRange;//Set range
+        flashLight.spotAngle = flashLightAngle;//Set angle of flashlight
+        flashLight.color = flashColor;//Set Color
+        flashLight.enabled = !flashLight.enabled;//set flashlight active
     }
 
     public void turnGlowLight()
     {
-        glowLight.gameObject.SetActive(!glowLight.gameObject.activeSelf);
-        glowLight.intensity = glowLightIntensity;
-        glowLight.range = glowLightRadius;
-        glowLight.color = glowColor;
-        glowLight.enabled = !glowLight.enabled;
+        glowlightobj.SetActive(!glowlightobj.activeInHierarchy);//Set glowlight model to active
+        glowLight.gameObject.SetActive(!glowLight.gameObject.activeSelf);//Set glowlight gameobject active
+        glowLight.intensity = glowLightIntensity;//Set intensity of glowlight light.
+        glowLight.range = glowLightRadius;//Set radius
+        glowLight.color = glowColor;//Set Color
+        glowLight.enabled = !glowLight.enabled;//set glowlight active
     }
 
     public void turnFlicker()
