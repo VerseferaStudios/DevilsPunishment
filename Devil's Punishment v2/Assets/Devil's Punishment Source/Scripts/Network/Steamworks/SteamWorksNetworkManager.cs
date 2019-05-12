@@ -7,6 +7,7 @@ using Steamworks;
 public class SteamWorksNetworkManager : MonoBehaviour
 {
     public GameObject PlayerPrefab;
+    public GameObject OtherPlayerPrefab;
     public string m_strServerName = "Test Server";
     public string m_strMapName = "Milky Way";
     public int m_nMaxPlayers = 8;
@@ -14,6 +15,11 @@ public class SteamWorksNetworkManager : MonoBehaviour
     bool m_bInitialized;
     bool m_bConnectedToSteam;
 
+    public CSteamID[] players;
+    public CSteamID steamid;
+    public CSteamID lobby;
+
+    private GameObject ServerInformationObject;
 
 
     // Current game server version
@@ -35,9 +41,29 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+
     }
 
+    void Start()
+    {
+        ServerInformationObject = GameObject.Find("SteamServerInformation");
+        int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
+        for (int i = 0; i < playersAmount; i++)
+            {
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
+                {
+                    GameObject p = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
+                    p.GetComponent<PlayerInformation>().steamid = (CSteamID)SteamMatchmaking.GetLobbyMemberByIndex(lobby, i).m_SteamID;
+                    p.GetComponent<PlayerInformation>().lobby = lobby;
+                    Destroy(p.transform.GetChild(0));
+                }
+                else
+                {
+                    GameObject p = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
+                    p.GetComponent<PlayerInformation>().lobby = lobby;
+                }
+            }
+    }
     // Tells us when we have successfully connected to Steam
     protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
 #if DISABLED

@@ -4,12 +4,16 @@ using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public class SWLobbyManager : MonoBehaviour {
 
+    public string _PLAYSCENE = "Prototype Scene Steamworks";
+
+    private string secret = "DEVILISINTHEDETAILS";
+
     public GameObject mainMenu;
     public GameObject LobbyList;
-
     public GameObject lobby;
 
     public GameObject lobbyAreaContent;
@@ -28,10 +32,16 @@ public class SWLobbyManager : MonoBehaviour {
 
     private int numberOfPlayersInLobby = 0;
 
+    private GameObject ServerInformationObject;
+
     ulong current_lobbyID;
     List<CSteamID> lobbyIDS;
 
     void Start () {
+        ServerInformationObject = GameObject.Find("SteamServerInformation");
+        ServerInformationObject.GetComponent<ServerInformation>().players = new CSteamID[4];
+        for (int i = 0; i < 4; i++)
+            ServerInformationObject.GetComponent<ServerInformation>().players[i] = (CSteamID)0;
 
         lobbyIDS = new List<CSteamID>();
         Callback_lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
@@ -47,10 +57,34 @@ public class SWLobbyManager : MonoBehaviour {
 
     }
 
+    private void HandleMessage(string playMessage)
+    {
+        string playmessage = Md5Sum(secret + current_lobbyID + secret);
+        int lobbynum = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
+        Debug.Log("Player Amount: " + lobbynum);
+        Debug.Log("Message Received " + playMessage);
+        Debug.Log("MD5 Secret " + playmessage);
+
+        int i = 0;
+        while (i < lobbynum) { 
+            ServerInformationObject.GetComponent<ServerInformation>().players[i] = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
+
+            i++;
+        }
+        ServerInformationObject.GetComponent<ServerInformation>().lobby = (CSteamID)current_lobbyID;
+        SteamMatchmaking.LeaveLobby((CSteamID)current_lobbyID);
+        if (playMessage == playmessage) //This will be changed to a more secure md5 hash
+        {
+            SceneManager.LoadScene(_PLAYSCENE);
+        }
+        
+    }
+
     public void ButtonCreateLobby()
     {
         Debug.Log("Trying to create lobby ...");
         SteamAPICall_t try_toHost = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 8);
+        ToggleLobby(true);
     }
 
     public void ButtonShowLobbyList()
@@ -70,7 +104,20 @@ public class SWLobbyManager : MonoBehaviour {
         SteamAPICall_t try_joinLobby = SteamMatchmaking.JoinLobby(SteamMatchmaking.GetLobbyByIndex(i));
     }
 
+    public void ButtonStartGame()
+    {
+        for (int i = 0; i < SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID); i++)
+        {
+            CSteamID receiver = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
+            string start = Md5Sum(secret + current_lobbyID + secret);
 
+            // allocate new bytes array and copy string characters as bytes
+            byte[] bytes = new byte[start.Length * sizeof(char)];
+            System.Buffer.BlockCopy(start.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+            SteamNetworking.SendP2PPacket(receiver, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable);
+        }
+    }
 
     private void ToggleMainMenu(bool B)
     {
@@ -105,7 +152,23 @@ public class SWLobbyManager : MonoBehaviour {
             byte[] MsgBody = System.Text.Encoding.UTF8.GetBytes(chatInput.GetComponent<InputField>().text + char.MinValue);
             bool ret = SteamMatchmaking.SendLobbyChatMsg((CSteamID)current_lobbyID, MsgBody, MsgBody.Length+1);
             chatInput.GetComponent<InputField>().text = " ";
-            
+        }
+
+        uint size;
+        while (SteamNetworking.IsP2PPacketAvailable(out size))
+        {
+            //allocate the buffer
+            var buffer = new byte[size];
+            uint bytesRead;
+            CSteamID remoteid;
+            //read message
+            if (SteamNetworking.ReadP2PPacket(buffer, size, out bytesRead, out remoteid))
+            {
+                char[] chars = new char[bytesRead / sizeof(char)];
+                System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
+                string message = new string(chars, 0, chars.Length);
+                HandleMessage(message);
+            }
         }
     }
 
@@ -148,6 +211,7 @@ public class SWLobbyManager : MonoBehaviour {
             CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
             lobbyIDS.Add(lobbyID);
             SteamMatchmaking.RequestLobbyData(lobbyID);
+            SteamMatchmaking.LeaveLobby((CSteamID)lobbyID);
         }
     }
 
@@ -227,8 +291,26 @@ public class SWLobbyManager : MonoBehaviour {
                 ret.Apply();
             }
         }
-
         return ret;
+    }
+    public string Md5Sum(string strToEncrypt)
+    {
+        UTF8Encoding ue = new UTF8Encoding();
+        byte[] bytes = ue.GetBytes(strToEncrypt);
+
+        // encrypt bytes
+        System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+        byte[] hashBytes = md5.ComputeHash(bytes);
+
+        // Convert the encrypted bytes back to a string (base 16)
+        string hashString = "";
+
+        for (int i = 0; i < hashBytes.Length; i++)
+        {
+            hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
+        }
+
+        return hashString.PadLeft(32, '0');
     }
 
 }
