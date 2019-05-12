@@ -70,8 +70,7 @@ public class PlayerController : MonoBehaviour
         Animation();
         CameraUpdate();
     }
-
-    public void AddToViewVector(float x, float y) {
+public void AddToViewVector(float x, float y) {
         horizontalAngle += x;
         verticalAngle += y;
     }
