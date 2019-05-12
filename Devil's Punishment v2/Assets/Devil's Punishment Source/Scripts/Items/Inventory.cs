@@ -80,8 +80,8 @@ public class Inventory : MonoBehaviour
         if(item is GunItem) {
 			if (equippedGun != null)
 			{
-				Debug.Log("Gun in hand,"+equippedGun.name+", so dropping it first...");
-				DropItem(equippedGun.name, 1);
+				Debug.Log("Gun in hand," + equippedGun.name +" " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
+				DropItem(10); // Drop the "GUN" in hand
 			} else
 			{
 				Debug.Log("Player doesn't appear to be holding a gun, so... ");
@@ -92,6 +92,7 @@ public class Inventory : MonoBehaviour
 			Debug.Log("Equipping picked gun " +item.name);
 			equippedGun = item as GunItem;
             gunController.InitGun();
+
             return;
         }
 
@@ -127,15 +128,36 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void DropItemAll(int index) {
+    public void DropItemAll(int index)
+	{
+		Debug.Log("Root of DropItem func reached");
         if(index>=inventory.Count) {
-            equippedGun = null;
-            gunController.InitGun();
+
+
+			GameObject GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Assault_Rifle"); // This is the wrong place to get it... Should get it from the prefab area
+			
+			GameObject DroppedGun = Instantiate(GunPrefab, gameObject.transform.position , gameObject.transform.rotation);
+
+			DroppedGun.SetActive(true);
+
+
+			equippedGun = null;
+			gunController.InitGun();
+
+
+			Debug.Log("Gun set to active, lets see : " + DroppedGun.activeInHierarchy);
+
+
+
+
+
 			Debug.Log("It should have dropped now... Must make sure to create a gameObject for it... Should be handled by the DropItem function calls probably.");
 
 		}
-		else if(index > -1) {
-            if(inventory[index].item != null) {
+		else if(index > -1)
+		{
+			Debug.Log("-> The item is in the inventory, removing it...");
+			if (inventory[index].item != null) {
                 inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
             }
@@ -144,7 +166,7 @@ public class Inventory : MonoBehaviour
     }
 
     public void DropItem(string name, int amount = 1) {
-
+		Debug.Log("Attempting to drop " + name);
         int x = amount;
 
         while(x > 0) {
@@ -152,9 +174,11 @@ public class Inventory : MonoBehaviour
             int index = GetIndexOfItem(name);
 
             if(index > -1) {
+				Debug.Log("Index was found to be:" + index);
                 DropItem(index, 1);
                 x--;
             } else {
+				Debug.Log("Item index was not found");
                 break;
             }
 
@@ -169,12 +193,12 @@ public class Inventory : MonoBehaviour
         for(int i = 0; i < amount; i++) {
 
             if(index>=inventory.Count) {
-                equippedGun = null;
-                gunController.InitGun();
+				DropItemAll(index);
                 return;
             } else if(index > -1) {
                 if(inventory[index].item != null && inventory[index].stack > 1) {
                     inventory[index].stack--;
+					Debug.Log("Appears to be dropping part of a stack... Must remember to create the game object for it.");
                 } else {
                     DropItemAll(index);
                     return;
