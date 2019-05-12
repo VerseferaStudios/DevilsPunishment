@@ -166,9 +166,8 @@ public class PlayerController : MonoBehaviour
         if(!isClimbing) {
             controller.Move(Vector3.down * Time.deltaTime * 9.81f);            
         } else {
-            controller.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);            
-            climbSpeed = movementInputRaw.y == 0 ? 0 : 
-                movementInputRaw.y > 0 ? 1 : 0.5f;           
+            controller.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
+            climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;                
         }
     }
 
