@@ -68,7 +68,6 @@ public class SWLobbyManager : MonoBehaviour {
         int i = 0;
         while (i < lobbynum) { 
             ServerInformationObject.GetComponent<ServerInformation>().players[i] = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
-
             i++;
         }
         ServerInformationObject.GetComponent<ServerInformation>().lobby = (CSteamID)current_lobbyID;

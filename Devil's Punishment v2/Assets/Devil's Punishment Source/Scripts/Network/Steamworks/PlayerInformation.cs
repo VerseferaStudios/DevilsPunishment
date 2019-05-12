@@ -8,8 +8,11 @@ public class PlayerInformation : MonoBehaviour
     public CSteamID steamid;
     public CSteamID lobby;
 
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
     }
+
+
 }

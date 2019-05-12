@@ -8,16 +8,15 @@ public class SteamWorksNetworkManager : MonoBehaviour
 {
     public GameObject PlayerPrefab;
     public GameObject OtherPlayerPrefab;
+
+    public GameObject[] OtherPlayers;
+    public GameObject Player;
     public string m_strServerName = "Test Server";
     public string m_strMapName = "Milky Way";
     public int m_nMaxPlayers = 8;
 
     bool m_bInitialized;
     bool m_bConnectedToSteam;
-
-    public CSteamID[] players;
-    public CSteamID steamid;
-    public CSteamID lobby;
 
     private GameObject ServerInformationObject;
 
@@ -47,25 +46,32 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
+
+
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
-        for (int i = 0; i < playersAmount; i++)
+        for (int i = 0; i < playersAmount; i++) {
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
             {
-                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != (CSteamID)0)
                 {
-                    GameObject p = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                    p.GetComponent<PlayerInformation>().steamid = (CSteamID)SteamMatchmaking.GetLobbyMemberByIndex(lobby, i).m_SteamID;
-                    p.GetComponent<PlayerInformation>().lobby = lobby;
-                    Destroy(p.transform.GetChild(0));
-                }
-                else
-                {
-                    GameObject p = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                    p.GetComponent<PlayerInformation>().lobby = lobby;
+                    OtherPlayers[i] = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
+                    OtherPlayers[i].GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
+                    ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = OtherPlayers[i].transform.position;
+                    ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = OtherPlayers[i].transform.rotation;
                 }
             }
+            else
+            {
+                Player = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
+                Player.GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
+                BroadcastSteamMessage("POS_" + Player.transform.position.ToString());
+                BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
+            }
+        }
     }
     // Tells us when we have successfully connected to Steam
     protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
+
 #if DISABLED
 
 	// Tells us when there was a failure to connect to Steam
@@ -151,7 +157,6 @@ public class SteamWorksNetworkManager : MonoBehaviour
 #if USE_GS_AUTH_API
 		SteamGameServer.EnableHeartbeats(true);
 #endif
-
         Debug.Log("Started.");
     }
 
@@ -194,12 +199,92 @@ public class SteamWorksNetworkManager : MonoBehaviour
         {
             SendUpdatedServerDetailsToSteam();
         }
+
+        uint size;
+        while (SteamNetworking.IsP2PPacketAvailable(out size))
+        {
+            //allocate the buffer
+            var buffer = new byte[size];
+            uint bytesRead;
+            CSteamID remoteid;
+            //read message
+            if (SteamNetworking.ReadP2PPacket(buffer, size, out bytesRead, out remoteid))
+            {
+                char[] chars = new char[bytesRead / sizeof(char)];
+                System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
+                string message = new string(chars, 0, chars.Length);
+                HandleMessage(message, remoteid);
+            }
+        }
+        SendPOSAndROT();
+        ReceivePOSAndROT();
     }
 
-    //-----------------------------------------------------------------------------
-    // Purpose: Take any action we need to on Steam notifying us we are now logged in
-    //-----------------------------------------------------------------------------
-    void OnSteamServersConnected(SteamServersConnected_t pLogonSuccess)
+    void SendPOSAndROT()
+    {
+        BroadcastSteamMessage("POS_" + Player.transform.position.ToString());
+        BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
+    }
+
+    void ReceivePOSAndROT()
+    {
+
+    }
+
+    void BroadcastSteamMessage(string message)
+    {
+        for (int i = 0; i < ServerInformationObject.GetComponent<ServerInformation>().players.Length; i++)
+        {
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
+            {
+                CSteamID receiver = ServerInformationObject.GetComponent<ServerInformation>().players[i];
+                string _m = message;
+                byte[] bytes = new byte[_m.Length * sizeof(char)];
+                System.Buffer.BlockCopy(_m.ToCharArray(), 0, bytes, 0, bytes.Length);
+                SteamNetworking.SendP2PPacket(receiver, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable);
+            }
+        }
+    }
+
+    private void HandleMessage(string m, CSteamID remote)
+    {
+        if (m.Substring(0, 4) == "POS_")
+        {
+            if (SteamUser.GetSteamID() != remote)
+                return;
+            string sposition = m.Substring(5, m.Length - 5);
+            Debug.Log(sposition);
+            Vector3 position = new Vector3(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]));
+            foreach (GameObject GO in OtherPlayers)
+            {
+                if (GO.GetComponent<PlayerInformation>().steamid == remote)
+                {
+                    GO.transform.position = position;
+                }
+            }
+        }
+        if (m.Substring(0, 4) == "ROT_")
+        {
+            if (SteamUser.GetSteamID() != remote)
+                return;
+            string sposition = m.Substring(5, m.Length - 5);
+            Debug.Log(sposition);
+            Quaternion rotation = new Quaternion(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]), float.Parse(sposition.Split(","[0])[3]));
+            foreach (GameObject GO in OtherPlayers)
+            {
+                if (GO.GetComponent<PlayerInformation>().steamid == remote)
+                {
+                    GO.transform.rotation = rotation;
+                }
+            }
+        }
+    }
+}
+
+        //-----------------------------------------------------------------------------
+        // Purpose: Take any action we need to on Steam notifying us we are now logged in
+        //-----------------------------------------------------------------------------
+        void OnSteamServersConnected(SteamServersConnected_t pLogonSuccess)
     {
         Debug.Log("DEVILS_PUNISHMENT connected to Steam successfully");
         m_bConnectedToSteam = true;

@@ -7,7 +7,8 @@ public class ServerInformation : MonoBehaviour
 {
     public CSteamID lobby;
     public CSteamID[] players;
-
+    public Vector3[] playersPos;
+    public Quaternion[] playersRot;
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
