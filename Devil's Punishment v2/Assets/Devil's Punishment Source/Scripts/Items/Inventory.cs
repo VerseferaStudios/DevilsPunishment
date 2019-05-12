@@ -133,9 +133,22 @@ public class Inventory : MonoBehaviour
 		Debug.Log("Root of DropItem func reached");
         if(index>=inventory.Count) {
 
+			GameObject GunPrefab;
+			if (equippedGun.clipSize >=32) // This bool is probably not good enough long-term
+			{
+				// This is supposedly the correct way, but the prefabs need to be in a resource folder?
+				//GunPrefab = (GameObject) Resources.Load("/Assets/Devil's Punishment Source/Prefabs/Items/Pickup_Assault_Rifle");
 
-			GameObject GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Assault_Rifle"); // This is the wrong place to get it... Should get it from the prefab area
-			
+				// So here's a hack that will work as long as the prefabs are copied to the scene.
+				GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Assault_Rifle");
+
+			} else
+			{
+				GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Handgun");
+			}
+
+			Debug.Assert(GunPrefab != null, "GunPrefab shouldn't be null. It didn't load correctly as a resource.");
+
 			GameObject DroppedGun = Instantiate(GunPrefab, gameObject.transform.position , gameObject.transform.rotation);
 
 			DroppedGun.SetActive(true);
