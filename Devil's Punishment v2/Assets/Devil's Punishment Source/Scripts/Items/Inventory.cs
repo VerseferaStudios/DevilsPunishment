@@ -78,7 +78,19 @@ public class Inventory : MonoBehaviour
     public void AddItem(Item item, int stack=1) {
 
         if(item is GunItem) {
-            equippedGun = item as GunItem;
+			if (equippedGun != null)
+			{
+				Debug.Log("Gun in hand,"+equippedGun.name+", so dropping it first...");
+				DropItem(equippedGun.name, 1);
+			} else
+			{
+				Debug.Log("Player doesn't appear to be holding a gun, so... ");
+
+			}
+
+
+			Debug.Log("Equipping picked gun " +item.name);
+			equippedGun = item as GunItem;
             gunController.InitGun();
             return;
         }
@@ -119,7 +131,10 @@ public class Inventory : MonoBehaviour
         if(index>=inventory.Count) {
             equippedGun = null;
             gunController.InitGun();
-        } else if(index > -1) {
+			Debug.Log("It should have dropped now... Must make sure to create a gameObject for it... Should be handled by the DropItem function calls probably.");
+
+		}
+		else if(index > -1) {
             if(inventory[index].item != null) {
                 inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
