@@ -136,15 +136,11 @@ public class Inventory : MonoBehaviour
 			GameObject GunPrefab;
 			if (equippedGun.clipSize >=32) // This bool is probably not good enough long-term
 			{
-				// This is supposedly the correct way, but the prefabs need to be in a resource folder?
-				//GunPrefab = (GameObject) Resources.Load("/Assets/Devil's Punishment Source/Prefabs/Items/Pickup_Assault_Rifle");
-
-				// So here's a hack that will work as long as the prefabs are copied to the scene.
-				GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Assault_Rifle");
+				GunPrefab = ResourceManager.instance.getResource("Pickup_Assault_Rifle");
 
 			} else
 			{
-				GunPrefab = GameObject.Find("/ENVIRONMENT/___DYNAMIC/Pickup_Handgun");
+				GunPrefab = ResourceManager.instance.getResource("Pickup_Handgun");
 			}
 
 			Debug.Assert(GunPrefab != null, "GunPrefab shouldn't be null. It didn't load correctly as a resource.");
