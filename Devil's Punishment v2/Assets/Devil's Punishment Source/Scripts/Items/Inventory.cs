@@ -157,13 +157,6 @@ public class Inventory : MonoBehaviour
 			equippedGun = null;
 			gunController.InitGun();
 
-
-			Debug.Log("Gun set to active, lets see : " + DroppedGun.activeInHierarchy);
-
-
-
-
-
 			Debug.Log("It should have dropped now... Must make sure to create a gameObject for it... Should be handled by the DropItem function calls probably.");
 
 		}
@@ -187,7 +180,7 @@ public class Inventory : MonoBehaviour
             int index = GetIndexOfItem(name);
 
             if(index > -1) {
-				Debug.Log("Index was found to be:" + index);
+				Debug.Log("Item was found to be at index:" + index);
                 DropItem(index, 1);
                 x--;
             } else {
