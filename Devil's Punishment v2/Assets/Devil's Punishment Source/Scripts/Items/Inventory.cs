@@ -158,9 +158,10 @@ public class Inventory : MonoBehaviour
 		}
 		else if(index > -1)
 		{
-			Debug.Log("-> The item is in the inventory, removing it...");
-			if (inventory[index].item != null) {
-                inventory.RemoveAt(index);
+			if (inventory[index].item != null)
+			{
+				Debug.Log("-> The item is in the inventory, removing it...");
+				inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
             }
         }
