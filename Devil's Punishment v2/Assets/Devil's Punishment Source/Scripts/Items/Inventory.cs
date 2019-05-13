@@ -160,7 +160,26 @@ public class Inventory : MonoBehaviour
 		{
 			if (inventory[index].item != null)
 			{
-				Debug.Log("-> The item is in the inventory, removing it...");
+
+				string name = inventory[index].item.name;
+				Debug.Log("Dropping item: " + name);
+
+
+				GameObject itemPrefab;
+				if (name == "Basic Medkit") // This bool is probably not good enough long-term
+				{
+					itemPrefab = ResourceManager.instance.getResource("Pikcup_Medkit_Basic");
+
+				}
+				else
+				{ // ToDo: The Rest of them
+					itemPrefab = ResourceManager.instance.getResource("Pickup_Handgun");
+				}
+				Debug.Assert(itemPrefab != null, "itemPrefab shouldn't be null. It didn't load correctly as a resource.");
+				GameObject DroppedGun = Instantiate(itemPrefab, gameObject.transform.position, gameObject.transform.rotation);
+				DroppedGun.SetActive(true);
+
+
 				inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
             }
