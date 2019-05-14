@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class TestChild : Test
 {
+    public GameObject door;
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(greeting);
+        Debug.Log(door.name.EndsWith("x") ? true : false );
     }
 
     // Update is called once per frame

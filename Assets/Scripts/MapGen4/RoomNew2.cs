@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomNew : MonoBehaviour
+public class RoomNew2 : MonoBehaviour
 {
-    private List<GameObject> spawnPoints = new List<GameObject>();
+    private GameObject[] spawnPoints;
     public GameObject corridor;
     private Transform corridorsParent;
     private MapGen3 mapGen3;
     private float nextTime = 0f;
-    private bool breakLoop = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,56 +17,57 @@ public class RoomNew : MonoBehaviour
         mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
 
-        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Corridor Spawn Points");
-        spawnPoints.AddRange(tempSpawnPoints);
-        Debug.Log(spawnPoints.Count);
-        for (int k = 0; k + 1 < spawnPoints.Count; k += 2)
+        spawnPoints = GameObject.FindGameObjectsWithTag("Corridor Spawn Points");
+        for (int k = 0; k + 1 < spawnPoints.Length; k += 2)
         {
-            
+
+            if (k == 2)
+            {
+                spawnPoints[k].GetComponent<Renderer>().material.color = Color.green;
+                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.green;
+            }
+            else if (k == 4)
+            {
+                spawnPoints[k].GetComponent<Renderer>().material.color = Color.red;
+                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.red;
+            }
+            else if (k == 6)
+            {
+                spawnPoints[k].GetComponent<Renderer>().material.color = Color.white;
+                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.white;
+            }
+            else if (k == 8)
+            {
+                spawnPoints[k].GetComponent<Renderer>().material.color = Color.yellow;
+                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.yellow;
+            }
+            else if (k == 10)
+            {
+                spawnPoints[k].GetComponent<Renderer>().material.color = Color.cyan;
+                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.cyan;
+            }
+
+
             Vector3 targetPos = new Vector3(0, 3, 0);
 
-            //string chk = checkCollisions(spawnPoints[k].transform.position, spawnPoints[k + 1].transform.position);
-            //Debug.Log(chk);
-            //if (chk == "xz")
-            //{
-            //            targetPos = new Vector3(spawnPoints[k].transform.position.x, 0.5f, spawnPoints[k + 1].transform.position.z); 
-            //}
-            /*
+            string chk = checkCollisions(spawnPoints[k].transform.position, spawnPoints[k + 1].transform.position);
+            Debug.Log(chk);
+            if (chk == "xz")
+            {
+                targetPos = new Vector3(spawnPoints[k].transform.position.x, 0.5f, spawnPoints[k + 1].transform.position.z);
+            }
             else if (chk == "zx")
             {
                 targetPos = new Vector3(spawnPoints[k + 1].transform.position.x, 0.5f, spawnPoints[k].transform.position.z);
             }
             else
                 //Check AGAIN
-            */
+
+            spawnHalf(spawnPoints[k].transform.position, targetPos, false); //false
+            spawnHalf(targetPos, spawnPoints[k + 1].transform.position, true);
 
 
-
-            for (int i = k + 1; i < spawnPoints.Count; i++)
-            {
-                if (!checkIfSameRoom(k, i))
-                {
-                    Debug.Log("1___________");
-                    Debug.Log(spawnPoints[k].transform.position);
-                    Debug.Log(spawnPoints[i].transform.position);
-                    targetPos = new Vector3(spawnPoints[k].transform.position.x, 0.5f, spawnPoints[i].transform.position.z);
-                    spawnHalf(spawnPoints[k].transform.position, targetPos, false); //false
-                    spawnHalf(targetPos, spawnPoints[i].transform.position, true);
-                    spawnPoints.RemoveAt(i);
-                    break;
-                }
-                else if (breakLoop)
-                {
-                    breakLoop = false;
-                    break;
-                }
-            }
-
-
-
-
-
-            //Debug.Log(targetPos);
+            Debug.Log(targetPos);
             
         }
         //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
@@ -75,7 +75,7 @@ public class RoomNew : MonoBehaviour
 
     private void spawnHalf(Vector3 from, Vector3 to, bool skipFirst)
     {
-        //Debug.Log(from + " " + to);
+        Debug.Log(from + " " + to);
         //Debug.Log("In Function");
         Vector3 spawnNowAt = from;
         if(from.x == to.x)
@@ -110,42 +110,6 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    private bool checkIfSameRoom(int k, int i)
-    {
-        bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false ;
-
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 11)
-        {
-            if (!isDoorTypeX)
-            {
-                Debug.Log("2___________");
-                Debug.Log(spawnPoints[k].transform.position);
-                Debug.Log(spawnPoints[i].transform.position);
-                spawnHalf(spawnPoints[k].transform.position, spawnPoints[i].transform.position, false);
-                breakLoop = true;
-            }
-            return true;
-        }
-        else if (Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[i].transform.position.z) == 11)
-        {
-            if (isDoorTypeX)
-            {
-                Debug.Log("3___________");
-                Debug.Log(spawnPoints[k].transform.position);
-                Debug.Log(spawnPoints[i].transform.position);
-                spawnHalf(spawnPoints[k].transform.position, spawnPoints[i].transform.position, false);
-                breakLoop = true;
-            }
-            return true;
-        }
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 5.5f)
-        {
-            return true;
-        }
-
-            return false;
-    }
-
     private string checkCollisions(Vector3 from, Vector3 to)
     {
         int ctr = 0;
@@ -155,7 +119,7 @@ public class RoomNew : MonoBehaviour
         //from to targetPos, x constant
         for (int i = 0; i < Data.instance.allRooms.Count; i++)
         {
-            //Debug.Log(((int[])Data.instance.allRooms[i])[1]);
+            Debug.Log(((int[])Data.instance.allRooms[i])[1]);
             if(Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - fromTemp.x) != Data.instance.xSize/2 + 1 && Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - fromTemp.x) < Data.instance.xSize)
             {
                 ctr++;
@@ -229,29 +193,29 @@ public class RoomNew : MonoBehaviour
 
 /*
  * //Colour scheme
-            if (k == 2)
+            if (i == 2)
             {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.green;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.green;
+                spawnPoints[i].GetComponent<Renderer>().material.color = Color.green;
+                spawnPoints[i + 1].GetComponent<Renderer>().material.color = Color.green;
             }
-            else if (k == 4)
+            else if (i == 4)
             {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.red;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.red;
+                spawnPoints[i].GetComponent<Renderer>().material.color = Color.red;
+                spawnPoints[i + 1].GetComponent<Renderer>().material.color = Color.red;
             }
-            else if (k == 6)
+            else if (i == 6)
             {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.white;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.white;
+                spawnPoints[i].GetComponent<Renderer>().material.color = Color.white;
+                spawnPoints[i + 1].GetComponent<Renderer>().material.color = Color.white;
             }
-            else if (k == 8)
+            else if (i == 8)
             {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.yellow;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.yellow;
+                spawnPoints[i].GetComponent<Renderer>().material.color = Color.yellow;
+                spawnPoints[i + 1].GetComponent<Renderer>().material.color = Color.yellow;
             }
-            else if (k == 10)
+            else if (i == 10)
             {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.cyan;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.cyan;
+                spawnPoints[i].GetComponent<Renderer>().material.color = Color.cyan;
+                spawnPoints[i + 1].GetComponent<Renderer>().material.color = Color.cyan;
             }
             */

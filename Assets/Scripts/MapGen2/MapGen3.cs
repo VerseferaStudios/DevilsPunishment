@@ -6,7 +6,7 @@ public class MapGen3 : MonoBehaviour
 {
     //first we'll see the ground floor
     //10 x 10 cube
-    private int n = 2;
+    private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
     public Transform target;
@@ -17,9 +17,9 @@ public class MapGen3 : MonoBehaviour
 
 
 
-    private float xSize = 10f, zSize = 10f;
+    private float xSize = 11f, zSize = 11f;
 
-
+    public GameObject corridor;
 
 
     private void Start()
@@ -31,19 +31,17 @@ public class MapGen3 : MonoBehaviour
 
     public void rooms()
     {
-
-
+        
 
         int k = 0, l = 0;
         while (k < n && l < 1000)
         {
-            //Debug.Log("2");
-            int[] arr = new int[2];
-            arr[0] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
-            arr[1] = (int)Mathf.Round(Random.Range(-0.49f + zSize, 99.49f - xSize)); //0,0 is the top left cell
+            float[] arr = new float[2];
+            arr[0] = Mathf.Round(Random.Range(1 - 0.49f + zSize/2, -1 + 99.49f - zSize/2)); //0,0 is the top left cell
+            arr[1] = Mathf.Round(Random.Range(1 - 0.49f + xSize/2, -1 + 99.49f - xSize/2)); //0,0 is the top left cell
 
-            arr[0] = (int)(Mathf.Round(((float)arr[0])/10f) * 10);
-            arr[1] = (int)(Mathf.Round(((float)arr[1])/10f) * 10);
+            arr[0] = (Mathf.Round(((int)arr[0])/zSize) * zSize);
+            arr[1] = (Mathf.Round(((int)arr[1])/xSize) * xSize);
             
 
             if (noCollisions(arr))
@@ -54,8 +52,7 @@ public class MapGen3 : MonoBehaviour
             }
             ++l;
         }
-
-       
+        
 
         for (int i = 0; i < k; i++)
         {
@@ -82,30 +79,41 @@ public class MapGen3 : MonoBehaviour
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             //roomScript.index = i;
-            GameObject spawnedRoom = Instantiate(roomToSpawn , new Vector3(-((int[])allRooms[i])[1], 0, -((int[])allRooms[i])[0]), Quaternion.identity, transform);
+            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.identity);
+            if(i == k - 1)
+            {
+                spawnedRoom.AddComponent<RoomNew>().corridor = corridor;
+                //spawnedRoom.GetComponent<RoomNew>().corridor = corridor;
+            }
 
-            gameObjectDetails.Add(roomScript);
+            //gameObjectDetails.Add(roomScript);
             //allRooms.Add(roomsInARow);
 
         }
         
 
-        
+        /*
+        //Debug ALL ROOM POSITIONS
 
         for (int i = 0; i < n; i++)
         {
-            ////Debug.Log("_________________" + i + "___________________");
-            int[] ddd = ((int[])allRooms[i]);
-            //Debug.Log(ddd[0]);
-            //Debug.Log(ddd[1]);
+            Debug.Log("_________________" + i + "___________________");
+            float[] ddd = ((float[])allRooms[i]);
+            Debug.Log(ddd[0]);
+            Debug.Log(ddd[1]);
         }
+        Debug.Log("_________________DONE___________________");
+        Data.instance.allRooms = this.allRooms;
+        Data.instance.xSize = xSize;
+        Data.instance.zSize = zSize;
+        */
     }
 
-    private bool noCollisions(int[] arr)
+    private bool noCollisions(float[] arr)
     {
         for (int i = 0; i < allRooms.Count; i++)
         {
-            if ((Mathf.Abs(arr[0] - ((int[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((int[])allRooms[i])[1]) < zSize))
+            if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
             {
                 return false;
             }
