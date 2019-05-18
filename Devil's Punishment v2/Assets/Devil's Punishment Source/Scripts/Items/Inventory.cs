@@ -131,7 +131,7 @@ public class Inventory : MonoBehaviour
 	public GameObject Drop(string ResourceID, int count = 1/*Count Not implemented*/)
 	{
 		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
-		GameObject drop = Instantiate(ResourceManager.instance.getResource("ResourceID"), gameObject.transform.position, gameObject.transform.rotation);
+		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
 		Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
 		drop.SetActive(true);
 		return drop;
@@ -156,7 +156,7 @@ public class Inventory : MonoBehaviour
 	public void DropGameObject(Item item)
 	{
 		GameObject itemPrefab;
-		String ResourceID = string.Empty;
+		String ResourceID = string.Empty	;
 		// ToDo: The Rest of them
 		if (item.name == "Basic Medkit") // This bool is probably not good enough long-term
 		{
@@ -168,14 +168,10 @@ public class Inventory : MonoBehaviour
 		}
 		else 
 		{
-			ResourceID = "Pickup_Handgun";
+			Debug.Assert(false, "Error in inventory.cs: DropGameObject() logic not completed for object, " + item.name);
+			return;
 		}
-		itemPrefab = ResourceManager.instance.getResource(ResourceID);
-		Debug.Log("Dropping gameObject: " + ResourceID);
-
-		Debug.Assert(itemPrefab != null, "itemPrefab shouldn't be null. It didn't load correctly as a resource.");
-		GameObject drop = Instantiate(itemPrefab, gameObject.transform.position, gameObject.transform.rotation);
-		drop.SetActive(true);
+		Drop(ResourceID);
 	}
 
 	public void DropItemAll(int index)
