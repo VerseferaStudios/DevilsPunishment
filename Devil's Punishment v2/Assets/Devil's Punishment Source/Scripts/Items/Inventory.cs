@@ -128,33 +128,60 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void DropItemAll(int index)
+	public GameObject Drop(string ResourceID, int count = 1/*Count Not implemented*/)
+	{
+		Debug.Log("Creating game object from item at "+DropDGameObject.name+"'s position.");
+		GameObject drop = Instantiate(ResourceManager.instance.getResource("ResourceID"), gameObject.transform.position, gameObject.transform.rotation);
+		Debug.Assert(GunPrefab != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		drop.SetActive(true);
+		return drop;
+	}
+
+	public void DropGun()
+	{
+		Debug.Log("DroppingGun");
+		if (equippedGun.clipSize >= 32) // This bool is probably not good enough long-term
+		{
+			Drop("Pickup_Assault_Rifle");
+		}
+		else
+		{
+			Drop("Pickup_Handgun");
+		}
+
+		equippedGun = null;
+		gunController.InitGun();
+	}
+
+	public void DropGameObject(Item item)
+	{
+		Debug.Log("Dropping gameObject: " + ResourceID);
+		GameObject itemPrefab;
+		// ToDo: The Rest of them
+		if (item.name == "Basic Medkit") // This bool is probably not good enough long-term
+		{
+			itemPrefab = ResourceManager.instance.getResource("Pikcup_Medkit_Basic");
+
+		}
+		else if (item.name == "Shotgun Ammo")
+		{
+			itemPrefab = ResourceManager.instance.getResource("Pickup_Shotgun_Ammo");
+		}
+		else 
+		{ 
+			itemPrefab = ResourceManager.instance.getResource("Pickup_Handgun");
+		}
+		Debug.Assert(itemPrefab != null, "itemPrefab shouldn't be null. It didn't load correctly as a resource.");
+		GameObject DroppedGun = Instantiate(itemPrefab, gameObject.transform.position, gameObject.transform.rotation);
+		DroppedGun.SetActive(true);
+	}
+
+	public void DropItemAll(int index)
 	{
 		Debug.Log("Root of DropItem func reached");
-        if(index>=inventory.Count) {
-
-			GameObject GunPrefab;
-			if (equippedGun.clipSize >=32) // This bool is probably not good enough long-term
-			{
-				GunPrefab = ResourceManager.instance.getResource("Pickup_Assault_Rifle");
-
-			} else
-			{
-				GunPrefab = ResourceManager.instance.getResource("Pickup_Handgun");
-			}
-
-			Debug.Assert(GunPrefab != null, "GunPrefab shouldn't be null. It didn't load correctly as a resource.");
-
-			GameObject DroppedGun = Instantiate(GunPrefab, gameObject.transform.position , gameObject.transform.rotation);
-
-			DroppedGun.SetActive(true);
-
-
-			equippedGun = null;
-			gunController.InitGun();
-
-			Debug.Log("It should have dropped now... Must make sure to create a gameObject for it... Should be handled by the DropItem function calls probably.");
-
+        if(index>=inventory.Count)
+		{
+			DropGun();
 		}
 		else if(index > -1)
 		{

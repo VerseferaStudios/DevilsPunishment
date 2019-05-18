@@ -33,7 +33,7 @@ public class ResourceManager : MonoBehaviour
 		foreach (GameObject prefab in gameObjects)
 		{
 			gameObjectDictionary.Add(prefab.name, prefab);
-			Debug.Log(prefab.name);
+			Debug.Log("Resource Manager - Loading Prefab: "+prefab.name);
 			// Do Something to the prefab?
 		}
 	}
