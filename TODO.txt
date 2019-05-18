@@ -2,3 +2,28 @@
 	first for constant size rooms 
 	then varying given sized rooms
 Discrepancy between prefab and groud scale, why
+
+
+
+
+---------------------------------------------------
+
+room1 _____
+|
+|
+|____room
+
+room1 |
+	|
+	|____room2
+
+L doesnt matter zig zag is same distance
+
+Keep 1 unit gap in between two rooms i the grid
+ie, reduce the scale of each room by 0.25 units (?)
+So, from a door reach oone of the corners then take the easy l route
+
+Get a proper function to draw corridors from and to
+like thefunction can be restrited to from and to having either x or z coordinates equal. Therefore you can have the point and instert into the function.
+
+Have proper debugs at each stage of the function writing and test very frequently!!!!!!!!!!!!

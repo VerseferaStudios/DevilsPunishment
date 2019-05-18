@@ -7,6 +7,8 @@ public class Data : MonoBehaviour
     public static Data instance = null;
     public ArrayList allRooms = new ArrayList();
     public float xSize, zSize;
+    public int collisionCount = 0, corridorCount = 0;
+    public bool isCollided = false;
 
     private void Awake()
     {

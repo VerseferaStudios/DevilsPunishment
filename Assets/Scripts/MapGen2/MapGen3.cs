@@ -6,6 +6,7 @@ public class MapGen3 : MonoBehaviour
 {
     //first we'll see the ground floor
     //10 x 10 cube
+    //later//private int gridSize;
     private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
@@ -19,7 +20,7 @@ public class MapGen3 : MonoBehaviour
 
     private float xSize = 11f, zSize = 11f;
 
-    public GameObject corridor;
+    public GameObject[] corridors;
 
 
     private void Start()
@@ -37,8 +38,8 @@ public class MapGen3 : MonoBehaviour
         while (k < n && l < 1000)
         {
             float[] arr = new float[2];
-            arr[0] = Mathf.Round(Random.Range(1 - 0.49f + zSize/2, -1 + 99.49f - zSize/2)); //0,0 is the top left cell
-            arr[1] = Mathf.Round(Random.Range(1 - 0.49f + xSize/2, -1 + 99.49f - xSize/2)); //0,0 is the top left cell
+            arr[0] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + zSize/2, /*-11*/ -1 + 99.49f - zSize/2)); //0,0 is the top left cell
+            arr[1] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + xSize/2, /*-11*/ -1 + 99.49f - xSize/2)); //0,0 is the top left cell
 
             arr[0] = (Mathf.Round(((int)arr[0])/zSize) * zSize);
             arr[1] = (Mathf.Round(((int)arr[1])/xSize) * xSize);
@@ -82,7 +83,7 @@ public class MapGen3 : MonoBehaviour
             GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.identity);
             if(i == k - 1)
             {
-                spawnedRoom.AddComponent<RoomNew>().corridor = corridor;
+                spawnedRoom.AddComponent<RoomNew>().corridors = corridors;
                 //spawnedRoom.GetComponent<RoomNew>().corridor = corridor;
             }
 

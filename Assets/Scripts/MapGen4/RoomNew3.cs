@@ -3,17 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomNew : MonoBehaviour
+public class RoomNew3 : MonoBehaviour
 {
-    //private List<Transform> spawnPoints = new List<Transform>();
     private List<GameObject> spawnPoints = new List<GameObject>();
-    public GameObject[] corridors;
+    public GameObject corridor;
     private Transform corridorsParent;
     private MapGen3 mapGen3;
     private float nextTime = 0f;
     private bool breakLoop = false;
-    private List<Vector3> visitedRooms = new List<Vector3>();
-    private Vector3 spawnNowAt;
 
     // Start is called before the first frame update
     void Start()
@@ -22,59 +19,12 @@ public class RoomNew : MonoBehaviour
 
 
         GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Corridor Spawn Points");
-        //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
-        //Debug.Log(f);
-        //GameObjects to transform
-        /*
-        for (int i = 0; i < tempSpawnPoints.Length; i++)
-        {
-            tempSpawnPoints[i] = tempSpawnPoints[i].transform.position;
-        }
-        */
+        string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
+        Debug.Log(f);
         spawnPoints.AddRange(tempSpawnPoints);
         Debug.Log(spawnPoints.Count);
-
-        for (int i = 0; i < spawnPoints.Count; i++)
-        {
-            bool isFound = false;
-            int lastIdx = i;
-            for (int j = 0; j < spawnPoints.Count; j++)
-            {
-                if(i == j)
-                {
-                    continue;
-                }
-                if(spawnPoints[i].transform.position == spawnPoints[j].transform.position)
-                {
-                    isFound = true;
-                    lastIdx = j;
-                    break;
-                }
-            }
-            if (isFound)
-            {
-                GameObject currentCorridor = Instantiate(corridors[1]/* L_1 */, spawnPoints[i].transform.position, Quaternion.identity);
-                Data.instance.corridorCount++;
-
-
-
-                Debug.Log(spawnPoints[i].transform.position + "______________________________________________________");
-                spawnPoints.RemoveAt(i);
-                spawnPoints.RemoveAt(lastIdx);
-                isFound = false;
-            }
-        }
-
         for (int k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
-
-            if (visitedRooms.Contains(spawnPoints[k].transform.parent.transform.position))
-            {
-                Debug.Log("Removed a door of ____ " + spawnPoints[k].transform.parent.transform.position);
-                spawnPoints.RemoveAt(k);
-                k--;
-                continue;
-            }
 
             Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -97,15 +47,6 @@ public class RoomNew : MonoBehaviour
 
             for (int i = 0; i < spawnPoints.Count; i++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-
-                if (visitedRooms.Contains(spawnPoints[i].transform.parent.transform.position))
-                {
-                    Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
-                    spawnPoints.RemoveAt(i);
-                    k--;
-                    break;
-                }
-
                 if (k == i)
                 {
                     continue;
@@ -121,7 +62,7 @@ public class RoomNew : MonoBehaviour
                         isKx = true;
                         targetPos = new Vector3(spawnPoints[k].transform.position.x, 0.5f, spawnPoints[i].transform.position.z);
                     }
-                    else if(spawnPoints[k].name.EndsWith("z") && spawnPoints[i].name.EndsWith("x"))
+                    else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[i].name.EndsWith("x"))
                     {
                         targetPos = new Vector3(spawnPoints[i].transform.position.x, 0.5f, spawnPoints[k].transform.position.z);
                     }
@@ -133,11 +74,9 @@ public class RoomNew : MonoBehaviour
                         spawnHalf(spawnPoints[k].transform.position, to, false);
                         From = to;
                         targetPos = new Vector3(spawnPoints[i].transform.position.x, 0.5f, From.z);
-                        /*
                         Debug.Log("From = " + From);
                         Debug.Log(targetPos);
                         Debug.Log(spawnPoints[i].transform.position);
-                        */
                     }
                     else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[i].name.EndsWith("z"))
                     {
@@ -147,11 +86,9 @@ public class RoomNew : MonoBehaviour
                         spawnHalf(spawnPoints[k].transform.position, to, false);
                         From = to;
                         targetPos = new Vector3(From.x, 0.5f, spawnPoints[i].transform.position.z);
-                        /*
                         Debug.Log("From = " + From);
                         Debug.Log(targetPos);
                         Debug.Log(spawnPoints[i].transform.position);
-                        */
                     }
 
 
@@ -159,21 +96,13 @@ public class RoomNew : MonoBehaviour
                     //Debug.Log(From);
                     //Debug.Log(spawnPoints[i].transform.position);
                     spawnHalf(From, targetPos, false); //false
-                    //Vector3 spawnNowAt
-
                     spawnHalf(targetPos, spawnPoints[i].transform.position, true);
-
-                    visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
-                    visitedRooms.Add(spawnPoints[k].transform.parent.transform.position);
-                    Debug.Log("Added a door of ____ " + spawnPoints[i].transform.parent.transform.position);
-                    Debug.Log("Added a door of ____ " + spawnPoints[k].transform.parent.transform.position);
-
                     spawnPoints.RemoveAt(i);
                     spawnPoints.RemoveAt(k); //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                              //i-=2; //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                              //k -=2; //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                    if(k < i)
+                    if (k < i)
                     {
                         k--;
                     }
@@ -195,66 +124,48 @@ public class RoomNew : MonoBehaviour
 
 
             //Debug.Log(targetPos);
-            
-            if(k >= spawnPoints.Count && spawnPoints.Count != 0)
+
+            if (k >= spawnPoints.Count && spawnPoints.Count != 0)
             {
                 k = 0; // makes it worse y????????????????????????//////
             }
 
         }
         //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
-        Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     private void spawnHalf(Vector3 From, Vector3 to, bool skipFirst)
     {
         //Debug.Log(From + " " + to);
         //Debug.Log("In Function");
-        spawnNowAt = From;
-        GameObject corridorToSpawn = corridors[0];
-        if(From.x == to.x)//Z
+        Vector3 spawnNowAt = From;
+        if (From.x == to.x)
         {
             int increment = (From.z > to.z) ? -1 : 1;
-            //if()
-            int i = 1;
-            if (skipFirst)
-            {
-                skipFirst = false;
-                i = 1;
-            }
-            for (; i < Mathf.Abs(From.z - to.z) + 1; i++)
+            for (int i = 0; i < Mathf.Abs(From.z - to.z) + 1; i++)
             {
                 //Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
-                currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                Data.instance.corridorCount++;
-                if (Data.instance.isCollided)
+                if (skipFirst)
                 {
-                    Data.instance.isCollided = false;
-                    //check curretn corridor and rotation. check the already instantiated once c=type AND rotation (using other)
-
+                    skipFirst = false;
+                    continue;
                 }
+                Instantiate(corridor, spawnNowAt, Quaternion.identity);
                 spawnNowAt.z += increment;
             }
         }
-        else if(From.z == to.z)
+        else if (From.z == to.z)
         {
-            Debug.Log("Did@#$%^&*()");
             int increment = (From.x > to.x) ? -1 : 1;
-            int i = 0;
-            if (skipFirst)
-            {
-                skipFirst = false;
-                i = 1;
-            }
-            for (; i < Mathf.Abs(From.x - to.x) + 1; i++)
+            for (int i = 0; i < Mathf.Abs(From.x - to.x) + 1; i++)
             {
                 //Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
-                Data.instance.corridorCount++;
-
-
-
+                if (skipFirst)
+                {
+                    skipFirst = false;
+                    continue;
+                }
+                Instantiate(corridor, spawnNowAt, Quaternion.identity);
                 spawnNowAt.x += increment;
             }
         }
@@ -262,7 +173,7 @@ public class RoomNew : MonoBehaviour
 
     private bool checkIfSameRoom(int k, int i)
     {
-        bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false ;
+        bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false;
 
         if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 11)
         {
@@ -293,7 +204,7 @@ public class RoomNew : MonoBehaviour
             return true;
         }
 
-            return false;
+        return false;
     }
 
     /*
