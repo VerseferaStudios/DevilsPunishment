@@ -140,13 +140,29 @@ public class Inventory : MonoBehaviour
 	public void DropGun()
 	{
 		Debug.Log("DroppingGun");
-		if (equippedGun.clipSize >= 32) // This bool is probably not good enough long-term
-		{
+		if (equippedGun == ResourceManager.instance.getResource("Pickup_Assault_Rifle").GetComponent<InteractableLoot>().item as GunItem)
+		{ 
 			DropGameObject("Pickup_Assault_Rifle");
+		}
+		else if (equippedGun == ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem)
+		{
+			Debug.Log("Shotgun Dropped, but resource doesn't exist yet.");
+			DropGameObject("Pickup_Shotgun");
+		}
+		else if (equippedGun == ResourceManager.instance.getResource("Pickup_Handgun").GetComponent<InteractableLoot>().item as GunItem)
+		{
+			Debug.Log("Shotgun Dropped, but resource doesn't exist yet.");
+			DropGameObject("Pickup_Shotgun");
 		}
 		else
 		{
-			DropGameObject("Pickup_Handgun");
+			if (equippedGun != null)
+			{
+				Debug.Log("Dropping unknown gun: " + equippedGun.name);
+			} else
+			{
+				Debug.Log("Dropping gun, but equipped gun is null");
+			}
 		}
 
 		equippedGun = null;
@@ -155,42 +171,26 @@ public class Inventory : MonoBehaviour
 
 	public void DropGameObject(Item item)
 	{
-		GameObject itemPrefab;
-		String ResourceID = string.Empty	;
-		// ToDo: The Rest of them
-		if (item.name == "Rifle Ammo") // This method of picking is probably not good enough long-term
+		string ResourceID = string.Empty;
+		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
+		foreach (string resource in resources)
 		{
-			Debug.Log("Rifle Ammo Dropped, but resource doesn't exist yet.");
-			ResourceID = "Pickup_Rifle_Ammo";
+			GameObject resItem = ResourceManager.instance.getResource(resource);
+			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
+			if (lootComp == null)
+			{
+				Debug.Log("Resource: " + resItem.name + " does not have an InteractableLoot component.");
+				continue;
+			}
+			if (item == lootComp.item)
+			{
+				ResourceID = name;
+				DropGameObject(resource);
+				return;
+			}
+		}
+		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGameObject() logic not completed for object, " + item.name);
 
-			//Also need to implement junk for flashlight & glowstick
-		}
-		else if (item.name == "Assault_Rifle")
-		{
-			ResourceID = "Pickup_Assault_Rifle";
-		}
-		else if (item.name == "Handgun")
-		{
-			ResourceID = "Pickup_Handgun";
-		}
-		else if (item.name == "Basic Medkit")
-		{
-			ResourceID = "Pikcup_Medkit_Basic";
-		}
-		else if (item.name == "Pills")
-		{
-			ResourceID = "Pickup_Pills";
-		}
-		else if (item.name == "Shotgun Ammo")
-		{
-			ResourceID = "Pickup_Shotgun_Ammo";
-		}
-		else
-		{
-			Debug.Assert(false, "Error in inventory.cs: DropGameObject() logic not completed for object, " + item.name);
-			return;
-		}
-		DropGameObject(ResourceID);
 	}
 
 	public void DropItemAll(int index)
@@ -208,7 +208,10 @@ public class Inventory : MonoBehaviour
 			{
 				string name = inventory[index].item.name;
 				Debug.Log("-> Dropping item: " + name);
-				DropGameObject(inventory[index].item);
+				if (inventory[index].stack > 0)
+				{
+					DropGameObject(inventory[index].item);
+				}
 				inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
             }
