@@ -76,23 +76,18 @@ public class Inventory : MonoBehaviour
     }
 
     public void AddItem(Item item, int stack=1) {
-
         if(item is GunItem) {
 			if (equippedGun != null)
 			{
 				Debug.Log("Gun in hand," + equippedGun.name +" " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
-				DropItem(10); // Drop the "GUN" in hand
+				DropGun();
 			} else
 			{
 				Debug.Log("Player doesn't appear to be holding a gun, so... ");
-
 			}
-
-
 			Debug.Log("Equipping picked gun " +item.name);
 			equippedGun = item as GunItem;
             gunController.InitGun();
-
             return;
         }
 
@@ -133,6 +128,7 @@ public class Inventory : MonoBehaviour
 		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
 		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
 		Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		drop.GetComponent<InteractableLoot>().stock = count;
 		drop.SetActive(true);
 		return drop;
 	}
@@ -159,7 +155,7 @@ public class Inventory : MonoBehaviour
 		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGun() logic not completed for object, " + ResourceID);
 	}
 
-	public void DropGameObject(Item item)
+	public void DropGameObject(Item item, int count = 1)
 	{
 		string ResourceID = string.Empty;
 		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
@@ -174,7 +170,7 @@ public class Inventory : MonoBehaviour
 			if (item == lootComp.item)
 			{
 				ResourceID = resource;
-				DropGameObject(resource);
+				DropGameObject(resource, count);
 				return;
 			}
 		}
@@ -199,7 +195,7 @@ public class Inventory : MonoBehaviour
 				Debug.Log("-> Dropping item: " + name);
 				if (inventory[index].stack > 0)
 				{
-					DropGameObject(inventory[index].item);
+					DropGameObject(inventory[index].item,inventory[index].stack);
 				}
 				inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
@@ -241,8 +237,9 @@ public class Inventory : MonoBehaviour
             } else if(index > -1) {
                 if(inventory[index].item != null && inventory[index].stack > 1) {
                     inventory[index].stack--;
-					Debug.Log("Appears to be dropping part of a stack... Must remember to create the game object for it.");
-                } else {
+					Debug.Log("Dropping a Partial Stack of " + amount + " " + inventory[index].item.name );
+					DropGameObject(inventory[index].item, amount);
+				} else {
                     DropItemAll(index);
                     return;
                 }
