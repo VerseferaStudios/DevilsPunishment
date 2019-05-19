@@ -147,7 +147,6 @@ public class Inventory : MonoBehaviour
 		{
 			GameObject resItem = ResourceManager.instance.getResource(resource);
 			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
-			string ResourceID = string.Empty;
 			if (equippedGun == lootComp.item as GunItem)
 			{
 				ResourceID = resource;
