@@ -128,7 +128,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-	public GameObject Drop(string ResourceID, int count = 1/*Count Not implemented*/)
+	public GameObject DropGameObject(string ResourceID, int count = 1/*Count Not implemented*/)
 	{
 		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
 		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
@@ -142,11 +142,11 @@ public class Inventory : MonoBehaviour
 		Debug.Log("DroppingGun");
 		if (equippedGun.clipSize >= 32) // This bool is probably not good enough long-term
 		{
-			Drop("Pickup_Assault_Rifle");
+			DropGameObject("Pickup_Assault_Rifle");
 		}
 		else
 		{
-			Drop("Pickup_Handgun");
+			DropGameObject("Pickup_Handgun");
 		}
 
 		equippedGun = null;
@@ -158,20 +158,39 @@ public class Inventory : MonoBehaviour
 		GameObject itemPrefab;
 		String ResourceID = string.Empty	;
 		// ToDo: The Rest of them
-		if (item.name == "Basic Medkit") // This bool is probably not good enough long-term
+		if (item.name == "Rifle Ammo") // This method of picking is probably not good enough long-term
+		{
+			Debug.Log("Rifle Ammo Dropped, but resource doesn't exist yet.");
+			ResourceID = "Pickup_Rifle_Ammo";
+
+			//Also need to implement junk for flashlight & glowstick
+		}
+		else if (item.name == "Assault_Rifle")
+		{
+			ResourceID = "Pickup_Assault_Rifle";
+		}
+		else if (item.name == "Handgun")
+		{
+			ResourceID = "Pickup_Handgun";
+		}
+		else if (item.name == "Basic Medkit")
 		{
 			ResourceID = "Pikcup_Medkit_Basic";
+		}
+		else if (item.name == "Pills")
+		{
+			ResourceID = "Pickup_Pills";
 		}
 		else if (item.name == "Shotgun Ammo")
 		{
 			ResourceID = "Pickup_Shotgun_Ammo";
 		}
-		else 
+		else
 		{
 			Debug.Assert(false, "Error in inventory.cs: DropGameObject() logic not completed for object, " + item.name);
 			return;
 		}
-		Drop(ResourceID);
+		DropGameObject(ResourceID);
 	}
 
 	public void DropItemAll(int index)
@@ -179,32 +198,17 @@ public class Inventory : MonoBehaviour
 		Debug.Log("Root of DropItem func reached");
         if(index>=inventory.Count)
 		{
+			Debug.Log("-> Determined that you want to drop a gun...");
 			DropGun();
 		}
 		else if(index > -1)
 		{
+			Debug.Log("-> Determined that you want to drop an item from your inventory...");
 			if (inventory[index].item != null)
 			{
-
 				string name = inventory[index].item.name;
-				Debug.Log("Dropping item: " + name);
-
-
-				GameObject itemPrefab;
-				if (name == "Basic Medkit") // This bool is probably not good enough long-term
-				{
-					itemPrefab = ResourceManager.instance.getResource("Pikcup_Medkit_Basic");
-
-				}
-				else
-				{ // ToDo: The Rest of them
-					itemPrefab = ResourceManager.instance.getResource("Pickup_Handgun");
-				}
-				Debug.Assert(itemPrefab != null, "itemPrefab shouldn't be null. It didn't load correctly as a resource.");
-				GameObject DroppedGun = Instantiate(itemPrefab, gameObject.transform.position, gameObject.transform.rotation);
-				DroppedGun.SetActive(true);
-
-
+				Debug.Log("-> Dropping item: " + name);
+				DropGameObject(inventory[index].item);
 				inventory.RemoveAt(index);
                 inventory.Add(new InventorySlot());
             }
