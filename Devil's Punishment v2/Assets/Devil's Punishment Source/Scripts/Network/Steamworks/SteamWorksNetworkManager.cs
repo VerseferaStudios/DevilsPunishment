@@ -279,7 +279,6 @@ public class SteamWorksNetworkManager : MonoBehaviour
             }
         }
     }
-}
 
         //-----------------------------------------------------------------------------
         // Purpose: Take any action we need to on Steam notifying us we are now logged in
