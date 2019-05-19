@@ -35,6 +35,8 @@ public class CuffController : MonoBehaviour
         pisLocked = true;
         risLocked = true;
         sisLocked = true;
+        //Add a on screen or audio cue for failure.
+        Debug.Log("Cuffed, find a way to get your cuffs off!");
     }
 
     public void Uncuff()
@@ -43,7 +45,9 @@ public class CuffController : MonoBehaviour
         pisLocked = false;
         risLocked = false;
         sisLocked = false;
+        Debug.Log("You have picked up a gun.");
     }
+
     public void OnTriggerEnter(Collider Ladder)
     {
         if (tag == "Player" && Input.GetKeyDown(KeyCode.E))
