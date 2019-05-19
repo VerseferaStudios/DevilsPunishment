@@ -139,34 +139,25 @@ public class Inventory : MonoBehaviour
 
 	public void DropGun()
 	{
-		Debug.Log("DroppingGun");
-		if (equippedGun == ResourceManager.instance.getResource("Pickup_Assault_Rifle").GetComponent<InteractableLoot>().item as GunItem)
-		{ 
-			DropGameObject("Pickup_Assault_Rifle");
-		}
-		else if (equippedGun == ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem)
+		Debug.Log("DroppingHeldGun");
+
+		string ResourceID = string.Empty;
+		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
+		foreach (string resource in resources)
 		{
-			Debug.Log("Shotgun Dropped, but resource doesn't exist yet.");
-			DropGameObject("Pickup_Shotgun");
-		}
-		else if (equippedGun == ResourceManager.instance.getResource("Pickup_Handgun").GetComponent<InteractableLoot>().item as GunItem)
-		{
-			Debug.Log("Shotgun Dropped, but resource doesn't exist yet.");
-			DropGameObject("Pickup_Shotgun");
-		}
-		else
-		{
-			if (equippedGun != null)
+			GameObject resItem = ResourceManager.instance.getResource(resource);
+			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
+			string ResourceID = string.Empty;
+			if (equippedGun == lootComp.item as GunItem)
 			{
-				Debug.Log("Dropping unknown gun: " + equippedGun.name);
-			} else
-			{
-				Debug.Log("Dropping gun, but equipped gun is null");
+				ResourceID = resource;
+				DropGameObject(resource);
+				equippedGun = null;
+				gunController.InitGun();
+				return;
 			}
 		}
-
-		equippedGun = null;
-		gunController.InitGun();
+		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGun() logic not completed for object, " + ResourceID);
 	}
 
 	public void DropGameObject(Item item)
@@ -179,17 +170,16 @@ public class Inventory : MonoBehaviour
 			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
 			if (lootComp == null)
 			{
-				Debug.Log("Resource: " + resItem.name + " does not have an InteractableLoot component.");
 				continue;
 			}
 			if (item == lootComp.item)
 			{
-				ResourceID = name;
+				ResourceID = resource;
 				DropGameObject(resource);
 				return;
 			}
 		}
-		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGameObject() logic not completed for object, " + item.name);
+		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGameObject() logic not completed for object, " + ResourceID);
 
 	}
 
