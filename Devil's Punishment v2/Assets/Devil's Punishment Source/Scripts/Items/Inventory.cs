@@ -56,8 +56,10 @@ public class Inventory : MonoBehaviour
 
     private GunController gunController;
 
+
     private void Awake() {
         instance = this;
+		CullNulls();
     }
 
     private void Start() {
@@ -74,12 +76,15 @@ public class Inventory : MonoBehaviour
             return null;
         }
     }
+	
+	private int size;
+	public bool hasSpace() { Debug.Log("Inventory size is: " + size); return size < inventory.Count; }
 
     public void AddItem(Item item, int stack=1) {
         if(item is GunItem) {
 			if (equippedGun != null)
 			{
-				Debug.Log("Gun in hand," + equippedGun.name +" " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
+				Debug.Log("Gun in hand," + equippedGun.name + " " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
 				DropGun();
 			} else
 			{
@@ -147,11 +152,12 @@ public class Inventory : MonoBehaviour
 			{
 				ResourceID = resource;
 				Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
-				AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
+				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null)
+					AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
 				equippedGun = null;
 				gunController.InitGun();
 				DropGameObject(resource);
-				return;
+				return;	
 			}
 		}
 		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGun() logic not completed for object, " + ResourceID);
@@ -200,10 +206,10 @@ public class Inventory : MonoBehaviour
 					DropGameObject(inventory[index].item,inventory[index].stack);
 				}
 				inventory.RemoveAt(index);
-                inventory.Add(new InventorySlot());
+				size--;
+				inventory.Add(new InventorySlot());
             }
         }
-
     }
 
     public void DropItem(string name, int amount = 1, bool consume = false)
@@ -296,7 +302,7 @@ public class Inventory : MonoBehaviour
     public void Sort() {
         CompoundInventory();
         inventory.Sort();
-    }
+	}
 
     public int GetIndexOfItem(string name) {
         for(int i = 0; i < inventory.Count; i++) {
@@ -347,10 +353,15 @@ public class Inventory : MonoBehaviour
     }
 
     private void CullNulls() {
+		size = 0;
         for(int i = 0; i < inventory.Count; i++) {
-            if(!(inventory[i] != null && inventory[i].item != null && inventory[i].stack > 0)) {
+            if(inventory[i] == null || inventory[i].item == null || inventory[i].stack <= 0) {
                 DropItemAll(i);
-            }
+			}
+			else
+			{
+				size++;
+			}
         }
     }
 
