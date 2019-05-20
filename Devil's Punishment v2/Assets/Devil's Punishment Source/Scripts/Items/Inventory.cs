@@ -123,7 +123,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-	public GameObject DropGameObject(string ResourceID, int count = 1/*Count Not implemented*/)
+	public GameObject DropGameObject(string ResourceID, int count = 1)
 	{
 		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
 		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
@@ -147,7 +147,6 @@ public class Inventory : MonoBehaviour
 			{
 				ResourceID = resource;
 				DropGameObject(resource);
-				equippedGun = null;
 				gunController.InitGun();
 				return;
 			}
@@ -204,7 +203,7 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public void DropItem(string name, int amount = 1) {
+    public void DropItem(string name, int amount = 1, bool consume = false) {
 		Debug.Log("Attempting to drop " + name);
         int x = amount;
 

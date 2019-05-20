@@ -316,10 +316,9 @@ public class GunController : MonoBehaviour
             }
 
         //}
-
         if(clipStock >= clipSize-clip) {
             Debug.Log("reloading with stock left: " + ammoName);
-            inventory.DropItem(ammoName, clipSize-clip);
+            inventory.DropItem(ammoName,/*ammount*/ clipSize-clip,/*consume*/true);
             clip = clipSize;
         } else {
             Debug.Log("almost empty!");
