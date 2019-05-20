@@ -28,7 +28,7 @@ public class SoundManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
         //Persist between scenes
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         soundGroupDictionary = new Dictionary<string, SoundGroup>(soundGroups.Length);
         foreach (SoundGroup group in soundGroups)
         {

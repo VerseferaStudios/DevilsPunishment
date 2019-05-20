@@ -305,6 +305,8 @@ MonoBehaviour:
   lobby:
     m_SteamID: 0
   players: []
+  playersPos: []
+  playersRot: []
 --- !u!1 &1281352413 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2216783644249945933, guid: 1ea93d5d737332e429397722586a9494,
@@ -435,16 +437,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 2216783644694104693, guid: 1ea93d5d737332e429397722586a9494,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2216783644887926628, guid: 1ea93d5d737332e429397722586a9494,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2216783644694104697, guid: 1ea93d5d737332e429397722586a9494,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -560,54 +552,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1503925625}
-    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 767443536, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -17
-      objectReference: {fileID: 0}
-    - target: {fileID: 1037555620, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831894576, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831894576, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1503925625}
-    - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ButtonStartGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 843089849, guid: 1ea93d5d737332e429397722586a9494, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ea93d5d737332e429397722586a9494, type: 3}
 --- !u!1001 &5711885729428160837

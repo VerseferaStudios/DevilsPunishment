@@ -29,6 +29,8 @@ public class SWLobbyManager : MonoBehaviour {
     protected Callback<LobbyEnter_t> Callback_lobbyEnter;
     protected Callback<LobbyDataUpdate_t> Callback_lobbyInfo;
     protected Callback<LobbyChatMsg_t> Callback_ChatMsgRec;
+    private Callback<P2PSessionRequest_t> Callback_SessionRequest;
+
 
     private int numberOfPlayersInLobby = 0;
 
@@ -39,9 +41,9 @@ public class SWLobbyManager : MonoBehaviour {
 
     void Start () {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-        ServerInformationObject.GetComponent<ServerInformation>().players = new CSteamID[4];
-        for (int i = 0; i < 4; i++)
-            ServerInformationObject.GetComponent<ServerInformation>().players[i] = (CSteamID)0;
+        ServerInformationObject.GetComponent<ServerInformation>().players = new PlayerInformation[8];
+        for (int i = 0; i < 8; i++)
+            ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid = (CSteamID)0;
 
         lobbyIDS = new List<CSteamID>();
         Callback_lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
@@ -49,6 +51,7 @@ public class SWLobbyManager : MonoBehaviour {
         Callback_lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         Callback_lobbyInfo = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
         Callback_ChatMsgRec = Callback<LobbyChatMsg_t>.Create(OnChatMsgRec);
+        Callback_SessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
 
         if (SteamAPI.Init())
             Debug.Log("Steam API init -- SUCCESS!");
@@ -57,22 +60,28 @@ public class SWLobbyManager : MonoBehaviour {
 
     }
 
+    //P2P communication//////
+    void OnP2PSessionRequest(P2PSessionRequest_t request)
+    {
+        CSteamID clientID = request.m_steamIDRemote;
+        for (int i = 0; i < ServerInformationObject.GetComponent<ServerInformation>().players.Length; i++)
+        {
+            if (current_lobbyID != 0)
+                SteamNetworking.AcceptP2PSessionWithUser(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
+        }
+    }
+
     private void HandleMessage(string playMessage)
     {
         string playmessage = Md5Sum(secret + current_lobbyID + secret);
-        int lobbynum = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
-        Debug.Log("Player Amount: " + lobbynum);
         Debug.Log("Message Received " + playMessage);
         Debug.Log("MD5 Secret " + playmessage);
-
-        int i = 0;
-        while (i < lobbynum) { 
-            ServerInformationObject.GetComponent<ServerInformation>().players[i] = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
-            i++;
-        }
-        ServerInformationObject.GetComponent<ServerInformation>().lobby = (CSteamID)current_lobbyID;
+        
         SteamMatchmaking.LeaveLobby((CSteamID)current_lobbyID);
-        if (playMessage == playmessage) //This will be changed to a more secure md5 hash
+
+        string SecretPlayMessage = Md5Sum(secret + current_lobbyID + secret);
+
+        if (SecretPlayMessage == playmessage) //This will be changed to a more secure md5 hash
         {
             SceneManager.LoadScene(_PLAYSCENE);
         }
@@ -84,6 +93,16 @@ public class SWLobbyManager : MonoBehaviour {
         Debug.Log("Trying to create lobby ...");
         SteamAPICall_t try_toHost = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 8);
         ToggleLobby(true);
+        int i = 0;
+        while(i < lobby.transform.childCount) //(Transform child in lobby.transform.GetChildCount)
+        {
+            if (lobby.transform.GetChild(i).name == "Start")
+            {
+                lobby.transform.GetChild(i).gameObject.SetActive(true);
+                return;
+            }
+            i++;
+        }
     }
 
     public void ButtonShowLobbyList()
@@ -93,7 +112,6 @@ public class SWLobbyManager : MonoBehaviour {
         SteamAPICall_t try_getList = SteamMatchmaking.RequestLobbyList();
         ToggleMainMenu(false);
         ToggleLobbyList(true);
-
     }
 
     public void ButtonJoinLobby(int i)
@@ -105,10 +123,14 @@ public class SWLobbyManager : MonoBehaviour {
 
     public void ButtonStartGame()
     {
+        Debug.Log("HOW MANY MEMBERS? - "+SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID));
         for (int i = 0; i < SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID); i++)
         {
             CSteamID receiver = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
+            Debug.Log("SENDING TO - " + i + " : " + SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
             string start = Md5Sum(secret + current_lobbyID + secret);
+
+            Debug.Log("SENDING " + start);
 
             // allocate new bytes array and copy string characters as bytes
             byte[] bytes = new byte[start.Length * sizeof(char)];
@@ -140,6 +162,7 @@ public class SWLobbyManager : MonoBehaviour {
         {
             int numPlayers = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
             MakePlayerLobbyItems(numPlayers);
+            UpdateServerInformationList();
         }
         // Command - List lobby members
         if (Input.GetKeyDown(KeyCode.Q))
@@ -156,6 +179,7 @@ public class SWLobbyManager : MonoBehaviour {
         uint size;
         while (SteamNetworking.IsP2PPacketAvailable(out size))
         {
+            Debug.Log("GOT A MESSAGE READY!!!");
             //allocate the buffer
             var buffer = new byte[size];
             uint bytesRead;
@@ -163,12 +187,25 @@ public class SWLobbyManager : MonoBehaviour {
             //read message
             if (SteamNetworking.ReadP2PPacket(buffer, size, out bytesRead, out remoteid))
             {
+                Debug.Log("GOT A MESSAGE!!!");
                 char[] chars = new char[bytesRead / sizeof(char)];
                 System.Buffer.BlockCopy(buffer, 0, chars, 0, buffer.Length);
                 string message = new string(chars, 0, chars.Length);
                 HandleMessage(message);
             }
         }
+    }
+
+    void UpdateServerInformationList()
+    {
+        int lobbynum = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
+        int i = 0;
+        while (i < lobbynum)
+        {
+            ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
+            i++;
+        }
+        ServerInformationObject.GetComponent<ServerInformation>().lobby = (CSteamID)current_lobbyID;
     }
 
     void OnChatMsgRec(LobbyChatMsg_t result)
@@ -249,7 +286,8 @@ public class SWLobbyManager : MonoBehaviour {
 
             int numPlayers = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
             lobby.GetComponentInChildren<Text>().text = "\n"+ "\t Number of players currently in lobby : " + numPlayers;
-            MakePlayerLobbyItems(numPlayers);           
+            MakePlayerLobbyItems(numPlayers);
+            UpdateServerInformationList();         
         }
         else
         {

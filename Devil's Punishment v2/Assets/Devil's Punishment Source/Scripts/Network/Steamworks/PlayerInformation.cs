@@ -6,8 +6,8 @@ using Steamworks;
 public class PlayerInformation : MonoBehaviour
 {
     public CSteamID steamid;
-    public CSteamID lobby;
-
+    public Vector3 playersPos;
+    public Quaternion playersRot;
 
     void Awake()
     {

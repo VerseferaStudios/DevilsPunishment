@@ -79,7 +79,7 @@ public class Inventory : MonoBehaviour
 
         if(item is GunItem) {
             equippedGun = item as GunItem;
-            gunController.InitGun();
+            //gunController.InitGun();
             return;
         }
 

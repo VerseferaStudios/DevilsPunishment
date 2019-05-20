@@ -20,6 +20,8 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     private GameObject ServerInformationObject;
 
+    protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
+    private Callback<P2PSessionRequest_t> Callback_SessionRequest;
 
     // Current game server version
     const string DEVILS_PUNISHMENT_SERVER_VERSION = "1.0.0.0";
@@ -46,31 +48,29 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-
-
+        Callback_SessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
+        OtherPlayers = new GameObject[7];
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
         for (int i = 0; i < playersAmount; i++) {
-            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != SteamUser.GetSteamID())
             {
-                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != (CSteamID)0)
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != (CSteamID)0)
                 {
                     OtherPlayers[i] = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                    OtherPlayers[i].GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
-                    ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = OtherPlayers[i].transform.position;
-                    ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = OtherPlayers[i].transform.rotation;
+                    OtherPlayers[i].GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
+                    ServerInformationObject.GetComponent<ServerInformation>().players[i].playersPos = OtherPlayers[i].transform.position;
+                    ServerInformationObject.GetComponent<ServerInformation>().players[i].playersRot = OtherPlayers[i].transform.rotation;
                 }
             }
             else
             {
                 Player = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                Player.GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
+                Player.GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
                 BroadcastSteamMessage("POS_" + Player.transform.position.ToString());
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
         }
     }
-    // Tells us when we have successfully connected to Steam
-    protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
 
 #if DISABLED
 
@@ -186,6 +186,19 @@ public class SteamWorksNetworkManager : MonoBehaviour
         Debug.Log("Shutdown.");
     }
 
+
+    //P2P communication//////
+    void OnP2PSessionRequest(P2PSessionRequest_t request)
+    {
+        CSteamID clientID = request.m_steamIDRemote;
+        int i = 0;
+        while (i < ServerInformationObject.GetComponent<ServerInformation>().players.Length)
+        {
+            SteamNetworking.AcceptP2PSessionWithUser(ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid);
+            i++;
+        }
+    }
+
     private void Update()
     {
         if (!m_bInitialized)
@@ -199,7 +212,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
         {
             SendUpdatedServerDetailsToSteam();
         }
-
+/*
         uint size;
         while (SteamNetworking.IsP2PPacketAvailable(out size))
         {
@@ -217,7 +230,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
             }
         }
         SendPOSAndROT();
-        ReceivePOSAndROT();
+        ReceivePOSAndROT();*/
     }
 
     void SendPOSAndROT()
@@ -235,9 +248,9 @@ public class SteamWorksNetworkManager : MonoBehaviour
     {
         for (int i = 0; i < ServerInformationObject.GetComponent<ServerInformation>().players.Length; i++)
         {
-            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != SteamUser.GetSteamID())
             {
-                CSteamID receiver = ServerInformationObject.GetComponent<ServerInformation>().players[i];
+                CSteamID receiver = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
                 string _m = message;
                 byte[] bytes = new byte[_m.Length * sizeof(char)];
                 System.Buffer.BlockCopy(_m.ToCharArray(), 0, bytes, 0, bytes.Length);

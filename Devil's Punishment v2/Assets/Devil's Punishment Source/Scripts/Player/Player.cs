@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
             if (inventoryOpen == false)
                 ToggleGameMenu();
         }
-        cuffController.ToggleCuffs();
+        //cuffController.ToggleCuffs();
     }
 
     public void ToggleGameMenu()
