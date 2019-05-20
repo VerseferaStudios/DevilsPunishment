@@ -59,14 +59,16 @@ public class Inventory : MonoBehaviour
 
     private void Awake() {
         instance = this;
-		CullNulls();
-		gunController = GunController.instance;
+		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
+		Debug.Assert(gunController != null, "gunController shouldn't be null!");
 	}
 
-    private void Start() {
-        Sort();
-        gunController = GunController.instance;
-    }
+    private void Start()
+	{
+		Awake();
+		Sort();
+		CullNulls();
+	}
 
     public Item GetItemFromIndex(int index) {
         if(index == inventory.Count) {

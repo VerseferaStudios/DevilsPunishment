@@ -111,7 +111,7 @@ public class InteractBehaviour : MonoBehaviour
 	private bool canPickUp()
 	{
 		if (focusedInteractable.item is GunItem) return true;
-		inventory = gameObject.transform.parent.GetChild(3).gameObject.GetComponent<Inventory>();
+		inventory = gameObject.transform.parent.transform.Find("Inventory").GetComponent<Inventory>();
 		if (inventory == null)
 		{
 			Debug.Log("Error in InteractBehavior.canPickUp(). \"inventory\" should not be null");	
