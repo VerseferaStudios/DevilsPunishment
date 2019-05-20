@@ -30,7 +30,12 @@ ModelImporter:
     7400012: Aiming Fire
     9500000: //RootNode
     13700000: Pistol
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pistol
+    second: {fileID: 2100000, guid: bd4e92893c5ffb0468ce34c9f328d3e3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -278,7 +283,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.1
+    previousCalculatedGlobalScale: 0.001
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
