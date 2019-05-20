@@ -60,7 +60,8 @@ public class Inventory : MonoBehaviour
     private void Awake() {
         instance = this;
 		CullNulls();
-    }
+		gunController = GunController.instance;
+	}
 
     private void Start() {
         Sort();
@@ -92,7 +93,8 @@ public class Inventory : MonoBehaviour
 			}
 			Debug.Log("Equipping picked gun " +item.name);
 			equippedGun = item as GunItem;
-            gunController.InitGun();
+			gunController.InitGun();
+			
             return;
         }
 
