@@ -315,15 +315,17 @@ public class GunController : MonoBehaviour
                 yield return null;
             }
 
-        //}
-        if(clipStock >= clipSize-clip) {
+		//}
+		clipStock = inventory.GetEquippedGunAmmo();
+		Debug.Log("Clipstock is: " + clipStock);
+		if (clipStock >= clipSize-clip) {
             Debug.Log("reloading with stock left: " + ammoName);
-            inventory.DropItem(ammoName,/*ammount*/ clipSize-clip,/*consume*/true);
+            inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
             clip = clipSize;
         } else {
             Debug.Log("almost empty!");
-            clip = clipStock;
-            inventory.DropItemAll(ammoName);
+			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
+			clip = clipStock;
         }
 
         reloading = false;

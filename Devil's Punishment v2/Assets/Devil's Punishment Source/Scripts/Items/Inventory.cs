@@ -146,8 +146,11 @@ public class Inventory : MonoBehaviour
 			if (equippedGun == lootComp.item as GunItem)
 			{
 				ResourceID = resource;
-				DropGameObject(resource);
+				Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
+				AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
+				equippedGun = null;
 				gunController.InitGun();
+				DropGameObject(resource);
 				return;
 			}
 		}
@@ -203,50 +206,37 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public void DropItem(string name, int amount = 1, bool consume = false) {
-		Debug.Log("Attempting to drop " + name);
-        int x = amount;
-
-        while(x > 0) {
-
-            int index = GetIndexOfItem(name);
-
-            if(index > -1) {
-				Debug.Log("Item was found to be at index:" + index);
-                DropItem(index, 1);
-                x--;
-            } else {
-				Debug.Log("Item index was not found");
-                break;
-            }
-
-        }
-
+    public void DropItem(string name, int amount = 1, bool consume = false)
+	{
+		int index = GetIndexOfItem(name);
+		DropItem(index, amount, consume);
         Sort();
-
     }
 
-    public void DropItem(int index, int amount = 1) {
-
-        for(int i = 0; i < amount; i++) {
-
-            if(index>=inventory.Count) {
-				DropItemAll(index);
-                return;
-            } else if(index > -1) {
-                if(inventory[index].item != null && inventory[index].stack > 1) {
-                    inventory[index].stack--;
-					Debug.Log("Dropping a Partial Stack of " + amount + " " + inventory[index].item.name );
+    public void DropItem(int index, int amount = 1, bool consume = false) {
+		if (index >= inventory.Count)
+		{
+			DropItemAll(index);
+			return;
+		}
+		else if (index > -1)
+		{
+			if (inventory[index].item != null && inventory[index].stack > 1)
+			{
+				inventory[index].stack -= amount;
+				Debug.Log("Dropping a Partial Stack of " + amount + " " + inventory[index].item.name);
+				if (!consume)
+				{
 					DropGameObject(inventory[index].item, amount);
-				} else {
-                    DropItemAll(index);
-                    return;
-                }
-            }
-
-        }
-
-    }
+				}
+			}
+			else
+			{
+				DropItemAll(index);
+				return;
+			}
+		}
+	}
 
     public void UseItem(int index) {
 
