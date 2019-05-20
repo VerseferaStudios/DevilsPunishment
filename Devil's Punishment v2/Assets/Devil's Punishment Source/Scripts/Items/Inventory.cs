@@ -78,7 +78,7 @@ public class Inventory : MonoBehaviour
     }
 	
 	private int size;
-	public bool hasSpace() { Debug.Log("Inventory size is: " + size); return size < inventory.Count; }
+	public bool hasSpace() { /*Debug.Log("Inventory size is: " + size);*/ return size < inventory.Count; }
 
     public void AddItem(Item item, int stack=1) {
         if(item is GunItem) {
@@ -186,7 +186,7 @@ public class Inventory : MonoBehaviour
 
 	}
 
-	public void DropItemAll(int index)
+	public void DropItemAll(int index, bool consume = false)
 	{
 		Debug.Log("Root of DropItem func reached");
         if(index>=inventory.Count)
@@ -201,14 +201,14 @@ public class Inventory : MonoBehaviour
 			{
 				string name = inventory[index].item.name;
 				Debug.Log("-> Dropping item: " + name);
-				if (inventory[index].stack > 0)
+				if (!consume && inventory[index].stack > 0)
 				{
 					DropGameObject(inventory[index].item,inventory[index].stack);
 				}
 				inventory.RemoveAt(index);
-				size--;
 				inventory.Add(new InventorySlot());
-            }
+				size--;
+			}
         }
     }
 
@@ -222,7 +222,7 @@ public class Inventory : MonoBehaviour
     public void DropItem(int index, int amount = 1, bool consume = false) {
 		if (index >= inventory.Count)
 		{
-			DropItemAll(index);
+			DropItemAll(index,consume);
 			return;
 		}
 		else if (index > -1)
@@ -238,7 +238,7 @@ public class Inventory : MonoBehaviour
 			}
 			else
 			{
-				DropItemAll(index);
+				DropItemAll(index, consume);
 				return;
 			}
 		}
@@ -249,7 +249,7 @@ public class Inventory : MonoBehaviour
         Item item = GetItemFromIndex(index);
         if(item != null) {
             if(item.Use()) {
-                DropItem(index);
+                DropItem(index,/*amount*/1,/*consume*/true);
             }
         }
 
