@@ -17,9 +17,9 @@ public class CuffController : MonoBehaviour
     public static CuffController instance;
     public PlayerController playercontroller;
     public bool isCuffed;
-    public bool pisLocked; //Pistol
-    public bool risLocked; //Assault Rifle
-    public bool sisLocked; //Shotgun
+    private bool pisLocked; //Pistol
+    private bool risLocked; //Assault Rifle
+    private bool sisLocked; //Shotgun
 
 
     void Awake()
