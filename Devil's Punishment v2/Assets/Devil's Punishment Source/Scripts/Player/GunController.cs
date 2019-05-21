@@ -324,6 +324,12 @@ public class GunController : MonoBehaviour
 			{
 				inventory.DropItem(ammoName,/*ammount*/1,/*consume*/true);
 				clip++;
+				if (clipStock > 0 && clip < clipSize)
+				{
+					StartCoroutine(Reload());
+					gunAnimator.SetTrigger("Reload");
+					handsAnimator.SetTrigger("Reload");
+				}
 			}
 		}
 		else if (clipStock >= clipSize - clip)
