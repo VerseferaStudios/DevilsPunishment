@@ -299,41 +299,52 @@ public class GunController : MonoBehaviour
         bulletSpreadCoefficient += 1.0f - aiming;
     }
 
-    IEnumerator Reload() {
+	IEnumerator Reload()
+	{
+		reloading = true;
 
-        reloading = true;
+		yield return new WaitForSeconds(1.5f);
 
-        yield return new WaitForSeconds(1.5f);
+		bool reloadAnimationPlayed = false;
 
-        bool reloadAnimationPlayed = false;
+		//while(!reloadAnimationPlayed) {
 
-        //while(!reloadAnimationPlayed) {
-
-            while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
-            {
-                reloadAnimationPlayed = true;
-                yield return null;
-            }
+		while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
+		{
+			reloadAnimationPlayed = true;
+			yield return null;
+		}
 
 		//}
 		clipStock = inventory.GetEquippedGunAmmo();
-		Debug.Log("Clipstock is: " + clipStock);
-		if (clipStock >= clipSize-clip) {
-            Debug.Log("reloading with stock left: " + ammoName);
-            inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
-            clip = clipSize;
-        } else {
-            Debug.Log("almost empty!");
+		Debug.Log("ClipStock is: " + clipStock);
+		if (equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType)
+		{
+			if (clipStock > 0 && clip < clipSize)
+			{
+				inventory.DropItem(ammoName,/*ammount*/1,/*consume*/true);
+				clip++;
+			}
+		}
+		else if (clipStock >= clipSize - clip)
+		{
+			Debug.Log("reloading with stock left: " + ammoName);
+			inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
+			clip = clipSize;
+		}
+		else
+		{
+			Debug.Log("almost empty!");
 			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
 			clip = clipStock;
-        }
+		}
 
-        reloading = false;
+		reloading = false;
 
-    }
+	}
 
-    //This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
-    private void IfEnemyHit(RaycastHit hit)
+	//This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
+	private void IfEnemyHit(RaycastHit hit)
     {
         TestEnemy enemyHit = hit.transform.GetComponent<TestEnemy>();
         if(enemyHit != null)
