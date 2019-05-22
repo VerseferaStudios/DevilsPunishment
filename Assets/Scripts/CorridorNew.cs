@@ -23,15 +23,18 @@ public class CorridorNew : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Data.instance.isCollided = true;
-        Data.instance.collisionCount++;
+        if (other.transform.parent.CompareTag("Corridor"))
+        {
+            Data.instance.isCollided = true;
+            Data.instance.collisionCount++;
 
-        //isNeedL = true;
+            //isNeedL = true;
 
-        Data.instance.collidedCorridors.Add(gameObject);
-        //Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        //startTime = Time.time;
-        //Destroy(gameObject); //transform.parent.gameObject
+            Data.instance.collidedCorridors.Add(gameObject);
+            //Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            //startTime = Time.time;
+            //Destroy(gameObject); //transform.parent.gameObject
+        }
     }
 
 }

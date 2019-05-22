@@ -63,7 +63,11 @@ public class RoomNew : MonoBehaviour
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[1]/* L_1 */, spawnPoints[i].transform.position, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridors[0]/* L_1 */, spawnPoints[i].transform.position, Quaternion.identity);
+                if (spawnPoints[i].name.EndsWith("x"))
+                {
+                    currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+                }
                 Debug.Log("Spawn1");
                 Data.instance.corridorCount++;
 
@@ -292,8 +296,8 @@ public class RoomNew : MonoBehaviour
                 GameObject currCorridor1 = Instantiate(corridors[1], spawnNowAt, Quaternion.identity);
                 List<int> openings = new List<int>();
                 openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
-                openings.Add((From.z > to.z) ? 3 : 1);
-                Debug.Log(Data.instance.convert(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
+                openings.Add((From.z > to.z) ? 2 : 0);
+                Debug.Log(Data.instance.convert(openings) + " " + ((From.z > to.z) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
                     + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                     + spawnPoints[k].name + " " + spawnPoints[l].name);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
@@ -304,7 +308,6 @@ public class RoomNew : MonoBehaviour
             {
                 //Debug.Log("Loop 1 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
-                currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
                 if (Data.instance.isCollided)
                 {
@@ -343,6 +346,7 @@ public class RoomNew : MonoBehaviour
             {
                 //Debug.Log("Loop 2 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
+                currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
 
 
