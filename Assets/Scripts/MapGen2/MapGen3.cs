@@ -11,23 +11,17 @@ public class MapGen3 : MonoBehaviour
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
     public Transform target;
-    //private Room room;
 
     public GameObject mainRoomIndicator, room4, room1, roomI, roomL, roomT;
-
-
-
-
-    private float xSize = 11f, zSize = 11f;
+    
+    private float xSize = 10f, zSize = 10f;
 
     public GameObject[] corridors;
 
 
     private void Start()
     {
-        //Debug.Log("1");
         rooms();
-        //Debug.Log("5");
     }
 
     public void rooms()
@@ -38,27 +32,28 @@ public class MapGen3 : MonoBehaviour
         while (k < n && l < 1000)
         {
             float[] arr = new float[2];
+
+            // ------------------- BOUNDS or SIZE of the grid -------------------
             arr[0] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + zSize/2, /*-11*/ -1 + 99.49f - zSize/2)); //0,0 is the top left cell
             arr[1] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + xSize/2, /*-11*/ -1 + 99.49f - xSize/2)); //0,0 is the top left cell
 
+            // ------------------- Integer positions in GRID / positions according to sizes of rooms in GRID fashion -------------------
             arr[0] = (Mathf.Round(((int)arr[0])/zSize) * zSize);
             arr[1] = (Mathf.Round(((int)arr[1])/xSize) * xSize);
-            
 
+            // ------------------- Checks for collisions between rooms  -------------------
             if (noCollisions(arr))
             {
-                //Debug.Log("3----------------------------");
                 allRooms.Add(arr);
                 ++k;
             }
             ++l;
         }
-        
+
+        // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
 
         for (int i = 0; i < k; i++)
         {
-            //roomsInARow = new ArrayList();
-            //Debug.Log("4");
             GameObject roomToSpawn = room4;
             switch ((int)Mathf.Round(Random.Range(-0.49f, 4.49f)))
             {
@@ -79,16 +74,15 @@ public class MapGen3 : MonoBehaviour
                     break;
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
-            //roomScript.index = i;
             GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.identity);
-            if(i == k - 1)
+
+            // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
+            if (i == k - 1)
             {
                 spawnedRoom.AddComponent<RoomNew>().corridors = corridors;
-                //spawnedRoom.GetComponent<RoomNew>().corridor = corridor;
             }
 
             //gameObjectDetails.Add(roomScript);
-            //allRooms.Add(roomsInARow);
 
         }
         
@@ -110,6 +104,7 @@ public class MapGen3 : MonoBehaviour
         */
     }
 
+    // --------------------------------- Checks for collisions between ROOMS ---------------------------------
     private bool noCollisions(float[] arr)
     {
         for (int i = 0; i < allRooms.Count; i++)

@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2380155385561690466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1776916100303635677}
+  m_Layer: 0
+  m_Name: Pipe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1776916100303635677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380155385561690466}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.02}
+  m_LocalScale: {x: 1, y: 1, z: -1}
+  m_Children:
+  - {fileID: 8572832211618833412}
+  - {fileID: 8572832210809416313}
+  m_Father: {fileID: 8572832210636776600}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8572832210592635836
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8572832210636776600}
+  - component: {fileID: 4829004436098368650}
   m_Layer: 0
   m_Name: CORR_L_WORKING
   m_TagString: Untagged
@@ -120,12 +153,25 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8572832212201940162}
-  - {fileID: 8572832211618833412}
-  - {fileID: 8572832210809416313}
+  - {fileID: 1776916100303635677}
   - {fileID: 8572832210805241674}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4829004436098368650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572832210636776603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111a3e3d5c1e2f44bb69c37793e41f84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPipeFromLeft: 0
+  isPipeToLeft: 0
 --- !u!1 &8572832210805241669
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +202,7 @@ Transform:
   - {fileID: 8572832210592635837}
   - {fileID: 8572832211951573915}
   m_Father: {fileID: 8572832210636776600}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8572832210809416312
 GameObject:
@@ -184,12 +230,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8572832210809416312}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.399, y: 0.6, z: 0.166}
   m_LocalScale: {x: 0.025, y: 1, z: 0.02}
   m_Children: []
-  m_Father: {fileID: 8572832210636776600}
-  m_RootOrder: 2
+  m_Father: {fileID: 1776916100303635677}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8572832210809416316
 MeshFilter:
@@ -276,12 +322,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8572832211618833415}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.18, y: 0.6, z: -0.1}
   m_LocalScale: {x: 0.02, y: 1, z: 0.075}
   m_Children: []
-  m_Father: {fileID: 8572832210636776600}
-  m_RootOrder: 1
+  m_Father: {fileID: 1776916100303635677}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8572832211618833419
 MeshFilter:

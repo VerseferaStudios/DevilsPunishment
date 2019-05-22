@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 8693691680234942430}
   - component: {fileID: 8693691680234942417}
   - component: {fileID: 2334880281922855340}
-  - component: {fileID: 7827124659230158158}
+  - component: {fileID: 4364230683604244510}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -123,7 +123,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Size: {x: 0.6, y: 0.6, z: 0.6}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2334880281922855340
 Rigidbody:
@@ -141,7 +141,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7827124659230158158
+--- !u!114 &4364230683604244510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,9 +150,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8693691680234942419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 155cac6b6aa416c4bb578425b33a50fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 111a3e3d5c1e2f44bb69c37793e41f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPipeFromLeft: 0
+  isPipeToLeft: 0
+  isNeedL: 0
+  isNeedT: 0
+  isNeedX: 0
 --- !u!1 &8693691680645866031
 GameObject:
   m_ObjectHideFlags: 0
