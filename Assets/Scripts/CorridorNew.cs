@@ -7,7 +7,7 @@ public class CorridorNew : MonoBehaviour
     public bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
 
     [Tooltip("Corridor openings in the order of +z, +x, -z, -x for 0, 1, 2, 3 indices respectively of the array")]
-    public bool[] corridorOpenings = new bool[4];
+    private List<int> corridorOpenings = new List<int>(4);
     /*
      * For example
      *      __L
@@ -16,8 +16,11 @@ public class CorridorNew : MonoBehaviour
      *      corridorOpenings[2] = false; (-z)
      *      
      */
-    
-    
+
+    private void Start()
+    {
+        //Debug.Log("corridorOpenings.Length" + corridorOpenings.Count + "    " + corridorOpenings.Capacity);
+    }
     private void OnTriggerEnter(Collider other)
     {
         Data.instance.isCollided = true;

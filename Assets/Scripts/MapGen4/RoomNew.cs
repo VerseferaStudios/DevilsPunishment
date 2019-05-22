@@ -14,11 +14,17 @@ public class RoomNew : MonoBehaviour
     private bool breakLoop = false;
     private List<Vector3> visitedRooms = new List<Vector3>();
     private Vector3 spawnNowAt;
+    private int k = 0, l = 0;
+
+    /// <summary>
+    /// If we are taking an extra turn forming a `L shape rather than an L shape 
+    /// (if both doors and either x and x or z and z and meet other conditions)
+    /// </summary>
+    private bool isExtraTurn = false;
 
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
-
 
         // ------------------- Get array of doors / spawnPoints -------------------
         GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Corridor Spawn Points");
@@ -87,7 +93,7 @@ public class RoomNew : MonoBehaviour
             }
         }
 
-        for (int k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
+        for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
             // ------------------- Remove door/spawnPoint if its of the same room -------------------
@@ -103,122 +109,148 @@ public class RoomNew : MonoBehaviour
 
             bool isKx, isIx;
 
-            for (int i = 0; i < spawnPoints.Count; i++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
 
-                if (visitedRooms.Contains(spawnPoints[i].transform.parent.transform.position))
+                if(k == l)
+                {
+                    continue;
+                }
+
+                if (visitedRooms.Contains(spawnPoints[l].transform.parent.transform.position))
                 {
                     //Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
-                    spawnPoints.RemoveAt(i);
+                    spawnPoints.RemoveAt(l);
                     k--;
                     break;
                 }
 
-                if (k == i)
+                if (k == l)
                 {
                     continue;
                 }
 
                 // ------------------------ if k and i are not in the same room ------------------------
-                if (!checkIfSameOrAdjacentRoom(k, i)) 
+                if (!checkIfSameOrAdjacentRoom(k, l)) 
                 {
 
                     Vector3 From = spawnPoints[k].transform.position;
                     GameObject lastCorridorType;
 
                     // ------------------- Connects x and z doors with L shape with no hindrance -------------------
-                    if (spawnPoints[k].name.EndsWith("x") && spawnPoints[i].name.EndsWith("z"))
+                    if (spawnPoints[k].name.EndsWith("x") && spawnPoints[l].name.EndsWith("z"))
                     {
-                        targetPos = new Vector3(From.x, 0.5f, spawnPoints[i].transform.position.z);
+                        targetPos = new Vector3(From.x, 0.5f, spawnPoints[l].transform.position.z);
                         Debug.Log("Spawn2");
                         //lastCorridorType = 
                     }
 
                     // ------------------- Connects z and x doors with L shape with no hindrance -------------------
-                    else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[i].name.EndsWith("x"))
+                    else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[l].name.EndsWith("x"))
                     {
-                        targetPos = new Vector3(spawnPoints[i].transform.position.x, 0.5f, From.z);
+                        targetPos = new Vector3(spawnPoints[l].transform.position.x, 0.5f, From.z);
                         Debug.Log("Spawn3");
                     }
 
                     // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
                     else if (
                         // -------------- if x doors AND z differnce == 10 --------------
-                        (spawnPoints[k].transform.position.x == spawnPoints[i].transform.position.x && Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[i].transform.position.z) == 10)
+                        (spawnPoints[k].transform.position.x == spawnPoints[l].transform.position.x && Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[l].transform.position.z) == 10)
                         ||
                         // -------------- if z doors AND x differnce == 10 --------------
-                        (spawnPoints[k].transform.position.z == spawnPoints[i].transform.position.z && Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 10)
+                        (spawnPoints[k].transform.position.z == spawnPoints[l].transform.position.z && Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[l].transform.position.x) == 10)
                         )
                     {
                         //targetPos = spawnPoints[i].transform.position;
                         Debug.Log("Spawn4--");
                     }
 
-                    // ------------------- Connects x and x doors with `L shape to avoid hindrance -------------------
-                    else if (spawnPoints[k].name.EndsWith("x") && spawnPoints[i].name.EndsWith("x"))
+                    // --------------------- Connects x and x doors ---------------------
+                    else if (spawnPoints[k].name.EndsWith("x") && spawnPoints[l].name.EndsWith("x"))
                     {
-                        //check and go nearer to destination
-                        Vector3 to = spawnPoints[k].transform.position;
-                        to.z += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //-------------- Connects x and x doors with `L shape to avoid hindrance --------------
+                        if(spawnPoints[k].transform.position.x != spawnPoints[l].transform.position.x)
+                        {
+                            //check and go nearer to destination
+                            Vector3 to = spawnPoints[k].transform.position;
+                            to.z += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                        // ------------------- Calls the actual spawning function -------------------
-                        spawnHalf(spawnPoints[k].transform.position, to, false);
-                        From = to;
-                        targetPos = new Vector3(spawnPoints[i].transform.position.x, 0.5f, From.z);
-                        Debug.Log("Spawn5");
-                        /*
-                        Debug.Log("From = " + From);
-                        Debug.Log(targetPos);
-                        Debug.Log(spawnPoints[i].transform.position);
-                        */
+                            // ------------------- Calls the actual spawning function -------------------
+                            spawnHalf(spawnPoints[k].transform.position, to, true);
+                            isExtraTurn = true;
+                            From = to;
+                            targetPos = new Vector3(spawnPoints[l].transform.position.x, 0.5f, From.z);
+                            Debug.Log("Spawn5");
+                            /*
+                            Debug.Log("From = " + From);
+                            Debug.Log(targetPos);
+                            Debug.Log(spawnPoints[i].transform.position);
+                            */
+                        }
+                        //-------------- Connects x and x doors with I shape since there's no hindrance --------------
+                        else
+                        {
+                            targetPos = spawnPoints[l].transform.position;
+                        }
                     }
 
-                    // ------------------- Connects z and z doors with `L shape to avoid hindrance -------------------
-                    else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[i].name.EndsWith("z"))
+                    // --------------------- Connects z and z doors ---------------------
+                    else if (spawnPoints[k].name.EndsWith("z") && spawnPoints[l].name.EndsWith("z"))
                     {
-                        //check and go nearer to destination
-                        Vector3 to = spawnPoints[k].transform.position;
-                        to.x += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        
-                        // ------------------- Calls the actual spawning function -------------------
-                        spawnHalf(spawnPoints[k].transform.position, to, false);
-                        From = to;
-                        targetPos = new Vector3(From.x, 0.5f, spawnPoints[i].transform.position.z);
-                        Debug.Log("Spawn6");
-                        /*
-                        Debug.Log("From = " + From);
-                        Debug.Log(targetPos);
-                        Debug.Log(spawnPoints[i].transform.position);
-                        */
+                        //-------------- Connects z and z doors with `L shape to avoid hindrance --------------
+                        if(spawnPoints[k].transform.position.z != spawnPoints[l].transform.position.z)
+                        {
+                            //check and go nearer to destination
+                            Vector3 to = spawnPoints[k].transform.position;
+                            to.x += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                            // ------------------- Calls the actual spawning function -------------------
+                            spawnHalf(spawnPoints[k].transform.position, to, true);
+                            isExtraTurn = true;
+                            From = to;
+                            targetPos = new Vector3(From.x, 0.5f, spawnPoints[l].transform.position.z);
+                            Debug.Log("Spawn6");
+                            /*
+                            Debug.Log("From = " + From);
+                            Debug.Log(targetPos);
+                            Debug.Log(spawnPoints[i].transform.position);
+                            */
+                        }
+                        //-------------- Connects z and z doors with I shape since there's no hindrance --------------
+                        else
+                        {
+                            targetPos = spawnPoints[l].transform.position;
+                        }
                     }
 
 
                     // ------------------- Calls the actual spawning function -------------------
-                    spawnHalf(From, targetPos, false); //false
-                    spawnHalf(targetPos, spawnPoints[i].transform.position, true);
+                    spawnHalf(From, targetPos, !isExtraTurn); 
+                    isExtraTurn = false;
+                    spawnHalf(targetPos, spawnPoints[l].transform.position, false);
 
                     // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-                    visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
+                    visitedRooms.Add(spawnPoints[l].transform.parent.transform.position);
                     visitedRooms.Add(spawnPoints[k].transform.parent.transform.position);
                     //Debug.Log("Added a door of ____ " + spawnPoints[i].transform.parent.transform.position);
                     //Debug.Log("Added a door of ____ " + spawnPoints[k].transform.parent.transform.position);
 
                     // ---------------------- Removes the used doors ----------------------
-                    spawnPoints.RemoveAt(i);
+                    spawnPoints.RemoveAt(l);
                     
                     // -------------- decrease k if greater than i --------------                
-                    if (k > i)
+                    if (k > l)
                     {
                         k--;
                     }
-                    i--;
+                    l--;
 
                     spawnPoints.RemoveAt(k); 
                     
                     // -------------- decrease k if greater than i --------------                
-                    if (i > k)
+                    if (l > k)
                     {
-                        i--;
+                        l--;
                     }
                     k--;
 
@@ -238,8 +270,8 @@ public class RoomNew : MonoBehaviour
         Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
-    // ---------------------- Spawns corridors from "Vector3 From", to "Vector3 to" ----------------------
-    private void spawnHalf(Vector3 From, Vector3 to, bool skipFirst)
+    // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
+    private void spawnHalf(Vector3 From, Vector3 to, bool isFirst)
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
@@ -250,16 +282,25 @@ public class RoomNew : MonoBehaviour
         if (From.x == to.x)
         {
             int increment = (From.z > to.z) ? -1 : 1;
-            //if()
+            
+            // ----------- Skips required corridors ----------- 
             int i = 1;
-            // ----------- Currently skips last corridor ----------- 
-            // ----------- Add "spawnNowAt.z += increment;" in if condition to skipFirst----------- 
-            if (skipFirst)
+            
+            //Instantiates L corridor in correct rotation at the door of a room
+            if (isFirst)
             {
-                skipFirst = false;
-                i = 1;
+                GameObject currCorridor1 = Instantiate(corridors[1], spawnNowAt, Quaternion.identity);
+                List<int> openings = new List<int>();
+                openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
+                openings.Add((From.z > to.z) ? 3 : 1);
+                Debug.Log(Data.instance.convert(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
+                    + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
+                    + spawnPoints[k].name + " " + spawnPoints[l].name);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
             }
-            for (; i < Mathf.Abs(From.z - to.z) + 1; i++)
+            spawnNowAt.z += increment;
+
+            for (; i < Mathf.Abs(From.z - to.z) + 1 - 1; i++)
             {
                 //Debug.Log("Loop 1 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
@@ -279,15 +320,26 @@ public class RoomNew : MonoBehaviour
         else if (From.z == to.z)
         {
             int increment = (From.x > to.x) ? -1 : 1;
-            int i = 0;
-            // ----------- Currently skips last corridor ----------- 
-            // ----------- Add "spawnNowAt.z += increment;" in if condition to skipFirst----------- 
-            if (skipFirst)
+            
+            // ----------- Skips required corridors ----------- 
+            int i = 1;
+
+            //Instantiates L corridor in correct rotation at the door of a room
+            if (isFirst)
             {
-                skipFirst = false;
-                i = 1;
+                GameObject currCorridor1 = Instantiate(corridors[1], spawnNowAt, Quaternion.identity);
+                List<int> openings = new List<int>();
+                openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
+                openings.Add((From.x > to.x) ? 3 : 1);
+                Debug.Log(Data.instance.convert(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
+                    + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
+                    + spawnPoints[k].name + " " + spawnPoints[l].name);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                isFirst = false;
             }
-            for (; i < Mathf.Abs(From.x - to.x) + 1; i++)
+            spawnNowAt.x += increment;
+
+            for (; i < Mathf.Abs(From.x - to.x) + 1 - 1; i++)
             {
                 //Debug.Log("Loop 2 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
