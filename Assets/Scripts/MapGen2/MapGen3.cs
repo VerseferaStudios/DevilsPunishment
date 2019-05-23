@@ -22,6 +22,8 @@ public class MapGen3 : MonoBehaviour
     private void Start()
     {
         rooms();
+        Data.instance.corridorT = corridors[3];
+        Data.instance.corridorX = corridors[4];
     }
 
     public void rooms()

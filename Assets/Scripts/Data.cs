@@ -19,6 +19,7 @@ public class Data : MonoBehaviour
     ///The direction of the opening for the L corridor near door of type stored in this list
     ///</summary>
     public List<string> nearDoorL = new List<string>();
+    public GameObject corridorT, corridorX;
 
     private void Awake()
     {
@@ -59,6 +60,15 @@ public class Data : MonoBehaviour
                     if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
                         && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                     {
+                        if(collidedCorridors[i].transform.rotation != collidedCorridors[j].transform.rotation)
+                        {
+                            GameObject currCorridor1 = Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity);
+                            Destroy(collidedCorridors[j].transform.parent.gameObject);
+                        }
+                        else
+                        {
+
+                        }
                         Destroy(collidedCorridors[i].transform.parent.gameObject);
                         collidedCorridors.RemoveAt(i);
 
