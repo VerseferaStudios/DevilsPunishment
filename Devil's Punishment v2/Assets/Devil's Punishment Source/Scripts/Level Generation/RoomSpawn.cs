@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RoomSpawn : MonoBehaviour
 {
+    public int seed;//the actual seed
     public Transform[] RoomSpawns; //Individual spawnpoints for the rooms
     public GameObject[] StaticRooms; //Static room prefabs go here
     public GameObject[] RandoRooms; //Random room prefabs go here
@@ -11,9 +10,16 @@ public class RoomSpawn : MonoBehaviour
     private int randomiser;//For calling Random.Range()
     public int[] TakenCells;//List of preoccupied cells so that two rooms don't spawn in the same spot
     private bool Overlap = false;//flag for search logic for checking taken cells
+    public bool ServerSide;//Seed generation can only take place at serverside. Else, use the seed set in.
 
     void Start()
     {
+        if (ServerSide)
+        {
+            seed = Random.Range(1, 256); //generate a seed if on serverside
+            //@Network coders: Code to push seed to clients goes here
+        }
+        Random.InitState(seed);
         int i = 0;
         NumOfRooms = Random.Range(20, 25); //pick a random number between 20 and 25
         while (i<5) //loop to spawn static rooms
