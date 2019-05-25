@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CorridorNew : MonoBehaviour
 {
-    public bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
+    [SerializeField]
+    private bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
 
     [Tooltip("Corridor openings in the order of +z, +x, -z, -x for 0, 1, 2, 3 indices respectively of the array")]
     private List<int> corridorOpenings = new List<int>(4);
@@ -34,6 +35,7 @@ public class CorridorNew : MonoBehaviour
             //Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject
+            //Debug.Log("!");
         }
     }
 

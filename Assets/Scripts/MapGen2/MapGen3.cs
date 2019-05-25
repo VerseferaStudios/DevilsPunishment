@@ -7,7 +7,7 @@ public class MapGen3 : MonoBehaviour
     //first we'll see the ground floor
     //10 x 10 cube
     //later//private int gridSize;
-    private int n = 10;
+    private int n = 15;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
     public Transform target;
@@ -36,15 +36,26 @@ public class MapGen3 : MonoBehaviour
             float[] arr = new float[2];
 
             // ------------------- BOUNDS or SIZE of the grid -------------------
-            arr[0] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + zSize/2, /*-11*/ -1 + 99.49f - zSize/2)); //0,0 is the top left cell
-            arr[1] = Mathf.Round(Random.Range(/*11*/ + 1 - 0.49f + xSize/2, /*-11*/ -1 + 99.49f - xSize/2)); //0,0 is the top left cell
-
+            arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 99 - (int)(xSize / 2)); //0,0 is the top left cell
+            arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 99 - (int)(xSize / 2)); //0,0 is the top left cell
+            /*
+            if(k == 0)
+            {
+                arr[1] = 50;
+                arr[0] = 80;
+            }
+            else
+            {
+                arr[1] = 50;
+                arr[0] = 10;
+            }
+            */
             // ------------------- Integer positions in GRID / positions according to sizes of rooms in GRID fashion -------------------
             arr[0] = (Mathf.Round(((int)arr[0])/zSize) * zSize);
             arr[1] = (Mathf.Round(((int)arr[1])/xSize) * xSize);
 
             // ------------------- Checks for collisions between rooms  -------------------
-            if (noCollisions(arr))
+            if (NoCollisions(arr))
             {
                 allRooms.Add(arr);
                 ++k;
@@ -107,7 +118,7 @@ public class MapGen3 : MonoBehaviour
     }
 
     // --------------------------------- Checks for collisions between ROOMS ---------------------------------
-    private bool noCollisions(float[] arr)
+    private bool NoCollisions(float[] arr)
     {
         for (int i = 0; i < allRooms.Count; i++)
         {

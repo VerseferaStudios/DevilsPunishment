@@ -229,8 +229,13 @@ public class RoomNew : MonoBehaviour
 
                     // ------------------- Calls the actual spawning function -------------------
                     spawnHalf(From, targetPos, !isExtraTurn); 
+
                     isExtraTurn = false;
-                    spawnHalf(targetPos, spawnPoints[l].transform.position, false);
+
+                    if(targetPos != spawnPoints[l].transform.position)
+                    {
+                        spawnHalf(targetPos, spawnPoints[l].transform.position, false);
+                    }
 
                     //Add L corridor to door at end room 
                     GameObject currCorridor1 = Instantiate(corridors[1], spawnPoints[l].transform.position, Quaternion.identity);
@@ -248,16 +253,16 @@ public class RoomNew : MonoBehaviour
                     }
 
                     //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                    openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString()));
+                    openings.Add(Data.instance.NeardoorLIndexSearch(spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString()));
                     /*
-                    Debug.Log(Data.instance.convert(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString())
+                    Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString())
                             + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                             + spawnPoints[k].name + " " + spawnPoints[l].name);
                     */
-                    Debug.Log(Data.instance.convert(openings) + " " + openings[0] + " " + openings[1]
+                    Debug.Log(Data.instance.ConvertToRotation(openings) + " " + openings[0] + " " + openings[1]
                         + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position);
 
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                    currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.ConvertToRotation(openings), 0);
 
 
                     // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
@@ -324,7 +329,7 @@ public class RoomNew : MonoBehaviour
                 List<int> openings = new List<int>();
 
                 //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
+                openings.Add(Data.instance.NeardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
                 
                 //storedOpening is for the next L corridor in line
                 storedOpening = (From.z > to.z) ? 0 : 2;
@@ -332,11 +337,11 @@ public class RoomNew : MonoBehaviour
                 //Add the opposite of storedOpening since this one will be facing the next L corridor
                 openings.Add(storedOpening == 0 ? 2 : 0);
 
-                Debug.Log(Data.instance.convert(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
+                Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
                     + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                     + spawnPoints[k].name + " " + spawnPoints[l].name);
 
-                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.ConvertToRotation(openings), 0);
                 isFirst = false;
             }
             //Instantiate L corridor in correct rotation at the join of two straight corridors
@@ -345,7 +350,7 @@ public class RoomNew : MonoBehaviour
                 GameObject currCorridor1 = Instantiate(corridors[1], spawnNowAt, Quaternion.identity);
                 List<int> openings = new List<int>();
                 
-                Debug.Log(Data.instance.convert(openings) + " " + storedOpening + " " + ((From.z > to.z) ? 2 : 0)
+                Debug.Log(Data.instance.ConvertToRotation(openings) + " " + storedOpening + " " + ((From.z > to.z) ? 2 : 0)
                     + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                     + spawnPoints[k].name + " " + spawnPoints[l].name);
                 
@@ -358,7 +363,7 @@ public class RoomNew : MonoBehaviour
                 //Add the opposite of storedOpening since this one will be facing the next L corridor
                 openings.Add(storedOpening == 0 ? 2 : 0);
 
-                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.ConvertToRotation(openings), 0);
             }
             spawnNowAt.z += increment;
 
@@ -392,7 +397,7 @@ public class RoomNew : MonoBehaviour
                 List<int> openings = new List<int>();
                 
                 //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                openings.Add(Data.instance.neardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
+                openings.Add(Data.instance.NeardoorLIndexSearch(spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()));
                 
                 //storedOpening is for the next L corridor in line
                 storedOpening = (From.x > to.x) ? 1 : 3;
@@ -400,11 +405,11 @@ public class RoomNew : MonoBehaviour
                 //Add the opposite of storedOpening since this one will be facing the next L corridor
                 openings.Add(storedOpening == 1 ? 3 : 1);
                 
-                Debug.Log(Data.instance.convert(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
+                Debug.Log(Data.instance.ConvertToRotation(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString())
                     + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                     + spawnPoints[k].name + " " + spawnPoints[l].name);
                 
-                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.ConvertToRotation(openings), 0);
                 isFirst = false;
             }
             //Instantiate L corridor in correct rotation at the join of two straight corridors
@@ -413,7 +418,7 @@ public class RoomNew : MonoBehaviour
                 GameObject currCorridor1 = Instantiate(corridors[1], spawnNowAt, Quaternion.identity);
                 List<int> openings = new List<int>();
 
-                Debug.Log(Data.instance.convert(openings) + " " + storedOpening + " " + ((From.x > to.x) ? 3 : 1)
+                Debug.Log(Data.instance.ConvertToRotation(openings) + " " + storedOpening + " " + ((From.x > to.x) ? 3 : 1)
                     + " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
                     + spawnPoints[k].name + " " + spawnPoints[l].name);
 
@@ -426,7 +431,7 @@ public class RoomNew : MonoBehaviour
                 //Add the opposite of storedOpening since this one will be facing the next L corridor
                 openings.Add(storedOpening == 1 ? 3 : 1);
 
-                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.convert(openings), 0);
+                currCorridor1.transform.rotation = Quaternion.Euler(0, Data.instance.ConvertToRotation(openings), 0);
             }
             spawnNowAt.x += increment;
 
