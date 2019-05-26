@@ -19,7 +19,7 @@ public class Data : MonoBehaviour
     ///The direction of the opening for the L corridor near door of type stored in this list
     ///</summary>
     public List<string> nearDoorL = new List<string>();
-    public GameObject corridorT, corridorX;
+    public GameObject corridorT1, corridorT2, corridorX;
 
     private float nextTime = 1f;
 
@@ -140,8 +140,13 @@ public class Data : MonoBehaviour
 
                             if (openings1.Count == 3)
                             {
-                                GameObject currCorridor = Instantiate(corridorT, collidedCorridors[j].transform.position, Quaternion.identity);
-                                currCorridor.transform.rotation = Quaternion.Euler(0, ConvertToRotation(openings1), 0);
+                                float yRotation = ConvertToRotation(openings1);
+                                GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == -90) ? corridorT2 : corridorT1 , collidedCorridors[j].transform.position, Quaternion.identity);
+                                if(yRotation == 0 || yRotation == 90)
+                                {
+                                    currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+                                }
+                                currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                             }
                             if(openings1.Count == 4)
                             {
