@@ -15,6 +15,5 @@ public class GunItem : Item
     [Range(25, 45)]
     public float recoilAmount = 32f;
 
-    public RuntimeAnimatorController overrideController;
 
 }

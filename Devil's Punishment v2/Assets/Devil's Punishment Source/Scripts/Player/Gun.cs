@@ -8,6 +8,4 @@ public class Gun : MonoBehaviour
     public Transform muzzle;
     public Transform ejector;
 
-
-
 }

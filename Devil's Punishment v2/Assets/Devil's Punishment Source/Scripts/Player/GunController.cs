@@ -11,7 +11,6 @@ public class GunController : MonoBehaviour
     public Gun equippedGun;
 
 
-    //public Animator handsAnimator;
     public ParticleSystem muzzleFlashParticles;
     public ParticleSystem ejectionParticles;
     public GameObject hitParticles;
@@ -150,13 +149,7 @@ public class GunController : MonoBehaviour
 					clipSize = equippedGun.gunItem.clipSize;
 					clipStock = inventory.GetEquippedGunAmmo();
 					ammoName = equippedGun.gunItem.ammunitionType.name;
-					gunAnimator = equippedGun.GetComponent<Animator>();
-					/*
-					if (equippedGun.gunItem.overrideController != null)
-					{
-						handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
-					}
-					*/
+					gunAnimator = equippedGun.GetComponent<Animator>(); 
 					break;
 				}
 			}
@@ -218,7 +211,6 @@ public class GunController : MonoBehaviour
 
                 StartCoroutine(Reload());
                 gunAnimator.SetTrigger("Reload");
-                //handsAnimator.SetTrigger("Reload");
                 shootResetTimer = .3f;
             }
 
@@ -260,10 +252,6 @@ public class GunController : MonoBehaviour
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
-		//handsAnimator.SetFloat("Aiming", aiming);
-		//handsAnimator.SetBool("Running", running);
-		//handsAnimator.SetBool("Raised", raised);
-		//handsAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
 	}
 
@@ -274,7 +262,6 @@ public class GunController : MonoBehaviour
     void Fire() {
 		reloading = false;
         gunAnimator.SetTrigger("Fire");
-       // handsAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
 
         Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
@@ -336,7 +323,6 @@ public class GunController : MonoBehaviour
 				{
 					StartCoroutine(Reload());
 					gunAnimator.SetTrigger("Reload");
-					//handsAnimator.SetTrigger("Reload");
 				}
 			}
 		}
