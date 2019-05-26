@@ -137,24 +137,29 @@ public class GunController : MonoBehaviour
 
             string gunName = inventory.equippedGun.name;
 
-            foreach(Gun gun in guns) {
-                if(gun.gunItem.name == gunName) {
-                    equippedGun = gun;
-                    equippedGun.gameObject.SetActive(true);
-                    raised = true;
-                    recoilAmount = equippedGun.gunItem.recoilAmount;
-                    SetFireRate(equippedGun.gunItem.fireRate);
-                    clip = 0;
-                    clipSize = equippedGun.gunItem.clipSize;
-                    clipStock = inventory.GetEquippedGunAmmo();
-                    ammoName = equippedGun.gunItem.ammunitionType.name;
-                    gunAnimator = equippedGun.GetComponent<Animator>();
-                    if(equippedGun.gunItem.overrideController != null) {
-                       handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
-                    }
-                    break;
-                }
-            }
+			foreach (Gun gun in guns)
+			{
+				if (gun.gunItem.name == gunName)
+				{
+					equippedGun = gun;
+					equippedGun.gameObject.SetActive(true);
+					raised = true;
+					recoilAmount = equippedGun.gunItem.recoilAmount;
+					SetFireRate(equippedGun.gunItem.fireRate);
+					clip = 0;
+					clipSize = equippedGun.gunItem.clipSize;
+					clipStock = inventory.GetEquippedGunAmmo();
+					ammoName = equippedGun.gunItem.ammunitionType.name;
+					gunAnimator = equippedGun.GetComponent<Animator>();
+					if (equippedGun.gunItem.overrideController != null)
+					{
+						//handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
+					}
+					break;
+				}
+			}
+            
+			
         }
 
     }
