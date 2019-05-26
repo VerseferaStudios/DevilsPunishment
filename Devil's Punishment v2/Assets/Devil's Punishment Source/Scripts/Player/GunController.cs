@@ -151,7 +151,6 @@ public class GunController : MonoBehaviour
                     gunAnimator = equippedGun.GetComponent<Animator>();
                     if(equippedGun.gunItem.overrideController != null) {
                        handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
-						Debug.Log("Using animation override controller for " + equippedGun.name);
                     }
                     break;
                 }
