@@ -14,7 +14,7 @@ public class InteractBehaviour : MonoBehaviour
     public Image interactablePromptBackground;
     public TextMeshProUGUI interactablePrompt;
 
-    private InteractableLoot focusedInteractable;
+    private IInteractable focusedInteractable;
     private bool interactableInVicinity = false;
 
     private float interactMaxTime;
@@ -50,11 +50,11 @@ public class InteractBehaviour : MonoBehaviour
             
             float maxDot = -1.0f;
 
-            InteractableLoot interactableToFocus = null;
+            IInteractable interactableToFocus = null;
             
             foreach (Collider col in hitColliders) {
 
-                InteractableLoot nearbyInteractable = col.GetComponent<InteractableLoot>();
+                IInteractable nearbyInteractable = col.GetComponent<IInteractable>();
                 if(nearbyInteractable != null) {
 
                     Vector3 pickupToCam = col.transform.position - Camera.main.transform.position;
@@ -107,18 +107,6 @@ public class InteractBehaviour : MonoBehaviour
         interactMaxTime = focusedInteractable.TimeToInteract();
     }
 
-	Inventory inventory;
-	private bool canPickUp()
-	{
-		if (focusedInteractable.item is GunItem) return true;
-		inventory = gameObject.transform.parent.transform.Find("Inventory").GetComponent<Inventory>();
-		if (inventory == null)
-		{
-			Debug.Log("Error in InteractBehavior.canPickUp(). \"inventory\" should not be null");	
-			return false;
-		}
-		return inventory.hasSpace();
-	}
     void WhileInteractableFocused() {
 
         Vector3 iconPosition = focusedInteractable.GetGameObject().transform.position/* + Vector3.up * .3f*/;
@@ -128,7 +116,7 @@ public class InteractBehaviour : MonoBehaviour
         interactableImage.rectTransform.anchorMax = screenPoint;
 
         progressBarImage.fillAmount = (interactElapsedTime/interactMaxTime);
-		if(canPickUp())
+
         if(interactElapsedTime >= interactMaxTime) {
             focusedInteractable.OnInteract();
             InteractableUnFocus();

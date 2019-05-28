@@ -11,6 +11,7 @@ public class GunController : MonoBehaviour
     public Gun equippedGun;
 
 
+    public Animator handsAnimator;
     public ParticleSystem muzzleFlashParticles;
     public ParticleSystem ejectionParticles;
     public GameObject hitParticles;
@@ -136,25 +137,24 @@ public class GunController : MonoBehaviour
 
             string gunName = inventory.equippedGun.name;
 
-			foreach (Gun gun in guns)
-			{
-				if (gun.gunItem.name == gunName)
-				{
-					equippedGun = gun;
-					equippedGun.gameObject.SetActive(true);
-					raised = true;
-					recoilAmount = equippedGun.gunItem.recoilAmount;
-					SetFireRate(equippedGun.gunItem.fireRate);
-					clip = 0;
-					clipSize = equippedGun.gunItem.clipSize;
-					clipStock = inventory.GetEquippedGunAmmo();
-					ammoName = equippedGun.gunItem.ammunitionType.name;
-					gunAnimator = equippedGun.GetComponent<Animator>(); 
-					break;
-				}
-			}
-            
-			
+            foreach(Gun gun in guns) {
+                if(gun.gunItem.name == gunName) {
+                    equippedGun = gun;
+                    equippedGun.gameObject.SetActive(true);
+                    raised = true;
+                    recoilAmount = equippedGun.gunItem.recoilAmount;
+                    SetFireRate(equippedGun.gunItem.fireRate);
+                    clip = 0;
+                    clipSize = equippedGun.gunItem.clipSize;
+                    clipStock = inventory.GetEquippedGunAmmo();
+                    ammoName = equippedGun.gunItem.ammunitionType.name;
+                    gunAnimator = equippedGun.GetComponent<Animator>();
+                    if(equippedGun.gunItem.overrideController != null) {
+                        handsAnimator.runtimeAnimatorController = equippedGun.gunItem.overrideController as RuntimeAnimatorController;
+                    }
+                    break;
+                }
+            }
         }
 
     }
@@ -211,6 +211,7 @@ public class GunController : MonoBehaviour
 
                 StartCoroutine(Reload());
                 gunAnimator.SetTrigger("Reload");
+                handsAnimator.SetTrigger("Reload");
                 shootResetTimer = .3f;
             }
 
@@ -252,16 +253,20 @@ public class GunController : MonoBehaviour
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
-		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
-	}
+        handsAnimator.SetFloat("Aiming", aiming);
+        handsAnimator.SetBool("Running", running);
+        handsAnimator.SetBool("Raised", raised);
+        gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+        handsAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+    }
 
-	void CameraUpdate() {
+    void CameraUpdate() {
         Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
     }
 
     void Fire() {
-		reloading = false;
         gunAnimator.SetTrigger("Fire");
+        handsAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
 
         Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
@@ -294,57 +299,40 @@ public class GunController : MonoBehaviour
         bulletSpreadCoefficient += 1.0f - aiming;
     }
 
-	IEnumerator Reload()
-	{
-		reloading = true;
+    IEnumerator Reload() {
 
-		yield return new WaitForSeconds(1.5f);
+        reloading = true;
 
-		bool reloadAnimationPlayed = false;
+        yield return new WaitForSeconds(1.5f);
 
-		//while(!reloadAnimationPlayed) {
+        bool reloadAnimationPlayed = false;
 
-		while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
-		{
-			reloadAnimationPlayed = true;
-			yield return null;
-		}
+        //while(!reloadAnimationPlayed) {
 
-		//}
-		clipStock = inventory.GetEquippedGunAmmo();
-		Debug.Log("ClipStock is: " + clipStock);
-		if (equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType)
-		{
-			if (clipStock > 0 && clip < clipSize)
-			{
-				inventory.DropItem(ammoName,/*ammount*/1,/*consume*/true);
-				clip++;
-				if (clipStock > 0 && clip < clipSize)
-				{
-					StartCoroutine(Reload());
-					gunAnimator.SetTrigger("Reload");
-				}
-			}
-		}
-		else if (clipStock >= clipSize - clip)
-		{
-			Debug.Log("reloading with stock left: " + ammoName);
-			inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
-			clip = clipSize;
-		}
-		else
-		{
-			Debug.Log("almost empty!");
-			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
-			clip = clipStock;
-		}
+            while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
+            {
+                reloadAnimationPlayed = true;
+                yield return null;
+            }
 
-		reloading = false;
+        //}
 
-	}
+        if(clipStock >= clipSize-clip) {
+            Debug.Log("reloading with stock left: " + ammoName);
+            inventory.DropItem(ammoName, clipSize-clip);
+            clip = clipSize;
+        } else {
+            Debug.Log("almost empty!");
+            clip = clipStock;
+            inventory.DropItemAll(ammoName);
+        }
 
-	//This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
-	private void IfEnemyHit(RaycastHit hit)
+        reloading = false;
+
+    }
+
+    //This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
+    private void IfEnemyHit(RaycastHit hit)
     {
         TestEnemy enemyHit = hit.transform.GetComponent<TestEnemy>();
         if(enemyHit != null)

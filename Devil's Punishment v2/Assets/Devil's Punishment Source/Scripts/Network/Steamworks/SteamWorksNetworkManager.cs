@@ -46,7 +46,6 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-		Debug.Assert(ServerInformationObject != null, "ServerInformationObject in SteamNetworkManager.Start() shouldn't be null.");
 
 
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
