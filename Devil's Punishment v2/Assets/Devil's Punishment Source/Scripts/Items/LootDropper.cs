@@ -98,7 +98,7 @@ public class LootDropper : MonoBehaviour
         startingRoomSpawns = noStartingRoom * StartingRoomSpots;
         Debug.Log("Have found the locations!");
         locationSet = armorySpawns + noBathroom + noDorms + noHospital + noCorridorT + noCorridorL + noKitchen + noKitchen + noRadio + noCave + noStartingRoom;
-        all.Add = locationSet;
+        //all.Add(locationSet);
 
     }
 
