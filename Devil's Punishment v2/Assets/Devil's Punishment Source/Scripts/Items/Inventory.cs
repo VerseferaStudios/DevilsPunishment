@@ -51,6 +51,7 @@ public class Inventory : MonoBehaviour
 
     public List<InventorySlot> inventory;
     public GunItem equippedGun;
+    private FlashlightScript fls;//FlashlightScript Variable
     public static Inventory instance;
     public static SortType sortType;
 
@@ -63,6 +64,7 @@ public class Inventory : MonoBehaviour
     private void Start() {
         Sort();
         gunController = GunController.instance;
+        fls = gameObject.transform.GetComponentInParent<FlashlightScript>();
     }
 
     public Item GetItemFromIndex(int index) {
@@ -81,6 +83,11 @@ public class Inventory : MonoBehaviour
             equippedGun = item as GunItem;
             gunController.InitGun();
             return;
+        }
+        if(item is FlashlightItem)
+        {
+            fls.isUpgraded = true;//set boolean to true
+            fls.glowLight.enabled = false;
         }
 
         for(int k = 0; k < stack; k++) {
