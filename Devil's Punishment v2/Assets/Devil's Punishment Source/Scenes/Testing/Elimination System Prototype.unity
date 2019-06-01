@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
+    m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -167,12 +168,13 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226354524}
   m_Enabled: 1
-  serializedVersion: 8
+  serializedVersion: 9
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -328,6 +330,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1418794770}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: bdfe24086a0ad934c9dd3e5cd6c87a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -414,26 +417,6 @@ PrefabInstance:
     - target: {fileID: 710846656262533718, guid: a8a0a82dcb0295d41b49890c026df2b7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6907204579590021644, guid: a8a0a82dcb0295d41b49890c026df2b7,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 710846658123284806, guid: a8a0a82dcb0295d41b49890c026df2b7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 710846657478706225, guid: a8a0a82dcb0295d41b49890c026df2b7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 710846656887480024, guid: a8a0a82dcb0295d41b49890c026df2b7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 710846656627530538, guid: a8a0a82dcb0295d41b49890c026df2b7,
@@ -931,6 +914,41 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4173197989868009126, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4173197989868009126, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6907204579590021644, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710846658123284806, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710846657478706225, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710846656887480024, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001764237267957263, guid: a8a0a82dcb0295d41b49890c026df2b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8a0a82dcb0295d41b49890c026df2b7, type: 3}
 --- !u!1 &1969431301
@@ -962,6 +980,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1969431301}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: 3b62face96745824f9565aeade39be4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -1151,6 +1170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2084899909}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: 03b8947802871064baea1ca4c7258a89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -1180,6 +1200,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2084899909}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: 5f3bb3908449c704ea844a74dabe0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
