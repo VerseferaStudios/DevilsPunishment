@@ -31,7 +31,7 @@ public class FlashlightScript : MonoBehaviour
     [Tooltip("Upgrade boolean used to determine if player picked up flashlight")]
     private bool isUpgraded = false;//Has the player picked up the flashlight?
     [SerializeField]
-    private float range = 0.1f;
+    private float flicker_range = 0.1f;
     private float currentIntensity;//Light Intensity
 	private Light glowLight;//GlowLight GameObject
 	private Light flashLight;//FlashLight GameObject
@@ -75,7 +75,7 @@ public class FlashlightScript : MonoBehaviour
     public void turnFlashLight()
     {
 		Debug.Log("Attempting to toggle flashLight.");
-        flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
+        //flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
         flashLight.intensity = flashLightInsensity;
         flashLight.range = flashLightRange;
         flashLight.spotAngle = flashLightAngle;
@@ -86,22 +86,22 @@ public class FlashlightScript : MonoBehaviour
     public void turnGlowLight()
     {
 		Debug.Log("Attempting to toggle glowLight");
-        glowLight.gameObject.SetActive(!glowLight.gameObject.activeSelf);
+		glowLight.enabled = !glowLight.enabled;
+		//glowLight.gameObject.SetActive(!glowLight.enabled);
         glowLight.intensity = glowLightIntensity;
         glowLight.range = glowLightRadius;
         glowLight.color = glowColor;
-        glowLight.enabled = !glowLight.enabled;
     }
 
     public void turnFlicker()
     {
         if (isUpgraded)
 		{
-			flashLight.intensity = Random.Range(currentIntensity - range, currentIntensity + range);
+			flashLight.intensity = Random.Range(currentIntensity - flicker_range, currentIntensity + flicker_range);
         }
         else
         {
-            glowLight.intensity = Random.Range(currentIntensity - range, currentIntensity + range);
+            glowLight.intensity = Random.Range(currentIntensity - flicker_range, currentIntensity + flicker_range);
         }
     }
 }
