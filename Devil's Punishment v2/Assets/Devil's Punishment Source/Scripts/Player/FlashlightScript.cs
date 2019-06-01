@@ -42,14 +42,10 @@ public class FlashlightScript : MonoBehaviour
 		Transform lights = gameObject.transform.Find("Lights");
 		Debug.Assert(lights != null, "FlashlightScript.cs could not find Player/Lights Transform");
 
-		Transform gl = lights.Find("GlowLight");
-		Debug.Assert(gl!=null,"FlashlightScript.cs could not find Player/Lights/GlowLight Transform");
-		glowLight = gl.GetComponentInChildren<Light>();
+		glowLight = lights.Find("GlowLight").Find("Point Light").GetComponent<Light>();
 		Debug.Assert(glowLight != null, "FlashlightScript.cs could not find light component in Player/Lights/Glowlight gameObject");
 
-		Transform fl = lights.Find("Flashlight");
-		Debug.Assert(fl != null, "FlashlightScript.cs could not find Player/Lights/Flashlight Transform");
-        flashLight = fl.GetComponentInChildren<Light>();
+		flashLight = lights.Find("Flashlight").Find("Spotlight").GetComponent<Light>();
 		Debug.Assert(flashLight != null, "FlashlightScript.cs could not find light component in Player/Lights/Flashlight gameObject");
 	}
 
@@ -58,7 +54,6 @@ public class FlashlightScript : MonoBehaviour
 	{
 		//isUpgraded will be coming from the player scripts
 		//isUpgraded == player.isUpgraded();
-
 		if (Input.GetKeyDown(flashlightButton))
         {
             if(isUpgraded)
