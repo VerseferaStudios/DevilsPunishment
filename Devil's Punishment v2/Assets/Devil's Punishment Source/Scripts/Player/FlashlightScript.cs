@@ -32,23 +32,34 @@ public class FlashlightScript : MonoBehaviour
     private bool isUpgraded = false;//Has the player picked up the flashlight?
     [SerializeField]
     private float range = 0.1f;
-    private Light glowLight;//GlowLight GameObject
-    private Light flashLight;//FlashLight GameObject
     private float currentIntensity;//Light Intensity
+	private Light glowLight;//GlowLight GameObject
+	private Light flashLight;//FlashLight GameObject
 
-    void Start()
-    {
-        glowLight = this.gameObject.transform.Find("Lights/GlowLight").GetComponent<Light>();
-        flashLight = this.gameObject.transform.Find("Lights/Flashlight").GetComponent<Light>();
-    }
+	void Start()
+	{
+		Debug.Log("current gameObject for FlashLightScript.cs is: " + gameObject.name);
+		Transform lights = gameObject.transform.Find("Lights");
+		Debug.Assert(lights != null, "FlashlightScript.cs could not find Player/Lights Transform");
 
-    // Update is called once per frame
-    void Update()
-    {
-        //isUpgraded will be coming from the player scripts
-        //isUpgraded == player.isUpgraded();
+		Transform gl = lights.Find("GlowLight");
+		Debug.Assert(gl!=null,"FlashlightScript.cs could not find Player/Lights/GlowLight Transform");
+		glowLight = gl.GetComponentInChildren<Light>();
+		Debug.Assert(glowLight != null, "FlashlightScript.cs could not find light component in Player/Lights/Glowlight gameObject");
 
-        if (Input.GetKeyDown(flashlightButton))
+		Transform fl = lights.Find("Flashlight");
+		Debug.Assert(fl != null, "FlashlightScript.cs could not find Player/Lights/Flashlight Transform");
+        flashLight = fl.GetComponentInChildren<Light>();
+		Debug.Assert(flashLight != null, "FlashlightScript.cs could not find light component in Player/Lights/Flashlight gameObject");
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+		//isUpgraded will be coming from the player scripts
+		//isUpgraded == player.isUpgraded();
+
+		if (Input.GetKeyDown(flashlightButton))
         {
             if(isUpgraded)
             {
@@ -68,6 +79,7 @@ public class FlashlightScript : MonoBehaviour
 
     public void turnFlashLight()
     {
+		Debug.Log("Attempting to toggle flashLight.");
         flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
         flashLight.intensity = flashLightInsensity;
         flashLight.range = flashLightRange;
@@ -78,6 +90,7 @@ public class FlashlightScript : MonoBehaviour
 
     public void turnGlowLight()
     {
+		Debug.Log("Attempting to toggle glowLight");
         glowLight.gameObject.SetActive(!glowLight.gameObject.activeSelf);
         glowLight.intensity = glowLightIntensity;
         glowLight.range = glowLightRadius;
@@ -88,8 +101,8 @@ public class FlashlightScript : MonoBehaviour
     public void turnFlicker()
     {
         if (isUpgraded)
-        {
-            flashLight.intensity = Random.Range(currentIntensity - range, currentIntensity + range);
+		{
+			flashLight.intensity = Random.Range(currentIntensity - range, currentIntensity + range);
         }
         else
         {
