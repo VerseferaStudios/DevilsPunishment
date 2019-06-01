@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CorridorNew : MonoBehaviour
 {
-    [SerializeField]
-    private bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
+    //[SerializeField]
+    //private bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
 
-    [Tooltip("Corridor openings in the order of +z, +x, -z, -x for 0, 1, 2, 3 indices respectively of the array")]
-    private List<int> corridorOpenings = new List<int>(4);
+    //[SerializeField]
+    //[Tooltip("Corridor openings in the order of +z, +x, -z, -x for 0, 1, 2, 3 indices respectively of the array")]
+    //private List<int> corridorOpenings = new List<int>(4);
     /*
      * For example
      *      __L
@@ -18,9 +19,14 @@ public class CorridorNew : MonoBehaviour
      *      
      */
 
+    public List<Vector3> rooms = new List<Vector3>();
+
+    //public GameObject collisionDetector;
+
     private void Start()
     {
         //Debug.Log("corridorOpenings.Length" + corridorOpenings.Count + "    " + corridorOpenings.Capacity);
+        //GameObject.FindObjectOfType
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -28,9 +34,10 @@ public class CorridorNew : MonoBehaviour
         {
             Data.instance.isCollided = true;
             Data.instance.collisionCount++;
+            
+            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
 
             //isNeedL = true;
-
             Data.instance.collidedCorridors.Add(gameObject);
             //Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;

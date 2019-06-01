@@ -23,7 +23,23 @@ public class Data : MonoBehaviour
 
     private float nextTime = 1f;
 
-    private Dictionary<Vector3, int> corridorPosDict = new Dictionary<Vector3, int>();
+    public Dictionary<Vector3, int> corridorPosDict = new Dictionary<Vector3, int>();
+
+    public List<ConnectedComponent> connectedRoomsThroughCollision = new List<ConnectedComponent>();
+
+    public List<List<Vector3>> connectedRooms = new List<List<Vector3>>();
+
+    public Vector3 spawnPointsFirstPos;
+
+    public int count = 0;
+
+    public GameObject roomIndicator;
+
+    public int ctr = 0;
+
+    public bool isOnce = true;
+
+    public int prevCount = 0;
 
     //public bool isPipeAtLeft = true;
 
@@ -38,6 +54,7 @@ public class Data : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+        //Random.InitState(10);
     }
 
     private void Start()
@@ -47,13 +64,16 @@ public class Data : MonoBehaviour
         nearDoorL.Add("-x");
         nearDoorL.Add("+z");
         nearDoorL.Add("+x");
+        prevCount = connectedRoomsThroughCollision.Count;
     }
 
     private void Update()
     {
 
-        if(collidedCorridors.Count != 0 && Time.time - startTime > nextTime)
+        if(count < 5 && collidedCorridors.Count != 0 && Time.time - startTime > nextTime)
         {
+            count++;
+
             Debug.Log("Count Olaf =" + collidedCorridors.Count);
 
 
@@ -105,7 +125,7 @@ public class Data : MonoBehaviour
                         if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name) 
                             && (collidedCorridors[i].transform.rotation == collidedCorridors[j].transform.rotation))
                         {
-                            Debug.Log("Leave");
+                            //Debug.Log("Leave");
 
                         }
                         else if(!isNotFirstTime)
@@ -144,7 +164,9 @@ public class Data : MonoBehaviour
                                 GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == -90) ? corridorT2 : corridorT1 , collidedCorridors[j].transform.position, Quaternion.identity);
                                 if(yRotation == 0 || yRotation == 90)
                                 {
+                                    currCorridor.GetComponentInChildren<BoxCollider>().enabled = false;
                                     currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+                                    currCorridor.GetComponentInChildren<BoxCollider>().enabled = true;
                                 }
                                 currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                             }
@@ -216,13 +238,69 @@ public class Data : MonoBehaviour
             Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
             for (int q = 0; q < collidedCorridors.Count; q++)
             {
-                Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
+                //Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
             }
+
+            if (connectedRoomsThroughCollision.Count != prevCount)
+            {
+                //AddConnectedRooms(connectedRoomsThroughCollision, false);
+                AddAndRemoveConnectedRooms();
+                ctr++;
+            }
+
+            prevCount = connectedRoomsThroughCollision.Count;
 
             nextTime = Time.time + 1f;
 
         }
-
+        if( Time.time - startTime >= 4f && isOnce ) //&& (count >= 5 || collidedCorridors.Count == 0))
+        {
+            isOnce = false;
+            int z = 1;
+            foreach (var item in connectedRooms)
+            {
+                Debug.Log("LLLLLAAAASTSSTTTTTTT ConnectedRooms No. " + z);
+                foreach (var item1 in item)
+                {
+                    Debug.Log(item1);
+                    GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity);
+                    //Colour scheme
+                    if (z == 1)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.green;
+                    }
+                    else if (z == 2)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.red;
+                    }
+                    else if (z == 3)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.white;
+                    }
+                    else if (z == 4)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.yellow;
+                    }
+                    else if (z == 5)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.cyan;
+                    }
+                    else if (z == 6)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.blue;
+                    }
+                    else if (z == 7)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.magenta;
+                    }
+                    else if (z == 8)
+                    {
+                        gb.GetComponent<Renderer>().material.color = Color.grey;
+                    }
+                }
+                ++z;
+            }
+        }
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -301,7 +379,7 @@ public class Data : MonoBehaviour
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
-            Debug.Log(openings[0] + " " + openings[1]);
+            //Debug.Log(openings[0] + " " + openings[1]);
         }
         else if (name.Equals("Corridor_L_1(Clone)"))
         {
@@ -355,10 +433,326 @@ public class Data : MonoBehaviour
             }
         }
 
-        Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
+        //Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
         foreach (KeyValuePair<Vector3, int> item in corridorPosDict)
         {
-            Debug.Log(item.Key + " " + item.Value);
+            //Debug.Log(item.Key + " " + item.Value);
         }
     }
+
+    public bool CheckIfVisited(Vector3 toCheck)
+    {
+        bool flag = false;
+        foreach (List<Vector3> groupOfRooms in connectedRooms)
+        {
+            if (groupOfRooms.Contains(toCheck))
+            {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    
+    private void AddOrRemoveConnectedRooms11(ref List<List<Vector3>> connectedRoomsThroughCollision, bool isRemoveAfterAdding)
+    {
+        bool isFoundOne = false, isFoundBoth = false;
+        int idxCollision = -1, idx = -1;
+        for (int k = 0; k < connectedRoomsThroughCollision.Count; ++k)
+        {
+            for (int i = 0; i < connectedRooms.Count; i++)
+            {
+                for (int j = 0; j < connectedRooms[i].Count; j++)
+                {
+                    if (connectedRooms[i][j] == connectedRoomsThroughCollision[k][0])
+                    {
+                        isFoundOne = true;
+                        idxCollision = k; //remove for isFoundBoth
+                        idx = i;
+                        break;
+                    }
+                }
+                /*
+                if (isFoundOne)
+                {
+                    for (int j = 0; j < connectedRooms[i].Count; j++)
+                    {
+                        if (connectedRooms[i][j] == connectedRoomsThroughCollision[k][1])
+                        {
+                            isFoundBoth = true;
+                            idxCollision = k;
+                            idx = i;
+                            break;
+                        }
+                    }
+                }
+                */
+            }
+        }
+        //if (!isFoundBoth)
+        if (!isFoundOne)
+        {
+            if (!isRemoveAfterAdding)
+            {
+                List<Vector3> arr = new List<Vector3>();
+                for (int i = 0; i < 2 * connectedRoomsThroughCollision.Count; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        arr.Add(connectedRoomsThroughCollision[i][j]);
+                    }
+                }
+                connectedRooms.Add(arr);
+            }
+        }
+        else
+        {
+            //Add the remaining connected rooms
+            for (int i = 0; i < connectedRoomsThroughCollision.Count; i++)
+            {
+                if(i == idxCollision)
+                {
+                    continue;
+                }
+                for (int j = 0; j < 2; j++)
+                {
+                    //if()
+                        connectedRooms[idx].Add(connectedRoomsThroughCollision[i][j]);
+                }
+            }
+
+            //search for second set and remove
+            SearchForOtherRooms(idx);
+        }
+    }
+
+    private void SearchForOtherRooms(int idx)
+    {
+        //search for second set and remove
+        for (int i = 0; i < connectedRooms.Count; i++)
+        {
+            if(i == idx)
+            {
+                continue;
+            }
+            for (int j = 0; j < 2; j++)
+            {
+                if (connectedRooms[i].Contains(connectedRoomsThroughCollision[i].rooms[j]))
+                {
+                    //AddOrRemoveConnectedRooms( ref connectedRooms.GetRange(i, 1) , true);
+                }
+            }
+        }
+    }
+
+    private void AddAndRemoveConnectedRooms()
+    {
+
+        //connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();  //NEEDED????????
+
+        //check the below for loop with debug
+        List<ConnectedComponent> temp = new List<ConnectedComponent>();
+        for (int i = 1; i < connectedRoomsThroughCollision.Count; i++)
+        {
+            if(connectedRoomsThroughCollision[0].corridorPos != connectedRoomsThroughCollision[i].corridorPos)
+            {
+                temp.Add(connectedRoomsThroughCollision[i]);
+                connectedRoomsThroughCollision.RemoveAt(i);
+                i--;
+            }
+        }
+
+        int z = 1;
+        foreach (var item in temp)
+        {
+            Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
+            foreach (var item1 in item.rooms)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+
+
+        Debug.Log("AddAndRemoveConnectedRooms iteration number" + ctr);
+
+        //TEST
+        //Number of distinct components B4
+        Debug.Log("connectedRooms B4 connecting process = " + connectedRooms.Count);
+        displayConnectedRooms();
+        
+
+        List<int> indices = new List<int>();
+
+        Vector3 collidedConnectedRoomToSearch;
+        for (int i = 0; i < connectedRoomsThroughCollision.Count; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                collidedConnectedRoomToSearch = connectedRoomsThroughCollision[i].rooms[j];
+                for (int k = 0; k < connectedRooms.Count; k++)
+                {
+                    for (int q = 0; q < connectedRooms[k].Count; q++)
+                    {
+                        //Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch) 
+                        //and comparing it with every element of connectedRooms
+                        if(collidedConnectedRoomToSearch == connectedRooms[k][q])
+                        {
+                            indices.Add(k);
+                            connectedRoomsThroughCollision.Add(new ConnectedComponent(connectedRoomsThroughCollision[i].corridorPos, connectedRooms[k]));
+                            connectedRooms.RemoveAt(k);
+                            k--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Now add a list to end of connectedRooms (which has less elements now)
+        // the new list is the whole of connectedRoomsThroughCollision (to which more elements have been added)
+
+
+        Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        displayConnectedRoomsThroughCollision();
+
+        
+        
+        connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();  //NEEDED????????
+
+        for (int i = 1; i < connectedRoomsThroughCollision.Count; i++)
+        {
+            connectedRoomsThroughCollision[0].rooms.AddRange(connectedRoomsThroughCollision[i].rooms); 
+        }
+
+        //Removes duplicates in the only List object (of type ConnectedComponent) left
+        connectedRoomsThroughCollision[0].rooms = connectedRoomsThroughCollision[0].rooms.Distinct().ToList();
+
+        connectedRoomsThroughCollision.RemoveRange(1, connectedRoomsThroughCollision.Count - 1);
+
+        //B4 adding
+
+        Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        displayConnectedRoomsThroughCollision();
+        
+        Debug.Log("connectedRooms B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        displayConnectedRooms();
+
+        //Add connectedRoomsThroughCollision[0] to end of connectedRooms
+        connectedRooms.Add(connectedRoomsThroughCollision[0].rooms);
+
+
+        //Then append the rest to connectedRooms[connectedRooms.Count - 1]
+        /*for (int i = 1; i < connectedRoomsThroughCollision.Count && connectedRooms.Count - i > 0; i++)
+        {
+            connectedRooms[connectedRooms.Count - i].AddRange(connectedRoomsThroughCollision[i].rooms);
+        }
+        */
+
+        //Resetting the List
+        connectedRoomsThroughCollision = temp;
+        
+
+
+        //Number of distinct components
+        Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
+        displayConnectedRooms();
+        
+
+        /*
+
+        List<List<Vector3>> A = new List<List<Vector3>>();
+        List<List<Vector3>> B = new List<List<Vector3>>();
+
+        List<Vector3> temp = new List<Vector3>();
+
+        temp.Add(new Vector3(1, 1, 1));
+        temp.Add(new Vector3(11, 10, 10));
+
+        B.Add(temp);
+
+        temp = new List<Vector3>();
+
+        temp.Add(new Vector3(-111, -10, -10));
+        temp.Add(new Vector3(-222, -20, -20));
+
+        A.Add(temp);
+        A.Add(temp);
+        Debug.Log("A");
+        foreach (var item in A)
+        {
+            Debug.Log("----");
+            foreach (var item1 in item)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+        Debug.Log("B");
+        foreach (var item in B)
+        {
+            Debug.Log("----");
+            foreach (var item1 in item)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+
+        B[B.Count - 1].AddRange(A[0]);
+        B[B.Count - 1].AddRange(A[1]);
+
+        Debug.Log("A");
+        foreach (var item in A)
+        {
+            Debug.Log("----");
+            foreach (var item1 in item)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+        Debug.Log("B");
+        foreach (var item in B)
+        {
+            Debug.Log("----");
+            foreach (var item1 in item)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+        */
+
+    }
+
+    private void displayConnectedRoomsThroughCollision()
+    {
+        int z = 1;
+        foreach (var item in connectedRoomsThroughCollision)
+        {
+            Debug.Log("ConnectedRoomsThroughCollision No. " + z + "item.Count = " + item.rooms.Count);
+            foreach (var item1 in item.rooms)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+    }
+
+    private void displayConnectedRooms()
+    {
+        int z = 1;
+        foreach (var item in connectedRooms)
+        {
+            Debug.Log("ConnectedRooms No. " + z);
+            foreach (var item1 in item)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+    }
+
 }

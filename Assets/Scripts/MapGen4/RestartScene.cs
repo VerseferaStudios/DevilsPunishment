@@ -12,6 +12,14 @@ public class RestartScene : MonoBehaviour
         Data.instance.startTime = Time.time;
         Data.instance.isCollided = false;
         Data.instance.collidedCorridors = new List<GameObject>();
+        Data.instance.corridorPosDict = new Dictionary<Vector3, int>();
+        Data.instance.connectedRoomsThroughCollision = new List<ConnectedComponent>();
+        Data.instance.connectedRooms = new List<List<Vector3>>();
+        Data.instance.count = 0;
+        Data.instance.isOnce = true;
+        Data.instance.ctr = 0;
+        Data.instance.prevCount = 0;
+        //Random.InitState(10);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

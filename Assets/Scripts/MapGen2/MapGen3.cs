@@ -69,7 +69,7 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = room4;
-            switch ((int)Mathf.Round(Random.Range(-0.49f, 4.49f)))
+            switch (4)//Random.Range(0, 4))
             {
                 case 0 :
                     roomToSpawn = room1;
