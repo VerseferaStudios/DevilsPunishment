@@ -27,7 +27,7 @@ public class LootDropper : MonoBehaviour
 
     [Space]
     [Header("Loot Locations")]
-    public Transform[] all; //This is only used to find the locations of the generator parts.
+    public Transform[] locate; 
     int randomLoc;
     int locationSet;
 
@@ -74,7 +74,7 @@ public class LootDropper : MonoBehaviour
 
     public void Start()
     {
-        List <Transform> all = new List<Transform>();
+        List <int> all = new List<int>();
         //Finding all possible spots.
         noArmory = 0;
         armorySpawns = noArmory * ArmorySpots;
@@ -98,7 +98,7 @@ public class LootDropper : MonoBehaviour
         startingRoomSpawns = noStartingRoom * StartingRoomSpots;
         Debug.Log("Have found the locations!");
         locationSet = armorySpawns + noBathroom + noDorms + noHospital + noCorridorT + noCorridorL + noKitchen + noKitchen + noRadio + noCave + noStartingRoom;
-        //all.Add(locationSet);
+        all.Add(locationSet);
 
     }
 
@@ -106,16 +106,18 @@ public class LootDropper : MonoBehaviour
     public void Awake()
     {
         //Generator Parts are spawning, must be on 1st floor set parameter to be between 1 and ? on the y axis...
-        //
-        //if (randomLoc.position.y >= 8)
-        randomLoc = Random.Range(0, all.Length);
-        Instantiate(gen1, all[randomLoc].position, all[randomLoc].rotation);
+        randomLoc = Random.Range(0, locate.Length);
+        //if (randomLoc.position.y <=8 randomLoc.Length)
+        //    {
+        //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
+        //    //Delete or deactivate the spawn location
+        //    }
+
+        randomLoc = Random.Range(0, locate.Length);
+        Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
         //Delete or deactivate the spawn location
-        randomLoc = Random.Range(0, all.Length);
-        Instantiate(gen2, all[randomLoc].position, all[randomLoc].rotation);
-        //Delete or deactivate the spawn location
-        randomLoc = Random.Range(0, all.Length);
-        Instantiate(gen3, all[randomLoc].position, all[randomLoc].rotation);
+        randomLoc = Random.Range(0, locate.Length);
+        Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
         //Delete or deactivate the spawn location
         Debug.Log("All generator pieces have been placed!");
         Debug.Log("Spawning all other items now!");
