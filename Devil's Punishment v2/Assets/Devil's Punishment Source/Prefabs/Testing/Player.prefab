@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 8164235254571143815}
   - component: {fileID: 710846656262533719}
   - component: {fileID: 3271764737072214793}
-  - component: {fileID: 7044920238141403533}
+  - component: {fileID: 1125293928587883724}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -659,7 +659,6 @@ Transform:
   - {fileID: 710846657549933314}
   - {fileID: 710846656944844315}
   - {fileID: 8137542081264263585}
-  - {fileID: 5783089327053701680}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -770,7 +769,7 @@ MonoBehaviour:
     m_SteamID: 0
   lobby:
     m_SteamID: 0
---- !u!114 &7044920238141403533
+--- !u!114 &1125293928587883724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -783,16 +782,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlightButton: 102
-  glowLightIntensity: 0
-  glowLightRadius: 0
-  glowColor: {r: 0, g: 0, b: 0, a: 0}
-  flashLightInsensity: 0
-  flashLightRange: 0
-  flashLightAngle: 0
-  flashColor: {r: 0, g: 0, b: 0, a: 0}
+  glowLightIntensity: 1
+  glowLightRadius: 10
+  glowColor: {r: 0, g: 1, b: 0.1764706, a: 0}
+  flashLightInsensity: 1.5
+  flashLightRange: 20
+  flashLightAngle: 33
+  flashColor: {r: 1, g: 0.92941177, b: 0.5529412, a: 0}
   isFlickerEnabled: 0
-  isUpgraded: 0
-  range: 0.1
+  isUpgraded: 1
+  flicker_range: 0.1
 --- !u!1 &710846656263735842
 GameObject:
   m_ObjectHideFlags: 0
@@ -19262,6 +19261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 710846656529159980}
+  - {fileID: 5783089327053701680}
   m_Father: {fileID: 710846656274360105}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -43157,14 +43157,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8880173687225191291}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.5, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 710846657784185193}
   - {fileID: 710846657357535894}
-  m_Father: {fileID: 710846656262533718}
-  m_RootOrder: 6
+  m_Father: {fileID: 710846657363605461}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &569431712928190925
 PrefabInstance:

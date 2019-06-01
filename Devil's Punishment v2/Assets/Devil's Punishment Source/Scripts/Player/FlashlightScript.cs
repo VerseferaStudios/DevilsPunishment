@@ -39,7 +39,7 @@ public class FlashlightScript : MonoBehaviour
 	void Start()
 	{
 		Debug.Log("current gameObject for FlashLightScript.cs is: " + gameObject.name);
-		Transform lights = gameObject.transform.Find("Lights");
+		Transform lights = gameObject.transform.Find("Camera/GunCamera/Lights");
 		Debug.Assert(lights != null, "FlashlightScript.cs could not find Player/Lights Transform");
 
 		glowLight = lights.Find("GlowLight").Find("Point Light").GetComponent<Light>();
@@ -75,7 +75,6 @@ public class FlashlightScript : MonoBehaviour
     public void turnFlashLight()
     {
 		Debug.Log("Attempting to toggle flashLight.");
-        //flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
         flashLight.intensity = flashLightInsensity;
         flashLight.range = flashLightRange;
         flashLight.spotAngle = flashLightAngle;
@@ -87,7 +86,6 @@ public class FlashlightScript : MonoBehaviour
     {
 		Debug.Log("Attempting to toggle glowLight");
 		glowLight.enabled = !glowLight.enabled;
-		//glowLight.gameObject.SetActive(!glowLight.enabled);
         glowLight.intensity = glowLightIntensity;
         glowLight.range = glowLightRadius;
         glowLight.color = glowColor;
