@@ -48,7 +48,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-        if(ServerInformationObject == null, )
+        if(ServerInformationObject == null)
         {
             SceneManager.LoadScene(2);
             //SceneManager.LoadScene(0);
