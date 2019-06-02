@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using Steamworks;
-
+using UnityEngine.SceneManagement;
 
 public class SteamWorksNetworkManager : MonoBehaviour
 {
@@ -48,6 +48,12 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
+        if(ServerInformationObject == null)
+        {
+            SceneManager.LoadScene(2);
+            //SceneManager.LoadScene(0);
+
+        }
         Callback_SessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
         OtherPlayers = new GameObject[7];
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
