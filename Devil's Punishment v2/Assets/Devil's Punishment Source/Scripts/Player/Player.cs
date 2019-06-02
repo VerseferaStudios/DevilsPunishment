@@ -27,7 +27,8 @@ public class Player : MonoBehaviour
         gameMenu = InGameMenuUI.instance;
         ToggleInventory();
         ToggleGameMenu();
-    }
+		if (inventory.equippedGun != null) { gunController.InitGun(); }
+	}
 
     void Update() {
         if(Input.GetButtonDown("Open Inventory")) {

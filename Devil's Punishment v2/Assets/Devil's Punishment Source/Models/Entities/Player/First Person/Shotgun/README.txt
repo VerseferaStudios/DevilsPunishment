@@ -9,7 +9,7 @@ Dont hesitate to change the speed of certain animations if necessary, ex: speed 
 
 frames		animation
 0-15		pulls out gun
-15-40		idle/breathing
+(17.5-35) 15-40		idle/breathing
 40-50		idle to running transition
 50-70		run cycle
 70-80		running to idle transition

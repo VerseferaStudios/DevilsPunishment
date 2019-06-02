@@ -56,14 +56,19 @@ public class Inventory : MonoBehaviour
 
     private GunController gunController;
 
+
     private void Awake() {
         instance = this;
-    }
+		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
+		Debug.Assert(gunController != null, "gunController shouldn't be null!");
+	}
 
-    private void Start() {
-        Sort();
-        gunController = GunController.instance;
-    }
+    private void Start()
+	{
+		Awake();
+		Sort();
+		CullNulls();
+	}
 
     public Item GetItemFromIndex(int index) {
         if(index == inventory.Count) {
@@ -74,12 +79,24 @@ public class Inventory : MonoBehaviour
             return null;
         }
     }
+	
+	private int size;
+	public bool hasSpace() { /*Debug.Log("Inventory size is: " + size);*/ return size < inventory.Count; }
 
     public void AddItem(Item item, int stack=1) {
-
         if(item is GunItem) {
-            equippedGun = item as GunItem;
-            //gunController.InitGun();
+			if (equippedGun != null)
+			{
+				Debug.Log("Gun in hand," + equippedGun.name + " " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
+				DropGun();
+			} else
+			{
+				Debug.Log("Player doesn't appear to be holding a gun, so... ");
+			}
+			Debug.Log("Equipping picked gun " +item.name);
+			equippedGun = item as GunItem;
+			gunController.InitGun();
+			
             return;
         }
 
@@ -115,67 +132,128 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void DropItemAll(int index) {
-        if(index>=inventory.Count) {
-            equippedGun = null;
-            gunController.InitGun();
-        } else if(index > -1) {
-            if(inventory[index].item != null) {
-                inventory.RemoveAt(index);
-                inventory.Add(new InventorySlot());
-            }
-        }
+	public GameObject DropGameObject(string ResourceID, int count = 1)
+	{
+		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
+		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
+		Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		drop.GetComponent<InteractableLoot>().stock = count;
+		drop.SetActive(true);
+		return drop;
+	}
 
+	public void DropGun()
+	{
+		Debug.Log("DroppingHeldGun");
+
+		string ResourceID = string.Empty;
+		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
+		foreach (string resource in resources)
+		{
+			GameObject resItem = ResourceManager.instance.getResource(resource);
+			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
+			if (equippedGun == lootComp.item as GunItem)
+			{
+				ResourceID = resource;
+				Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
+				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null)
+					AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
+				equippedGun = null;
+				gunController.InitGun();
+				DropGameObject(resource);
+				return;	
+			}
+		}
+		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGun() logic not completed for object, " + ResourceID);
+	}
+
+	public void DropGameObject(Item item, int count = 1)
+	{
+		string ResourceID = string.Empty;
+		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
+		foreach (string resource in resources)
+		{
+			GameObject resItem = ResourceManager.instance.getResource(resource);
+			InteractableLoot lootComp = resItem.GetComponent<InteractableLoot>();
+			if (lootComp == null)
+			{
+				continue;
+			}
+			if (item == lootComp.item)
+			{
+				ResourceID = resource;
+				DropGameObject(resource, count);
+				return;
+			}
+		}
+		Debug.Assert(ResourceID != string.Empty, "Error in inventory.cs: DropGameObject() logic not completed for object, " + ResourceID);
+
+	}
+
+	public void DropItemAll(int index, bool consume = false)
+	{
+		Debug.Log("Root of DropItem func reached");
+        if(index>=inventory.Count)
+		{
+			Debug.Log("-> Determined that you want to drop a gun...");
+			DropGun();
+		}
+		else if(index > -1)
+		{
+			Debug.Log("-> Determined that you want to drop an item from your inventory...");
+			if (inventory[index].item != null)
+			{
+				string name = inventory[index].item.name;
+				Debug.Log("-> Dropping item: " + name);
+				if (!consume && inventory[index].stack > 0)
+				{
+					DropGameObject(inventory[index].item,inventory[index].stack);
+				}
+				inventory.RemoveAt(index);
+				inventory.Add(new InventorySlot());
+				size--;
+			}
+        }
     }
 
-    public void DropItem(string name, int amount = 1) {
-
-        int x = amount;
-
-        while(x > 0) {
-
-            int index = GetIndexOfItem(name);
-
-            if(index > -1) {
-                DropItem(index, 1);
-                x--;
-            } else {
-                break;
-            }
-
-        }
-
+    public void DropItem(string name, int amount = 1, bool consume = false)
+	{
+		int index = GetIndexOfItem(name);
+		DropItem(index, amount, consume);
         Sort();
-
     }
 
-    public void DropItem(int index, int amount = 1) {
-
-        for(int i = 0; i < amount; i++) {
-
-            if(index>=inventory.Count) {
-                equippedGun = null;
-                gunController.InitGun();
-                return;
-            } else if(index > -1) {
-                if(inventory[index].item != null && inventory[index].stack > 1) {
-                    inventory[index].stack--;
-                } else {
-                    DropItemAll(index);
-                    return;
-                }
-            }
-
-        }
-
-    }
+    public void DropItem(int index, int amount = 1, bool consume = false) {
+		if (index >= inventory.Count)
+		{
+			DropItemAll(index,consume);
+			return;
+		}
+		else if (index > -1)
+		{
+			if (inventory[index].item != null && inventory[index].stack > 1)
+			{
+				inventory[index].stack -= amount;
+				Debug.Log("Dropping a Partial Stack of " + amount + " " + inventory[index].item.name);
+				if (!consume)
+				{
+					DropGameObject(inventory[index].item, amount);
+				}
+			}
+			else
+			{
+				DropItemAll(index, consume);
+				return;
+			}
+		}
+	}
 
     public void UseItem(int index) {
 
         Item item = GetItemFromIndex(index);
         if(item != null) {
             if(item.Use()) {
-                DropItem(index);
+                DropItem(index,/*amount*/1,/*consume*/true);
             }
         }
 
@@ -228,7 +306,7 @@ public class Inventory : MonoBehaviour
     public void Sort() {
         CompoundInventory();
         inventory.Sort();
-    }
+	}
 
     public int GetIndexOfItem(string name) {
         for(int i = 0; i < inventory.Count; i++) {
@@ -279,10 +357,15 @@ public class Inventory : MonoBehaviour
     }
 
     private void CullNulls() {
+		size = 0;
         for(int i = 0; i < inventory.Count; i++) {
-            if(!(inventory[i] != null && inventory[i].item != null && inventory[i].stack > 0)) {
+            if(inventory[i] == null || inventory[i].item == null || inventory[i].stack <= 0) {
                 DropItemAll(i);
-            }
+			}
+			else
+			{
+				size++;
+			}
         }
     }
 

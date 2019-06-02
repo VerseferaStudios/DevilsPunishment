@@ -11,12 +11,14 @@ GameObject:
   - component: {fileID: 4225125002172416512}
   - component: {fileID: 4225125002173710880}
   - component: {fileID: 4225125002174709984}
-  m_Layer: 0
+  - component: {fileID: 2935302502087771588}
+  - component: {fileID: 6827910252956428824}
+  m_Layer: 9
   m_Name: flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4225125002172416512
 Transform:
@@ -78,6 +80,34 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &2935302502087771588
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225125002172456480}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.102988526, y: 0.022049515, z: 0.022049507}
+  m_Center: {x: 0.029232938, y: -0.000000013038516, z: 0.00000000325963}
+--- !u!114 &6827910252956428824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225125002172456480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c93522399cc39448e36cc4276ccdad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: d339d792d00c46a48a8e783a297d227c, type: 2}
+  stock: 1
+  timeToPickUp: 1
 --- !u!1 &7782998237570477660
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,13 +118,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7782998237570477661}
   - component: {fileID: 7782998237570477650}
-  - component: {fileID: 7242328764991498751}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &7782998237570477661
 Transform:
@@ -148,17 +177,3 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &7242328764991498751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7782998237570477660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4abe63da92ee0ed438601913b42a2147, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isFlickerEnabled: 1
-  range: 0.1

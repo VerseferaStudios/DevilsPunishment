@@ -32,7 +32,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 movementInputRaw;
     private float speed;
-    private float animationSpeed;
+    private float forwardAnimationSpeed;
+    private float rightAnimationSpeed;
+    private float climbSpeed;
     private bool isCrouching;
     private bool isSprinting;
     private bool isMoving;
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
         Animation();
         CameraUpdate();
     }
-public void AddToViewVector(float x, float y) {
+	public void AddToViewVector(float x, float y) {
         horizontalAngle += x;
         verticalAngle += y;
     }
@@ -142,10 +144,12 @@ public void AddToViewVector(float x, float y) {
             (1.0f - .5f * gunController.GetAimingCoefficient());
 
         float targetSpeed = movementSpeed * generalSpeedMultiplier;
-        float targetAnimationSpeed = movementDirection.sqrMagnitude * (isSprinting? 2.0f : 1.0f) * Mathf.Sign(movementInputRaw.y);
+        float targetForwardAnimationSpeed = movementInputRaw.y * (isSprinting ? 2.0f : 1.0f);
+        float targetRightAnimationSpeed = movementInputRaw.x;        
 
         speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * movementSmoothingSpeed);
-        animationSpeed = Mathf.Lerp(animationSpeed, targetAnimationSpeed, Time.deltaTime * movementSmoothingSpeed * 2f);
+        forwardAnimationSpeed = Mathf.Lerp(forwardAnimationSpeed, targetForwardAnimationSpeed, Time.deltaTime * movementSmoothingSpeed * 2f);
+        rightAnimationSpeed = Mathf.Lerp(rightAnimationSpeed, targetRightAnimationSpeed, Time.deltaTime * movementSmoothingSpeed * 2f);
 
         Vector3 velocity =
         ((movementDirection.y * transform.forward) + (movementDirection.x * transform.right))
@@ -159,9 +163,10 @@ public void AddToViewVector(float x, float y) {
 
     void VerticalLocomotion() {
         if(!isClimbing) {
-            controller.Move(Vector3.down * Time.deltaTime * 9.81f);
+            controller.Move(Vector3.down * Time.deltaTime * 9.81f);            
         } else {
             controller.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
+            climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;                
         }
     }
 
@@ -180,9 +185,11 @@ public void AddToViewVector(float x, float y) {
 
     void Animation() {
 
-        characterAnimator.SetFloat("Speed", animationSpeed);
+        characterAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
+        characterAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
+        characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
     }
 
     void CameraUpdate() {
