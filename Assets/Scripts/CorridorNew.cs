@@ -21,6 +21,10 @@ public class CorridorNew : MonoBehaviour
 
     public List<Vector3> rooms = new List<Vector3>();
 
+    public string KOrL;
+
+    public List<Vector3> theEqualOnes = new List<Vector3>();
+
     //public GameObject collisionDetector;
 
     private void Start()

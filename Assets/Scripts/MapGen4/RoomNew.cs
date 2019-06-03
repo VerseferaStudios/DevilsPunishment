@@ -65,9 +65,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[0]/* L_1 */, spawnPoints[i].transform.position, Quaternion.identity);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[k].transform.parent.transform.position);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[l].transform.parent.transform.position);
+                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
                 if (spawnPoints[i].name.EndsWith("x"))
                 {
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -78,6 +78,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
                 visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
                 visitedRooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
+
+                //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 
                 Data.instance.connectedRooms.Add(visitedRooms);
 
@@ -105,6 +107,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 isFound = false;
             }
+        }
+
+
+        //put all adjacnt rooms in same component
+        for (int i = 0; i < Data.instance.connectedRooms.Count; i++)
+        {
+            if (Mathf.Abs(Data.instance.connectedRooms[i][0].x - Data.instance.connectedRooms[i][1].x) == 10 
+                || Mathf.Abs(Data.instance.connectedRooms[i][0].z - Data.instance.connectedRooms[i][1].z) == 10)
+            {
+
+            }
+
         }
 
 
@@ -287,6 +301,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
                     visitedRooms.Add(spawnPoints[l].transform.parent.transform.position);
                     visitedRooms.Add(spawnPoints[k].transform.parent.transform.position);
+
+                    //CheckDuplicatesAndConnect(spawnPoints[l].transform.parent.transform.position, spawnPoints[k].transform.parent.transform.position);
 
                     Data.instance.connectedRooms.Add(visitedRooms);
 
@@ -576,6 +592,51 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
                     - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
     }
+
+
+    private void CheckDuplicatesAndConnect(List<Vector3> rooms)
+    {
+        for (int i = 0; i < Data.instance.connectedRooms.Count; i++)
+        {
+            for (int j = 0; j < Data.instance.connectedRooms[i].Count; j++)
+            {
+                if(rooms[0] == Data.instance.connectedRooms[i][j])
+                {
+                    Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(rooms[0] / 2 + rooms[1] / 2, rooms));
+                }
+            }
+        }
+    }
+
+    private void CompareAndAddAdjacent()
+    {
+        Vector3 collidedConnectedRoomToSearch;
+        for (int i = 0; i < Data.instance.connectedRoomsThroughCollision.Count; i++)
+        {
+            for (int j = 0; j < Data.instance.connectedRoomsThroughCollision[i].rooms.Count; j++)
+            {
+                collidedConnectedRoomToSearch = Data.instance.connectedRoomsThroughCollision[i].rooms[j];
+                for (int k = 0; k < Data.instance.connectedRooms.Count; k++)
+                {
+                    for (int q = 0; q < Data.instance.connectedRooms[k].Count; q++)
+                    {
+                        // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
+                        // -------------- and comparing it with every element of connectedRooms -------------- 
+                        // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
+                        // -------------- and removing the same ones from connectedRooms --------------
+                        if (collidedConnectedRoomToSearch == Data.instance.connectedRooms[k][q])
+                        {
+                            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data.instance.connectedRooms[k]));
+                            Data.instance.connectedRooms.RemoveAt(k);
+                            k--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
     /*
     private string checkCollisions(Vector3 From, Vector3 to)
