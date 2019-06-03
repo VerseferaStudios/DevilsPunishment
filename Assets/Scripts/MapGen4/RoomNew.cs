@@ -116,7 +116,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             if (Mathf.Abs(Data.instance.connectedRooms[i][0].x - Data.instance.connectedRooms[i][1].x) == 10 
                 || Mathf.Abs(Data.instance.connectedRooms[i][0].z - Data.instance.connectedRooms[i][1].z) == 10)
             {
-
+                    
             }
 
         }
