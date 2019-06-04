@@ -74,7 +74,7 @@ public class LootDropper : MonoBehaviour
 
     public void Start()
     {
-        List <int> all = new List<int>();
+        List <Transform> all = new List<Transform>();
         //Finding all possible spots.
         noArmory = 0;
         armorySpawns = noArmory * ArmorySpots;
@@ -98,8 +98,13 @@ public class LootDropper : MonoBehaviour
         startingRoomSpawns = noStartingRoom * StartingRoomSpots;
         Debug.Log("Have found the locations!");
         locationSet = armorySpawns + noBathroom + noDorms + noHospital + noCorridorT + noCorridorL + noKitchen + noKitchen + noRadio + noCave + noStartingRoom;
-        all.Add(locationSet);
-
+        
+        while (locationSet > 0)
+        {
+            all.Add(gameObject.transform);
+            locationSet--;
+        }
+        Debug.Log("Locations are now in the list, ready for spawning!");
     }
 
 
