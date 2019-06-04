@@ -1,4 +1,13 @@
-﻿using System.Collections;
+﻿//Author: David K Bird
+//Date: Thursday, May 23, 2019
+//Last Edited: Tuesday, June 4, 2019
+    //By: David Bird
+        //Purpose: Writing the script
+ //Written For: Devil's Punishment v2
+ //Purpose: This script details all things that has to do with the loot generation at the beginning of the game.
+ //Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -108,26 +117,26 @@ public class LootGenerator : MonoBehaviour
     }
 
 
-    public void Awake()
-    {
-        //Generator Parts are spawning, must be on 1st floor set parameter to be between 1 and ? on the y axis...
-        randomLoc = Random.Range(0, locate.Length);
-        //if (randomLoc.position.y <=8 randomLoc.Length)
-        //    {
-        //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
-        //    //Delete or deactivate the spawn location
-        //    }
+    //public void Awake()
+    //{
+    //    //Generator Parts are spawning, must be on 1st floor set parameter to be between 1 and ? on the y axis...
+    //    randomLoc = Random.Range(0, locate.Length);
+    //    //if (randomLoc.position.y <=8 randomLoc.Length)
+    //    //    {
+    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //    //Delete or deactivate the spawn location
+    //    //    }
 
-        randomLoc = Random.Range(0, locate.Length);
-        Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
-        //Delete or deactivate the spawn location
-        randomLoc = Random.Range(0, locate.Length);
-        Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
-        //Delete or deactivate the spawn location
-        Debug.Log("All generator pieces have been placed!");
-        Debug.Log("Spawning all other items now!");
+    //    randomLoc = Random.Range(0, locate.Length);
+    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //Delete or deactivate the spawn location
+    //    randomLoc = Random.Range(0, locate.Length);
+    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //Delete or deactivate the spawn location
+    //    Debug.Log("All generator pieces have been placed!");
+    //    Debug.Log("Spawning all other items now!");
 
-        //Now going to spawn in the rest of the loot, once the loot is spawned in the spawn location is dead
+    //    //Now going to spawn in the rest of the loot, once the loot is spawned in the spawn location is dead
 
-    }
+    //}
 }
