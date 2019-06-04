@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LootDropper : MonoBehaviour
+public class LootGenerator : MonoBehaviour
 {
     //Define All possible loot locations 
     //Define the possibilty for if its a green light to spawn (50% 20%)
@@ -27,7 +27,7 @@ public class LootDropper : MonoBehaviour
 
     [Space]
     [Header("Loot Locations")]
-    public Transform[] locate; 
+    public Transform[] locate;
     int randomLoc;
     int locationSet;
 
@@ -74,7 +74,7 @@ public class LootDropper : MonoBehaviour
 
     public void Start()
     {
-        List <Transform> all = new List<Transform>();
+        List<Transform> all = new List<Transform>();
         //Finding all possible spots.
         noArmory = 0;
         armorySpawns = noArmory * ArmorySpots;
@@ -98,7 +98,7 @@ public class LootDropper : MonoBehaviour
         startingRoomSpawns = noStartingRoom * StartingRoomSpots;
         Debug.Log("Have found the locations!");
         locationSet = armorySpawns + noBathroom + noDorms + noHospital + noCorridorT + noCorridorL + noKitchen + noKitchen + noRadio + noCave + noStartingRoom;
-        
+
         while (locationSet > 0)
         {
             all.Add(gameObject.transform);
