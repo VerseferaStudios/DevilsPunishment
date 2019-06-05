@@ -7,7 +7,7 @@ public class Data : MonoBehaviour
 {
     public static Data instance = null;
     public ArrayList allRooms = new ArrayList();
-    public float xSize, zSize;
+    public float xSize, zSize, corridorSize = 4;
     public int collisionCount = 0, corridorCount = 0;
     public bool isCollided = false;
     public List<GameObject> collidedCorridors = new List<GameObject>();
@@ -37,7 +37,7 @@ public class Data : MonoBehaviour
 
     public int ctr = 0;
 
-    public bool isOnce = true, isDonePrevFnCall = true;
+    public bool isOnce = true, isDonePrevFnCall = true, isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false;
 
     public int prevCount = 0;
 
@@ -67,65 +67,7 @@ public class Data : MonoBehaviour
         nearDoorL.Add("+x");
         prevCount = connectedRoomsThroughCollision.Count;
         StartCoroutine(DoCheckPerSecond());
-    }
-
-    private void Update()
-    {
-        
-        if( Time.time - startTime >= 8f && isOnce ) //&& (count >= 5 || collidedCorridors.Count == 0))
-        {
-            if (connectedRoomsThroughCollision.Count != 0)
-            {
-                AddAndRemoveConnectedRooms();
-                ctr++;
-            }
-                
-            isOnce = false;
-            int z = 1;
-            foreach (var item in connectedRooms)
-            {
-                Debug.Log("LLLLLAAAASTSSTTTTTTT ConnectedRooms No. " + z);
-                foreach (var item1 in item)
-                {
-                    Debug.Log(item1);
-                    GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity);
-                    //Colour scheme
-                    if (z == 1)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.green;
-                    }
-                    else if (z == 2)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.red;
-                    }
-                    else if (z == 3)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.white;
-                    }
-                    else if (z == 4)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.yellow;
-                    }
-                    else if (z == 5)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.cyan;
-                    }
-                    else if (z == 6)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.blue;
-                    }
-                    else if (z == 7)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.magenta;
-                    }
-                    else if (z == 8)
-                    {
-                        gb.GetComponent<Renderer>().material.color = Color.grey;
-                    }
-                }
-                ++z;
-            }
-        }
+        StartCoroutine(DoConnectedComponents());
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -283,19 +225,27 @@ public class Data : MonoBehaviour
     {
         while (true)
         {
+            Debug.Log(collidedCorridors.Count + " " + count + "#################################");
             if (count < 6 && collidedCorridors.Count != 0)
             {
-                if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
+                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+
+                if (count == 0) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
                     AddAndRemoveAdjacentRooms();
+                    yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
+                    isFinishedAddAndRemoveConnectedRooms = false;
+                    ctr++;
                 }
                 else
                 {
                     CheckForCollision();
+                    yield return new WaitUntil(() => isFinishedCheckCollisions = true);
+                    isFinishedCheckCollisions = false;
                 }
                 count++;
             }
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -475,6 +425,8 @@ public class Data : MonoBehaviour
         //Number of distinct components
         Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
         displayConnectedRooms();
+
+        isFinishedAddAndRemoveConnectedRooms = true;
 
     }
 
@@ -746,14 +698,79 @@ public class Data : MonoBehaviour
         if (isDonePrevFnCall && connectedRoomsThroughCollision.Count != prevCount)
         {
             //AddConnectedRooms(connectedRoomsThroughCollision, false);
-            AddAndRemoveConnectedRooms();
-            ctr++;
+            //AddAndRemoveConnectedRooms();
+            //ctr++;
         }
 
         prevCount = connectedRoomsThroughCollision.Count;
-            
 
+        isFinishedCheckCollisions = true;
         
+    }
+
+    IEnumerator DoConnectedComponents()
+    {
+        while (true)
+        {
+            if (Time.time - startTime >= 8f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
+            {
+                isOnce = false;
+
+                if (connectedRoomsThroughCollision.Count != 0)
+                {
+                    AddAndRemoveConnectedRooms();
+                    yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
+                    isFinishedAddAndRemoveConnectedRooms = false;
+                    ctr++;
+                }
+
+                int z = 1;
+                foreach (var item in connectedRooms)
+                {
+                    Debug.Log("LLLLLAAAASTSSTTTTTTT ConnectedRooms No. " + z);
+                    foreach (var item1 in item)
+                    {
+                        Debug.Log(item1);
+                        GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity);
+                        //Colour scheme
+                        if (z == 1)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.green;
+                        }
+                        else if (z == 2)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.red;
+                        }
+                        else if (z == 3)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        else if (z == 4)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.yellow;
+                        }
+                        else if (z == 5)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.cyan;
+                        }
+                        else if (z == 6)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.blue;
+                        }
+                        else if (z == 7)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.magenta;
+                        }
+                        else if (z == 8)
+                        {
+                            gb.GetComponent<Renderer>().material.color = Color.grey;
+                        }
+                    }
+                    ++z;
+                }
+            }
+            yield return new WaitForSeconds(2.0f);
+        }
     }
 
 }

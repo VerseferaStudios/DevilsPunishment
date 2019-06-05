@@ -113,8 +113,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //put all adjacnt rooms in same component
         for (int i = 0; i < Data.instance.connectedRooms.Count; i++)
         {
-            if (Mathf.Abs(Data.instance.connectedRooms[i][0].x - Data.instance.connectedRooms[i][1].x) == 10 
-                || Mathf.Abs(Data.instance.connectedRooms[i][0].z - Data.instance.connectedRooms[i][1].z) == 10)
+            if (Mathf.Abs(Data.instance.connectedRooms[i][0].x - Data.instance.connectedRooms[i][1].x) == Data.instance.xSize 
+                || Mathf.Abs(Data.instance.connectedRooms[i][0].z - Data.instance.connectedRooms[i][1].z) == Data.instance.zSize)
             {
                     
             }
@@ -188,11 +188,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                     // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
                     else if (
-                        // -------------- if x doors AND z differnce == 10 --------------
-                        (spawnPoints[k].transform.position.x == spawnPoints[l].transform.position.x && Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[l].transform.position.z) == 10)
+                        // -------------- if x doors AND z differnce == xSize --------------
+                        (spawnPoints[k].transform.position.x == spawnPoints[l].transform.position.x && Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[l].transform.position.z) == Data.instance.xSize)
                         ||
                         // -------------- if z doors AND x differnce == 10 --------------
-                        (spawnPoints[k].transform.position.z == spawnPoints[l].transform.position.z && Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[l].transform.position.x) == 10)
+                        (spawnPoints[k].transform.position.z == spawnPoints[l].transform.position.z && Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[l].transform.position.x) == Data.instance.xSize)
                         )
                     {
                         //targetPos = spawnPoints[i].transform.position;
@@ -207,7 +207,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         {
                             //check and go nearer to destination
                             Vector3 to = spawnPoints[k].transform.position;
-                            to.z += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            to.z += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                             // ------------------- Calls the actual spawning function -------------------
                             spawnHalf(spawnPoints[k].transform.position, to, true);
@@ -236,7 +236,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         {
                             //check and go nearer to destination
                             Vector3 to = spawnPoints[k].transform.position;
-                            to.x += 5f;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            to.x += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                             // ------------------- Calls the actual spawning function -------------------
                             spawnHalf(spawnPoints[k].transform.position, to, true);
@@ -377,7 +377,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         // -------------- Spawns corridors along z axis since x coord is constant --------------                
         if (From.x == to.x)
         {
-            int increment = (From.z > to.z) ? -1 : 1;
+            int increment = (From.z > to.z) ? -4 : 4;
 
             // ----------- Skips required corridors ----------- 
             int i = 1;
@@ -450,7 +450,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             spawnNowAt.z += increment;
 
-            for (; i < Mathf.Abs(From.z - to.z) + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 //Debug.Log("Loop 1 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
@@ -470,7 +470,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         // -------------- Spawns corridors along x axis since z coord is constant --------------                
         else if (From.z == to.z)
         {
-            int increment = (From.x > to.x) ? -1 : 1;
+            int increment = (From.x > to.x) ? -4 : 4;
 
             // ----------- Skips required corridors ----------- 
             int i = 1;
@@ -546,7 +546,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             spawnNowAt.x += increment;
 
-            for (; i < Mathf.Abs(From.x - to.x) + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 //Debug.Log("Loop 2 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
@@ -568,18 +568,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false;
 
         // ------------- Check x axis ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 10)
+        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize)
         {
             return true;
         }
         // ------------- Check z axis ------------- 
-        else if (Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[i].transform.position.z) == 10)
+        else if (Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[i].transform.position.z) == Data.instance.xSize)
         {
             return true;
         }
 
         // ------------- Check between x door and z door (in L shape) ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == 5f)
+        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize / 2)
         {
             return true;
         }

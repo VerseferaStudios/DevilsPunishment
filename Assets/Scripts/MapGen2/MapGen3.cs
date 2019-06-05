@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
 
     public GameObject mainRoomIndicator, room4, room1, roomI, roomL, roomT;
     
-    private float xSize = 10f, zSize = 10f;
+    private float xSize = 44f, zSize = 44f;
 
     public GameObject[] corridors;
 
@@ -25,6 +25,8 @@ public class MapGen3 : MonoBehaviour
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[6];
         Data.instance.corridorX = corridors[4];
+        Data.instance.xSize = xSize;
+        Data.instance.zSize = zSize;
     }
 
     public void rooms()
@@ -37,8 +39,29 @@ public class MapGen3 : MonoBehaviour
             float[] arr = new float[2];
 
             // ------------------- BOUNDS or SIZE of the grid -------------------
-            arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 99 - (int)(xSize / 2)); //0,0 is the top left cell
-            arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 99 - (int)(xSize / 2)); //0,0 is the top left cell
+
+
+
+            // 400 - 20 = 380 (MAX)
+            // 0 + 20 = 20 (MIN)
+            //Increments of 40
+
+            //arr[0] = 40 * Random.Range(0, 9) + 20;  //9 coz -> 9 * 40 + 20 = 380
+            //arr[1] = 40 * Random.Range(0, 9) + 20;
+
+
+            // 480 - 20 = 460 (MAX)
+            // 0 + 28 = 28 (MIN)
+            //Increments of 40
+
+            arr[0] = 44 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 44 * Random.Range(0, 9) + 28;
+
+
+            //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
+            //arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
+
+
             /*
             if(k == 0)
             {
@@ -52,8 +75,8 @@ public class MapGen3 : MonoBehaviour
             }
             */
             // ------------------- Integer positions in GRID / positions according to sizes of rooms in GRID fashion -------------------
-            arr[0] = (Mathf.Round(((int)arr[0])/zSize) * zSize);
-            arr[1] = (Mathf.Round(((int)arr[1])/xSize) * xSize);
+            //arr[0] = Mathf.Round(((((int)arr[0])/zSize) * zSize) / zSize) * zSize;
+            //arr[1] = Mathf.Round(((((int)arr[1])/xSize) * xSize) / zSize) * zSize;
 
             // ------------------- Checks for collisions between rooms  -------------------
             if (NoCollisions(arr))
