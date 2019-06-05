@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
 
     public GameObject mainRoomIndicator, room4, room1, roomI, roomL, roomT;
     
-    private float xSize = 44f, zSize = 44f;
+    private float xSize = 48f, zSize = 48f;
 
     public GameObject[] corridors;
 
@@ -54,8 +54,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 44 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 44 * Random.Range(0, 9) + 28;
+            arr[0] = 48 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 9) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
