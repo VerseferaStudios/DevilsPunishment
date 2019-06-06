@@ -20,7 +20,6 @@ public class LootGenerator : MonoBehaviour
     //Turn off the spawn point once the item spawns.
     //Define if drops a gun it drops ammo as well. 
 
-
     [Space]
     [Header("How many?")]
     public int noArmory; //Number of Armory this will get set in the room mapgen script
@@ -81,7 +80,7 @@ public class LootGenerator : MonoBehaviour
     int caveSpawns;
     int startingRoomSpawns;
 
-    public void Start()
+    public void FindLocations()
     {
         List<Transform> all = new List<Transform>();
         //Finding all possible spots.
@@ -114,9 +113,13 @@ public class LootGenerator : MonoBehaviour
             locationSet--;
         }
         Debug.Log("Locations are now in the list, ready for spawning!");
+        SetSpawns();
     }
 
-
+    public void SetSpawns()
+    {
+       
+    }
     //public void Awake()
     //{
     //    //Generator Parts are spawning, must be on 1st floor set parameter to be between 1 and ? on the y axis...

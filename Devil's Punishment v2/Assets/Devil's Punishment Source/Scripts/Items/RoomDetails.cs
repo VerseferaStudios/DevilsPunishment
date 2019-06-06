@@ -13,7 +13,7 @@ using UnityEngine;
 
 public class RoomDetails : MonoBehaviour
 {
-    public LootDropper lootScript;
+    //public LootDropper lootScript;
     public string roomType;
     public int spawnLocations; 
     
