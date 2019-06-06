@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestPlayerController : MonoBehaviour
 {
 
-    private float journeyLength = 0.2f;
+    private float journeyLength = 1f;
     private float speed = 25f;
 
     private float yRotation, xRotation;

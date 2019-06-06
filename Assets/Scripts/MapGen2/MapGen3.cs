@@ -12,7 +12,7 @@ public class MapGen3 : MonoBehaviour
     private ArrayList gameObjectDetails = new ArrayList();
     public Transform target;
 
-    public GameObject mainRoomIndicator, room4, room1, roomI, roomL, roomT;
+    public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom;
     
     private float xSize = 48f, zSize = 48f;
 
@@ -91,15 +91,15 @@ public class MapGen3 : MonoBehaviour
 
         for (int i = 0; i < k; i++)
         {
-            GameObject roomToSpawn = room4;
-            switch (4)//Random.Range(0, 4))
+            GameObject roomToSpawn = generatorRoom;
+            switch (Random.Range(0, 2))
             {
                 case 0 :
-                    roomToSpawn = room1;
+                    roomToSpawn = startRoom;
                     break;
                 case 1:
-                    roomToSpawn = roomI;
-                    break;
+                    roomToSpawn = endRoom;
+                    break;/*
                 case 2:
                     roomToSpawn = roomL;
                     break;
@@ -108,10 +108,25 @@ public class MapGen3 : MonoBehaviour
                     break;
                 case 4:
                     roomToSpawn = room4;
-                    break;
+                    break;*/
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
-            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.identity);
+            float yRotation = Random.Range(0, 3) * 90;
+            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
+
+            if(yRotation == 90)
+            {
+                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
+            }
+            else if(yRotation == 180)
+            {
+                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+            }
+            else if(yRotation == 270)
+            {
+                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+            }
+
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)

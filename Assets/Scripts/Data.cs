@@ -41,6 +41,8 @@ public class Data : MonoBehaviour
 
     public int prevCount = 0;
 
+    private int counter = 0;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -67,7 +69,7 @@ public class Data : MonoBehaviour
         nearDoorL.Add("+x");
         prevCount = connectedRoomsThroughCollision.Count;
         StartCoroutine(DoCheckPerSecond());
-        StartCoroutine(DoConnectedComponents());
+        //StartCoroutine(DoConnectedComponents());
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -225,12 +227,18 @@ public class Data : MonoBehaviour
     {
         while (true)
         {
+            if(counter > 50)
+            {
+                break;
+            }
+            counter++;
+
             Debug.Log(collidedCorridors.Count + " " + count + "#################################");
             if (count < 6 && collidedCorridors.Count != 0)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
-                if (count == 0) // Change to 0 to execute AddAndRemoveAdjacentRooms()
+                if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
                     AddAndRemoveAdjacentRooms();
                     yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
