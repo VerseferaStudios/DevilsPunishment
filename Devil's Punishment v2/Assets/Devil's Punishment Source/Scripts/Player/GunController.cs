@@ -327,7 +327,7 @@ public class GunController : MonoBehaviour
 			if (!trigger && clipStock > 0 && clip < clipSize)
 			{
 				gunAnimator.SetBool("Reload", true);
-				yield return new WaitForSeconds(0.3f * gunAnimator.GetCurrentAnimatorStateInfo(0).length);
+				yield return new WaitForSeconds(0.2f * gunAnimator.GetCurrentAnimatorStateInfo(0).length);
 				StartCoroutine(Reload());
 			}
 			else
