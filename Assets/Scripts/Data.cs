@@ -21,8 +21,6 @@ public class Data : MonoBehaviour
     public List<string> nearDoorL = new List<string>();
     public GameObject corridorT1, corridorT2, corridorX;
 
-    private float nextTime = 1f;
-
     public Dictionary<Vector3, int> corridorPosDict = new Dictionary<Vector3, int>();
 
     public List<ConnectedComponent> connectedRoomsThroughCollision = new List<ConnectedComponent>();
@@ -37,11 +35,16 @@ public class Data : MonoBehaviour
 
     public int ctr = 0;
 
-    public bool isOnce = true, isDonePrevFnCall = true, isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false;
+    public bool isOnce = true, isDonePrevFnCall = true;
 
     public int prevCount = 0;
 
-    private int counter = 0;
+    public int counter = 0;
+    public int counter1 = 0;
+
+    public List<ConnectedComponent> temp = new List<ConnectedComponent>();
+
+    public bool isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
 
     //public bool isPipeAtLeft = true;
 
@@ -69,7 +72,7 @@ public class Data : MonoBehaviour
         nearDoorL.Add("+x");
         prevCount = connectedRoomsThroughCollision.Count;
         StartCoroutine(DoCheckPerSecond());
-        //StartCoroutine(DoConnectedComponents());
+        StartCoroutine(DoConnectedComponents());
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -202,11 +205,13 @@ public class Data : MonoBehaviour
             }
         }
 
-        //Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
+        /*
+        Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
         foreach (KeyValuePair<Vector3, int> item in corridorPosDict)
         {
-            //Debug.Log(item.Key + " " + item.Value);
+            Debug.Log(item.Key + " " + item.Value);
         }
+        */
     }
 
     public bool CheckIfVisited(Vector3 toCheck)
@@ -223,24 +228,26 @@ public class Data : MonoBehaviour
         return flag;
     }
 
-    IEnumerator DoCheckPerSecond()
+    public IEnumerator DoCheckPerSecond()
     {
+        yield return new WaitUntil(() => isConnectedComponentsCheckDone == true);
+        float startTime1 = Time.time;
         while (true)
         {
-            if(counter > 50)
+            if(Time.time - startTime1 >= 10f)
             {
                 break;
             }
-            counter++;
 
             Debug.Log(collidedCorridors.Count + " " + count + "#################################");
-            if (count < 6 && collidedCorridors.Count != 0)
+            if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
                 if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
                     AddAndRemoveAdjacentRooms();
+                    count++;
                     yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
                     isFinishedAddAndRemoveConnectedRooms = false;
                     ctr++;
@@ -248,10 +255,10 @@ public class Data : MonoBehaviour
                 else
                 {
                     CheckForCollision();
+                    count++;
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
                     isFinishedCheckCollisions = false;
                 }
-                count++;
             }
             yield return new WaitForSeconds(0.5f);
         }
@@ -348,14 +355,15 @@ public class Data : MonoBehaviour
 
     } 
 
-    private void AddAndRemoveConnectedRooms()
+    private bool AddAndRemoveConnectedRooms()
     {
         isDonePrevFnCall = false;
+        connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();
         //connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();  //NEEDED????????
 
         //check the below for loop with debug
         // -------------- In List connectedRoomsThroughCollision, Keep only the elements which are in the same collision as connectedRoomsThroughCollision[0] --------------
-        List<ConnectedComponent> temp = new List<ConnectedComponent>();
+        temp = new List<ConnectedComponent>();
         for (int i = 1; i < connectedRoomsThroughCollision.Count; i++)
         {
             if(connectedRoomsThroughCollision[0].corridorPos != connectedRoomsThroughCollision[i].corridorPos)
@@ -365,26 +373,15 @@ public class Data : MonoBehaviour
                 i--;
             }
         }
-
-        //Display temp, the list being kept back to revisit after execution of this whole function
-        int z = 1;
-        foreach (var item in temp)
-        {
-            Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
-            foreach (var item1 in item.rooms)
-            {
-                Debug.Log(item1);
-            }
-            z++;
-        }
+        
 
 
-        Debug.Log("AddAndRemoveConnectedRooms iteration number" + ctr);
+        //Debug.Log("AddAndRemoveConnectedRooms iteration number" + ctr);
 
         //TEST
         //Number of distinct components B4
-        Debug.Log("connectedRooms B4 connecting process = " + connectedRooms.Count);
-        displayConnectedRooms();
+        //Debug.Log("connectedRooms B4 connecting process = " + connectedRooms.Count);
+        //displayConnectedRooms();
 
 
 
@@ -401,8 +398,8 @@ public class Data : MonoBehaviour
         // the new list is the whole of connectedRoomsThroughCollision (to which more elements have been added)
 
 
-        Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
-        displayConnectedRoomsThroughCollision();
+        //Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        //displayConnectedRoomsThroughCollision();
 
 
         AddConnectedRoomsThroughCollisionToConnectedRooms();
@@ -416,26 +413,87 @@ public class Data : MonoBehaviour
         }
         */
 
+
+        // -------------- Display -------------
+        Debug.Log("ctr = " + ctr);
+        displayConnectedRoomsThroughCollision();
+
+
+        //Display temp, the list being kept back to revisit after execution of this whole function
+        int z = 1;
+        foreach (var item in temp)
+        {
+            Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
+            foreach (var item1 in item.rooms)
+            {
+                Debug.Log(item1);
+            }
+            z++;
+        }
+
+
+
+
+        if (counter1 > 100)
+        {
+            counter1 = 0;
+            isDonePrevFnCall = true;
+            isFinishedAddAndRemoveConnectedRooms = true;
+            return true;
+        }
+        counter1++;
+
         //Resetting the List
         connectedRoomsThroughCollision = temp;
         if(connectedRoomsThroughCollision.Count == 0)
         {
             isDonePrevFnCall = true;
+            isFinishedAddAndRemoveConnectedRooms = true;
+            return true;
         }
         else
         {
-            AddAndRemoveConnectedRooms();
             ctr++;
+            return false;
         }
         
         
 
         //Number of distinct components
-        Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
-        displayConnectedRooms();
+        //Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
+        //displayConnectedRooms();
+        
 
-        isFinishedAddAndRemoveConnectedRooms = true;
+    }
 
+    private void CompareAndAdd()
+    {
+        List<int> indices = new List<int>();
+
+        for (int i = 0; i < connectedRoomsThroughCollision.Count; i++)
+        {
+            for (int j = 0; j < connectedRoomsThroughCollision[i].rooms.Count; j++)
+            {
+                for (int k = 0; k < connectedRooms.Count; k++)
+                {
+                    for (int q = 0; q < connectedRooms[k].Count; q++)
+                    {
+                        // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
+                        // -------------- and comparing it with every element of connectedRooms -------------- 
+                        // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
+                        // -------------- and removing the same ones from connectedRooms --------------
+                        if (connectedRoomsThroughCollision[i].rooms[j] == connectedRooms[k][q])
+                        {
+                            indices.Add(k);
+                            connectedRoomsThroughCollision.Add(new ConnectedComponent(/*connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), connectedRooms[k]));
+                            connectedRooms.RemoveAt(k);
+                            k--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void AddConnectedRoomsThroughCollisionToConnectedRooms()
@@ -457,48 +515,17 @@ public class Data : MonoBehaviour
 
         //B4 adding
 
-        Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
-        displayConnectedRoomsThroughCollision();
+        //Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        //displayConnectedRoomsThroughCollision();
 
-        Debug.Log("connectedRooms B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
-        displayConnectedRooms();
+        //Debug.Log("connectedRooms B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        //displayConnectedRooms();
 
         //Add connectedRoomsThroughCollision[0] to end of connectedRooms
         connectedRooms.Add(connectedRoomsThroughCollision[0].rooms);
 
     }
 
-    private void CompareAndAdd()
-    {
-        List<int> indices = new List<int>();
-
-        Vector3 collidedConnectedRoomToSearch;
-        for (int i = 0; i < connectedRoomsThroughCollision.Count; i++)
-        {
-            for (int j = 0; j < connectedRoomsThroughCollision[i].rooms.Count; j++)
-            {
-                collidedConnectedRoomToSearch = connectedRoomsThroughCollision[i].rooms[j];
-                for (int k = 0; k < connectedRooms.Count; k++)
-                {
-                    for (int q = 0; q < connectedRooms[k].Count; q++)
-                    {
-                        // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
-                        // -------------- and comparing it with every element of connectedRooms -------------- 
-                        // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
-                        // -------------- and removing the same ones from connectedRooms --------------
-                        if (collidedConnectedRoomToSearch == connectedRooms[k][q])
-                        {
-                            indices.Add(k);
-                            connectedRoomsThroughCollision.Add(new ConnectedComponent(/*connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), connectedRooms[k]));
-                            connectedRooms.RemoveAt(k);
-                            k--;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private void displayConnectedRoomsThroughCollision()
     {
@@ -617,24 +644,25 @@ public class Data : MonoBehaviour
                         openings1.AddRange(openings2);
 
 
-                        openings1 = openings1.Distinct<int>().ToList<int>();
+                        openings1 = openings1.Distinct().ToList();
 
 
                         if (openings1.Count == 3)
                         {
                             float yRotation = ConvertToRotation(openings1);
-                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == -90) ? corridorT2 : corridorT1, collidedCorridors[j].transform.position, Quaternion.identity);
-                            if (yRotation == 0 || yRotation == 90)
+                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270) ? corridorT2 : corridorT1, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
+                            if (yRotation == 0 || yRotation == 90 /*|| yRotation == 180*/)
                             {
-                                currCorridor.GetComponentInChildren<BoxCollider>().enabled = false;
+                                //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
+                                //Destroy(bc);
                                 currCorridor.transform.localScale = new Vector3(-1, 1, 1);
-                                currCorridor.GetComponentInChildren<BoxCollider>().enabled = true;
+                                //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                         }
                         if (openings1.Count == 4)
                         {
-                            Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity);
+                            Instantiate(corridorX, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
                         }
 
                         /*
@@ -716,21 +744,25 @@ public class Data : MonoBehaviour
         
     }
 
-    IEnumerator DoConnectedComponents()
+    public IEnumerator DoConnectedComponents()
     {
+        yield return new WaitForSeconds(2f);
         while (true)
         {
-            if (Time.time - startTime >= 8f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
+            if (Time.time - startTime >= 3f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
             {
                 isOnce = false;
-
+                Debug.Log("B444444444444444444444444444444444444444");
                 if (connectedRoomsThroughCollision.Count != 0)
                 {
-                    AddAndRemoveConnectedRooms();
+
+                    while (!AddAndRemoveConnectedRooms()) ;
+
                     yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
                     isFinishedAddAndRemoveConnectedRooms = false;
                     ctr++;
                 }
+                Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
                 int z = 1;
                 foreach (var item in connectedRooms)
@@ -776,6 +808,7 @@ public class Data : MonoBehaviour
                     }
                     ++z;
                 }
+                isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
         }

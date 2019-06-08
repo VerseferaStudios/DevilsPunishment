@@ -39,7 +39,10 @@ public class CorridorNew : MonoBehaviour
             Data.instance.isCollided = true;
             Data.instance.collisionCount++;
             
-            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
+            if(!(name.Equals("Corridor_I") && other.name.Equals("Corridor_I")))
+            {
+                Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
+            }
 
             //isNeedL = true;
             Data.instance.collidedCorridors.Add(gameObject);

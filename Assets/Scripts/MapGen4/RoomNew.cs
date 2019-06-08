@@ -408,9 +408,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                     currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
                     currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
@@ -442,9 +442,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                     currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
                     currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
             }
@@ -502,9 +502,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 if (yRotation == 0)
                 {
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                     currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
                     currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
@@ -537,9 +537,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 if (yRotation == 0)
                 {
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                     currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
                     currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
