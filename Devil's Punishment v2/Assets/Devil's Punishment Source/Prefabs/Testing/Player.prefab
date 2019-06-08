@@ -767,8 +767,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   steamid:
     m_SteamID: 0
-  lobby:
-    m_SteamID: 0
+  playersPos: {x: 0, y: 0, z: 0}
+  playersRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1125293928587883724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4296,6 +4296,7 @@ MonoBehaviour:
   crosshairColor: {r: 1, g: 1, b: 1, a: 0}
   clipText: {fileID: 710846657734933366}
   clipStockText: {fileID: 710846658333633902}
+  AmmoDisplay: {fileID: 710846657860270683}
 --- !u!1 &710846656647542757
 GameObject:
   m_ObjectHideFlags: 0
