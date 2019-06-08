@@ -47,6 +47,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     void Start()
     {
+		/*
         ServerInformationObject = GameObject.Find("SteamServerInformation");
         if(ServerInformationObject == null)
         {
@@ -75,6 +76,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
         }
+		*/
     }
 
 #if DISABLED

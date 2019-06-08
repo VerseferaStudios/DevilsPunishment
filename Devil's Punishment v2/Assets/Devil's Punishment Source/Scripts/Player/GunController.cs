@@ -127,7 +127,10 @@ public class GunController : MonoBehaviour
         raised = false;
 
         equippedGun = null;
-
+		if (guns == null)
+		{
+			return;
+		}
         foreach(Gun gun in guns) {
             gun.gameObject.SetActive(false);
         }
