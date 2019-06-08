@@ -206,9 +206,9 @@ public class GunController : MonoBehaviour
             shootResetTimer = .3f;
         }
 
-        if(inputEnabled) {
+        if(inputEnabled && (!reloading || !trigger)) {
 
-            if(!reloading && (triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
+            if((triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
 
                 Debug.Log("ReloadTriggered!");
 
@@ -217,7 +217,7 @@ public class GunController : MonoBehaviour
                 shootResetTimer = .3f;
             }
 
-            if(shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
+				if ( shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
                 Fire();
             }
 
@@ -255,6 +255,7 @@ public class GunController : MonoBehaviour
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
+		gunAnimator.SetBool("Reload", reloading);
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
 	}
 
@@ -301,32 +302,40 @@ public class GunController : MonoBehaviour
 	{
 		reloading = true;
 
-		yield return new WaitForSeconds(1.5f);
+		yield return new WaitForSeconds(0.15f);
 
 		bool reloadAnimationPlayed = false;
 
-		//while(!reloadAnimationPlayed) {
+		//while(!reloadAnimationPlayed) {	
+		while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.75f) {
 
-		while (gunAnimator.GetCurrentAnimatorStateInfo(0).nameHash == -1507367648)
-		{
 			reloadAnimationPlayed = true;
 			yield return null;
 		}
-
 		//}
 		clipStock = inventory.GetEquippedGunAmmo();
 		Debug.Log("ClipStock is: " + clipStock);
 		if (equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType)
 		{
-			if (clipStock > 0 && clip < clipSize)
+			if (!trigger && clipStock > 0 && clip < clipSize)
 			{
 				inventory.DropItem(ammoName,/*ammount*/1,/*consume*/true);
 				clip++;
-				if (clipStock > 0 && clip < clipSize)
-				{
-					StartCoroutine(Reload());
-					gunAnimator.SetTrigger("Reload");
-				}
+				clipStock--;
+
+			}
+			if (!trigger && clipStock > 0 && clip < clipSize)
+			{
+				gunAnimator.SetBool("Reload", true);
+				yield return new WaitForSeconds(0.3f * gunAnimator.GetCurrentAnimatorStateInfo(0).length);
+				StartCoroutine(Reload());
+			}
+			else
+			{
+				reloading = false;
+				gunAnimator.SetBool("Reload", false);
+				yield break;
+
 			}
 		}
 		else if (clipStock >= clipSize - clip)
@@ -334,15 +343,16 @@ public class GunController : MonoBehaviour
 			Debug.Log("reloading with stock left: " + ammoName);
 			inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
 			clip = clipSize;
+			reloading = false;
+
 		}
 		else
 		{
 			Debug.Log("almost empty!");
 			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
 			clip = clipStock;
+			reloading = false;
 		}
-
-		reloading = false;
 
 	}
 
