@@ -326,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunItem: {fileID: 11400000, guid: e38d2685d70cd6548b3d3d5f24619919, type: 2}
   muzzle: {fileID: 6117860887738029008}
-  ejector: {fileID: 6596582355653697815}
+  ejector: {fileID: 8873881020681856230}
 --- !u!1 &1451495271487685322
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,7 +498,8 @@ Transform:
   m_LocalRotation: {x: -0.49999973, y: -0.5000003, z: 0.49999964, w: 0.50000036}
   m_LocalPosition: {x: -4.295845, y: 0.00000044703484, z: -0.10881263}
   m_LocalScale: {x: 0.9999999, y: 1, z: 0.99999994}
-  m_Children: []
+  m_Children:
+  - {fileID: 8873881020681856230}
   m_Father: {fileID: 796636065372931307}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1478,6 +1479,36 @@ Transform:
   m_LocalScale: {x: 0.9999998, y: 0.9999999, z: 1}
   m_Children: []
   m_Father: {fileID: 4619815389590613547}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5840815993311081149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8873881020681856230}
+  m_Layer: 10
+  m_Name: Ejector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8873881020681856230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840815993311081149}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6596582355653697815}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6155880289804763044
