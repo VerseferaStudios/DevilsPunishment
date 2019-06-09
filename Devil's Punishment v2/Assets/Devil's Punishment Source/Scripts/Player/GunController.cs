@@ -104,7 +104,6 @@ public class GunController : MonoBehaviour
 
     void Update()
 	{
-		shottieOffset = GameObject.Find("Hands and Gun/SHOTGUN").GetComponent<OffsetTransform>().position;
 		GatherInput();
         if(equippedGun != null) {
             Shooting();
@@ -267,7 +266,7 @@ public class GunController : MonoBehaviour
 		gunAnimator.SetBool("Reload", reloading);
 
 
-		Vector3 localGunPosition = shottieOffset;
+		Vector3 localGunPosition = equippedGun.gameObject.GetComponent<OffsetTransform>().position;
 		Debug.Log("LocalGunPosition: " + localGunPosition);
 		gunAnimator.transform.localPosition = localGunPosition + Vector3.Lerp(standardPosition, aimingPosition, aiming);
 
