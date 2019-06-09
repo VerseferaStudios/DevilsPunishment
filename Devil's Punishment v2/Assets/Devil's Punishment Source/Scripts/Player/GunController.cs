@@ -286,21 +286,27 @@ public class GunController : MonoBehaviour
         gunAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
 
-        Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
+		for (int i = 0; i < (weaponIsShotgun()?10:1); i++)
+		{
+			Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
-        Ray ray = new Ray(Camera.main.transform.position + offset, Camera.main.transform.forward);
-        RaycastHit hit;
+			Ray ray = new Ray(Camera.main.transform.position + offset, Camera.main.transform.forward);
+			RaycastHit hit;
 
-        if(Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value)) {
-            targetPoint.position = hit.point;
-            Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
+			if (Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value))
+			{
+				targetPoint.position = hit.point;
+				Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 
-            //This is just for testing a thing in the elimination system, can be removed later / SkitzFist
-            IfEnemyHit(hit);
+				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
+				IfEnemyHit(hit);
 
-        } else {
-            targetPoint.position = transform.position + transform.forward * 50f;
-        }
+			}
+			else
+			{
+				targetPoint.position = transform.position + transform.forward * 50f;
+			}
+		}
 
         muzzleFlashParticles.Play();
         ejectionParticles.Play();
