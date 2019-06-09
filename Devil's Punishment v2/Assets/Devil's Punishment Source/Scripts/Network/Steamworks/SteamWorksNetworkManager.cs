@@ -48,6 +48,8 @@ public class SteamWorksNetworkManager : MonoBehaviour
     void Start()
     {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
+        ServerInformationObject.GetComponent<ServerInformation>().playersPos = new Vector3[7];
+        ServerInformationObject.GetComponent<ServerInformation>().playersRot = new Quaternion[7];
         if(ServerInformationObject == null)
         {
             SceneManager.LoadScene(2);
@@ -57,20 +59,20 @@ public class SteamWorksNetworkManager : MonoBehaviour
         OtherPlayers = new GameObject[7];
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
         for (int i = 0; i < playersAmount; i++) {
-            if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != SteamUser.GetSteamID())
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
             {
-                if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != (CSteamID)0)
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != (CSteamID)0)
                 {
                     OtherPlayers[i] = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                    OtherPlayers[i].GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
-                    ServerInformationObject.GetComponent<ServerInformation>().players[i].playersPos = OtherPlayers[i].transform.position;
-                    ServerInformationObject.GetComponent<ServerInformation>().players[i].playersRot = OtherPlayers[i].transform.rotation;
+                    OtherPlayers[i].GetComponent<PlayerInformation>().setSteamid(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
+                    ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = OtherPlayers[i].transform.position;
+                    ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = OtherPlayers[i].transform.rotation;
                 }
             }
             else
             {
                 Player = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                Player.GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
+                Player.GetComponent<PlayerInformation>().setSteamid(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
                 BroadcastSteamMessage("POS_" + Player.transform.position.ToString());
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
@@ -199,7 +201,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
         int i = 0;
         while (i < ServerInformationObject.GetComponent<ServerInformation>().players.Length)
         {
-            SteamNetworking.AcceptP2PSessionWithUser(ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid);
+            SteamNetworking.AcceptP2PSessionWithUser(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
             i++;
         }
     }
@@ -217,7 +219,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
         {
             SendUpdatedServerDetailsToSteam();
         }
-/*
+
         uint size;
         while (SteamNetworking.IsP2PPacketAvailable(out size))
         {
@@ -234,8 +236,10 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 HandleMessage(message, remoteid);
             }
         }
+    }
+
+    private void FixedUpdate(){
         SendPOSAndROT();
-        ReceivePOSAndROT();*/
     }
 
     void SendPOSAndROT()
@@ -244,18 +248,19 @@ public class SteamWorksNetworkManager : MonoBehaviour
         BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
     }
 
-    void ReceivePOSAndROT()
+    void ReceivePOSAndROT(CSteamID remote , Vector3 position, Quaternion rotation)
     {
 
     }
 
     void BroadcastSteamMessage(string message)
     {
+        Debug.Log("Broadcasting Message : " + message);
         for (int i = 0; i < ServerInformationObject.GetComponent<ServerInformation>().players.Length; i++)
         {
-            if (ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid != SteamUser.GetSteamID())
+            if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
             {
-                CSteamID receiver = ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid;
+                CSteamID receiver = ServerInformationObject.GetComponent<ServerInformation>().players[i];
                 string _m = message;
                 byte[] bytes = new byte[_m.Length * sizeof(char)];
                 System.Buffer.BlockCopy(_m.ToCharArray(), 0, bytes, 0, bytes.Length);
@@ -273,11 +278,13 @@ public class SteamWorksNetworkManager : MonoBehaviour
             string sposition = m.Substring(5, m.Length - 5);
             Debug.Log(sposition);
             Vector3 position = new Vector3(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]));
-            foreach (GameObject GO in OtherPlayers)
-            {
-                if (GO.GetComponent<PlayerInformation>().steamid == remote)
+            
+            int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
+            for (int i = 0; i < playersAmount; i++) {
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] == remote)
                 {
-                    GO.transform.position = position;
+                        ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = position;
+                        OtherPlayers[i].transform.position = ServerInformationObject.GetComponent<ServerInformation>().playersPos[i];
                 }
             }
         }
@@ -288,14 +295,17 @@ public class SteamWorksNetworkManager : MonoBehaviour
             string sposition = m.Substring(5, m.Length - 5);
             Debug.Log(sposition);
             Quaternion rotation = new Quaternion(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]), float.Parse(sposition.Split(","[0])[3]));
-            foreach (GameObject GO in OtherPlayers)
-            {
-                if (GO.GetComponent<PlayerInformation>().steamid == remote)
+            
+            int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
+            for (int i = 0; i < playersAmount; i++) {
+                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] == remote)
                 {
-                    GO.transform.rotation = rotation;
+                        ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = rotation;
+                        OtherPlayers[i].transform.rotation = ServerInformationObject.GetComponent<ServerInformation>().playersRot[i];
                 }
             }
         }
+        
     }
 
         //-----------------------------------------------------------------------------

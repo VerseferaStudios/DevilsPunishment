@@ -28,8 +28,6 @@ namespace Steamworks {
 
 		public static void TestIfAvailableClient() {
 			TestIfPlatformSupported();
-            Debug.Log("CSteamAPIContext.GetSteamClient() " + CSteamAPIContext.GetSteamClient());
-            Debug.Log("System.IntPtr.Zero " + System.IntPtr.Zero);
             if (CSteamAPIContext.GetSteamClient() == System.IntPtr.Zero) {
 				if (!CSteamAPIContext.Init()) {
 					throw new System.InvalidOperationException("Steamworks is not initialized.");

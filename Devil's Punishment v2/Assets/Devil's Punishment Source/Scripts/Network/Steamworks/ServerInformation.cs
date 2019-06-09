@@ -6,10 +6,10 @@ using Steamworks;
 public class ServerInformation : MonoBehaviour
 {
     public CSteamID lobby;
-    public PlayerInformation[] players;
-    //public CSteamID[] players;
-    //public Vector3[] playersPos;
-    //public Quaternion[] playersRot;
+    
+    public CSteamID[] players;
+    public Vector3[] playersPos;
+    public Quaternion[] playersRot;
     
     void Awake()
     {
@@ -21,7 +21,7 @@ public class ServerInformation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

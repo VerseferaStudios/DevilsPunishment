@@ -41,11 +41,7 @@ public class SWLobbyManager : MonoBehaviour {
 
     void Start () {
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-        ServerInformationObject.GetComponent<ServerInformation>().players = new PlayerInformation[8];
-        for (int i = 0; i < 8; i++)
-            ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid = (CSteamID)0;
 
-        lobbyIDS = new List<CSteamID>();
         Callback_lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         Callback_lobbyList = Callback<LobbyMatchList_t>.Create(OnGetLobbiesList);
         Callback_lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
@@ -54,9 +50,17 @@ public class SWLobbyManager : MonoBehaviour {
         Callback_SessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
 
         if (SteamAPI.Init())
+        {
             Debug.Log("Steam API init -- SUCCESS!");
+        }
         else
+        {
             Debug.Log("Steam API init -- failure ...");
+        }
+
+        ServerInformationObject.GetComponent<ServerInformation>().players = new CSteamID[8];
+
+        lobbyIDS = new List<CSteamID>();
 
     }
 
@@ -73,19 +77,26 @@ public class SWLobbyManager : MonoBehaviour {
 
     private void HandleMessage(string playMessage)
     {
-        string playmessage = Md5Sum(secret + current_lobbyID + secret);
         Debug.Log("Message Received " + playMessage);
-        Debug.Log("MD5 Secret " + playmessage);
-        
         SteamMatchmaking.LeaveLobby((CSteamID)current_lobbyID);
 
         string SecretPlayMessage = Md5Sum(secret + current_lobbyID + secret);
+        Debug.Log("MD5 Secret " + SecretPlayMessage);
 
-        if (SecretPlayMessage == playmessage) //This will be changed to a more secure md5 hash
+        if (SecretPlayMessage == playMessage) //This will be changed to a more secure md5 hash
         {
             SceneManager.LoadScene(_PLAYSCENE);
         }
         
+    }
+
+    public void ButtonLeaveLobby()
+    {
+
+        SteamMatchmaking.LeaveLobby((CSteamID)current_lobbyID);
+        Debug.Log("leaving lobby " + (CSteamID)current_lobbyID);
+        ToggleLobby(false);
+        ToggleMainMenu(true);
     }
 
     public void ButtonCreateLobby()
@@ -108,6 +119,10 @@ public class SWLobbyManager : MonoBehaviour {
     public void ButtonShowLobbyList()
     {
         Debug.Log("Trying to get list of available lobbies ...");
+       
+        foreach (Transform child in lobbyAreaContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
 
         SteamAPICall_t try_getList = SteamMatchmaking.RequestLobbyList();
         ToggleMainMenu(false);
@@ -116,6 +131,9 @@ public class SWLobbyManager : MonoBehaviour {
 
     public void ButtonJoinLobby(int i)
     {
+        foreach (Transform child in lobbyPlayerAreaContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
         ToggleLobbyList(false);
         ToggleLobby(true);
         SteamAPICall_t try_joinLobby = SteamMatchmaking.JoinLobby(SteamMatchmaking.GetLobbyByIndex(i));
@@ -202,7 +220,9 @@ public class SWLobbyManager : MonoBehaviour {
         int i = 0;
         while (i < lobbynum)
         {
-            ServerInformationObject.GetComponent<ServerInformation>().players[i].steamid = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
+            Debug.Log(i);
+            Debug.Log(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i));
+            ServerInformationObject.GetComponent<ServerInformation>().players[i] = SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i);
             i++;
         }
         ServerInformationObject.GetComponent<ServerInformation>().lobby = (CSteamID)current_lobbyID;
@@ -217,11 +237,11 @@ public class SWLobbyManager : MonoBehaviour {
         SteamMatchmaking.GetLobbyChatEntry((CSteamID)result.m_ulSteamIDLobby, (int)result.m_iChatID, out SteamIDUser, Data, Data.Length, out ChatEntryType);
         byte[] dataResized = new byte[Data.Length];
         int ret = SteamMatchmaking.GetLobbyChatEntry((CSteamID)result.m_ulSteamIDLobby, (int)result.m_iChatID, out SteamIDUser, dataResized, dataResized.Length, out ChatEntryType);
-        Debug.Log("GetLobbyChatEntry(" + (CSteamID)result.m_ulSteamIDLobby + ", " + (int)result.m_iChatID + ", out SteamIDUser, Data, Data.Length, out ChatEntryType) : ret " + ret + " --iduser " + SteamIDUser + " -- data" + System.Text.Encoding.UTF8.GetString(Data) + " --" + ChatEntryType);
-        string message = Encoding.UTF8.GetString(Data) + "\0";
+        Debug.Log("GetLobbyChatEntry(" + (CSteamID)result.m_ulSteamIDLobby + ", " + (int)result.m_iChatID + ", out SteamIDUser, Data, Data.Length, out ChatEntryType) "+ (int)ChatEntryType + " : ret " + ret + " --iduser " + SteamIDUser + " -- data" + System.Text.Encoding.UTF8.GetString(Data) + " --" + ChatEntryType);
+        string message = Encoding.UTF8.GetString(Data) + " ";
         if ((int)ChatEntryType == 1)
         {
-            lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + SteamFriends.GetFriendPersonaName(SteamIDUser) + ":" + message;
+            lobby.GetComponentInChildren<Text>().text = lobby.GetComponentInChildren<Text>().text + "\n" + SteamFriends.GetFriendPersonaName(SteamIDUser) + ":" + message + "\n";
         }
 
 
@@ -240,6 +260,11 @@ public class SWLobbyManager : MonoBehaviour {
 
     void OnGetLobbiesList(LobbyMatchList_t result)
     {
+        lobbyIDS.Clear();
+        for(int i=0; i< result.m_nLobbiesMatching; i++)
+        {
+            SteamMatchmaking.LeaveLobby(SteamMatchmaking.GetLobbyByIndex(i));
+        }
 
         Debug.Log("Found " + result.m_nLobbiesMatching + " lobbies!");
         for(int i=0; i< result.m_nLobbiesMatching; i++)
@@ -247,7 +272,6 @@ public class SWLobbyManager : MonoBehaviour {
             CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
             lobbyIDS.Add(lobbyID);
             SteamMatchmaking.RequestLobbyData(lobbyID);
-            SteamMatchmaking.LeaveLobby((CSteamID)lobbyID);
         }
     }
 
@@ -255,6 +279,7 @@ public class SWLobbyManager : MonoBehaviour {
     {
         for(int i=0; i<lobbyIDS.Count; i++)
         {
+            SteamMatchmaking.LeaveLobby((CSteamID)lobbyIDS[i]);
             if (lobbyIDS[i].m_SteamID == result.m_ulSteamIDLobby)
             {
                 GameObject newLobby = Instantiate(uiLobbyItem) as GameObject;

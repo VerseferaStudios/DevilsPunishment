@@ -3,16 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
 
-public class PlayerInformation : MonoBehaviour
+public class PlayerInformation
 {
-    public CSteamID steamid;
-    public Vector3 playersPos;
-    public Quaternion playersRot;
+    private CSteamID steamid = (CSteamID)0;
+    private Vector3 playersPos;
+    private Quaternion playersRot;
 
-    void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+	public CSteamID getSteamid() {
+		return this.steamid;
+	}
+
+	public void setSteamid(CSteamID steamid) {
+		this.steamid = steamid;
+	}
+
+	public Vector3 getPlayersPos() {
+		return this.playersPos;
+	}
+
+	public void setPlayersPos(Vector3 playersPos) {
+		this.playersPos = playersPos;
+	}
+
+	public Quaternion getPlayersRot() {
+		return this.playersRot;
+	}
+
+	public void setPlayersRot(Quaternion playersRot) {
+		this.playersRot = playersRot;
+	}
+
 
 
 }
