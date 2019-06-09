@@ -189,11 +189,20 @@ public class GunController : MonoBehaviour
 
         clipStock = inventory.GetEquippedGunAmmo();
 
-        //Debug.Log(clip + "/" + clipStock + "===" + clipSize);
-        //Debug.Log(reloading);
+		//Debug.Log(clip + "/" + clipStock + "===" + clipSize);
+		//Debug.Log(reloading);
+		if (aiming < .75f)
+		{
+			muzzle.position = equippedGun.muzzle.position;
+			ejector.position = equippedGun.ejector.position;
+		}
+		else
+		{
+			OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
+			muzzle.position = aimingOffsets[0].position;
+			ejector.position = aimingOffsets[1].position;
 
-        muzzle.position = equippedGun.muzzle.position;
-        ejector.position = equippedGun.ejector.position;
+		}
 
         float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
 
@@ -301,9 +310,11 @@ public class GunController : MonoBehaviour
 
 		for (int i = 0; i < (weaponIsShotgun()?10:1); i++)
 		{
+			Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
+			Random.seed = Random.Range(-9999, 9999);
 			Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
-			Ray ray = new Ray(Camera.main.transform.position + offset, Camera.main.transform.forward);
+			Ray ray = new Ray(equippedGun.muzzle.position, Camera.main.transform.forward + offset);
 			RaycastHit hit;
 
 			if (Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value))
