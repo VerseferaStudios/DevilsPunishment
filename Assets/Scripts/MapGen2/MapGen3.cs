@@ -10,7 +10,6 @@ public class MapGen3 : MonoBehaviour
     private int n = 15;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
-    public Transform target;
 
     public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom;
     
@@ -131,7 +130,9 @@ public class MapGen3 : MonoBehaviour
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
             {
-                spawnedRoom.AddComponent<RoomNew>().corridors = corridors;
+                RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
+                roomNewScript.corridors = corridors;
+                Data.instance.roomNewScript = roomNewScript;
             }
 
             //gameObjectDetails.Add(roomScript);
@@ -140,16 +141,16 @@ public class MapGen3 : MonoBehaviour
         
 
         /*
-        //Debug ALL ROOM POSITIONS
+        ////Debug ALL ROOM POSITIONS
 
         for (int i = 0; i < n; i++)
         {
-            Debug.Log("_________________" + i + "___________________");
+            //Debug.Log("_________________" + i + "___________________");
             float[] ddd = ((float[])allRooms[i]);
-            Debug.Log(ddd[0]);
-            Debug.Log(ddd[1]);
+            //Debug.Log(ddd[0]);
+            //Debug.Log(ddd[1]);
         }
-        Debug.Log("_________________DONE___________________");
+        //Debug.Log("_________________DONE___________________");
         Data.instance.allRooms = this.allRooms;
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;

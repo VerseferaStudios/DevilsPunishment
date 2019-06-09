@@ -45,6 +45,10 @@ public class Data : MonoBehaviour
     public List<ConnectedComponent> temp = new List<ConnectedComponent>();
 
     public bool isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
+    
+    public RoomNew roomNewScript;
+
+    private GameObject[] roomsArray;
 
     //public bool isPipeAtLeft = true;
 
@@ -151,7 +155,7 @@ public class Data : MonoBehaviour
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
-            //Debug.Log(openings[0] + " " + openings[1]);
+            ////Debug.Log(openings[0] + " " + openings[1]);
         }
         else if (name.Equals("Corridor_L_1(Clone)"))
         {
@@ -206,10 +210,10 @@ public class Data : MonoBehaviour
         }
 
         /*
-        Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
+        //Debug.Log("Dictionary of duplicates!!!!!!!!!!!!!");
         foreach (KeyValuePair<Vector3, int> item in corridorPosDict)
         {
-            Debug.Log(item.Key + " " + item.Value);
+            //Debug.Log(item.Key + " " + item.Value);
         }
         */
     }
@@ -239,10 +243,10 @@ public class Data : MonoBehaviour
                 break;
             }
 
-            Debug.Log(collidedCorridors.Count + " " + count + "#################################");
+            //Debug.Log(collidedCorridors.Count + " " + count + "#################################");
             if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
-                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+                //Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
                 if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
@@ -361,7 +365,7 @@ public class Data : MonoBehaviour
         connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();
         //connectedRoomsThroughCollision = connectedRoomsThroughCollision.Distinct().ToList();  //NEEDED????????
 
-        //check the below for loop with debug
+        //check the below for loop with //Debug
         // -------------- In List connectedRoomsThroughCollision, Keep only the elements which are in the same collision as connectedRoomsThroughCollision[0] --------------
         temp = new List<ConnectedComponent>();
         for (int i = 1; i < connectedRoomsThroughCollision.Count; i++)
@@ -376,11 +380,11 @@ public class Data : MonoBehaviour
         
 
 
-        //Debug.Log("AddAndRemoveConnectedRooms iteration number" + ctr);
+        ////Debug.Log("AddAndRemoveConnectedRooms iteration number" + ctr);
 
         //TEST
         //Number of distinct components B4
-        //Debug.Log("connectedRooms B4 connecting process = " + connectedRooms.Count);
+        ////Debug.Log("connectedRooms B4 connecting process = " + connectedRooms.Count);
         //displayConnectedRooms();
 
 
@@ -398,7 +402,7 @@ public class Data : MonoBehaviour
         // the new list is the whole of connectedRoomsThroughCollision (to which more elements have been added)
 
 
-        //Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        ////Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
         //displayConnectedRoomsThroughCollision();
 
 
@@ -415,7 +419,7 @@ public class Data : MonoBehaviour
 
 
         // -------------- Display -------------
-        Debug.Log("ctr = " + ctr);
+        //Debug.Log("ctr = " + ctr);
         displayConnectedRoomsThroughCollision();
 
 
@@ -423,10 +427,10 @@ public class Data : MonoBehaviour
         int z = 1;
         foreach (var item in temp)
         {
-            Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
+            //Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
             foreach (var item1 in item.rooms)
             {
-                Debug.Log(item1);
+                //Debug.Log(item1);
             }
             z++;
         }
@@ -460,7 +464,7 @@ public class Data : MonoBehaviour
         
 
         //Number of distinct components
-        //Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
+        ////Debug.Log("ConnectedRooms after adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]" + connectedRooms.Count);
         //displayConnectedRooms();
         
 
@@ -515,10 +519,10 @@ public class Data : MonoBehaviour
 
         //B4 adding
 
-        //Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        ////Debug.Log("connectedRoomsThroughCollision B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
         //displayConnectedRoomsThroughCollision();
 
-        //Debug.Log("connectedRooms B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
+        ////Debug.Log("connectedRooms B4 adding connectedRoomsThroughCollision to connectedRooms[connectedRooms.Count - i]");
         //displayConnectedRooms();
 
         //Add connectedRoomsThroughCollision[0] to end of connectedRooms
@@ -532,10 +536,10 @@ public class Data : MonoBehaviour
         int z = 1;
         foreach (var item in connectedRoomsThroughCollision)
         {
-            Debug.Log("ConnectedRoomsThroughCollision No. " + z + "item.Count = " + item.rooms.Count);
+            //Debug.Log("ConnectedRoomsThroughCollision No. " + z + "item.Count = " + item.rooms.Count);
             foreach (var item1 in item.rooms)
             {
-                Debug.Log(item1);
+                //Debug.Log(item1);
             }
             z++;
         }
@@ -546,10 +550,10 @@ public class Data : MonoBehaviour
         int z = 1;
         foreach (var item in connectedRooms)
         {
-            Debug.Log("ConnectedRooms No. " + z);
+            //Debug.Log("ConnectedRooms No. " + z);
             foreach (var item1 in item)
             {
-                Debug.Log(item1);
+                //Debug.Log(item1);
             }
             z++;
         }
@@ -563,13 +567,13 @@ public class Data : MonoBehaviour
 
     private void CheckForCollision()
     {
-        Debug.Log("Count Olaf =" + collidedCorridors.Count);
+        //Debug.Log("Count Olaf =" + collidedCorridors.Count);
 
 
         //FindDuplicates(); //use this to group corridors at the same place use ConvertToOpenings and Linq.Distinct and do the necessary
 
 
-        Debug.Log("----------------------wargarsg----------------------");
+        //Debug.Log("----------------------wargarsg----------------------");
         for (int i = 0; i < collidedCorridors.Count; i++)
         {
             if (collidedCorridors[i] == null)
@@ -602,8 +606,8 @@ public class Data : MonoBehaviour
                 }
                 */
 
-                //Debug.Log(collidedCorridors[i].transform.position);
-                //Debug.Log(collidedCorridors[j].transform.position);
+                ////Debug.Log(collidedCorridors[i].transform.position);
+                ////Debug.Log(collidedCorridors[j].transform.position);
 
                 if (collidedCorridors[i].transform.position == collidedCorridors[j].transform.position)
                 //if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
@@ -614,20 +618,20 @@ public class Data : MonoBehaviour
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
                         && (collidedCorridors[i].transform.rotation == collidedCorridors[j].transform.rotation))
                     {
-                        //Debug.Log("Leave");
+                        ////Debug.Log("Leave");
 
                     }
                     else if (!isNotFirstTime)
                     {
 
-                        //Debug.Log("in at " + collidedCorridors[i].transform.position);
-                        //Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
-                        //Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
+                        ////Debug.Log("in at " + collidedCorridors[i].transform.position);
+                        ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
+                        ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
                         openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.name, collidedCorridors[i].transform.rotation.eulerAngles.y);
                         openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.name, collidedCorridors[j].transform.rotation.eulerAngles.y);
-                        //Debug.Log(openings1[0] + " " + openings1[1]);
-                        //Debug.Log(openings2[0] + " " + openings2[1]);
+                        ////Debug.Log(openings1[0] + " " + openings1[1]);
+                        ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
                         for (int i = 0; i < openings1.Count; i++)
                         {
@@ -725,10 +729,10 @@ public class Data : MonoBehaviour
             Destroy(collidedCorridors[0].transform.parent.gameObject);
         }
 
-        Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
+        //Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
         for (int q = 0; q < collidedCorridors.Count; q++)
         {
-            //Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
+            ////Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
         }
 
         if (isDonePrevFnCall && connectedRoomsThroughCollision.Count != prevCount)
@@ -752,7 +756,7 @@ public class Data : MonoBehaviour
             if (Time.time - startTime >= 3f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
             {
                 isOnce = false;
-                Debug.Log("B444444444444444444444444444444444444444");
+                //Debug.Log("B444444444444444444444444444444444444444");
                 if (connectedRoomsThroughCollision.Count != 0)
                 {
 
@@ -762,15 +766,31 @@ public class Data : MonoBehaviour
                     isFinishedAddAndRemoveConnectedRooms = false;
                     ctr++;
                 }
-                Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+
+
+                roomsArray = GameObject.FindGameObjectsWithTag("Room");
+
+                for (int i = 0; i + 1 < connectedRooms.Count; i += 2)
+                {
+                    //Find doors with parent pos same as req and door pos also same in another fn to reduce GC
+                    Debug.Log("roomPos = " + connectedRooms[i][0] + " i = " + i);
+                    Transform door0 = FindDoor(connectedRooms[i][0]);
+                    Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
+                    Transform door1 = FindDoor(connectedRooms[i + 1][0]);
+                    Debug.Log(door0.parent.position + " " + door1.parent.position);
+                    roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                }
+                
 
                 int z = 1;
+
                 foreach (var item in connectedRooms)
                 {
-                    Debug.Log("LLLLLAAAASTSSTTTTTTT ConnectedRooms No. " + z);
+                    //Debug.Log("LLLLLAAAASTSSTTTTTTT ConnectedRooms No. " + z);
                     foreach (var item1 in item)
                     {
-                        Debug.Log(item1);
+                        //Debug.Log(item1);
                         GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity);
                         //Colour scheme
                         if (z == 1)
@@ -808,10 +828,26 @@ public class Data : MonoBehaviour
                     }
                     ++z;
                 }
+                
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
         }
+    }
+
+    private Transform FindDoor(Vector3 roomPos)
+    {
+        for (int i = 0; i < roomsArray.Length; i++)
+        {
+            Debug.Log(roomsArray[i].transform.position);
+            if(roomsArray[i].transform.position == roomPos)
+            {
+                //Found the room
+                Debug.Log("found");
+                return roomsArray[i].transform.GetChild(1);
+            }
+        }
+        return null;
     }
 
 }

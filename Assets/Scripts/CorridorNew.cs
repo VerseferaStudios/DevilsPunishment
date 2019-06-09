@@ -29,7 +29,7 @@ public class CorridorNew : MonoBehaviour
 
     private void Start()
     {
-        //Debug.Log("corridorOpenings.Length" + corridorOpenings.Count + "    " + corridorOpenings.Capacity);
+        ////Debug.Log("corridorOpenings.Length" + corridorOpenings.Count + "    " + corridorOpenings.Capacity);
         //GameObject.FindObjectOfType
     }
     private void OnTriggerEnter(Collider other)
@@ -46,10 +46,10 @@ public class CorridorNew : MonoBehaviour
 
             //isNeedL = true;
             Data.instance.collidedCorridors.Add(gameObject);
-            //Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            ////Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject
-            //Debug.Log("!");
+            ////Debug.Log("!");
         }
     }
 
