@@ -174,23 +174,6 @@ public class GunController : MonoBehaviour
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
             trigger = Input.GetButton("Fire1");
-			if (trigger)
-			{
-				//gameObject.Find("Ejector").Find("CartridgeEjectEffect").transform.renderer.material.color = Color.red;
-				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
-				
-				rend.material.shader = Shader.Find("Opaque");
-				rend.material.SetColor("_SpecColor", Color.magenta);
-
-				/*
-
-				var col = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Shader>().colorOverLifetime;//.material.color = Color.red;
-				Gradient grad = new Gradient();
-				grad.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.blue, 0.0f), new GradientColorKey(Color.red, 1.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.0f, 1.0f) });
-
-				col.color = grad;
-				*/
-			}
 			triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
             if(running||reloading) {aiming = 0f; } else {
                 aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
@@ -274,6 +257,24 @@ public class GunController : MonoBehaviour
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+		if (trigger)
+		{
+			//Get color from gun's ITEM description?
+			//Color color = equippedGun.gunItem.color;
+			//Only set color for shotgun
+			if (weaponIsShotgun())
+			{
+
+				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
+				rend.material.shader = Shader.Find("_Color");
+				rend.material.SetColor("_Color", new Color(0.863f, 0.078f, 0.235f));
+
+				//Find the Specular shader and change its Color to red
+				rend.material.shader = Shader.Find("Specular");
+				rend.material.SetColor("_SpecColor", new Color(0.863f, 0.078f, 0.235f));
+			}
+
+		}
 	}
 
 	void CameraUpdate() {
@@ -314,7 +315,10 @@ public class GunController : MonoBehaviour
         clip--;
         bulletSpreadCoefficient += 1.0f - aiming;
     }
-
+	private bool weaponIsShotgun()
+	{
+		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
+	}
 	IEnumerator Reload()
 	{
 		reloading = true;
@@ -332,7 +336,7 @@ public class GunController : MonoBehaviour
 		//}
 		clipStock = inventory.GetEquippedGunAmmo();
 		Debug.Log("ClipStock is: " + clipStock);
-		if (equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType)
+		if (weaponIsShotgun())
 		{
 			if (!trigger && clipStock > 0 && clip < clipSize)
 			{
