@@ -174,7 +174,24 @@ public class GunController : MonoBehaviour
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
             trigger = Input.GetButton("Fire1");
-            triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
+			if (trigger)
+			{
+				//gameObject.Find("Ejector").Find("CartridgeEjectEffect").transform.renderer.material.color = Color.red;
+				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
+				
+				rend.material.shader = Shader.Find("Opaque");
+				rend.material.SetColor("_SpecColor", Color.magenta);
+
+				/*
+
+				var col = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Shader>().colorOverLifetime;//.material.color = Color.red;
+				Gradient grad = new Gradient();
+				grad.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.blue, 0.0f), new GradientColorKey(Color.red, 1.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.0f, 1.0f) });
+
+				col.color = grad;
+				*/
+			}
+			triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
             if(running||reloading) {aiming = 0f; } else {
                 aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
             }
