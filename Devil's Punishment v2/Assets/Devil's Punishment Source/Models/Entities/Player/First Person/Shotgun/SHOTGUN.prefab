@@ -2450,6 +2450,7 @@ GameObject:
   - component: {fileID: 3586286994714039219}
   - component: {fileID: 3586286994714039218}
   - component: {fileID: 3586286994714039220}
+  - component: {fileID: 2507869031986522222}
   m_Layer: 0
   m_Name: SHOTGUN
   m_TagString: Untagged
@@ -2464,9 +2465,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3586286994714039221}
-  m_LocalRotation: {x: -0.012822202, y: -0.011087243, z: -0.0005784031, w: 0.9998562}
+  m_LocalRotation: {x: -0.01282767, y: -0.00035460855, z: -0.00044074215, w: 0.99991757}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0996, y: 0.0996, z: 0.0996}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 3586286995269145157}
   - {fileID: 3586286994969612455}
@@ -2492,7 +2493,7 @@ Transform:
   - {fileID: 3586286993875656218}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -1.47, y: -1.27, z: -0.05}
+  m_LocalEulerAnglesHint: {x: -1.47, y: -0.04, z: -0.05}
 --- !u!95 &3586286994714039218
 Animator:
   serializedVersion: 3
@@ -2506,7 +2507,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: 4b75261fc95c79b42a1854bc99779143, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -2527,6 +2528,21 @@ MonoBehaviour:
   gunItem: {fileID: 11400000, guid: 7f582fc9bd9fc7b499e57b67979f9717, type: 2}
   muzzle: {fileID: 8324990285674957431}
   ejector: {fileID: 6219056359213407880}
+--- !u!114 &2507869031986522222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3586286994714039221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f538afeb6d2a20d44aa598a1524e44ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
 --- !u!1 &3586286994720498285
 GameObject:
   m_ObjectHideFlags: 0

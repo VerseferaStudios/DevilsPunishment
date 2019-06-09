@@ -47,9 +47,11 @@ public class GunController : MonoBehaviour
     float aiming = 0;
 
     Vector3 standardPosition = new Vector3(0, -1.55f, 0);
-    Vector3 aimingPosition = new Vector3(0.0035f,-1.493f,0.2f);
+	Vector3 aimingPosition = new Vector3(0.0035f, -1.493f, 0.2f);
+	Vector3 shottieOffset;
+	Vector3 handGunOffset;
 
-    Vector3 swayOffset = Vector3.zero;
+	Vector3 swayOffset = Vector3.zero;
 
     float timeBetweenShots = .04f;
     float shootTimer;
@@ -89,7 +91,7 @@ public class GunController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
         inventory = Inventory.instance;
-    }
+	}
 
     void SetFireRate(float f) {
         fireRate = f;
@@ -100,8 +102,10 @@ public class GunController : MonoBehaviour
         timeBetweenShots = 1.00f/fireRate;
     }
 
-    void Update() {
-        GatherInput();
+    void Update()
+	{
+		shottieOffset = GameObject.Find("Hands and Gun/SHOTGUN").GetComponent<OffsetTransform>().position;
+		GatherInput();
         if(equippedGun != null) {
             Shooting();
             Sway();
@@ -232,32 +236,42 @@ public class GunController : MonoBehaviour
 
     void Sway() {
 
-        float swayLimit = 10.0f;
+		float swayLimit = 10.0f;
 
-        if(aiming<.5f && inputEnabled) {
-            swayOffset = new Vector3(
-                Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x*2.0f,
-                Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
-                0f);
-        } else {
-            swayOffset += Vector3.forward * recoil.y * .5f;
-        }
+		if (aiming < .5f && inputEnabled)
+		{
+			swayOffset = new Vector3(
+				Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x * 2.0f,
+				Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
+				0f);
+		}
+		else
+		{
+			swayOffset += Vector3.forward * recoil.y * .5f;
+		}
 
-        swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
-        transform.localPosition = swayOffset * .001f * swayAmount;
+		swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
+		transform.localPosition = swayOffset * .001f * swayAmount;
 
-        transform.localRotation = Quaternion.Lerp(transform.localRotation,
-        Quaternion.Euler(0f, 0f, crouching? -20f : 0f),
-        Time.deltaTime * 10.0f);
+		transform.localRotation = Quaternion.Lerp(transform.localRotation,
+		Quaternion.Euler(0f, 0f, crouching ? -20f : 0f),
+		Time.deltaTime * 10.0f);
 
-    }
 
-    void Animation() {
+	}
+
+	void Animation() {
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
-		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, aimingPosition, aiming);
+
+
+		Vector3 localGunPosition = shottieOffset;
+		Debug.Log("LocalGunPosition: " + localGunPosition);
+		gunAnimator.transform.localPosition = localGunPosition + Vector3.Lerp(standardPosition, aimingPosition, aiming);
+
+
 		if (trigger)
 		{
 			//Get color from gun's ITEM description?
