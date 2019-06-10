@@ -203,12 +203,23 @@ public class GunController : MonoBehaviour
 		else
 		{
 			OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
-			muzzle.position = aimingOffsets[0].position;
-			ejector.position = aimingOffsets[1].position;
+			Debug.Log("Component count: " + aimingOffsets.Length);
+			Debug.Log("Components: " + aimingOffsets);
+			foreach (OffsetTransform o in aimingOffsets)
+			{
+				Debug.Log("Component: " + o.position);
+			}
+			Vector3 oldEjectPos = equippedGun.ejector.position;
+			equippedGun.ejector.localPosition = aimingOffsets[1].position;
+			ejector.position = equippedGun.ejector.position;
+			equippedGun.ejector.position = oldEjectPos;
 
+
+
+			muzzle.position = aimingOffsets[1].position;
 		}
 
-        float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
+		float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
 
         playerController.AddToViewVector(recoil.x*aimingCoefficient, 0f);
         playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
@@ -339,6 +350,7 @@ public class GunController : MonoBehaviour
 		}
 
         muzzleFlashParticles.Play();
+		Debug.Log("Playing Ejection Particles...");
         ejectionParticles.Play();
         if(soundManager != null)
         {
