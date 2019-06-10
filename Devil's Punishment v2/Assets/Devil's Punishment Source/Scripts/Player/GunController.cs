@@ -203,12 +203,9 @@ public class GunController : MonoBehaviour
 		else
 		{
 			OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
-			Debug.Log("Component count: " + aimingOffsets.Length);
-			Debug.Log("Components: " + aimingOffsets);
-			foreach (OffsetTransform o in aimingOffsets)
-			{
-				Debug.Log("Component: " + o.position);
-			}
+
+			// For some reason I MUST get this position from the gun's ejector object, otherwise it doesn't give me the right spot.
+
 			Vector3 oldEjectPos = equippedGun.ejector.position;
 			equippedGun.ejector.localPosition = aimingOffsets[1].position;
 			ejector.position = equippedGun.ejector.position;
