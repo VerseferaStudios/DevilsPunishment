@@ -276,7 +276,7 @@ public class GunController : MonoBehaviour
 
 
 		Vector3 localGunPosition = equippedGun.gameObject.GetComponent<OffsetTransform>().position;
-		gunAnimator.transform.localPosition = localGunPosition + Vector3.Lerp(standardPosition, aimingPosition, aiming);
+		//gunAnimator.transform.localPosition = localGunPosition + Vector3.Lerp(standardPosition, aimingPosition, aiming);
 
 
 		if (trigger)
