@@ -185,6 +185,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //Debug.Log("times!!!!!!!!!!!!!!!!!!!!!!!!! = " + times + " && spawnPoints.Count = " + spawnPoints.Count);
             }
             */
+            if(k == spawnPoints.Count - 1)
+            {
+                Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
+                //StartCoroutine(Data.instance.DoConnectedComponents());
+                StartCoroutine(Data.instance.DoCheckPerSecond());
+            }
 
             //Should only happen once!!!
             if(k == spawnPoints.Count - 1)
