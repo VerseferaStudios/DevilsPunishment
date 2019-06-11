@@ -186,7 +186,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             */
 
+            //Should only happen once!!!
+            if(k == spawnPoints.Count - 1)
+            {
+                Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
+                StartCoroutine(Data.instance.DoConnectedComponents());
+                StartCoroutine(Data.instance.DoCheckPerSecond());
+            }
+
         }
+
         //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }

@@ -34,12 +34,13 @@ public class CorridorNew : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.CompareTag("Corridor"))
+        string otherTag = other.transform.parent.tag;
+        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
         {
             Data.instance.isCollided = true;
             Data.instance.collisionCount++;
             
-            if(!(name.Equals("Corridor_I") && other.name.Equals("Corridor_I")))
+            if(!(transform.parent.tag.Equals("CorridorI") && otherTag.Equals("CorridorI")))
             {
                 Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
             }

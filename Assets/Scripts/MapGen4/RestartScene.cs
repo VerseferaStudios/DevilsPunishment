@@ -27,7 +27,7 @@ public class RestartScene : MonoBehaviour
 
         //Random.InitState(10);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        StartCoroutine(Data.instance.DoCheckPerSecond());
-        StartCoroutine(Data.instance.DoConnectedComponents());
+        //StartCoroutine(Data.instance.DoCheckPerSecond());
+        //StartCoroutine(Data.instance.DoConnectedComponents());
     }
 }

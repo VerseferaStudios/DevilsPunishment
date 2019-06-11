@@ -22,8 +22,8 @@ public class MapGen3 : MonoBehaviour
     {
         rooms();
         Data.instance.corridorT1 = corridors[3];
-        Data.instance.corridorT2 = corridors[6];
-        Data.instance.corridorX = corridors[4];
+        Data.instance.corridorT2 = corridors[4];
+        Data.instance.corridorX = corridors[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
     }
@@ -117,14 +117,27 @@ public class MapGen3 : MonoBehaviour
             {
                 spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
             }
-            else if(yRotation == 180)
+            else if(yRotation == 180 || yRotation == 270 || yRotation == -90)
             {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+                float reqYRotationForCorridor = 0; 
+                if (yRotation == 180)
+                {
+                    spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+                    reqYRotationForCorridor = 0;
+                }
+                else if (yRotation == 270 || yRotation == -90)
+                {
+                    spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+                    reqYRotationForCorridor = 90;
+                }
+
+                for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
+                {
+                    spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
+                }
+
             }
-            else if(yRotation == 270)
-            {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
-            }
+            
 
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
