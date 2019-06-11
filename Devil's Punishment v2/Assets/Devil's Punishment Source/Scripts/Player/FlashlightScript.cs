@@ -42,7 +42,7 @@ public class FlashlightScript : MonoBehaviour
 		Transform lights = gameObject.transform.Find("Camera/GunCamera/Lights");
 		Debug.Assert(lights != null, "FlashlightScript.cs could not find Player/Lights Transform");
 
-		glowLight = lights.Find("GlowLight").Find("Point Light").GetComponent<Light>();
+		glowLight = lights.Find("GlowStick").Find("Point Light").GetComponent<Light>();
 		Debug.Assert(glowLight != null, "FlashlightScript.cs could not find light component in Player/Lights/Glowlight gameObject");
 
 		flashLight = lights.Find("Flashlight").Find("Spotlight").GetComponent<Light>();
