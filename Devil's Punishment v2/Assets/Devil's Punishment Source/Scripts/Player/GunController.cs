@@ -113,7 +113,7 @@ public class GunController : MonoBehaviour
 			 * IF YOU SET IT IN THE UPDATE, YOU'LL PERMANENTLY MOVE THE GUN WHEN YOU AIM.
 			 * HOWEVER, IF YOU DON'T SET IT IN THE UPDATE, YOU CAN'T SET THE INITIAL GUN POSITION, USING THE EDITOR GIZMO, YOU'LL HAVE TO TYPE IT IN.
 			 */
-			standardPosition = gunAnimator.transform.localPosition;
+			//standardPosition = gunAnimator.transform.localPosition;
 			Shooting();
             Sway();
             Animation();
