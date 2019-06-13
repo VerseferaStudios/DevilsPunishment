@@ -110,8 +110,7 @@ public class GunController : MonoBehaviour
         if(equippedGun != null)
 		{
 			/* DON'T SET "standardPosition" WITH UPDATE UNLESS YOU'RE DOING INITIAL, UNZOOMED POSITIONING...
-			 * IF YOU SET IT IN THE UPDATE, YOU'LL PERMANENTLY MOVE THE GUN WHEN YOU AIM.
-			 * HOWEVER, IF YOU DON'T SET IT IN THE UPDATE, YOU CAN'T SET THE INITIAL GUN POSITION, USING THE EDITOR GIZMO, YOU'LL HAVE TO TYPE IT IN.
+			 * Commenting this line out also helps with aimed positioning. (allowing gizmo use)
 			 */
 			//standardPosition = gunAnimator.transform.localPosition;
 			Shooting();
@@ -295,11 +294,8 @@ public class GunController : MonoBehaviour
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
 
-
-		//Vector3 localGunPosition = equippedGun.gameObject.GetComponent<OffsetTransform>().position;
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
-		//gunAnimator.transform.localRotation = Quaternion.Lerp(Quaternion.Euler(standardRotation), Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
-		//gunAnimator.transform.localPosition = localGunPosition + Vector3.Lerp(standardPosition, aimingPosition, aiming);
+
 
 
 		if (trigger)
