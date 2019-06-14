@@ -45,6 +45,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     void Start()
     {
+		/*
         ServerInformationObject = GameObject.Find("SteamServerInformation");
 		Debug.Assert(ServerInformationObject != null, "ServerInformationObject in SteamNetworkManager.Start() shouldn't be null.");
 
@@ -69,6 +70,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
         }
+		*/
     }
     // Tells us when we have successfully connected to Steam
     protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
