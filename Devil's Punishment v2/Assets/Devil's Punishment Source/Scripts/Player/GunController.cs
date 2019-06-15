@@ -47,7 +47,7 @@ public class GunController : MonoBehaviour
     float aiming = 0;
 
 	Vector3 standardPosition = new Vector3(0, -1.55f, 0);
-	Vector3 standardRotation = new Vector3(0, 0, 0);
+	Quaternion standardRotation;
 	Vector3 aimingPosition = new Vector3(0.0035f, -1.493f, 0.2f);
 	Vector3 shottieOffset;
 	Vector3 handGunOffset;
@@ -164,7 +164,7 @@ public class GunController : MonoBehaviour
 					ammoName = equippedGun.gunItem.ammunitionType.name;
 					gunAnimator = equippedGun.GetComponent<Animator>();
 					standardPosition = gunAnimator.transform.localPosition;
-					standardRotation = gunAnimator.transform.localEulerAngles;
+					standardRotation = gunAnimator.transform.localRotation;
 					break;
 				}
 			}
@@ -295,6 +295,7 @@ public class GunController : MonoBehaviour
 		gunAnimator.SetBool("Reload", reloading);
 
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
+		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
 
 
 
