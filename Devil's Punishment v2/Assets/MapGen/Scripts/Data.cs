@@ -50,6 +50,8 @@ public class Data : MonoBehaviour
 
     private GameObject[] roomsArray;
 
+    private bool isFirstPassDone = false;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -234,6 +236,15 @@ public class Data : MonoBehaviour
 
     public IEnumerator DoCheckPerSecond()
     {
+        //for putting corridors so that connected components does correctly
+        for (int i = 0; i < 3; i++)
+        {
+            CheckForCollision();
+            yield return new WaitUntil(() => isFinishedCheckCollisions = true);
+            isFinishedCheckCollisions = false;
+        }
+        isFirstPassDone = true;
+
         yield return new WaitUntil(() => isConnectedComponentsCheckDone == true);
         yield return new WaitForSeconds(1f);
         float startTime1 = Time.time;
@@ -784,6 +795,8 @@ public class Data : MonoBehaviour
 
     public IEnumerator DoConnectedComponents()
     {
+        yield return new WaitUntil(() => isFirstPassDone == true);
+        isFirstPassDone = false;
         yield return new WaitForSeconds(2f);
         while (true)
         {
@@ -860,11 +873,23 @@ public class Data : MonoBehaviour
                 {
                     //Find doors with parent pos same as req and door pos also same in another fn to reduce GC
                     //Debug.Log("roomPos = " + connectedRooms[i][0] + " i = " + i);
-                    Transform door0 = FindDoor(connectedRooms[i][0]);
-                    //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
-                    Transform door1 = FindDoor(connectedRooms[i + 1][0]);
-                    //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                    roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                    if (connectedRooms[i].Count == 0)
+                    {
+                        Debug.Log("Error1");
+                    }
+                    if (connectedRooms[i + 1].Count == 0)
+                    {
+                        Debug.Log("Error2");
+                    }
+                    if (connectedRooms[i].Count != 0 && connectedRooms[i + 1].Count != 0)
+                    {
+                        Transform door0 = FindDoor(connectedRooms[i][0]);
+                        //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
+                        Transform door1 = FindDoor(connectedRooms[i + 1][0]);
+                        //Debug.Log(door0.parent.position + " " + door1.parent.position);
+                        roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                    }
+
                 }
 
                 isConnectedComponentsCheckDone = true;
@@ -881,7 +906,7 @@ public class Data : MonoBehaviour
             if(roomsArray[i].transform.position == roomPos)
             {
                 //Found the room
-                Debug.Log("found");
+                Debug.Log("found = " + roomsArray[i].name);
                 return roomsArray[i].transform.GetChild(1);
             }
         }

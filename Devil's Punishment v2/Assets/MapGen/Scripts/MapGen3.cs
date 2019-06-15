@@ -7,6 +7,7 @@ public class MapGen3 : MonoBehaviour
     //first we'll see the ground floor
     //10 x 10 cube
     //later//private int gridSize;
+    [Header("Rooms")]
     private int n = 15;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
@@ -16,6 +17,11 @@ public class MapGen3 : MonoBehaviour
     private float xSize = 48f, zSize = 48f;
 
     public GameObject[] corridors;
+
+    //For Vents
+    [Header("Vents")]
+    public float ventCoverProbabilty = 0.050f;
+    public GameObject ventCover;
 
 
     private void Start()
@@ -31,7 +37,7 @@ public class MapGen3 : MonoBehaviour
     public void rooms()
     {
         
-
+        //Make this while and next loop into one? will Collisions be a prob?
         int k = 0, l = 0;
         while (k < n && l < 1000)
         {
@@ -113,6 +119,11 @@ public class MapGen3 : MonoBehaviour
             float yRotation = Random.Range(0, 3) * 90;
             GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
 
+            if(Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+            {
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0));
+            }
+
             if(yRotation == 90)
             {
                 spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
@@ -143,9 +154,11 @@ public class MapGen3 : MonoBehaviour
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
             {
+                /*
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
                 Data.instance.roomNewScript = roomNewScript;
+                */
             }
 
             //gameObjectDetails.Add(roomScript);
