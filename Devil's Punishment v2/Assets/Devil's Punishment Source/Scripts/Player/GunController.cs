@@ -298,7 +298,6 @@ public class GunController : MonoBehaviour
 		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
 
 
-
 		if (trigger)
 		{
 			//Get color from gun's ITEM description?
