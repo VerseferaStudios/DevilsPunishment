@@ -154,11 +154,11 @@ public class MapGen3 : MonoBehaviour
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
             {
-                /*
+                
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
                 Data.instance.roomNewScript = roomNewScript;
-                */
+                
             }
 
             //gameObjectDetails.Add(roomScript);
