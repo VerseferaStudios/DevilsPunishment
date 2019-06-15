@@ -939,7 +939,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710846656274360104}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0.25}
+  m_LocalPosition: {x: 0, y: 0.39, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 710846657363605461}
@@ -961,7 +961,7 @@ Camera:
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_GateFitMode: 2
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -970,13 +970,13 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 90
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 823
+    m_Bits: 7991
   m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2488,7 +2488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6854785311804820240}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Hands and Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9903,13 +9903,13 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 5
-  field of view: 60
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 24576
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -33911,11 +33911,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6854785311804820240}
     m_Modifications:
-    - target: {fileID: 1063864918959891601, guid: 39ac7d4bb1ca6bf4dac377872172213b,
-        type: 3}
-      propertyPath: m_Name
-      value: ASSAULT RIFLE
-      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 39ac7d4bb1ca6bf4dac377872172213b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -33959,6 +33954,11 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 39ac7d4bb1ca6bf4dac377872172213b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1063864918959891601, guid: 39ac7d4bb1ca6bf4dac377872172213b,
+        type: 3}
+      propertyPath: m_Name
+      value: ASSAULT RIFLE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39ac7d4bb1ca6bf4dac377872172213b, type: 3}
@@ -34060,16 +34060,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6854785311804820240}
     m_Modifications:
-    - target: {fileID: 3586286994714039221, guid: 7964298706d68fd4493fedd4dc2d73c8,
-        type: 3}
-      propertyPath: m_Name
-      value: SHOTGUN
-      objectReference: {fileID: 0}
-    - target: {fileID: 3586286994714039221, guid: 7964298706d68fd4493fedd4dc2d73c8,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 3586286994714039219, guid: 7964298706d68fd4493fedd4dc2d73c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34104,6 +34094,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3586286994714039221, guid: 7964298706d68fd4493fedd4dc2d73c8,
+        type: 3}
+      propertyPath: m_Name
+      value: SHOTGUN
+      objectReference: {fileID: 0}
+    - target: {fileID: 3586286994714039221, guid: 7964298706d68fd4493fedd4dc2d73c8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3586286995322439488, guid: 7964298706d68fd4493fedd4dc2d73c8,
         type: 3}
@@ -34605,11 +34605,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 710846658292176344}
     m_Modifications:
-    - target: {fileID: 4627776797700982997, guid: 0f4624b202ed5494baf3604dafe77c2a,
-        type: 3}
-      propertyPath: m_Name
-      value: CartridgeEjectEffect
-      objectReference: {fileID: 0}
     - target: {fileID: 4627776797700982996, guid: 0f4624b202ed5494baf3604dafe77c2a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34665,6 +34660,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4627776797700982997, guid: 0f4624b202ed5494baf3604dafe77c2a,
+        type: 3}
+      propertyPath: m_Name
+      value: CartridgeEjectEffect
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f4624b202ed5494baf3604dafe77c2a, type: 3}
 --- !u!4 &710846657291602483 stripped
@@ -34686,11 +34686,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6854785311804820240}
     m_Modifications:
-    - target: {fileID: 6581459324453951995, guid: 3d713bbfcd94f9d42826c6321c05905d,
-        type: 3}
-      propertyPath: m_Name
-      value: HANDGUN
-      objectReference: {fileID: 0}
     - target: {fileID: 6581459324454110683, guid: 3d713bbfcd94f9d42826c6321c05905d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34745,6 +34740,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6581459324453951995, guid: 3d713bbfcd94f9d42826c6321c05905d,
+        type: 3}
+      propertyPath: m_Name
+      value: HANDGUN
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d713bbfcd94f9d42826c6321c05905d, type: 3}
