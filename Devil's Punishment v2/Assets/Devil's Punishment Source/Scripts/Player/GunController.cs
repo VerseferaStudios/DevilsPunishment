@@ -293,10 +293,10 @@ public class GunController : MonoBehaviour
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
-
+		/**/
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
 		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
-
+		
 
 		if (trigger)
 		{
