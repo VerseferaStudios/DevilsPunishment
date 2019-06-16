@@ -109,10 +109,12 @@ public class GunController : MonoBehaviour
 		GatherInput();
         if(equippedGun != null)
 		{
-			/* DON'T SET "standardPosition" WITH UPDATE UNLESS YOU'RE DOING INITIAL, UNZOOMED POSITIONING...
-			 * Commenting this line out also helps with aimed positioning. (allowing gizmo use)
+			/* 
+			 * Uncommenting this line out helps with gun positioning. (allowing gizmo use)
+			 * Commenting is better for use in the actual game, and preventing the gun from getting a floating point error that causes it to drift away to infinity
 			 */
 			//standardPosition = gunAnimator.transform.localPosition;
+
 			Shooting();
             Sway();
             Animation();
@@ -293,10 +295,10 @@ public class GunController : MonoBehaviour
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
-
+//		/*	
 		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
 		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
-
+//		*/
 
 		if (trigger)
 		{
