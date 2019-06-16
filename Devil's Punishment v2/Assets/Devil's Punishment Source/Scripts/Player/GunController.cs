@@ -112,7 +112,7 @@ public class GunController : MonoBehaviour
 			/* DON'T SET "standardPosition" WITH UPDATE UNLESS YOU'RE DOING INITIAL, UNZOOMED POSITIONING...
 			 * Commenting this line out also helps with aimed positioning. (allowing gizmo use)
 			 */
-			//standardPosition = gunAnimator.transform.localPosition;
+			standardPosition = gunAnimator.transform.localPosition;
 			Shooting();
             Sway();
             Animation();
