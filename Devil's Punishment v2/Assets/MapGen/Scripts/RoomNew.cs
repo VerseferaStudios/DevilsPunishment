@@ -1,4 +1,4 @@
-﻿//1using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,11 +24,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     //storedOpening is for the next L corridor in line
     private int storedOpening;
-    private GameObject spawnPoint;
-
-    //Vents
-    public float ventCoverProbabilty;// = 0.13333f/50f;
-    public GameObject ventCover;
 
     void Start()
     {
@@ -47,7 +42,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         // ------------------- Convert array of doors / spawnPoints into list -------------------
         spawnPoints.AddRange(tempSpawnPoints);
-        spawnPoint = spawnPoints[0];
         //Debug.Log("spawnPoints.Count = " + spawnPoints.Count);
 
         // ------------------- Find exactly overlapping doors/spawnPoints, spawn a corridor at thst position, and destroy both doors/spawnPoints -------------------
@@ -74,12 +68,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnPoints[i].transform.position, Quaternion.identity);
-                }
-
                 if (spawnPoints[i].name.EndsWith("x"))
                 {
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -144,16 +132,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         // ------------------- Connect two doors of different rooms with suitable corridor shapes -------------------
         int times = 0;
-        int leastDistIdx = -1;
-        float minDist = 9999, currentDist;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
-            leastDistIdx = -1;
-            minDist = 9999;
-
             // ------------------- Remove door/spawnPoint if its of the same room -------------------
-            if (/*spawnPoints.Count != 2 && *//*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[k].transform.parent.transform.position))
+            if (/*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[k].transform.parent.transform.position))
             {
                 ////Debug.Log("Removed a door of ____ " + spawnPoints[k].transform.parent.transform.position);
                 spawnPoints.RemoveAt(k);
@@ -169,7 +152,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     continue;
                 }
 
-                if (/*spawnPoints.Count != 2 && *//*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position))
+                if (/*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position))
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
                     spawnPoints.RemoveAt(l);
@@ -185,23 +168,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 // ------------------------ if k and i are not in the same room ------------------------
                 if (!checkIfSameOrAdjacentRoom(k, l))
                 {
-                    currentDist = Vector2.Distance(new Vector2(spawnPoints[k].transform.position.x, spawnPoints[k].transform.position.y), new Vector2(spawnPoints[l].transform.position.x, spawnPoints[l].transform.position.y));
-                    if (currentDist < minDist)
-                    {
-                        minDist = currentDist;
-                        leastDistIdx = l;
-                    }
-
-                    
-                    //break;
+                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
+                                    spawnPoints[k].name, spawnPoints[l].name, 
+                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);
+                    break;
                 }
-            }
-
-            if(leastDistIdx != -1)
-            {
-                ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[leastDistIdx].transform.position,
-                                    spawnPoints[k].name, spawnPoints[leastDistIdx].name,
-                                    spawnPoints[k].transform.parent.position, spawnPoints[leastDistIdx].transform.parent.position, false, leastDistIdx);
             }
 
 
@@ -216,35 +187,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             */
 
             //Should only happen once!!!
-            if (k == spawnPoints.Count - 1)
+            if(k == spawnPoints.Count - 1)
             {
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
-                Debug.Log("No. of vent covers = " + GameObject.FindGameObjectsWithTag("Vent Cover").Length);
             }
 
         }
-
-        /*
-        if(spawnPoints.Count >= 1)
-        {
-            spawnPoints.Add(spawnPoint);
-            Debug.Log("in; count = " + spawnPoints.Count);
-            //if (!checkIfSameOrAdjacentRoom(0, 1))
-            {
-                ConnectTwoRooms(spawnPoints[0].transform.position, spawnPoints[1].transform.position,
-                                spawnPoints[0].name, spawnPoints[1].name,
-                                spawnPoints[0].transform.parent.position, spawnPoints[1].transform.parent.position, false, l);
-            }
-        }
-        */
 
         //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
-    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton, int lIdx)
+    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -350,12 +306,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         GameObject currCorridor1 = Instantiate(corridors[1], lPos, Quaternion.identity);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        //Vents
-        if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-        {
-            Instantiate(ventCover, lPos, Quaternion.identity);
-        }
-
         List<int> openings = new List<int>();
 
         if (targetPos.x == lPos.x)
@@ -415,21 +365,21 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         if (!fromDataSingleton)
         {
-            spawnPoints.RemoveAt(lIdx);
+            spawnPoints.RemoveAt(l);
 
             // -------------- decrease k if greater than i --------------                
-            if (k > lIdx)
+            if (k > l)
             {
                 k--;
             }
-            //l--;
+            l--;
 
-            spawnPoints.RemoveAt(k); //error for even no
+            spawnPoints.RemoveAt(k);
 
             // -------------- decrease k if greater than i --------------                
             if (l > k)
             {
-                //l--;
+                l--;
             }
             k--;
         }
@@ -476,12 +426,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
-
                 if (yRotation == 0)
                 {
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
@@ -515,12 +459,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 GameObject currCorridor1 = Instantiate(corridors[(yRotation == 0 || yRotation == 180) ? 2 : 1], spawnNowAt, Quaternion.identity);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
-
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
@@ -538,12 +476,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
-
                 Data.instance.corridorCount++;
                 if (Data.instance.isCollided)
                 {
@@ -587,11 +519,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
 
                 if (yRotation == 0)
                 {
@@ -627,11 +554,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
 
                 if (yRotation == 0)
                 {
@@ -652,11 +574,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
-                //Vents
-                if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity);
-                }
 
 
 
