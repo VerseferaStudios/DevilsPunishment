@@ -65,7 +65,6 @@ public class Inventory : MonoBehaviour
 
     private void Start()
 	{
-		Awake();
 		Sort();
 		CullNulls();
 	}
@@ -200,9 +199,9 @@ public class Inventory : MonoBehaviour
 		}
 		else if(index > -1)
 		{
-			Debug.Log("-> Determined that you want to drop an item from your inventory...");
 			if (inventory[index].item != null)
 			{
+				Debug.Log("-> Determined that you want to drop an item from your inventory at position" + index.ToString() + "...");
 				string name = inventory[index].item.name;
 				Debug.Log("-> Dropping item: " + name);
 				if (!consume && inventory[index].stack > 0)

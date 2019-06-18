@@ -11,10 +11,12 @@ public class GunControllerDisplayUI : MonoBehaviour
 
     public TextMeshProUGUI clipText;
     public TextMeshProUGUI clipStockText;
+	public GameObject AmmoDisplay;
 
     Image[] crosshairs;
     GunController gunController;
     PlayerController playerController;
+	Inventory inventory;
 
     void Start() {
         gunController = GunController.instance;
@@ -29,6 +31,7 @@ public class GunControllerDisplayUI : MonoBehaviour
 
     void Ammo() {
 
+		AmmoDisplay.SetActive(Inventory.instance !=null && Inventory.instance.equippedGun != null);
         int clip = gunController.GetClip();
 
         if(clip == 0) {
