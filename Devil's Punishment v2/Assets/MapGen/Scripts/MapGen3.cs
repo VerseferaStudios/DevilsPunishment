@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -20,12 +21,15 @@ public class MapGen3 : MonoBehaviour
 
     //For Vents
     [Header("Vents")]
-    public float ventCoverProbabilty = 0.050f;
+    public float ventCoverProbabilty;
     public GameObject ventCover;
 
+    public ItemGen itemGen;
+    private List<Vector3> itemPositions;
 
     private void Start()
     {
+        ventCoverProbabilty = 6f / n;
         rooms();
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
@@ -119,7 +123,30 @@ public class MapGen3 : MonoBehaviour
             float yRotation = Random.Range(0, 3) * 90;
             GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
 
-            if(Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+
+
+
+            //List to check item overlap
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            itemGen.SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
+
+
+            if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
             {
                 Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0));
             }
@@ -157,8 +184,9 @@ public class MapGen3 : MonoBehaviour
                 
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
+                roomNewScript.ventCover = ventCover;
+                roomNewScript.ventCoverProbabilty = ventCoverProbabilty / n / 3;
                 Data.instance.roomNewScript = roomNewScript;
-                
             }
 
             //gameObjectDetails.Add(roomScript);
