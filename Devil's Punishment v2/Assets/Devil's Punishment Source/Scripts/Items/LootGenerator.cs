@@ -1,4 +1,21 @@
-﻿//Author: David K Bird
+﻿//What this script is SUPPOSED to do is the following...
+//-Map Generator spawns in 1 of each of the static rooms (forced) and a "x" amount of the non-static rooms and of them non-static rooms there could be none of a certain type of room or it could be nothing BUT that room type (ie Dormatory, Hospital etc.)
+//-As the map generator room spawns in a room it tells this script that it spawned in what ever that room was 
+//-There are only certain rooms that have loot spawn locations, and of them rooms they have a range of 1-8 spawn spots depending on the room.
+//-As the map generator spawns in a room it will tell my script ok there is a armory. for every armory there are 8 spawn spots so it multiplies the number of the rooms of that type by the number of spawn spots. Once the map generator is done spawning in rooms it will then take all the answers for rooms*spawn spots and add them together (32 spawns in armory, 10 in hospital, 5 in cave... etc.) 
+//-What ever that spawn is now the number of POSSIBLE locations for loot to spawn. It takes that number and creates the list to be that long. (ie if its 55 loot spots big the list will be 55 spaces big)
+//-Once it has the loot spots figured out it then is supposed to randomly choose 3 locations that are below the transform location of y <= 8 (because world creator wants all the generator pieces on the first floor) and they have 100% spawn rate that is why they go first (ideally i would like to then remove that loot spot from the spawn list.
+//- This will leave all possible spots for the other loot (ie guns, ammo, health, pills, and light upgrade) each one has its own spawn rate.
+//-After the generator part I need it to go down the list as its going calculate ok will it spawn loot yes/no (50% chance to spawn in each spot in rooms 20% chance in corridor spots)... yes ok calculate the drop rate and place that item there, then romove the spot from the list.... can it spawn here... no .. ok remove from list and move on to the next one.
+//-Once all places are either filled or deleted from the list then it shuts off the script permanantly until the next game.
+
+//My issue is coming into the generator looting, its saying that it cant convert a int to a transform which i know, but how do i get it to move down the list and place it in that transform spot. perhaps i have the wrong set up... any insight would be a great help ty
+
+
+
+
+
+//Author: David K Bird
 //Date: Thursday, May 23, 2019
 //Last Edited: Tuesday, June 4, 2019
     //By: David Bird
@@ -118,7 +135,12 @@ public class LootGenerator : MonoBehaviour
 
     public void SetSpawns()
     {
-       
+        //Generator parts need to spawn first must be on 1st floor.
+        //randomLoc = Random.Range(0, locate.Length);
+        if (locate[].position.y <= 8)
+        {
+
+        }
     }
     //public void Awake()
     //{
