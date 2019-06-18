@@ -255,10 +255,10 @@ public class Data : MonoBehaviour
                 break;
             }
 
-            Debug.Log(collidedCorridors.Count + " " + count + "#################################");
+            //Debug.Log(collidedCorridors.Count + " " + count + "#################################");
             if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
-                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+              //  Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
                 if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
@@ -270,7 +270,7 @@ public class Data : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("innnnnnnnnnnnnn");
+                //    Debug.Log("innnnnnnnnnnnnn");
                     CheckForCollision();
                     count++;
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
@@ -659,9 +659,9 @@ public class Data : MonoBehaviour
                             }
                         }
                         */
-                        Debug.Log("Before combining");
-                        Debug.Log("openings1");
-
+                        //Debug.Log("Before combining");
+                        //Debug.Log("openings1");
+                        /*
                         foreach (var item in openings1)
                         {
                             Debug.Log(item);
@@ -671,16 +671,18 @@ public class Data : MonoBehaviour
                         {
                             Debug.Log(item);
                         }
-
+                        */
                         openings1.AddRange(openings2);
 
 
                         openings1 = openings1.Distinct().ToList();
+                        /*
                         Debug.Log("After combining");
                         foreach (var item in openings1)
                         {
                             Debug.Log(item);
                         }
+                        */
                         isError = false;
 
                         if (openings1.Count == 3)
@@ -695,7 +697,7 @@ public class Data : MonoBehaviour
                                 //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                            Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+                            //Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
                         {
@@ -703,7 +705,7 @@ public class Data : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            //Debug.Log("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
                             isError = true;
                             Debug.Log("Count = " + openings1.Count);
                             Debug.Log("Position = " + collidedCorridors[i].transform.position);
@@ -887,7 +889,7 @@ public class Data : MonoBehaviour
                         //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
                         Transform door1 = FindDoor(connectedRooms[i + 1][0]);
                         //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                        roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                        roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true, i + 1);
                     }
 
                 }
@@ -902,11 +904,11 @@ public class Data : MonoBehaviour
     {
         for (int i = 0; i < roomsArray.Length; i++)
         {
-            Debug.Log(roomsArray[i].transform.position);
+            //Debug.Log(roomsArray[i].transform.position);
             if(roomsArray[i].transform.position == roomPos)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name);
+              //  Debug.Log("found = " + roomsArray[i].name);
                 return roomsArray[i].transform.GetChild(1);
             }
         }
