@@ -52,6 +52,8 @@ public class Data : MonoBehaviour
 
     private bool isFirstPassDone = false;
 
+    public bool isStartedVents = false;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -79,6 +81,7 @@ public class Data : MonoBehaviour
         prevCount = connectedRoomsThroughCollision.Count;
         //StartCoroutine(DoCheckPerSecond());
         //StartCoroutine(DoConnectedComponents());
+        //StartCoroutine(DoVents());
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -319,9 +322,9 @@ public class Data : MonoBehaviour
                                     GameObject gb = Instantiate(roomIndicator, connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, Quaternion.identity);
                                     CorridorNew cn = gb.AddComponent<CorridorNew>();
                                     cn.rooms = connectedRooms[l];
-                                    cn.KOrL = "l";
-                                    cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[0]);
-                                    cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[1]);
+                                    //cn.KOrL = "l";
+                                    //cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[0]);
+                                    //cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[1]);
 
                                     isFoundK = true;
 
@@ -347,7 +350,7 @@ public class Data : MonoBehaviour
                         GameObject gb = Instantiate(roomIndicator, connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, Quaternion.identity);
                         CorridorNew cn = gb.AddComponent<CorridorNew>();
                         cn.rooms = connectedRoomsThroughCollision[reqK].rooms;
-                        cn.KOrL = "k";
+                        //cn.KOrL = "k";
 
                         connectedRooms.RemoveAt(reqK);
                         //k--;
@@ -693,7 +696,7 @@ public class Data : MonoBehaviour
                             {
                                 //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
                                 //Destroy(bc);
-                                currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+                                currCorridor.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                                 //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -913,6 +916,23 @@ public class Data : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public IEnumerator DoVents()
+    {
+        yield return new WaitUntil(() => isConnectedComponentsCheckDone == true);
+        yield return new WaitForSeconds(1.0f);
+        isStartedVents = true;
+        //Do Vents here! Do it Morty!
+
+        //Re initialising variables for using with vents!!! Morty stick it up your a**!!
+        isCollided = false;
+        collisionCount = 0;
+        connectedRoomsThroughCollision = new List<ConnectedComponent>();
+        collidedCorridors = new List<GameObject>();
+
+        roomNewScript.StartItUp();
+
     }
 
 }

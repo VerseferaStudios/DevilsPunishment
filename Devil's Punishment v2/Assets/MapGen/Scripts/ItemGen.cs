@@ -208,10 +208,12 @@ public class ItemGen : MonoBehaviour
     {
         //Generator parts need to spawn first must be on 1st floor.
         //randomLoc = Random.Range(0, locate.Length);
+        /*
         if (locate[].position.y <= 8)
         {
 
         }
+        */
     }
     //public void Awake()
     //{

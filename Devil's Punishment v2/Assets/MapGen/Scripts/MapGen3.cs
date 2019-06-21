@@ -18,6 +18,7 @@ public class MapGen3 : MonoBehaviour
     private float xSize = 48f, zSize = 48f;
 
     public GameObject[] corridors;
+    public GameObject[] vents;
 
     //For Vents
     [Header("Vents")]
@@ -30,7 +31,7 @@ public class MapGen3 : MonoBehaviour
     private void Start()
     {
         ventCoverProbabilty = 6f / n;
-        rooms();
+        Rooms();
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
@@ -38,7 +39,7 @@ public class MapGen3 : MonoBehaviour
         Data.instance.zSize = zSize;
     }
 
-    public void rooms()
+    public void Rooms()
     {
         
         //Make this while and next loop into one? will Collisions be a prob?
@@ -143,7 +144,7 @@ public class MapGen3 : MonoBehaviour
 
 
 
-            itemGen.SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
+            //itemGen.SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
 
 
             if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
@@ -184,6 +185,7 @@ public class MapGen3 : MonoBehaviour
                 
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
+                roomNewScript.vents = vents;
                 roomNewScript.ventCover = ventCover;
                 roomNewScript.ventCoverProbabilty = ventCoverProbabilty / n / 3;
                 Data.instance.roomNewScript = roomNewScript;
