@@ -97,7 +97,7 @@ public class ItemGen : MonoBehaviour
     int caveSpawns;
     int startingRoomSpawns;
 
-    private List<Vector3> itemPositions;
+    private List<Vector3> itemPositions = new List<Vector3>();
 
     public void FindLocations()
     {
@@ -151,7 +151,8 @@ public class ItemGen : MonoBehaviour
         bool isOverlapping = false;
         float maxSizeOfItem = 3;
 
-        for (int i = 0; i < noOfSpawns; i++) //Run for more than noOfSpawns times /*while (k < n && l < 1000)*/
+        int k = 0;
+        for (int i = 0; k < noOfSpawns && i < 1000; i++) //Run for more than noOfSpawns times /*while (k < n && l < 1000)*/
         {
             float randomPositionX = Random.Range(topLeftCorner.x, bottomRightCorner.x);
             float randomPositionZ = Random.Range(topLeftCorner.z, bottomRightCorner.z);
@@ -176,7 +177,7 @@ public class ItemGen : MonoBehaviour
             {
                 continue;
             }
-
+            k++;
 
             // Call a function to spawn the items according to the chance
             GameObject itemToSpawn = SpawnCorrectItemHelper();
@@ -187,7 +188,9 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                Instantiate(itemToSpawn);
+                GameObject gb = Instantiate(itemToSpawn, currentItemPos, Quaternion.identity);
+                gb.GetComponent<Rigidbody>().useGravity = false;
+                gb.GetComponent<Rigidbody>().isKinematic = true;
                 itemPositions.Add(currentItemPos);
             }
 
@@ -201,7 +204,57 @@ public class ItemGen : MonoBehaviour
     //Take the chances into account and spawn the right item
     private GameObject SpawnCorrectItemHelper()
     {
-        return null;
+        /*   public GameObject gen1; //------------
+       public GameObject gen2; // 100% spawn rate
+       public GameObject gen3; //------------
+       [Space]
+       public GameObject med; //10% Spawnrate
+       public GameObject pills; //5% spawnrate
+       public GameObject pAmmo; //30% spawnrate
+       public GameObject sAmmo; //15% spawnrate
+       public GameObject rAmmo; //10% spawnrate
+       public GameObject pistol; //30% spawnrate
+       public GameObject shotgun; //15% spawnrate
+       public GameObject rifle; //10% spawnrate
+       public GameObject flashlight; //30% spawnrate
+       */
+        float rand = Random.Range(0f, 1.55f);
+        if(rand < .10f)
+        {
+            return med;
+        }
+        else if (rand < .15f)
+        {
+            return pills;
+        }
+        else if (rand < .45f)
+        {
+            return pAmmo;
+        }
+        else if (rand < .60f)
+        {
+            return sAmmo;
+        }
+        else if (rand < .70f)
+        {
+            return rAmmo;
+        }
+        else if (rand < 1.00f)
+        {
+            return pistol;
+        }
+        else if (rand < 1.15f)
+        {
+            return shotgun;
+        }
+        else if (rand < 1.25f)
+        {
+            return rifle;
+        }
+        else
+        {
+            return flashlight;
+        }
     }
 
     public void SetSpawns()

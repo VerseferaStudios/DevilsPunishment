@@ -122,29 +122,14 @@ public class MapGen3 : MonoBehaviour
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 3) * 90;
-            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
-
-
+            Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]);
+            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0));
 
 
             //List to check item overlap
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //itemGen.SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
+            itemGen.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 4);
 
 
             if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
