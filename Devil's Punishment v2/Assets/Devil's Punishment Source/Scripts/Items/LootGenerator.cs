@@ -165,3 +165,7 @@ public class LootGenerator : MonoBehaviour
 
     //}
 }
+
+
+
+
