@@ -282,10 +282,11 @@ public class GunController : MonoBehaviour
 
 		swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
 		transform.localPosition = swayOffset * .001f * swayAmount;
-
+		/*
 		transform.localRotation = Quaternion.Lerp(transform.localRotation,
 		Quaternion.Euler(0f, 0f, crouching ? -20f : 0f),
 		Time.deltaTime * 10.0f);
+		*/
 
 
 	}

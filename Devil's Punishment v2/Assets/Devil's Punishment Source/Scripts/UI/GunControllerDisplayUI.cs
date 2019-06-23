@@ -52,10 +52,11 @@ public class GunControllerDisplayUI : MonoBehaviour
 
         float size = 32f * spread;
 
-
+/*
         crosshairsParent.localRotation =
         Quaternion.Lerp(crosshairsParent.localRotation, Quaternion.Euler(0, 0, playerController.IsCrouching()? 45f : 0f),
         Time.deltaTime * 10.0f);
+*/
 
         crosshairColor.a = Mathf.Clamp01(spread - 1.0f);
 
