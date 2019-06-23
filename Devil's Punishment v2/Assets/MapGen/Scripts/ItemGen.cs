@@ -144,8 +144,8 @@ public class ItemGen : MonoBehaviour
     // 2. Inside room - Done
     //Map gen finishes a room
 
-    //Spawn "noOfSpawns" number of items in the given room indicated by topLeftCorner and bottomRightCorner
-    public void SpawnItems(Vector3 topLeftCorner, Vector3 bottomRightCorner, int noOfSpawns)
+    //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
+    public void SpawnItems(Vector3 bottomLeftCorner, Vector3 topRightCorner, int noOfSpawns)
     {
 
         bool isOverlapping = false;
@@ -154,8 +154,8 @@ public class ItemGen : MonoBehaviour
         int k = 0;
         for (int i = 0; k < noOfSpawns && i < 1000; i++) //Run for more than noOfSpawns times /*while (k < n && l < 1000)*/
         {
-            float randomPositionX = Random.Range(topLeftCorner.x, bottomRightCorner.x);
-            float randomPositionZ = Random.Range(topLeftCorner.z, bottomRightCorner.z);
+            float randomPositionX = Random.Range(bottomLeftCorner.x, topRightCorner.x);
+            float randomPositionZ = Random.Range(bottomLeftCorner.z, topRightCorner.z);
 
             Vector3 currentItemPos = new Vector3(randomPositionX, 0, randomPositionZ);
 
@@ -188,7 +188,7 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                GameObject gb = Instantiate(itemToSpawn, currentItemPos, Quaternion.identity);
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity);
                 gb.GetComponent<Rigidbody>().useGravity = false;
                 gb.GetComponent<Rigidbody>().isKinematic = true;
                 itemPositions.Add(currentItemPos);
@@ -204,20 +204,6 @@ public class ItemGen : MonoBehaviour
     //Take the chances into account and spawn the right item
     private GameObject SpawnCorrectItemHelper()
     {
-        /*   public GameObject gen1; //------------
-       public GameObject gen2; // 100% spawn rate
-       public GameObject gen3; //------------
-       [Space]
-       public GameObject med; //10% Spawnrate
-       public GameObject pills; //5% spawnrate
-       public GameObject pAmmo; //30% spawnrate
-       public GameObject sAmmo; //15% spawnrate
-       public GameObject rAmmo; //10% spawnrate
-       public GameObject pistol; //30% spawnrate
-       public GameObject shotgun; //15% spawnrate
-       public GameObject rifle; //10% spawnrate
-       public GameObject flashlight; //30% spawnrate
-       */
         float rand = Random.Range(0f, 1.55f);
         if(rand < .10f)
         {

@@ -101,7 +101,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                     if (spawnPoints[i].name.EndsWith("x"))
                     {
-                        currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+                        currentCorridor.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                     }
                     //Debug.Log("Spawn1");
                     Data.instance.corridorCount++;
@@ -540,7 +540,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     GameObject currCorridor1 = Instantiate(corridors[(yRotation == 0 || yRotation == 180) ? 2 : 1], spawnNowAt, Quaternion.identity);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+                    currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, yRotation, 0);
                     //Vents
                     if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
                     {
@@ -552,7 +552,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                         currCorridor1.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                        currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                        currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                     }
 
                 }
@@ -597,7 +597,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+                    currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, yRotation, 0);
 
                     //Vents
                     if (!Data.instance.isStartedVents)
@@ -613,7 +613,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                             currCorridor1.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                            currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                         }
                     }
                     /*
@@ -630,7 +630,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, /*new Vector3(spawnNowAt.x - 0.15f, spawnNowAt.y, spawnNowAt.z)*/spawnNowAt, Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 //Vents
@@ -696,7 +696,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     GameObject currCorridor1 = Instantiate(corridors[(yRotation == 0 || yRotation == 180) ? 2 : 1], spawnNowAt, Quaternion.identity);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+                    currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, yRotation, 0);
                     //Vents
                     if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
                     {
@@ -708,7 +708,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                         currCorridor1.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                        currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                        currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                     }
 
                 }
@@ -739,7 +739,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+                currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, yRotation, 0);
 
                 //Vents
                 if (!Data.instance.isStartedVents)
@@ -754,7 +754,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
                         currCorridor1.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                         //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                        currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                        currCorridor1.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                     }
                 }
                 /*
@@ -774,7 +774,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+                currentCorridor.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
                 //Vents
                 if (!Data.instance.isStartedVents && Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)

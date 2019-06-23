@@ -633,7 +633,7 @@ public class Data : MonoBehaviour
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
-                        && (collidedCorridors[i].transform.rotation == collidedCorridors[j].transform.rotation))
+                        && (collidedCorridors[i].transform.parent.GetChild(0).rotation == collidedCorridors[j].transform.parent.GetChild(0).rotation))
                     {
                         ////Debug.Log("Leave");
 
@@ -642,11 +642,11 @@ public class Data : MonoBehaviour
                     {
 
                         ////Debug.Log("in at " + collidedCorridors[i].transform.position);
-                        ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
-                        ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
+                        ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.parent.GetChild(0).eulerAngles);
+                        ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.parent.GetChild(0).eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y);
+                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.parent.GetChild(0).eulerAngles.y);
+                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.parent.GetChild(0).eulerAngles.y);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -699,7 +699,7 @@ public class Data : MonoBehaviour
                                 currCorridor.transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
                                 //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
-                            currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+                            currCorridor.transform.GetChild(0).rotation = Quaternion.Euler(0, yRotation, 0);
                             //Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
@@ -712,13 +712,13 @@ public class Data : MonoBehaviour
                             isError = true;
                             Debug.Log("Count = " + openings1.Count);
                             Debug.Log("Position = " + collidedCorridors[i].transform.position);
-                            //Debug.Log("rotation = " + collidedCorridors[j].transform.rotation.eulerAngles.y);
+                            //Debug.Log("rotation = " + collidedCorridors[j].transform.parent.GetChild(0).eulerAngles.y);
                             //Debug.Log("parent name " + collidedCorridors[j].transform.parent.name);
                         }
 
                         /*
                         //If I and I collides with different rotations
-                        if (collidedCorridors[i].transform.rotation != collidedCorridors[j].transform.rotation)
+                        if (collidedCorridors[i].transform.parent.GetChild(0).rotation != collidedCorridors[j].transform.parent.GetChild(0).rotation)
                         {
                             GameObject currCorridor1 = Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity);
                         }

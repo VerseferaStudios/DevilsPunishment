@@ -129,7 +129,7 @@ public class MapGen3 : MonoBehaviour
             //List to check item overlap
 
 
-            itemGen.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 4);
+            itemGen.SpawnItems(new Vector3(roomPos.x - 10, 0, roomPos.z - 10), new Vector3(roomPos.x + 10, 0, roomPos.z + 10), 4);
 
 
             if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)

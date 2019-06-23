@@ -340,13 +340,14 @@ GameObject:
   - component: {fileID: 186707135}
   - component: {fileID: 186707136}
   - component: {fileID: 186707134}
+  - component: {fileID: 186707137}
   m_Layer: 0
   m_Name: RoomsLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &186707134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,8 +375,14 @@ MonoBehaviour:
   - {fileID: 4767898886828146706, guid: 7d16cadbbbe9e3f4fae867b671c7c4cb, type: 3}
   - {fileID: 7475365134836359222, guid: 534b1a807c562f54794b31538f43e8a1, type: 3}
   - {fileID: 2711133060991232383, guid: a7358d2a45511b34ba9b3d4a327a35ab, type: 3}
+  vents:
+  - {fileID: 4252666463506747666, guid: f260530c1fa67d84a90015b10a747ad7, type: 3}
+  - {fileID: 6633108427632789466, guid: bec97ddb588f3c94a8489c86340f8c16, type: 3}
+  - {fileID: 1368869441243255204, guid: dd9d8f36b844d704fb77893b979bac56, type: 3}
+  - {fileID: 8766696067864751312, guid: 57e40344baec35e4bb875809bee09862, type: 3}
   ventCoverProbabilty: 0.1333333
   ventCover: {fileID: 100000, guid: 5d32429074f54134787a0a21ccf8fb9f, type: 3}
+  itemGen: {fileID: 186707137}
 --- !u!4 &186707135
 Transform:
   m_ObjectHideFlags: 0
@@ -403,6 +410,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 1841075158073676714, guid: 49b4b1d208cb32845b13db9d7fe330c3, type: 3}
+--- !u!114 &186707137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186707133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041b8dffbbfbb02418e2d27b793d92c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noArmory: 0
+  noBathroom: 0
+  noDorms: 0
+  noHospital: 0
+  noCorridorT: 0
+  noCorridorL: 0
+  noKitchen: 0
+  noRadio: 0
+  noCave: 0
+  noStartingRoom: 0
+  locate: []
+  gen1: {fileID: 0}
+  gen2: {fileID: 0}
+  gen3: {fileID: 0}
+  med: {fileID: 2902966717406714023, guid: a8e90d125b7730d44b7748a1e030659a, type: 3}
+  pills: {fileID: 2522617697065975613, guid: e67a76ca0344f6241a65990951fd877f, type: 3}
+  pAmmo: {fileID: 633611198, guid: fbd07153258bf064f8fff62ad836d580, type: 3}
+  sAmmo: {fileID: 760858563, guid: e06ec8024936a274da204761607b072f, type: 3}
+  rAmmo: {fileID: 2112450355, guid: 77dfe72449785934aab3545a5f5ba7ef, type: 3}
+  pistol: {fileID: 5447192453428761013, guid: 1f8bd90e3c4343e4ab3f67e1896fbfd8, type: 3}
+  shotgun: {fileID: 967863708, guid: 7783224945ef8734681e0227845bb9cb, type: 3}
+  rifle: {fileID: 1104159912874014877, guid: 63c70b1bf6178a54fb8b1f628a56a7a4, type: 3}
+  flashlight: {fileID: 4225125002172456480, guid: 72faa1e14467ff14a816f80420379713,
+    type: 3}
+  ArmorySpots: 8
+  BathroomSpots: 3
+  DormSpots: 3
+  HospitalSpots: 5
+  CorridorTSpots: 1
+  CorridorLSpots: 1
+  KitchenSpots: 3
+  RadioSpots: 3
+  CaveSpots: 1
+  StartingRoomSpots: 5
 --- !u!1 &601377202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,7 +1427,7 @@ Transform:
   m_GameObject: {fileID: 1017969497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.745987, y: -0.74, z: -13.828802}
-  m_LocalScale: {x: 25, y: 1, z: 25}
+  m_LocalScale: {x: 1000, y: 1, z: 1000}
   m_Children:
   - {fileID: 1782075725}
   - {fileID: 601377203}
