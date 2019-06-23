@@ -113,7 +113,7 @@ public class GunController : MonoBehaviour
 			 * Uncommenting this line out helps with gun positioning. (allowing gizmo use)
 			 * Commenting is better for use in the actual game, and preventing the gun from getting a floating point error that causes it to drift away to infinity
 			 */
-			standardPosition = gunAnimator.transform.localPosition;
+			//standardPosition = gunAnimator.transform.localPosition;
 
 			Shooting();
             Sway();
@@ -335,12 +335,14 @@ public class GunController : MonoBehaviour
 		reloading = false;
         gunAnimator.SetTrigger("Fire");
         shootTimer = timeBetweenShots;
+		bool isShotgun = weaponIsShotgun();
 
-		for (int i = 0; i < (weaponIsShotgun()?10:1); i++)
+		for (int i = 0; i < (isShotgun?10:1); i++)
 		{
 			Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
 			Random.seed = Random.Range(-9999, 9999);
-			Vector3 offset = bulletSpreadCoefficient * .05f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
+			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
+			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
 			Ray ray = new Ray(equippedGun.muzzle.position, Camera.main.transform.forward + offset);
 			RaycastHit hit;
@@ -372,7 +374,6 @@ public class GunController : MonoBehaviour
 
         recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
         clip--;
-        bulletSpreadCoefficient += 1.0f - aiming;
     }
 	private bool weaponIsShotgun()
 	{
