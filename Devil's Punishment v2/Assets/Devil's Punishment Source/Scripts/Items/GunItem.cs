@@ -12,8 +12,11 @@ public class GunItem : Item
     [Range(1f, 20f)]
     public float fireRate = 10f;
 
-    [Range(25, 45)]
-    public float recoilAmount = 32f;
+	[Range(25, 45)]
+	public float recoilAmount = 32f;
+
+	[Range(0, 100)]
+	public int damage = 100;
 
 
 }

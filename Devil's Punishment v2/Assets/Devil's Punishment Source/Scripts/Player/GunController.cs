@@ -189,7 +189,7 @@ public class GunController : MonoBehaviour
             crouching = playerController.IsCrouching();
             trigger = Input.GetButton("Fire1");
 			triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
-            if(running) {aiming = 0f; } else {
+            if(running || gunAnimator == null) {aiming = 0f; } else {
                 aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
 				gunAnimator.SetBool("Reload", reloading && aiming <=0);
 			}
@@ -443,7 +443,7 @@ public class GunController : MonoBehaviour
         TestEnemy enemyHit = hit.transform.GetComponent<TestEnemy>();
         if(enemyHit != null)
         {
-            enemyHit.TakeDamage(2);
+            enemyHit.TakeDamage(equippedGun.gunItem.damage);
         }
     }
 }
