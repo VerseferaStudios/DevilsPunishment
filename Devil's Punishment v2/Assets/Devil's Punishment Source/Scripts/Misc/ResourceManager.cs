@@ -42,7 +42,7 @@ public class ResourceManager : MonoBehaviour
 	// For the functions below, can C# generate them with a "macro" based on the "keys" in the "gameObjectDictionary"? Creating (and maintaining) these getters seems like busy work...
 	public GameObject getResource(string ResourceName)
 	{
-		Debug.Log("Loading Resource: " + ResourceName);
+		//Debug.Log("Loading Resource: " + ResourceName);
 		return gameObjectDictionary[ResourceName];
 	}
 

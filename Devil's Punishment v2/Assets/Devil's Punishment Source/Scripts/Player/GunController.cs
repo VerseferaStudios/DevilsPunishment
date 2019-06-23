@@ -245,7 +245,7 @@ public class GunController : MonoBehaviour
 
             if((triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
 
-                Debug.Log("ReloadTriggered!");
+                //Debug.Log("ReloadTriggered!");
 
                 StartCoroutine(Reload());
                 gunAnimator.SetTrigger("Reload");
@@ -339,7 +339,7 @@ public class GunController : MonoBehaviour
 
 		for (int i = 0; i < (isShotgun?10:1); i++)
 		{
-			Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
+			//Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
 			Random.seed = Random.Range(-9999, 9999);
 			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
 			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
@@ -363,7 +363,7 @@ public class GunController : MonoBehaviour
 		}
 
         muzzleFlashParticles.Play();
-		Debug.Log("Playing Ejection Particles...");
+		//Debug.Log("Playing Ejection Particles...");
         ejectionParticles.Play();
         if(soundManager != null)
         {
@@ -395,7 +395,7 @@ public class GunController : MonoBehaviour
 		}
 		//}
 		clipStock = inventory.GetEquippedGunAmmo();
-		Debug.Log("ClipStock is: " + clipStock);
+		//Debug.Log("ClipStock is: " + clipStock);
 		if (weaponIsShotgun())
 		{
 			if (!trigger && clipStock > 0 && clip < clipSize)
@@ -421,7 +421,7 @@ public class GunController : MonoBehaviour
 		}
 		else if (clipStock >= clipSize - clip)
 		{
-			Debug.Log("reloading with stock left: " + ammoName);
+			//Debug.Log("reloading with stock left: " + ammoName);
 			inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
 			clip = clipSize;
 			reloading = false;
@@ -429,7 +429,7 @@ public class GunController : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("almost empty!");
+			//Debug.Log("almost empty!");
 			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
 			clip = clipStock;
 			reloading = false;

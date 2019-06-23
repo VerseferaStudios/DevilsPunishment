@@ -86,11 +86,11 @@ public class Inventory : MonoBehaviour
         if(item is GunItem) {
 			if (equippedGun != null)
 			{
-				Debug.Log("Gun in hand," + equippedGun.name + " " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
+				//Debug.Log("Gun in hand," + equippedGun.name + " " + (equippedGun as Item).description + ")" + ", so dropping it first...(");
 				DropGun();
 			} else
 			{
-				Debug.Log("Player doesn't appear to be holding a gun, so... ");
+				//Debug.Log("Player doesn't appear to be holding a gun, so... ");
 			}
 			Debug.Log("Equipping picked gun " +item.name);
 			equippedGun = item as GunItem;
@@ -133,9 +133,9 @@ public class Inventory : MonoBehaviour
 
 	public GameObject DropGameObject(string ResourceID, int count = 1)
 	{
-		Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
+		//Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
 		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
-		Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		//Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
 		drop.GetComponent<InteractableLoot>().stock = count;
 		drop.SetActive(true);
 		return drop;
@@ -143,7 +143,7 @@ public class Inventory : MonoBehaviour
 
 	public void DropGun()
 	{
-		Debug.Log("DroppingHeldGun");
+		//Debug.Log("DroppingHeldGun");
 
 		string ResourceID = string.Empty;
 		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
@@ -154,7 +154,7 @@ public class Inventory : MonoBehaviour
 			if (equippedGun == lootComp.item as GunItem)
 			{
 				ResourceID = resource;
-				Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
+				//Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
 				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null)
 					AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
 				equippedGun = null;
@@ -168,6 +168,7 @@ public class Inventory : MonoBehaviour
 
 	public void DropGameObject(Item item, int count = 1)
 	{
+		//Debug.Log("Dropping a Partial Stack of " + count + " " + item.name);
 		string ResourceID = string.Empty;
 		Dictionary<string, GameObject>.KeyCollection resources = ResourceManager.instance.getResourceNamesList();
 		foreach (string resource in resources)
@@ -191,19 +192,19 @@ public class Inventory : MonoBehaviour
 
 	public void DropItemAll(int index, bool consume = false)
 	{
-		Debug.Log("Root of DropItem func reached");
+		//Debug.Log("Root of DropItem func reached");
         if(index>=inventory.Count)
 		{
-			Debug.Log("-> Determined that you want to drop a gun...");
+			//Debug.Log("-> Determined that you want to drop a gun...");
 			DropGun();
 		}
 		else if(index > -1)
 		{
 			if (inventory[index].item != null)
 			{
-				Debug.Log("-> Determined that you want to drop an item from your inventory at position" + index.ToString() + "...");
+				//Debug.Log("-> Determined that you want to drop an item from your inventory at position" + index.ToString() + "...");
 				string name = inventory[index].item.name;
-				Debug.Log("-> Dropping item: " + name);
+				//Debug.Log("-> Dropping item: " + name);
 				if (!consume && inventory[index].stack > 0)
 				{
 					DropGameObject(inventory[index].item,inventory[index].stack);
@@ -233,7 +234,6 @@ public class Inventory : MonoBehaviour
 			if (inventory[index].item != null && inventory[index].stack > 1)
 			{
 				inventory[index].stack -= amount;
-				Debug.Log("Dropping a Partial Stack of " + amount + " " + inventory[index].item.name);
 				if (!consume)
 				{
 					DropGameObject(inventory[index].item, amount);
@@ -377,8 +377,8 @@ public class Inventory : MonoBehaviour
 
         for(int i = 0; i < inventory.Count; i++) {
             if(inventory[i].item != null) {
-                Debug.Log(inventory[i].item.name + " x " + inventory[i].stack + " : " + inventory[i].item.description);
-            } else {
+				Debug.Log(inventory[i].item.name + " x " + inventory[i].stack + " : " + inventory[i].item.description);
+			} else {
                 Debug.Log("EMPTY");
             }
         }
