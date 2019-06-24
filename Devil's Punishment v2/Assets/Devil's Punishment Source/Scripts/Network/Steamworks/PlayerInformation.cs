@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
 
-public class PlayerInformation
+public class PlayerInformation : MonoBehaviour
 {
     private CSteamID steamid = (CSteamID)0;
     private Vector3 playersPos;
