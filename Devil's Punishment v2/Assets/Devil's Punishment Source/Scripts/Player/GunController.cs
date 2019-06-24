@@ -113,7 +113,7 @@ public class GunController : MonoBehaviour
 			 * Uncommenting this line out helps with gun positioning. (allowing gizmo use)
 			 * Commenting is better for use in the actual game, and preventing the gun from getting a floating point error that causes it to drift away to infinity
 			 */
-			standardPosition = gunAnimator.transform.localPosition;
+			//standardPosition = gunAnimator.transform.localPosition;
 
 			Shooting();
             Sway();
@@ -188,10 +188,23 @@ public class GunController : MonoBehaviour
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
             trigger = Input.GetButton("Fire1");
-			triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
+			if (trigger)
+			{	
+				reloading = false;
+				triggerReload = false;
+			} else
+			{
+				triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
+			}
             if(running || gunAnimator == null) {aiming = 0f; } else {
-                aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2")? 1.0f : 0.0f, Time.deltaTime * 13.0f);
-				gunAnimator.SetBool("Reload", reloading && aiming <=0);
+				if (triggerReload)
+				{
+					aiming = 0f;
+					gunAnimator.SetBool("Reload", triggerReload);
+				} else
+				{
+					aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2") ? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+				}
 			}
         }
     }
@@ -296,13 +309,13 @@ public class GunController : MonoBehaviour
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
 		gunAnimator.SetBool("Reload", reloading);
-		
-		
+
+
 
 
 		//	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
-		//gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
-		//gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
+		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
+		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
 
 
 
@@ -382,13 +395,18 @@ public class GunController : MonoBehaviour
 	IEnumerator Reload()
 	{
 		reloading = true;
+		float breakPoint = .95f;
+		while (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= breakPoint)
+		{
 
-		yield return new WaitForSeconds(0.15f);
-
+			yield return new WaitForSeconds(0.1f);
+		}
 		bool reloadAnimationPlayed = false;
+		yield return new WaitForSeconds(0.1f);
+
 
 		//while(!reloadAnimationPlayed) {	
-		while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.75f) {
+		while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < breakPoint) {
 
 			reloadAnimationPlayed = true;
 			yield return null;
