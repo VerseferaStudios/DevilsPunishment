@@ -113,7 +113,7 @@ public class GunController : MonoBehaviour
 			 * Uncommenting this line out helps with gun positioning. (allowing gizmo use)
 			 * Commenting is better for use in the actual game, and preventing the gun from getting a floating point error that causes it to drift away to infinity
 			 */
-			//standardPosition = gunAnimator.transform.localPosition;
+			standardPosition = gunAnimator.transform.localPosition;
 
 			Shooting();
             Sway();
