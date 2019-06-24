@@ -367,7 +367,9 @@ public class GunController : MonoBehaviour
         ejectionParticles.Play();
         if(soundManager != null)
         {
-            soundManager.PlaySound("AssaultRifle", "Shot");
+            /*AudioClip audioClip = */playerController.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<AudioSource>().clip 
+                                = soundManager.changeSound(getActiveGun());
+            soundManager.PlaySound(getActiveGun(), "Shot");
         }
         
 
@@ -445,5 +447,23 @@ public class GunController : MonoBehaviour
         {
             enemyHit.TakeDamage(equippedGun.gunItem.damage);
         }
+    }
+
+    private string getActiveGun()
+    {
+        Transform t = playerController.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0);
+        if (t.GetChild(0).gameObject.activeSelf)
+        {
+            return "Handgun";
+        }
+        else if (t.GetChild(1).gameObject.activeSelf)
+        {
+            return "Shotgun";
+        }
+        else //if (t.GetChild(2).gameObject.activeSelf)
+        {
+            return "AssaultRifle";
+        }
+        //return null;
     }
 }

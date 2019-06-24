@@ -127,5 +127,11 @@ public class SoundManager : MonoBehaviour
             Debug.LogError("Error: Sound could not be stopped. SoundGroup not found.");
     }
 
+    public AudioClip changeSound(string soundGroupName)
+    {
+        //GetComponent<AudioSource>().clip = soundGroupDictionary[soundGroupName].sounds[0].AudioClip;
+        return soundGroupDictionary[soundGroupName].sounds[0].AudioClip;
+    }
+
 
 }
