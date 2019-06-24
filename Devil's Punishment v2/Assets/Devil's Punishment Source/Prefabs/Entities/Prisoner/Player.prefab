@@ -665,7 +665,7 @@ GameObject:
   - component: {fileID: 45009218}
   - component: {fileID: 45009220}
   - component: {fileID: 45009219}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: CartridgeEjectEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22339,7 +22339,7 @@ GameObject:
   - component: {fileID: 1103394097}
   - component: {fileID: 1103394099}
   - component: {fileID: 1103394098}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Puff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49838,13 +49838,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698571296612156487}
-  m_LocalRotation: {x: -0.50000006, y: -0.5, z: 0.50000006, w: 0.5}
-  m_LocalPosition: {x: -3.766, y: 0, z: -0.109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.00033, y: 0.04038, z: -0.0013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4580370990978444536}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 90.00001}
+  m_Father: {fileID: 4580370990978444516}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4070287283551401078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49857,7 +49857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6a0d8ba1422e04cb0f97731fc9e6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: -3.766, y: 0, z: -0.109}
+  position: {x: 0.00033, y: 0.04038, z: -0.0013}
   rotation: {x: 0, y: 0, z: 0}
 --- !u!1 &4580370990978150528
 GameObject:
@@ -51092,6 +51092,7 @@ Transform:
   m_LocalPosition: {x: 0.009498688, y: 0.1290444, z: -0.010012711}
   m_LocalScale: {x: 0.5775956, y: 0.57759553, z: 0.5775956}
   m_Children:
+  - {fileID: 2861500861093850838}
   - {fileID: 4580370990978444524}
   - {fileID: 4580370990978444536}
   m_Father: {fileID: 4580370990978444518}
@@ -51270,7 +51271,7 @@ Transform:
   m_Children:
   - {fileID: 4580370990978444522}
   m_Father: {fileID: 4580370990978444516}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4580370990978150606
 GameObject:
@@ -51707,9 +51708,8 @@ Transform:
   m_LocalScale: {x: 0.99999994, y: 1.0000001, z: 1}
   m_Children:
   - {fileID: 4580370990978444486}
-  - {fileID: 2861500861093850838}
   m_Father: {fileID: 4580370990978444516}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4580370990978150618
 GameObject:
