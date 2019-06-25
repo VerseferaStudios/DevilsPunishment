@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading.Tasks;
 public class GunController : MonoBehaviour
 {
 
@@ -107,7 +107,7 @@ public class GunController : MonoBehaviour
     void Update()
 	{
 		GatherInput();
-        if(equippedGun != null)
+        if(!busyFiringAlready && equippedGun != null)
 		{
 			/* 
 			 * Uncommenting this line out helps with gun positioning. (allowing gizmo use)
@@ -190,6 +190,7 @@ public class GunController : MonoBehaviour
             trigger = Input.GetButton("Fire1");
 			if (trigger)
 			{	
+				// Stop reloading if you're trying to shoot!
 				reloading = false;
 				triggerReload = false;
 			} else
@@ -258,10 +259,10 @@ public class GunController : MonoBehaviour
 
             if((triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
 
-                //Debug.Log("ReloadTriggered!");
+				//Debug.Log("ReloadTriggered!");
 
-                StartCoroutine(Reload());
-                gunAnimator.SetTrigger("Reload");
+				gunAnimator.SetTrigger("Reload");
+				StartCoroutine(Reload());
                 shootResetTimer = .3f;
             }
 
@@ -344,10 +345,28 @@ public class GunController : MonoBehaviour
         Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
     }
 
-    void Fire() {
-		reloading = false;
-        gunAnimator.SetTrigger("Fire");
-        shootTimer = timeBetweenShots;
+	//Don't allow multiple activations of the fire method just because you're waiting for an animation to finish...
+	bool busyFiringAlready = false;
+	async Task Fire()
+	{
+		if (busyFiringAlready) return;
+		busyFiringAlready = true;
+		//void wait4ReloadAsync()
+		//{
+			do
+			{
+				Debug.Log("Waiting for fire to happen 0; Null? : " + gunAnimator == null);
+				gunAnimator.SetBool("Reload", false);
+				Debug.Log("Waiting for fire to happen 1");
+				gunAnimator.SetTrigger("Fire");
+				Debug.Log("Waiting for fire to happen 2");
+				await Task.Delay(10);
+			} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
+			
+		//}
+		//await Task.Run(() =>wait4ReloadAsync());
+
+		shootTimer = timeBetweenShots;
 		bool isShotgun = weaponIsShotgun();
 
 		for (int i = 0; i < (isShotgun?10:1); i++)
@@ -387,6 +406,7 @@ public class GunController : MonoBehaviour
 
         recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
         clip--;
+		busyFiringAlready = false;
     }
 	private bool weaponIsShotgun()
 	{
@@ -394,6 +414,7 @@ public class GunController : MonoBehaviour
 	}
 	IEnumerator Reload()
 	{
+		bool reloadAnimationPlayed = false;
 		reloading = true;
 		float breakPoint = .95f;
 		while (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= breakPoint)
@@ -401,7 +422,6 @@ public class GunController : MonoBehaviour
 
 			yield return new WaitForSeconds(0.1f);
 		}
-		bool reloadAnimationPlayed = false;
 		yield return new WaitForSeconds(0.1f);
 
 
