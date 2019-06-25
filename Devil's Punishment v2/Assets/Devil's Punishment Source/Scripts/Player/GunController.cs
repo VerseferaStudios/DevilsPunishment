@@ -201,7 +201,6 @@ public class GunController : MonoBehaviour
 				if (triggerReload)
 				{
 					aiming = 0f;
-					gunAnimator.SetBool("Reload", triggerReload);
 				} else
 				{
 					aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2") ? 1.0f : 0.0f, Time.deltaTime * 13.0f);
@@ -266,7 +265,7 @@ public class GunController : MonoBehaviour
                 shootResetTimer = .3f;
             }
 
-				if ( shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
+			if ( shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
                 Fire();
             }
 
@@ -309,7 +308,6 @@ public class GunController : MonoBehaviour
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
-		gunAnimator.SetBool("Reload", reloading);
 
 
 
@@ -355,12 +353,9 @@ public class GunController : MonoBehaviour
 		//{
 			do
 			{
-				Debug.Log("Waiting for fire to happen 0; Null? : " + gunAnimator == null);
 				gunAnimator.SetBool("Reload", false);
-				Debug.Log("Waiting for fire to happen 1");
 				gunAnimator.SetTrigger("Fire");
-				Debug.Log("Waiting for fire to happen 2");
-				await Task.Delay(10);
+				await Task.Delay(1);
 			} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 			
 		//}
@@ -416,8 +411,8 @@ public class GunController : MonoBehaviour
 	{
 		bool reloadAnimationPlayed = false;
 		reloading = true;
-		float breakPoint = .95f;
-		while (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= breakPoint)
+		float breakPoint = .85f;
+		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= breakPoint)
 		{
 
 			yield return new WaitForSeconds(0.1f);
@@ -445,14 +440,12 @@ public class GunController : MonoBehaviour
 			}
 			if (!trigger && clipStock > 0 && clip < clipSize && aiming <= 0)
 			{
-				gunAnimator.SetBool("Reload", true);
 				yield return new WaitForSeconds(0.2f * gunAnimator.GetCurrentAnimatorStateInfo(0).length);
 				StartCoroutine(Reload());
 			}
 			else
 			{
 				reloading = false;
-				gunAnimator.SetBool("Reload", false);
 				yield break;
 
 			}
