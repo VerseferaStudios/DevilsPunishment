@@ -308,13 +308,12 @@ public class GunController : MonoBehaviour
         gunAnimator.SetFloat("Aiming", aiming);
         gunAnimator.SetBool("Running", running);
         gunAnimator.SetBool("Raised", raised);
-
-
+		
 
 
 		//	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
-		gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
-		gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
+			gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
+			gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
 
 
 
@@ -377,7 +376,8 @@ public class GunController : MonoBehaviour
 			if (Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value))
 			{
 				targetPoint.position = hit.point;
-				Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
+				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
+				bp.transform.SetParent(hit.collider.transform);
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
 				IfEnemyHit(hit);
