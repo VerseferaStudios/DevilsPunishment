@@ -216,29 +216,36 @@ public class GunController : MonoBehaviour
 
 		//Debug.Log(clip + "/" + clipStock + "===" + clipSize);
 		//Debug.Log(reloading);
-		if (aiming < .75f)
-		{
-			muzzle.position = equippedGun.muzzle.position;
-			ejector.position = equippedGun.ejector.position;
-		}
-		else
-		{
-			OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
 
-			// For some reason I MUST get this position from the gun's ejector object, otherwise it doesn't give me the right spot.
-			
-			Vector3 oldEjectPos = equippedGun.ejector.position;
-			equippedGun.ejector.localPosition = aimingOffsets[1].position;
-			ejector.position = equippedGun.ejector.position;
-			equippedGun.ejector.position = oldEjectPos;
+		// OLD method, with offsets for ejector and muzzle
+		//if (aiming < .75f)
+		//{
+		//	muzzle.position = equippedGun.muzzle.position;
+		//	ejector.position = equippedGun.ejector.position;
+		//}
+		//else
+		//{
+		//	OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
+
+		//	// For some reason I MUST get this position from the gun's ejector object, otherwise it doesn't give me the right spot.
+
+		//	Vector3 oldEjectPos = equippedGun.ejector.position;
+		//	equippedGun.ejector.localPosition = aimingOffsets[1].position;
+		//	ejector.position = equippedGun.ejector.position;
+		//	equippedGun.ejector.position = oldEjectPos;
 
 
-			Vector3 oldMuzzlePos = equippedGun.muzzle.position;
-			equippedGun.muzzle.localPosition = aimingOffsets[2].position;
-			muzzle.position = equippedGun.muzzle.position;
-			equippedGun.muzzle.position = oldMuzzlePos;
+		//	Vector3 oldMuzzlePos = equippedGun.muzzle.position;
+		//	equippedGun.muzzle.localPosition = aimingOffsets[2].position;
+		//	muzzle.position = equippedGun.muzzle.position;
+		//	equippedGun.muzzle.position = oldMuzzlePos;
 
-		}
+		//}
+
+		// New method, with muzzle and ejector attached to root bone on guns
+		muzzle.position = equippedGun.muzzle.position;
+		ejector.position = equippedGun.ejector.position;
+
 
 		float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
 
