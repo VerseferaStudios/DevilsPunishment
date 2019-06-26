@@ -401,8 +401,7 @@ public class GunController : MonoBehaviour
 		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
 	}
 
-	// Don't reload if already doing it once (don't stack reloads);
-	bool alreadyReloading = false;
+	// Don't reload if already doing it once (don't stack reloads); Can't figure out how to pull this off...
 	IEnumerator Reload()
 	{
 
