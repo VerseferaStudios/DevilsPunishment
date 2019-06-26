@@ -371,7 +371,7 @@ public class GunController : MonoBehaviour
 			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
 			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
-			Ray ray = new Ray(equippedGun.muzzle.position, Camera.main.transform.forward + offset);
+			Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset);
 			RaycastHit hit;
 
 			if (Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value))
