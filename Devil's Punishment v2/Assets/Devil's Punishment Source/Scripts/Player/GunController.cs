@@ -399,7 +399,7 @@ public class GunController : MonoBehaviour
         
 
 
-        recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
+        //recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
         clip--;
 		busyFiringAlready = false;
     }
