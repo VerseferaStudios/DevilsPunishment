@@ -217,32 +217,7 @@ public class GunController : MonoBehaviour
 		//Debug.Log(clip + "/" + clipStock + "===" + clipSize);
 		//Debug.Log(reloading);
 
-		// OLD method, with offsets for ejector and muzzle
-		//if (aiming < .75f)
-		//{
-		//	muzzle.position = equippedGun.muzzle.position;
-		//	ejector.position = equippedGun.ejector.position;
-		//}
-		//else
-		//{
-		//	OffsetTransform[] aimingOffsets = equippedGun.GetComponentsInChildren<OffsetTransform>();
-
-		//	// For some reason I MUST get this position from the gun's ejector object, otherwise it doesn't give me the right spot.
-
-		//	Vector3 oldEjectPos = equippedGun.ejector.position;
-		//	equippedGun.ejector.localPosition = aimingOffsets[1].position;
-		//	ejector.position = equippedGun.ejector.position;
-		//	equippedGun.ejector.position = oldEjectPos;
-
-
-		//	Vector3 oldMuzzlePos = equippedGun.muzzle.position;
-		//	equippedGun.muzzle.localPosition = aimingOffsets[2].position;
-		//	muzzle.position = equippedGun.muzzle.position;
-		//	equippedGun.muzzle.position = oldMuzzlePos;
-
-		//}
-
-		// New method, with muzzle and ejector attached to root bone on guns
+		// Make sure muzzle and ejector are attached to root bone on guns, otherwise the positions will move unpredictably
 		muzzle.position = equippedGun.muzzle.position;
 		ejector.position = equippedGun.ejector.position;
 
