@@ -61,8 +61,6 @@ public class GunController : MonoBehaviour
 
     float bulletSpreadCoefficient;
 
-    float shootResetTimer;
-
     private Vector2 recoil;
 
     private SoundManager soundManager;
@@ -168,6 +166,7 @@ public class GunController : MonoBehaviour
 					gunAnimator = equippedGun.GetComponent<Animator>();
 					standardPosition = gunAnimator.transform.localPosition;
 					standardRotation = gunAnimator.transform.localRotation;
+
 					break;
 				}
 			}
@@ -250,31 +249,20 @@ public class GunController : MonoBehaviour
         recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
         bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 
-		if (!running && !reloading)
+
+		if (inputEnabled)
 		{
-			shootResetTimer -= Time.deltaTime;
-		}
-		else
-		{
-			shootResetTimer = .3f;
-		}
-
-		if (inputEnabled && (!reloading || !trigger)) {
-
-            if((triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
-
-				Debug.Log("ReloadTriggered!");
-
+			if (shootTimer <= 0f && trigger && clip > 0)
+			{
+				Fire();
+			}
+			else if (triggerReload/*||clip<=0*/)
+			{
+				//Debug.Log("ReloadTriggered!");
 				gunAnimator.SetTrigger("Reload");
 				StartCoroutine(Reload());
-                shootResetTimer = .3f;
-            }
-
-			if ( shootTimer <= 0f && trigger && shootResetTimer <= 0f && clip > 0) {
-                Fire();
-            }
-
-        }
+			}
+		}
 
         shootTimer -= Time.deltaTime;
 
@@ -412,6 +400,9 @@ public class GunController : MonoBehaviour
 	{
 		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
 	}
+
+	// Don't reload if already doing it once (don't stack reloads);
+	bool alreadyReloading = false;
 	IEnumerator Reload()
 	{
 
@@ -442,7 +433,7 @@ public class GunController : MonoBehaviour
 			if (!trigger && clipStock > 0 && clip < clipSize && aiming <= 0)
 			{
 				//Wait for animation to finish
-				yield return new WaitForSeconds(0.5f*(gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
+				yield return new WaitForSeconds(0.33f*(gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				StartCoroutine(Reload());
 			}
 			else
