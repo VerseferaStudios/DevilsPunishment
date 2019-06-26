@@ -137,8 +137,9 @@ public class GunController : MonoBehaviour
     public void InitGun() {
 
         raised = false;
+		reloading = false;
 
-        equippedGun = null;
+		equippedGun = null;
 		if (guns == null)
 		{
 			return;
@@ -188,8 +189,9 @@ public class GunController : MonoBehaviour
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
             trigger = Input.GetButton("Fire1");
+
 			if (trigger)
-			{	
+			{
 				// Stop reloading if you're trying to shoot!
 				reloading = false;
 				triggerReload = false;
@@ -248,17 +250,20 @@ public class GunController : MonoBehaviour
         recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
         bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 
-        if(!running && !reloading) {
-            shootResetTimer -= Time.deltaTime;
-        } else {
-            shootResetTimer = .3f;
-        }
+		if (!running && !reloading)
+		{
+			shootResetTimer -= Time.deltaTime;
+		}
+		else
+		{
+			shootResetTimer = .3f;
+		}
 
-        if(inputEnabled && (!reloading || !trigger)) {
+		if (inputEnabled && (!reloading || !trigger)) {
 
             if((triggerReload/*||clip==0*/) && shootResetTimer <= 0f) {
 
-				//Debug.Log("ReloadTriggered!");
+				Debug.Log("ReloadTriggered!");
 
 				gunAnimator.SetTrigger("Reload");
 				StartCoroutine(Reload());
@@ -409,24 +414,20 @@ public class GunController : MonoBehaviour
 	}
 	IEnumerator Reload()
 	{
-		bool reloadAnimationPlayed = false;
+
 		reloading = true;
-		float breakPoint = .85f;
-		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= breakPoint)
+		float breakPoint = .5f;
+		// Wait for other states to finish
+		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
 		{
-
-			yield return new WaitForSeconds(0.1f);
-		}
-		yield return new WaitForSeconds(0.1f);
-
-
-		//while(!reloadAnimationPlayed) {	
-		while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < breakPoint) {
-
-			reloadAnimationPlayed = true;
 			yield return null;
 		}
-		//}
+		// Wait for reload to animate a "little bit"
+		while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") && gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < breakPoint) {
+			yield return null;
+		}
+		///////////////////////////////////////////
+		//Process the reload
 		clipStock = inventory.GetEquippedGunAmmo();
 		//Debug.Log("ClipStock is: " + clipStock);
 		if (weaponIsShotgun())
@@ -440,32 +441,38 @@ public class GunController : MonoBehaviour
 			}
 			if (!trigger && clipStock > 0 && clip < clipSize && aiming <= 0)
 			{
-				yield return new WaitForSeconds(0.2f * gunAnimator.GetCurrentAnimatorStateInfo(0).length);
+				//Wait for animation to finish
+				yield return new WaitForSeconds(0.5f*(gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				StartCoroutine(Reload());
 			}
 			else
 			{
 				reloading = false;
-				yield break;
-
+				gunAnimator.SetBool("Reload", false);
+				//Wait for animation to finish
+				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			}
 		}
 		else if (clipStock >= clipSize - clip)
 		{
 			//Debug.Log("reloading with stock left: " + ammoName);
-			inventory.DropItem(ammoName,/*ammount*/ clipSize - clip,/*consume*/true);
 			clip = clipSize;
+			inventory.DropItem(ammoName,/*ammount*/ clip,/*consume*/true);
 			reloading = false;
-
+			gunAnimator.SetBool("Reload", false);
+			//Wait for animation to finish
+			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 		}
 		else
 		{
 			//Debug.Log("almost empty!");
-			inventory.DropItem(ammoName,/*ammount*/ clipStock - clip,/*consume*/true);
 			clip = clipStock;
+			inventory.DropItem(ammoName,/*ammount*/ clip,/*consume*/true);
 			reloading = false;
+			gunAnimator.SetBool("Reload", false);
+			//Wait for animation to finish
+			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 		}
-
 	}
 
 	//This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
