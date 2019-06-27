@@ -10,7 +10,7 @@ public class Data : MonoBehaviour
     public float xSize, zSize, corridorSize = 4;
     public int collisionCount = 0, corridorCount = 0;
     public bool isCollided = false;
-    public List<GameObject> collidedCorridors = new List<GameObject>();
+    public List<GameObject> collidedCorridors = new List<GameObject>(), collidedVents = new List<GameObject>();
 
     public float startTime;
     private bool isNotFirstTime = false;
@@ -29,7 +29,7 @@ public class Data : MonoBehaviour
 
     public Vector3 spawnPointsFirstPos;
 
-    public int count = 0;
+    public int count = 0, countVents = 0;
 
     public GameObject roomIndicator;
 
@@ -44,7 +44,7 @@ public class Data : MonoBehaviour
 
     public List<ConnectedComponent> temp = new List<ConnectedComponent>();
 
-    public bool isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
+    public bool isFinishedCheckCorridorCollisions = false, isFinishedCheckVentCollisions = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
     
     public RoomNew roomNewScript;
 
@@ -156,13 +156,13 @@ public class Data : MonoBehaviour
     public List<int> ConvertToOpenings(string tag, float yRotation)
     {
         List<int> openings = new List<int>();
-        if (tag.Equals("CorridorI"))
+        if (tag.Equals("CorridorI") || tag.Equals("VentI"))
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
             ////Debug.Log(openings[0] + " " + openings[1]);
         }
-        else if (tag.Equals("CorridorL"))
+        else if (tag.Equals("CorridorL") || tag.Equals("VentL"))
         {
             if(yRotation == 270 || yRotation == -90)
             {
@@ -175,7 +175,7 @@ public class Data : MonoBehaviour
                 openings.Add(openings[0] + 1);
             }
         }
-        else if (tag.Equals("CorridorT"))
+        else if (tag.Equals("CorridorT") || tag.Equals("VentT"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -185,7 +185,7 @@ public class Data : MonoBehaviour
             oneToFour.Remove((int)(yRotation / 90f));
             openings.AddRange(oneToFour);
         }
-        else if (tag.Equals("CorridorX"))
+        else if (tag.Equals("CorridorX") || tag.Equals("VentX"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -242,14 +242,14 @@ public class Data : MonoBehaviour
         //for putting corridors so that connected components does correctly
         for (int i = 0; i < 3; i++)
         {
-            CheckForCollision();
-            yield return new WaitUntil(() => isFinishedCheckCollisions = true);
-            isFinishedCheckCollisions = false;
+            CheckForCollision(collidedCorridors);
+            yield return new WaitUntil(() => isFinishedCheckCorridorCollisions = true);
+            isFinishedCheckCorridorCollisions = false;
         }
         isFirstPassDone = true;
 
         yield return new WaitUntil(() => isConnectedComponentsCheckDone == true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         float startTime1 = Time.time;
         while (true)
         {
@@ -274,11 +274,60 @@ public class Data : MonoBehaviour
                 else
                 {
                 //    Debug.Log("innnnnnnnnnnnnn");
-                    CheckForCollision();
+                    CheckForCollision(collidedCorridors);
                     count++;
-                    yield return new WaitUntil(() => isFinishedCheckCollisions = true);
-                    isFinishedCheckCollisions = false;
+                    yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
+                    isFinishedCheckVentCollisions = false;
                 }
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    public IEnumerator DoCheckVentsPerSecond()
+    {
+
+        yield return new WaitUntil(() => isStartedVents == true);
+
+        //for putting corridors so that connected components does correctly
+        for (int i = 0; i < 3; i++)
+        {
+            CheckForCollision(collidedVents);
+            yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
+            isFinishedCheckCorridorCollisions = false;
+        }
+        isFirstPassDone = true;
+
+        yield return new WaitForSeconds(1f);
+        float startTime1 = Time.time;
+        while (true)
+        {
+            if (Time.time - startTime1 >= 10f)
+            {
+                break;
+            }
+
+            //Debug.Log(collidedVents.Count + " " + count + "#################################");
+            if (countVents < 6 /*&& collidedVents.Count != 0*/)
+            {
+                //  Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+                /*
+                if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
+                {
+                    AddAndRemoveAdjacentRooms();
+                    count++;
+                    yield return new WaitUntil(() => isFinishedAddAndRemoveConnectedRooms = true);
+                    isFinishedAddAndRemoveConnectedRooms = false;
+                    ctr++;
+                }
+                else
+                {*/
+                    //    Debug.Log("innnnnnnnnnnnnn");
+                    CheckForCollision(collidedVents);
+                    countVents++;
+                    yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
+                    isFinishedCheckVentCollisions = false;
+                //}
             }
             yield return new WaitForSeconds(1f);
         }
@@ -581,30 +630,38 @@ public class Data : MonoBehaviour
     }
 
 
-    private void CheckForCollision()
+    private void CheckForCollision(List<GameObject> collidedCorridorsOrVents)
     {
-        //Debug.Log("Count Olaf =" + collidedCorridors.Count);
+
+        bool isVents = true;
+        if (collidedCorridorsOrVents.Count != 0 && collidedCorridorsOrVents[0].name.StartsWith("Corridor"))
+        {
+            isVents = false;
+        }
+
+        Debug.Log("Count Olaf =" + collidedCorridorsOrVents.Count);
 
 
         //FindDuplicates(); //use this to group corridors at the same place use ConvertToOpenings and Linq.Distinct and do the necessary
 
 
         //Debug.Log("----------------------wargarsg----------------------");
-        for (int i = 0; i < collidedCorridors.Count; i++)
+        for (int i = 0; i < collidedCorridorsOrVents.Count; i++)
         {
-            if (collidedCorridors[i] == null)
+
+            if (collidedCorridorsOrVents[i] == null)
             {
-                collidedCorridors.RemoveAt(i);
+                collidedCorridorsOrVents.RemoveAt(i);
                 i--;
                 continue;
             }
-            for (int j = 0; /*j < i + 4 &&*/ j < collidedCorridors.Count; j++)
+            for (int j = 0; /*j < i + 4 &&*/ j < collidedCorridorsOrVents.Count; j++)
             {
                 if (i == j) continue;
 
-                if (collidedCorridors[j] == null)
+                if (collidedCorridorsOrVents[j] == null)
                 {
-                    collidedCorridors.RemoveAt(j);
+                    collidedCorridorsOrVents.RemoveAt(j);
                     if (i > j)
                     {
                         i--;
@@ -614,39 +671,44 @@ public class Data : MonoBehaviour
                 }
 
                 /*
-                if (collidedCorridors[i] == null)
+                if (collidedCorridorsOrVents[i] == null)
                 {
-                    collidedCorridors.RemoveAt(i);
+                    collidedCorridorsOrVents.RemoveAt(i);
                     i--;
                     continue;
                 }
                 */
 
-                ////Debug.Log(collidedCorridors[i].transform.position);
-                ////Debug.Log(collidedCorridors[j].transform.position);
+                ////Debug.Log(collidedCorridorsOrVents[i].transform.position);
+                ////Debug.Log(collidedCorridorsOrVents[j].transform.position);
                 bool isError = false;
 
-                if (collidedCorridors[i].transform.position == collidedCorridors[j].transform.position)
-                //if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
-                //    && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
+                if (collidedCorridorsOrVents[i].transform.position == collidedCorridorsOrVents[j].transform.position)
+                //if(Mathf.Abs(collidedCorridorsOrVents[i].transform.position.x - collidedCorridorsOrVents[j].transform.position.x) <= 0.6f
+                //    && Mathf.Abs(collidedCorridorsOrVents[i].transform.position.z - collidedCorridorsOrVents[j].transform.position.z) <= 0.6f)
                 {
                     //Make condition perfect er
 
-                    if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
-                        && (collidedCorridors[i].transform.parent.GetChild(0).rotation == collidedCorridors[j].transform.parent.GetChild(0).rotation))
+                    if (collidedCorridorsOrVents[i].transform.parent.name.Equals(collidedCorridorsOrVents[j].transform.parent.name)
+                        && (collidedCorridorsOrVents[i].transform.parent.GetChild(0).rotation == collidedCorridorsOrVents[j].transform.parent.GetChild(0).rotation))
                     {
-                        ////Debug.Log("Leave");
-
+                        Debug.Log("Leave");
+                        Debug.Log(collidedCorridorsOrVents[i].transform.parent.GetChild(0).eulerAngles.x);
+                        Debug.Log(collidedCorridorsOrVents[i].transform.parent.GetChild(0).eulerAngles.y);
+                        Debug.Log(collidedCorridorsOrVents[i].transform.parent.GetChild(0).eulerAngles.z);
+                        Debug.Log(collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles.x);
+                        Debug.Log(collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles.y);
+                        Debug.Log(collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles.z);
                     }
                     else if (!isNotFirstTime)
                     {
 
-                        ////Debug.Log("in at " + collidedCorridors[i].transform.position);
-                        ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.parent.GetChild(0).eulerAngles);
-                        ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.parent.GetChild(0).eulerAngles);
+                        ////Debug.Log("in at " + collidedCorridorsOrVents[i].transform.position);
+                        ////Debug.Log(collidedCorridorsOrVents[i].transform.parent.name + " " + collidedCorridorsOrVents[i].transform.parent.GetChild(0).eulerAngles);
+                        ////Debug.Log(collidedCorridorsOrVents[j].transform.parent.name + " " + collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.parent.GetChild(0).eulerAngles.y);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.parent.GetChild(0).eulerAngles.y);
+                        openings1 = ConvertToOpenings(collidedCorridorsOrVents[i].transform.parent.tag, collidedCorridorsOrVents[i].transform.parent.GetChild(0).eulerAngles.y);
+                        openings2 = ConvertToOpenings(collidedCorridorsOrVents[j].transform.parent.tag, collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles.y);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -691,7 +753,7 @@ public class Data : MonoBehaviour
                         if (openings1.Count == 3)
                         {
                             float yRotation = ConvertToRotation(openings1);
-                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
+                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, collidedCorridorsOrVents[j].transform.parent.transform.position, Quaternion.identity);
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
                                 //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
@@ -704,26 +766,26 @@ public class Data : MonoBehaviour
                         }
                         else if (openings1.Count == 4)
                         {
-                            Instantiate(corridorX, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
+                            Instantiate(corridorX, collidedCorridorsOrVents[j].transform.parent.transform.position, Quaternion.identity);
                         }
                         else
                         {
                             //Debug.Log("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
                             isError = true;
                             Debug.Log("Count = " + openings1.Count);
-                            Debug.Log("Position = " + collidedCorridors[i].transform.position);
-                            //Debug.Log("rotation = " + collidedCorridors[j].transform.parent.GetChild(0).eulerAngles.y);
-                            //Debug.Log("parent name " + collidedCorridors[j].transform.parent.name);
+                            Debug.Log("Position = " + collidedCorridorsOrVents[i].transform.position);
+                            //Debug.Log("rotation = " + collidedCorridorsOrVents[j].transform.parent.GetChild(0).eulerAngles.y);
+                            //Debug.Log("parent name " + collidedCorridorsOrVents[j].transform.parent.name);
                         }
 
                         /*
                         //If I and I collides with different rotations
-                        if (collidedCorridors[i].transform.parent.GetChild(0).rotation != collidedCorridors[j].transform.parent.GetChild(0).rotation)
+                        if (collidedCorridorsOrVents[i].transform.parent.GetChild(0).rotation != collidedCorridorsOrVents[j].transform.parent.GetChild(0).rotation)
                         {
-                            GameObject currCorridor1 = Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity);
+                            GameObject currCorridor1 = Instantiate(corridorX, collidedCorridorsOrVents[j].transform.position, Quaternion.identity);
                         }
                         //If I and L collides
-                        else if (!collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name))
+                        else if (!collidedCorridorsOrVents[i].transform.parent.name.Equals(collidedCorridorsOrVents[j].transform.parent.name))
                         {
                             //T
                         }
@@ -732,19 +794,19 @@ public class Data : MonoBehaviour
 
                         }
                         */
-                        //Debug.Log("Destroying " + collidedCorridors[i].transform.parent);
+                        //Debug.Log("Destroying " + collidedCorridorsOrVents[i].transform.parent);
                         if(!isError)
-                            Destroy(collidedCorridors[i].transform.parent.gameObject);
+                            Destroy(collidedCorridorsOrVents[i].transform.parent.gameObject);
                     }
 
-                    //Debug.Log("Destroying " + collidedCorridors[j].transform.parent);
+                    //Debug.Log("Destroying " + collidedCorridorsOrVents[j].transform.parent);
                     if(!isError)
-                        Destroy(collidedCorridors[j].transform.parent.gameObject);
+                        Destroy(collidedCorridorsOrVents[j].transform.parent.gameObject);
 
                     // !!!!!!!!!!!!!!!!! Take care of collisions that happen when the above corridors (T and X) are instantiated, if any !!!!!!!!!!!!!!!!!
                     if (!isNotFirstTime)
                     {
-                        collidedCorridors.RemoveAt(i);
+                        collidedCorridorsOrVents.RemoveAt(i);
 
                         if (j > i)
                         {
@@ -754,7 +816,7 @@ public class Data : MonoBehaviour
                         i--;
                     }
 
-                    collidedCorridors.RemoveAt(j);
+                    collidedCorridorsOrVents.RemoveAt(j);
 
                     if (!isNotFirstTime && i > j)
                     {
@@ -774,15 +836,15 @@ public class Data : MonoBehaviour
             }
         }
 
-        if (collidedCorridors.Count == 1)
+        if (collidedCorridorsOrVents.Count == 1)
         {
-            Destroy(collidedCorridors[0].transform.parent.gameObject);
+            Destroy(collidedCorridorsOrVents[0].transform.parent.gameObject);
         }
 
-        //Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
-        for (int q = 0; q < collidedCorridors.Count; q++)
+        Debug.Log("Count Olaf AFTER =" + collidedCorridorsOrVents.Count);
+        for (int q = 0; q < collidedCorridorsOrVents.Count; q++)
         {
-            ////Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
+            ////Debug.Log(collidedCorridorsOrVents[q].transform.position + " " + collidedCorridorsOrVents[q].transform.parent.name);
         }
 
         if (isDonePrevFnCall && connectedRoomsThroughCollision.Count != prevCount)
@@ -794,8 +856,15 @@ public class Data : MonoBehaviour
 
         prevCount = connectedRoomsThroughCollision.Count;
 
-        isFinishedCheckCollisions = true;
-        
+        if (isVents)
+        {
+            isFinishedCheckVentCollisions = true;
+        }
+        else
+        {
+            isFinishedCheckCorridorCollisions = true;
+        }
+
     }
 
     public IEnumerator DoConnectedComponents()
