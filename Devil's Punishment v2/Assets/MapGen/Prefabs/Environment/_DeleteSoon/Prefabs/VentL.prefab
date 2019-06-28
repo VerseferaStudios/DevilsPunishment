@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1030583534382429865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5951009632052360972}
+  m_Layer: 0
+  m_Name: Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5951009632052360972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030583534382429865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8366188597201462516}
+  m_Father: {fileID: 65764901554619107}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6633108427632789466
 GameObject:
   m_ObjectHideFlags: 0
@@ -27,7 +58,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8366188597201462516}
+  - {fileID: 5951009632052360972}
   - {fileID: 5355139221712637113}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -39,11 +70,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 65764901554619107}
     m_Modifications:
-    - target: {fileID: 4056963172898893465, guid: d1263a277c442d240a2bf63d70b34b2a,
-        type: 3}
-      propertyPath: m_Name
-      value: CollisionDetector
-      objectReference: {fileID: 0}
     - target: {fileID: 4056963172898893466, guid: d1263a277c442d240a2bf63d70b34b2a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -99,6 +125,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4056963172898893465, guid: d1263a277c442d240a2bf63d70b34b2a,
+        type: 3}
+      propertyPath: m_Name
+      value: CollisionDetector
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1263a277c442d240a2bf63d70b34b2a, type: 3}
 --- !u!4 &5355139221712637113 stripped
@@ -112,7 +143,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 65764901554619107}
+    m_TransformParent: {fileID: 5951009632052360972}
     m_Modifications:
     - target: {fileID: 100000, guid: 56f1a97ed2b00514cbbc304217873a54, type: 3}
       propertyPath: m_Name
