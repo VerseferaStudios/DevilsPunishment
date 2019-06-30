@@ -47,6 +47,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     void Start()
     {
+		/*
         ServerInformationObject = GameObject.Find("SteamServerInformation");
         ServerInformationObject.GetComponent<ServerInformation>().playersPos = new Vector3[7];
         ServerInformationObject.GetComponent<ServerInformation>().playersRot = new Quaternion[7];
@@ -77,6 +78,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
         }
+		*/
     }
 
 #if DISABLED
