@@ -15,13 +15,16 @@ public class RestartScene : MonoBehaviour
         Data.instance.corridorPosDict = new Dictionary<Vector3, int>();
         Data.instance.connectedRoomsThroughCollision = new List<ConnectedComponent>();
         Data.instance.connectedRooms = new List<List<Vector3>>();
-        Data.instance.count =   0;
+        Data.instance.count = Data.instance.countVents = 0;
         Data.instance.isOnce = true;
         Data.instance.isDonePrevFnCall = true;
         Data.instance.ctr = 0;
         Data.instance.prevCount = 0;
 
-        Data.instance.isFinishedAddAndRemoveConnectedRooms = Data.instance.isFinishedCheckCollisions = Data.instance.isConnectedComponentsCheckDone = false;
+        Data.instance.isFinishedAddAndRemoveConnectedRooms
+            = Data.instance.isFinishedCheckCorridorCollisions
+            = Data.instance.isFinishedCheckVentCollisions
+            = Data.instance.isConnectedComponentsCheckDone = false;
         Data.instance.temp = new List<ConnectedComponent>();
         Data.instance.counter = Data.instance.counter1 = 0;
 

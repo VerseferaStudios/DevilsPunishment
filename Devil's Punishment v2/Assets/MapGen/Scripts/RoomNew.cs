@@ -238,6 +238,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             */
 
+            Debug.Log("k = " + k);
+
             //Should only happen once!!!
             if (k == spawnPoints.Count - 1)
             {
@@ -245,6 +247,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
                 StartCoroutine(Data.instance.DoVents());
+                StartCoroutine(Data.instance.DoCheckVentsPerSecond());
                 Debug.Log("No. of vent covers = " + GameObject.FindGameObjectsWithTag("Vent Cover").Length);
             }
 
@@ -336,9 +339,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         else
         {
             yRotation = 90 * storedOpening; //Test
-            currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 90, 0); // Only x is changed from 90 to 0
+            currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 0, 90); // Only z is changed from 0 to 90
         }
-        currCorridor1.transform.eulerAngles = new Vector3(currCorridor1.transform.eulerAngles.x, yRotation, currCorridor1.transform.eulerAngles.z);
+        currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(currCorridor1.transform.GetChild(0).eulerAngles.x, yRotation, currCorridor1.transform.GetChild(0).eulerAngles.z);
 
 
         // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
@@ -514,8 +517,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     GameObject currCorridor1 = Instantiate(vents[1], spawnNowAt, Quaternion.identity);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 90, 0); // Only x is changed from 90 to 0
-                    currCorridor1.transform.eulerAngles = new Vector3(0, (storedOpening == 0 ? 2 : 0) * 90, 0);
+                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 0, 90); // Only z is changed from 0 to 90
+                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(currCorridor1.transform.GetChild(0).eulerAngles.x, (storedOpening == 0 ? 2 : 0) * 90, currCorridor1.transform.GetChild(0).eulerAngles.z);
                     //(storedOpening == 0 ? 2 : 0) * 90
                 }
                 //Instantiates L corridor in correct rotation at the door of a room
@@ -619,18 +622,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     /*
                     else
                     {
-                        currCorridor1.transform.eulerAngles = new Vector3(0, (storedOpening == 0) ? 2 : ((storedOpening == 2) ? 0 : ((storedOpening == 1) ? 3 : 1)) * 90, 0); // Only x is changed from 90 to 0
+                        currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, (storedOpening == 0) ? 2 : ((storedOpening == 2) ? 0 : ((storedOpening == 1) ? 3 : 1)) * 90, 0); // Only x is changed from 90 to 0
                     }
                     */
                 }
-                
+
             }
             spawnNowAt.z += increment;
 
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, /*new Vector3(spawnNowAt.x - 0.15f, spawnNowAt.y, spawnNowAt.z)*/spawnNowAt, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, (Data.instance.isStartedVents) ? spawnNowAt : new Vector3(spawnNowAt.x - 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 //Vents
@@ -670,8 +673,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     GameObject currCorridor1 = Instantiate(vents[1], spawnNowAt, Quaternion.identity);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                     currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 90, 0); // Only x is changed from 90 to 0
-                    currCorridor1.transform.eulerAngles = new Vector3(0, (storedOpening == 1 ? 3 : 1) * 90, 0);
+                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, 0, 90); // Only z is changed from 0 to 90
+                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(currCorridor1.transform.GetChild(0).eulerAngles.x, (storedOpening == 1 ? 3 : 1) * 90, currCorridor1.transform.GetChild(0).eulerAngles.z);
                 }
                 //Instantiates L corridor in correct rotation at the door of a room
                 else
@@ -760,7 +763,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 /*
                 else
                 {
-                    currCorridor1.transform.eulerAngles = new Vector3(0, storedOpening * 90, 0); // Only x is changed from 90 to 0
+                    currCorridor1.transform.GetChild(0).eulerAngles = new Vector3(0, storedOpening * 90, 0); // Only x is changed from 90 to 0
                 }
                 */
 
@@ -771,7 +774,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, (Data.instance.isStartedVents) ? spawnNowAt : new Vector3(spawnNowAt.x + 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.GetChild(0).localRotation = Quaternion.Euler(0, 90, 0);

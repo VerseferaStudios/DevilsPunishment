@@ -35,14 +35,12 @@ public class CorridorNew : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string otherTag = other.transform.parent.tag;
-        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX")
-            && otherTag.Equals("VentI") || otherTag.Equals("VentL") || otherTag.Equals("VentT") || otherTag.Equals("VentX"))
+        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
         {
             Data.instance.isCollided = true;
             Data.instance.collisionCount++;
             
-            if(!(transform.parent.tag.Equals("CorridorI") && otherTag.Equals("CorridorI"))
-                || !(transform.parent.tag.Equals("VentI") && otherTag.Equals("VentI")))
+            if(!(transform.parent.tag.Equals("CorridorI") && otherTag.Equals("CorridorI")))
             {
                 Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
             }
@@ -53,6 +51,10 @@ public class CorridorNew : MonoBehaviour
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject
             ////Debug.Log("!");
+        }
+        else if (otherTag.Equals("VentI") || otherTag.Equals("VentL") || otherTag.Equals("VentT") || otherTag.Equals("VentX"))
+        {
+            Data.instance.collidedVents.Add(gameObject);
         }
     }
 
