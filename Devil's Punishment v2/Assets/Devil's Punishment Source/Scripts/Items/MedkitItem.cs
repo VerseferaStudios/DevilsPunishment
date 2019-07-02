@@ -6,8 +6,8 @@ using UnityEngine;
 public class MedkitItem : Item
 {
 
-    public float healAmount;
-    public float timeToApply;
+    public float healAmount = 40.0f;
+    public float timeToApply = 2.0f;
 
 
     public override bool Use() {

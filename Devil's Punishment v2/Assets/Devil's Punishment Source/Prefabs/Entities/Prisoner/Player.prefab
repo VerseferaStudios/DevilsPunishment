@@ -85,13 +85,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fa7f72db085eb4ba82c3d28d3b3d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
-  HP: 25
-  onPlayerDeath:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  curHealth: 0
+  maxHealth: 0
+  player: {fileID: 1038655}
+  pillsConsumed: 0
+  chanceToInfect: 0
+  infected: 0
+  canInfect: 0
+  infectRate: 900
+  infectionRate: 0
+  infectMore: 0
+  changeRate1: 0
+  changeRate2: 0
+  changeRate3: 0
+  nightTerror: {fileID: 0}
 --- !u!114 &1038660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6238,7 +6245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &192528601
 RectTransform:
   m_ObjectHideFlags: 0

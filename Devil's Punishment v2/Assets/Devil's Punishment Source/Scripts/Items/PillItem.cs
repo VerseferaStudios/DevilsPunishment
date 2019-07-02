@@ -14,13 +14,15 @@ public class PillItem : Item
 
     private Infection infect;
 
-    public override bool Use() {
-        infect = Player.instance.GetComponent<Infection>();
+    public override bool Use()
+    {
         protectionDuration = duration;
         protectionStrength = strength;
-        Debug.Log("Pill taken! Player is " + protectionStrength + "% more resistant to infection for " + protectionDuration + " seconds (" + (protectionDuration/60) + " minutes).");
-        infect.UsePill(protectionDuration, protectionStrength);
-        
+        //Debug.Log("Pill taken! Player is " + protectionStrength + "% more resistant to infection for " + protectionDuration + " seconds (" + (protectionDuration/60) + " minutes).");
+        Player player = Player.instance;
+        Health health = player.GetComponent<Health>();
+        health.pillsConsumed++;
+
         return true;
     }
 

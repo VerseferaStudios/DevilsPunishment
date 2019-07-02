@@ -41,12 +41,15 @@ public class StatusDisplayUI : MonoBehaviour
         float HPPercentage = health.GetHPPercentage();
         healthSlider.value = HPPercentage;
 
-        percentageText.text = Mathf.FloorToInt(HPPercentage*100f) + "%";
+        percentageText.text = Mathf.FloorToInt(HPPercentage * 100f) + "%";
 
-        if(HPPercentage > .2f) {
+        if (HPPercentage > .2f)
+        {
             deepRed.a = 0;
-        } else {
-            deepRed.a = Mathf.Sin(10f*Time.time)*.02f + (.2f-HPPercentage)*2f;
+        }
+        else
+        {
+            deepRed.a = Mathf.Sin(10f * Time.time) * .02f + (.2f - HPPercentage) * 2f;
         }
 
         bloodOnScreen.color = deepRed;
