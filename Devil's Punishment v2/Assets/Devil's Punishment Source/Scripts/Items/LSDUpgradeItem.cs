@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LSD Upgrade", menuName = "Item/LSDUpgrade")]
 public class LSDUpgradeItem : Item
 {
+	// THIS NEEDS TO GET THE FLASHLIGHT SCRIPT COMPONENT FROM THE PLAYER (EX: .parent.parent of this object?, right now it causes null-ptr issues)
     FlashlightScript LSD;
     public override bool Use()
     {
