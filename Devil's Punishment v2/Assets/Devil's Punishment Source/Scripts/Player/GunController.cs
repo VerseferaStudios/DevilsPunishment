@@ -113,11 +113,9 @@ public class GunController : MonoBehaviour
 			 */
 			//standardPosition = gunAnimator.transform.localPosition;
 
-			Shooting();
-            Sway();
-            Animation();
+			EvaluateInput();
         }
-        CameraUpdate();
+		Animation();
     }
 
     public int GetClip() {
@@ -159,13 +157,13 @@ public class GunController : MonoBehaviour
 					raised = true;
 					recoilAmount = equippedGun.gunItem.recoilAmount;
 					SetFireRate(equippedGun.gunItem.fireRate);
-					clip = 0;
-					clipSize = equippedGun.gunItem.clipSize;
-					clipStock = inventory.GetEquippedGunAmmo();
 					ammoName = equippedGun.gunItem.ammunitionType.name;
 					gunAnimator = equippedGun.GetComponent<Animator>();
 					standardPosition = gunAnimator.transform.localPosition;
 					standardRotation = gunAnimator.transform.localRotation;
+					clip = 0;
+					clipSize = equippedGun.gunItem.clipSize;
+					clipStock = inventory.GetEquippedGunAmmo();
 
 					break;
 				}
@@ -210,26 +208,12 @@ public class GunController : MonoBehaviour
         }
     }
 
-    void Shooting() {
+    void EvaluateInput() {
 
-        clipStock = inventory.GetEquippedGunAmmo();
 
 		//Debug.Log(clip + "/" + clipStock + "===" + clipSize);
 		//Debug.Log(reloading);
 
-		// Make sure muzzle and ejector are attached to root bone on guns, otherwise the positions will move unpredictably
-		muzzle.position = equippedGun.muzzle.position;
-		ejector.position = equippedGun.ejector.position;
-
-
-		float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
-
-        playerController.AddToViewVector(recoil.x*aimingCoefficient, 0f);
-        playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
-        playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
-
-        recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
-        bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 
 
 		if (inputEnabled)
@@ -238,10 +222,8 @@ public class GunController : MonoBehaviour
 			{
 				Fire();
 			}
-			else if (triggerReload/*||clip<=0*/)
+			else if (!reloading && triggerReload/*||clip<=0*/)
 			{
-				//Debug.Log("ReloadTriggered!");
-				gunAnimator.SetTrigger("Reload");
 				StartCoroutine(Reload());
 			}
 		}
@@ -252,77 +234,27 @@ public class GunController : MonoBehaviour
 
     }
 
-    void Sway() {
-
-		float swayLimit = 10.0f;
-
-		if (aiming < .5f && inputEnabled)
-		{
-			swayOffset = new Vector3(
-				Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x * 2.0f,
-				Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
-				0f);
-		}
-		else
-		{
-			swayOffset += Vector3.forward * recoil.y * .5f;
-		}
-
-		swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
-		transform.localPosition = swayOffset * .001f * swayAmount;
-		/*
-		transform.localRotation = Quaternion.Lerp(transform.localRotation,
-		Quaternion.Euler(0f, 0f, crouching ? -20f : 0f),
-		Time.deltaTime * 10.0f);
-		*/
-
-
-	}
-
-	void Animation() {
-        gunAnimator.SetFloat("Aiming", aiming);
-        gunAnimator.SetBool("Running", running);
-        gunAnimator.SetBool("Raised", raised);
-		
-
-
-		//	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
-			gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
-			gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
-
-
-
-
-		if (trigger)
-		{
-			//Get color from gun's ITEM description?
-			//Color color = equippedGun.gunItem.color;
-			//Only set color for shotgun
-			if (weaponIsShotgun())
-			{
-
-				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
-				rend.material.shader = Shader.Find("_Color");
-				rend.material.SetColor("_Color", new Color(0.863f, 0.078f, 0.235f));
-
-				//Find the Specular shader and change its Color to red
-				rend.material.shader = Shader.Find("Specular");
-				rend.material.SetColor("_SpecColor", new Color(0.863f, 0.078f, 0.235f));
-			}
-
-		}
-	}
-
-	void CameraUpdate() {
-        Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
-    }
-
 	//Don't allow multiple activations of the fire method just because you're waiting for an animation to finish...
 	bool busyFiringAlready = false;
 	async Task Fire()
 	{
 		if (busyFiringAlready) return;
 		busyFiringAlready = true;
+		
+        clipStock = inventory.GetEquippedGunAmmo();
+		// Make sure muzzle and ejector are attached to root bone on guns, otherwise the positions will move unpredictably
+		muzzle.position = equippedGun.muzzle.position;
+		ejector.position = equippedGun.ejector.position;
+
+		float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
+
+        playerController.AddToViewVector(recoil.x*aimingCoefficient, 0f);
+        playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
+        playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
+
+        recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
+        bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
+		
 		//void wait4ReloadAsync()
 		//{
 			do
@@ -378,16 +310,13 @@ public class GunController : MonoBehaviour
         clip--;
 		busyFiringAlready = false;
     }
-	private bool weaponIsShotgun()
-	{
-		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
-	}
 
 	// Don't reload if already doing it once (don't stack reloads); Can't figure out how to pull this off...
 	IEnumerator Reload()
 	{
-
 		reloading = true;
+		//Debug.Log("ReloadTriggered!");
+		gunAnimator.SetTrigger("Reload");
 		float breakPoint = .5f;
 		// Wait for other states to finish
 		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -419,32 +348,106 @@ public class GunController : MonoBehaviour
 			}
 			else
 			{
-				reloading = false;
 				gunAnimator.SetBool("Reload", false);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
+				reloading = false;
 			}
 		}
 		else if (clipStock >= clipSize - clip)
 		{
+			int amt = clipSize - clip;
 			//Debug.Log("reloading with stock left: " + ammoName);
-			clip = clipSize;
-			inventory.DropItem(ammoName,/*ammount*/ clip,/*consume*/true);
-			reloading = false;
+			clip += amt;
+			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
+			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
+			reloading = false;
 		}
 		else
 		{
 			//Debug.Log("almost empty!");
-			clip = clipStock;
-			inventory.DropItem(ammoName,/*ammount*/ clip,/*consume*/true);
-			reloading = false;
+			clip +=clipStock;
+			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
+			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
+			reloading = false;
 		}
+	}
+
+	void Animation() {
+        Sway();
+
+        gunAnimator.SetFloat("Aiming", aiming);
+        gunAnimator.SetBool("Running", running);
+        gunAnimator.SetBool("Raised", raised);
+		
+
+
+		//	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
+			gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
+			gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
+
+
+
+
+		if (trigger)
+		{
+			//Get color from gun's ITEM description?
+			//Color color = equippedGun.gunItem.color;
+			//Only set color for shotgun
+			if (weaponIsShotgun())
+			{
+
+				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
+				rend.material.shader = Shader.Find("_Color");
+				rend.material.SetColor("_Color", new Color(0.863f, 0.078f, 0.235f));
+
+				//Find the Specular shader and change its Color to red
+				rend.material.shader = Shader.Find("Specular");
+				rend.material.SetColor("_SpecColor", new Color(0.863f, 0.078f, 0.235f));
+			}
+
+		}
+		// Camera update:
+		
+        Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
+	}
+
+    void Sway() {
+
+		float swayLimit = 10.0f;
+
+		if (aiming < .5f && inputEnabled)
+		{
+			swayOffset = new Vector3(
+				Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x * 2.0f,
+				Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
+				0f);
+		}
+		else
+		{
+			swayOffset += Vector3.forward * recoil.y * .5f;
+		}
+
+		swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
+		transform.localPosition = swayOffset * .001f * swayAmount;
+		/*
+		transform.localRotation = Quaternion.Lerp(transform.localRotation,
+		Quaternion.Euler(0f, 0f, crouching ? -20f : 0f),
+		Time.deltaTime * 10.0f);
+		*/
+
+
+	}
+
+	private bool weaponIsShotgun()
+	{
+		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
 	}
 
 	//This is just for testing a thing for the elimination system, this can be removed later /SkitzFist

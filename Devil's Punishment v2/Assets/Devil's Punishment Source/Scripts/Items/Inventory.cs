@@ -61,12 +61,12 @@ public class Inventory : MonoBehaviour
         instance = this;
 		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
 		Debug.Assert(gunController != null, "gunController shouldn't be null!");
+        CompoundInventory();
+		Sort();
 	}
 
     private void Start()
 	{
-		Sort();
-		CullNulls();
 	}
 
     public Item GetItemFromIndex(int index) {
@@ -218,9 +218,18 @@ public class Inventory : MonoBehaviour
 
     public void DropItem(string name, int amount = 1, bool consume = false)
 	{
-		int index = GetIndexOfItem(name);
-		DropItem(index, amount, consume);
-        Sort();
+        int dropped = 0;
+        while (dropped < amount){
+            int index = GetIndexOfItem(name);
+            if (inventory[index].item != null && inventory[index].stack >= 1){
+                int thisAmt = Math.Min(amount-dropped,inventory[index].stack);
+                dropped+= thisAmt;
+                Debug.Log("dropped: "+dropped);
+                DropItem(index, thisAmt, consume);
+                Sort();
+                CullNulls();
+            }
+        }
     }
 
     public void DropItem(int index, int amount = 1, bool consume = false) {
@@ -231,7 +240,7 @@ public class Inventory : MonoBehaviour
 		}
 		else if (index > -1)
 		{
-			if (inventory[index].item != null && inventory[index].stack > 1)
+			if (inventory[index].item != null && inventory[index].stack >= 1 && amount <= inventory[index].stack)
 			{
 				inventory[index].stack -= amount;
 				if (!consume)
@@ -266,7 +275,6 @@ public class Inventory : MonoBehaviour
     }
 
     public int GetEquippedGunAmmo() {
-
         return GetQuantityOfItem(equippedGun.ammunitionType.name);
     }
 
