@@ -10,14 +10,22 @@ public class MedkitItem : Item
     public float timeToApply = 2.0f;
 
 
-    public override bool Use() {
-        Debug.Log("Medkit used! Player healed by " + healAmount + " health points.");
-
+    public override bool Use()
+    {
         Player player = Player.instance;
         Health health = player.GetComponent<Health>();
-        health.IncreaseHealth(healAmount, timeToApply);
+        if (health.curHealth < 100)
+        {
+            Debug.Log("Medkit used! Player healed by " + healAmount + " health points.");
 
-        return true; //Medkits are consumed upon usage
+            //Player player = Player.instance;
+            //Health health = player.GetComponent<Health>();
+            health.IncreaseHealth(healAmount, timeToApply);
+
+            return true; //Medkits are consumed upon usage
+        }
+        Debug.Log("Attempted to use item, health was already full. -No TGM HERE :P ");
+        return false;
     }
 
 }

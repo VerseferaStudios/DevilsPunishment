@@ -5,25 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Pill", menuName = "Item/Pill")]
 public class PillItem : Item
 {
-
-    public float duration; // Time in seconds
-    public float strength; // Time in seconds
-
-    private float protectionDuration;
-    private float protectionStrength;
-
-    private Infection infect;
-
     public override bool Use()
     {
-        protectionDuration = duration;
-        protectionStrength = strength;
-        //Debug.Log("Pill taken! Player is " + protectionStrength + "% more resistant to infection for " + protectionDuration + " seconds (" + (protectionDuration/60) + " minutes).");
         Player player = Player.instance;
         Health health = player.GetComponent<Health>();
-        health.pillsConsumed++;
-
-        return true;
+        Debug.Assert(health != null, "Player health script was NULL inside of the pill's use method");
+        Debug.Log("In 'pills use()' -> health.infected: " + health.infected);
+        if (health.infected && health.pillsConsumed < 3)
+        {
+            health.pillsConsumed++;
+            return true;
+        }
+        Debug.Log("Attempted to use item, was not able to either weren't infected or already reached maximum of pills used. (we dont want you to O.D.)");
+        return false;
     }
-
 }

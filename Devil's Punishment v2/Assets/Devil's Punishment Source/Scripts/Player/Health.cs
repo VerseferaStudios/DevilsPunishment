@@ -17,34 +17,35 @@ public class Health : MonoBehaviour
     /* Need to do!
      * Set health  //Done
      * Set cur health //Done
-     * Set infection rate //50% done
-     * Set infection rate in regards to cur health //50% done
-     * Change Medkit script to adjust the health of both infected and noninfected players
-     * Change Medkit Use script to adjust the time delay for being infected to +2 seconds
-     * Change pill script to add pillsConsumed++
-     * Change StatusUI script to reflect the infection rate.
-     * Create/Adjust creature attack script to run the chance to infect.
+     * Set infection rate //Done
+     * Set infection rate in regards to cur health //Done
+     * Change Medkit script to adjust the health of both infected and noninfected players //Done
+     * Change Medkit Use script to adjust the time delay for being infected to +2 seconds //Done
+     * Change pill script to add pillsConsumed++ //Done
+     * Change StatusUI script to reflect the infection rate. 
+     * Create/Adjust creature attack script to run the chance to infect. //Done
      */
     [Header("Setting Health")]
     [SerializeField]
-    private float curHealth;
+    public float curHealth;
     [SerializeField]
     private float maxHealth;
-    public GameObject player;
-    public int pillsConsumed;
+    public GameObject player; 
+    public int pillsConsumed; //How many pills have you consumed to stall the infection
     public int chanceToInfect; //Set random range from 0-150, if the number is between 0-20 infection sets in.
-    public bool infected;
-    public bool canInfect;
+    public bool infected; //Are you infected?
+    public bool canInfect; //Can you get infected?
 
     [Header("Setting Infection Rates")]
     public float infectRate = 900.0f;
     public int infectionRate;
     public float infectMore; //Used to add +9, +10, +11, +12 then add +1% to infectionRate
+    public StatusDisplayUI infectStatus;
 
     [Header("Has a pill been consumed?")]
-    public bool changeRate1;
-    public bool changeRate2;
-    public bool changeRate3;
+    public bool pill1Used; 
+    public bool pill2Used;
+    public bool pill3Used;
     [Header("When player dies")]
     public GameObject nightTerror;
 
@@ -74,9 +75,6 @@ public class Health : MonoBehaviour
         {
             StartCoroutine(_ChangeHPCoroutine(healthIncreaseValue, timeInSeconds));
         }
-
-
-
     }
 
     private IEnumerator _ChangeHPCoroutine(float HPValueChange, float time)
@@ -102,8 +100,10 @@ public class Health : MonoBehaviour
     public void InfectChance()
     {
         chanceToInfect = Random.Range(0, 150);
-        if (chanceToInfect >= 0 && chanceToInfect <= 50)
+        Debug.Log("The attack dealth damage and you rolled a " + chanceToInfect + " if it was below 20 you are infected.");
+        if (chanceToInfect <= 150)
         {
+            Debug.Log("You were infected.");
             infected = true;
             canInfect = false;
             Debug.Log("You've been infected. You now have 900 seconds before the infection takes you.");
@@ -118,12 +118,11 @@ public class Health : MonoBehaviour
     {
         if (curHealth <= 0)
         {
-            //player throes
+            StartCoroutine("NormalDeath");
         }
         else if (infectionRate >= 100.0f)
         {
-            //player throes
-            //instantiate night terror
+            StartCoroutine("InfectionDeath");
         }
         else
         {
@@ -131,36 +130,33 @@ public class Health : MonoBehaviour
         }
     }
 
+    IEnumerator NormalDeath()
+    {
+        yield return null;
+    }
+
+    IEnumerator InfectionDeath()
+    {
+        yield return null;
+        //instantiate night terror
+    }
+
+    public int InfectionRate()
+    {
+        return infectionRate;
+    }
+
+
     private void Update()
     {
-        //...................................
-        //For Testing to infect press i
-        //...................................
-        if (Input.GetKeyDown(KeyCode.I) && !infected)
-        {
-            infected = true;
-            canInfect = false;
-        }
-        else if (Input.GetKeyDown(KeyCode.I) && infected)
-        {
-            infected = false;
-            canInfect = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            pillsConsumed++;
-        }
-        //Remove above after testing...
-
         //Add infection meter call and connect it to the infection game object 
-        //Add a while loop that while its running at every 9 , 10, 11, or 12 seconds it add 1% to the infection meter
 
         if (infected)
         {
             maxHealth = 75;
             infectRate -= Time.deltaTime;
-            //Debug.Log("You have " + infectRate + " left.");
             infectMore += Time.deltaTime;
+            infectStatus.UpdateInfectionDisplay();
             if (pillsConsumed == 0)
             {
                 if (infectMore >= 9)
@@ -171,9 +167,9 @@ public class Health : MonoBehaviour
             }
             else if (pillsConsumed == 1)
             {
-                if (changeRate1 == false)
+                if (pill1Used == false)
                 {
-                    changeRate1 = true;
+                    pill1Used = true;
                     infectRate += 100;
                 }
                 if (infectMore >= 10)
@@ -184,9 +180,9 @@ public class Health : MonoBehaviour
             }
             else if (pillsConsumed == 2)
             {
-                if (changeRate2 == false)
+                if (pill2Used == false)
                 {
-                    changeRate2 = true;
+                    pill2Used = true;
                     infectRate += 100;
                 }
                 if (infectMore >= 11)
@@ -197,9 +193,9 @@ public class Health : MonoBehaviour
             }
             else if (pillsConsumed == 3)
             {
-                if (changeRate3 == false)
+                if (pill3Used == false)
                 {
-                    changeRate3 = true;
+                    pill3Used = true;
                     infectRate += 100;
                 }
                 if (infectMore >= 12)
