@@ -216,6 +216,7 @@ public class GunController : MonoBehaviour
 
 
 
+        bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 		if (inputEnabled)
 		{
 			if (shootTimer <= 0f && trigger && clip > 0)
@@ -253,7 +254,6 @@ public class GunController : MonoBehaviour
         playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
 
         recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
-        bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 		
 		//void wait4ReloadAsync()
 		//{

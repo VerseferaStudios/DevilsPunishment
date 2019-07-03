@@ -9,7 +9,7 @@ public class GunItem : Item
 
     public int clipSize;
 
-    [Range(1f, 20f)]
+    [Range(1f, 100f)]
     public float fireRate = 10f;
 
 	[Range(25, 45)]
