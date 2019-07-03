@@ -194,7 +194,10 @@ public class GunController : MonoBehaviour
 				triggerReload = false;
 			} else
 			{
-				triggerReload = Input.GetButtonDown("Reload") && clip < clipSize && clipStock > 0;
+				triggerReload = 
+					clip < clipSize && clipStock > 0
+					&& !reloading && !gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload")
+					&& (Input.GetButtonDown("Reload") || clip<=0);
 			}
             if(running || gunAnimator == null) {aiming = 0f; } else {
 				if (triggerReload)
@@ -209,12 +212,8 @@ public class GunController : MonoBehaviour
     }
 
     void EvaluateInput() {
-
-
 		//Debug.Log(clip + "/" + clipStock + "===" + clipSize);
 		//Debug.Log(reloading);
-
-
 
         bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 		if (inputEnabled)
@@ -223,7 +222,7 @@ public class GunController : MonoBehaviour
 			{
 				Fire();
 			}
-			else if (((triggerReload ||clip<=0) && !reloading && !gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload")))
+			else if (triggerReload )
 			{
 				StartCoroutine(Reload());
 			}
