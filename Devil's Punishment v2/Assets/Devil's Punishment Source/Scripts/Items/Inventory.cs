@@ -1,5 +1,5 @@
 using System;
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,7 +61,6 @@ public class Inventory : MonoBehaviour
         instance = this;
 		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
 		Debug.Assert(gunController != null, "gunController shouldn't be null!");
-        CompoundInventory();
 		Sort();
 	}
 
@@ -117,9 +116,13 @@ public class Inventory : MonoBehaviour
                 }
 
             }
-
             CompoundInventory();
         }
+        // AddItem gets called like a billion times recursively, otherwise this would be a pretty good spot for this...
+        // Something to do with how it "drags overflow to new spots by calling AddItem again"...
+        // Also sorts the whole inventory...
+        // Confirmed: This will break the algorithm that the inventory uses...For whatever reason, this messes stuff up...
+        // gunController.UpdateClipStock();
 
     }
 
@@ -155,8 +158,10 @@ public class Inventory : MonoBehaviour
 			{
 				ResourceID = resource;
 				//Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
-				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null)
+				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null){
+                    // Keep unused ammo...
 					AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
+                }
 				equippedGun = null;
 				gunController.InitGun();
 				DropGameObject(resource);

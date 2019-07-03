@@ -168,9 +168,19 @@ public class GunController : MonoBehaviour
 					break;
 				}
 			}
-            
-			
-        }
+        } else {
+			// Reset some empty values (might not all be necessary)
+			equippedGun = null;
+			raised = false;
+			recoilAmount = 4.0f;
+			SetFireRate(10.0f);
+			ammoName = null;
+			//gunAnimator = null;
+			clip = 0;
+			clipSize = 0;
+			clipStock = 0;
+
+		}
 
     }
 
@@ -197,7 +207,7 @@ public class GunController : MonoBehaviour
 				triggerReload = 
 					clip < clipSize && clipStock > 0
 					&& !reloading && !gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload")
-					&& (Input.GetButtonDown("Reload") || clip<=0);
+					&& (Input.GetButtonDown("Reload") /*|| clip<=0*/);
 			}
             if(running || gunAnimator == null) {aiming = 0f; } else {
 				if (triggerReload)
@@ -447,6 +457,11 @@ public class GunController : MonoBehaviour
 	private bool weaponIsShotgun()
 	{
 		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
+	}
+
+	public void UpdateClipStock(){
+		Debug.Log("Updating Clipstock...");
+        clipStock = inventory.GetEquippedGunAmmo();
 	}
 
 	//This is just for testing a thing for the elimination system, this can be removed later /SkitzFist
