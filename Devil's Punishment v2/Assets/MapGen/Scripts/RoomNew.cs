@@ -64,6 +64,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         // ------------------- Convert array of doors / spawnPoints into list -------------------
         spawnPoints.AddRange(tempSpawnPoints);
         Debug.Log("SpawnPoint.Count = " + spawnPoints.Count);
+        if(spawnPoints.Count == 0)
+        {
+            return;
+        }
         spawnPoint = spawnPoints[0];
         //Debug.Log("spawnPoints.Count = " + spawnPoints.Count);
 
