@@ -185,7 +185,7 @@ public class GunController : MonoBehaviour
             running = playerController.IsSprinting();
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
-            trigger = Input.GetButton("Fire1");
+            trigger = shootTimer <= 0f && Input.GetButton("Fire1") && clip > 0;
 
 			if (trigger)
 			{
@@ -218,11 +218,11 @@ public class GunController : MonoBehaviour
         bulletSpreadCoefficient = Mathf.Lerp(bulletSpreadCoefficient, 2.0f * (moving? 2.0f : 1.0f) * (1.0f - aiming), Time.deltaTime * 3.0f);
 		if (inputEnabled)
 		{
-			if (shootTimer <= 0f && trigger && clip > 0)
+			if (trigger)
 			{
 				Fire();
 			}
-			else if (triggerReload )
+			else if (triggerReload)
 			{
 				StartCoroutine(Reload());
 			}
