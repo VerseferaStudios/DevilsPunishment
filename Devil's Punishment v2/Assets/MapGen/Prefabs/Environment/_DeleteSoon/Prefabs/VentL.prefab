@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 65764901554619107}
   m_Layer: 0
   m_Name: VentL
-  m_TagString: Untagged
+  m_TagString: Vent Spawn Points
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,6 +70,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 65764901554619107}
     m_Modifications:
+    - target: {fileID: 4056963172898893465, guid: d1263a277c442d240a2bf63d70b34b2a,
+        type: 3}
+      propertyPath: m_Name
+      value: CollisionDetector
+      objectReference: {fileID: 0}
     - target: {fileID: 4056963172898893466, guid: d1263a277c442d240a2bf63d70b34b2a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -124,11 +129,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4056963172898893465, guid: d1263a277c442d240a2bf63d70b34b2a,
-        type: 3}
-      propertyPath: m_Name
-      value: CollisionDetector
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1263a277c442d240a2bf63d70b34b2a, type: 3}
