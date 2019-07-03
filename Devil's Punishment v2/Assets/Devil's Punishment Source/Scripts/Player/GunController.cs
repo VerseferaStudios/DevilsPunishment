@@ -222,7 +222,7 @@ public class GunController : MonoBehaviour
 			{
 				Fire();
 			}
-			else if (!reloading && triggerReload/*||clip<=0*/)
+			else if (((triggerReload ||clip<=0) && !reloading && !gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload")))
 			{
 				StartCoroutine(Reload());
 			}
@@ -335,9 +335,9 @@ public class GunController : MonoBehaviour
 		{
 			if (!trigger && clipStock > 0 && clip < clipSize)
 			{
-				inventory.DropItem(ammoName,/*ammount*/1,/*consume*/true);
 				clip++;
-				clipStock--;
+				inventory.DropItem(ammoName,/*ammount*/ 1,/*consume*/true);
+				clipStock = inventory.GetEquippedGunAmmo();
 
 			}
 			if (!trigger && clipStock > 0 && clip < clipSize && aiming <= 0)
@@ -369,7 +369,7 @@ public class GunController : MonoBehaviour
 		else
 		{
 			//Debug.Log("almost empty!");
-			clip +=clipStock;
+			clip += clipStock;
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);

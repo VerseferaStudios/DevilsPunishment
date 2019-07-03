@@ -224,7 +224,6 @@ public class Inventory : MonoBehaviour
             if (inventory[index].item != null && inventory[index].stack >= 1){
                 int thisAmt = Math.Min(amount-dropped,inventory[index].stack);
                 dropped+= thisAmt;
-                Debug.Log("dropped: "+dropped);
                 DropItem(index, thisAmt, consume);
                 Sort();
                 CullNulls();
