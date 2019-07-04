@@ -11,7 +11,7 @@ public class TeleportToMapGen : MonoBehaviour
         {
             Debug.Log("teleporting...");
             Vector3 playerPos = other.transform.position;
-            other.transform.position = new Vector3(playerPos.x - 220, playerPos.y, playerPos.z);
+            other.transform.position = new Vector3(playerPos.x - 220, playerPos.y + 3, playerPos.z - 2);
             other.transform.eulerAngles = new Vector3(0, 180, 0);
         }
     }
