@@ -9,11 +9,14 @@ public class GunItem : Item
 
     public int clipSize;
 
-    [Range(1f, 20f)]
+    [Range(1f, 100f)]
     public float fireRate = 10f;
 
-    [Range(25, 45)]
-    public float recoilAmount = 32f;
+	[Range(25, 45)]
+	public float recoilAmount = 32f;
+
+	[Range(0, 100)]
+	public int damage = 100;
 
 
 }

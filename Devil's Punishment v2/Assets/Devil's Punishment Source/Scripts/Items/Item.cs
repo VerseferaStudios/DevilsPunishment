@@ -11,7 +11,7 @@ public class Item : ScriptableObject, IComparable<Item>
     public enum ItemClassification {
         NONE,
         BULLET,
-        KEY
+        KEY,
     }
 
     //Does this item get consumed when used? true - yes false - no

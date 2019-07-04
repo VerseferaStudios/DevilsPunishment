@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 1736052710343697787}
   - component: {fileID: 428398656920789162}
   - component: {fileID: 865095213743628278}
+  - component: {fileID: 7859725933097996619}
   m_Layer: 9
   m_Name: Pickup_Handgun
   m_TagString: Untagged
@@ -102,14 +103,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5447192453428761013}
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
-  m_LocalPosition: {x: -8.972, y: 0, z: 0.308}
-  m_LocalScale: {x: 1, y: 0.99999976, z: 0.99999976}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1736052708356605798}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &428398656920789162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,3 +139,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.29, y: 0.2, z: 0.15}
   m_Center: {x: 0, y: 0.0068262806, z: 0.07924547}
+--- !u!54 &7859725933097996619
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447192453428761013}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

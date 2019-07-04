@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -17,16 +18,21 @@ public class MapGen3 : MonoBehaviour
     private float xSize = 48f, zSize = 48f;
 
     public GameObject[] corridors;
+    public GameObject[] vents;
 
     //For Vents
     [Header("Vents")]
-    public float ventCoverProbabilty = 0.050f;
+    public float ventCoverProbabilty;
     public GameObject ventCover;
 
+    public ItemGen itemGen;
+    private List<Vector3> itemPositions;
 
     private void Start()
     {
-        rooms();
+        Debug.Log("HI");
+        ventCoverProbabilty = 24f / n;
+        Rooms();
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
@@ -34,7 +40,7 @@ public class MapGen3 : MonoBehaviour
         Data.instance.zSize = zSize;
     }
 
-    public void rooms()
+    public void Rooms()
     {
         
         //Make this while and next loop into one? will Collisions be a prob?
@@ -59,8 +65,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 9) + 28;
+            arr[0] = 48 * Random.Range(0, 6) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 6) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -117,9 +123,17 @@ public class MapGen3 : MonoBehaviour
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 3) * 90;
-            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
+            Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]);
+            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0));
 
-            if(Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+
+            //List to check item overlap
+
+
+            itemGen.SpawnItems(new Vector3(roomPos.x - 10, 0, roomPos.z - 10), new Vector3(roomPos.x + 10, 0, roomPos.z + 10), 4);
+
+
+            if (Random.Range(0.0f, 1.0f) <= ventCoverProbabilty)
             {
                 Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0));
             }
@@ -156,6 +170,9 @@ public class MapGen3 : MonoBehaviour
             {
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
+                roomNewScript.vents = vents;
+                roomNewScript.ventCover = ventCover;
+                roomNewScript.ventCoverProbabilty = ventCoverProbabilty / n / 3;
                 Data.instance.roomNewScript = roomNewScript;
             }
 

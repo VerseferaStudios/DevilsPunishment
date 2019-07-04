@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using Steamworks;
-using UnityEngine.SceneManagement;
+
 
 public class SteamWorksNetworkManager : MonoBehaviour
 {
@@ -20,8 +20,6 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     private GameObject ServerInformationObject;
 
-    protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
-    private Callback<P2PSessionRequest_t> Callback_SessionRequest;
 
     // Current game server version
     const string DEVILS_PUNISHMENT_SERVER_VERSION = "1.0.0.0";
@@ -47,16 +45,11 @@ public class SteamWorksNetworkManager : MonoBehaviour
 
     void Start()
     {
+		/*
         ServerInformationObject = GameObject.Find("SteamServerInformation");
-        ServerInformationObject.GetComponent<ServerInformation>().playersPos = new Vector3[7];
-        ServerInformationObject.GetComponent<ServerInformation>().playersRot = new Quaternion[7];
-        if(ServerInformationObject == null)
-        {
-            SceneManager.LoadScene(2);
-            //SceneManager.LoadScene(0);
-        }
-        Callback_SessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
-        OtherPlayers = new GameObject[7];
+		Debug.Assert(ServerInformationObject != null, "ServerInformationObject in SteamNetworkManager.Start() shouldn't be null.");
+
+
         int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
         for (int i = 0; i < playersAmount; i++) {
             if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
@@ -64,7 +57,7 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != (CSteamID)0)
                 {
                     OtherPlayers[i] = Instantiate(OtherPlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                    OtherPlayers[i].GetComponent<PlayerInformation>().setSteamid(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
+                    OtherPlayers[i].GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
                     ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = OtherPlayers[i].transform.position;
                     ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = OtherPlayers[i].transform.rotation;
                 }
@@ -72,12 +65,15 @@ public class SteamWorksNetworkManager : MonoBehaviour
             else
             {
                 Player = Instantiate(PlayerPrefab, gameObject.transform.GetChild(i).localPosition, Quaternion.identity);
-                Player.GetComponent<PlayerInformation>().setSteamid(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
+                Player.GetComponent<PlayerInformation>().steamid = ServerInformationObject.GetComponent<ServerInformation>().players[i];
                 BroadcastSteamMessage("POS_" + Player.transform.position.ToString());
                 BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
             }
         }
+		*/
     }
+    // Tells us when we have successfully connected to Steam
+    protected Callback<SteamServersConnected_t> m_CallbackSteamServersConnected;
 
 #if DISABLED
 
@@ -193,19 +189,6 @@ public class SteamWorksNetworkManager : MonoBehaviour
         Debug.Log("Shutdown.");
     }
 
-
-    //P2P communication//////
-    void OnP2PSessionRequest(P2PSessionRequest_t request)
-    {
-        CSteamID clientID = request.m_steamIDRemote;
-        int i = 0;
-        while (i < ServerInformationObject.GetComponent<ServerInformation>().players.Length)
-        {
-            SteamNetworking.AcceptP2PSessionWithUser(ServerInformationObject.GetComponent<ServerInformation>().players[i]);
-            i++;
-        }
-    }
-
     private void Update()
     {
         if (!m_bInitialized)
@@ -236,10 +219,8 @@ public class SteamWorksNetworkManager : MonoBehaviour
                 HandleMessage(message, remoteid);
             }
         }
-    }
-
-    private void FixedUpdate(){
         SendPOSAndROT();
+        ReceivePOSAndROT();
     }
 
     void SendPOSAndROT()
@@ -248,14 +229,13 @@ public class SteamWorksNetworkManager : MonoBehaviour
         BroadcastSteamMessage("ROT_" + Player.transform.rotation.ToString());
     }
 
-    void ReceivePOSAndROT(CSteamID remote , Vector3 position, Quaternion rotation)
+    void ReceivePOSAndROT()
     {
 
     }
 
     void BroadcastSteamMessage(string message)
     {
-        Debug.Log("Broadcasting Message : " + message);
         for (int i = 0; i < ServerInformationObject.GetComponent<ServerInformation>().players.Length; i++)
         {
             if (ServerInformationObject.GetComponent<ServerInformation>().players[i] != SteamUser.GetSteamID())
@@ -278,13 +258,11 @@ public class SteamWorksNetworkManager : MonoBehaviour
             string sposition = m.Substring(5, m.Length - 5);
             Debug.Log(sposition);
             Vector3 position = new Vector3(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]));
-            
-            int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
-            for (int i = 0; i < playersAmount; i++) {
-                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] == remote)
+            foreach (GameObject GO in OtherPlayers)
+            {
+                if (GO.GetComponent<PlayerInformation>().steamid == remote)
                 {
-                        ServerInformationObject.GetComponent<ServerInformation>().playersPos[i] = position;
-                        OtherPlayers[i].transform.position = ServerInformationObject.GetComponent<ServerInformation>().playersPos[i];
+                    GO.transform.position = position;
                 }
             }
         }
@@ -295,17 +273,14 @@ public class SteamWorksNetworkManager : MonoBehaviour
             string sposition = m.Substring(5, m.Length - 5);
             Debug.Log(sposition);
             Quaternion rotation = new Quaternion(float.Parse(sposition.Split(","[0])[0]), float.Parse(sposition.Split(","[0])[1]), float.Parse(sposition.Split(","[0])[2]), float.Parse(sposition.Split(","[0])[3]));
-            
-            int playersAmount = ServerInformationObject.GetComponent<ServerInformation>().players.Length;
-            for (int i = 0; i < playersAmount; i++) {
-                if (ServerInformationObject.GetComponent<ServerInformation>().players[i] == remote)
+            foreach (GameObject GO in OtherPlayers)
+            {
+                if (GO.GetComponent<PlayerInformation>().steamid == remote)
                 {
-                        ServerInformationObject.GetComponent<ServerInformation>().playersRot[i] = rotation;
-                        OtherPlayers[i].transform.rotation = ServerInformationObject.GetComponent<ServerInformation>().playersRot[i];
+                    GO.transform.rotation = rotation;
                 }
             }
         }
-        
     }
 
         //-----------------------------------------------------------------------------

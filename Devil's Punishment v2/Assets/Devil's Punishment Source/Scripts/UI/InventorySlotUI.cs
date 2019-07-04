@@ -29,6 +29,7 @@ public class InventorySlotUI : MonoBehaviour
     }
 
     public void SetSelected() {
+        Debug.Log("Selecting " + gameObject.name);
         dropdown.Select();
         InventoryUI.instance.SetSelectedItemIndex(index);
     }

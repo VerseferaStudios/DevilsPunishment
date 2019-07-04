@@ -12,7 +12,6 @@
 #if !DISABLESTEAMWORKS
 
 using System.Runtime.InteropServices;
-using UnityEngine;
 using IntPtr = System.IntPtr;
 
 namespace Steamworks {
@@ -289,37 +288,25 @@ namespace Steamworks {
 		internal static bool Init() {
 			HSteamUser hSteamUser = SteamAPI.GetHSteamUser();
 			HSteamPipe hSteamPipe = SteamAPI.GetHSteamPipe();
-			if (hSteamPipe == (HSteamPipe)0) {
-                Debug.Log("hSteamPipe");
-                return false; }
+			if (hSteamPipe == (HSteamPipe)0) { return false; }
 
 			using (var pchVersionString = new InteropHelp.UTF8StringHandle(Constants.STEAMCLIENT_INTERFACE_VERSION)) {
 				m_pSteamClient = NativeMethods.SteamInternal_CreateInterface(pchVersionString);
 			}
 
-			if (m_pSteamClient == IntPtr.Zero) {
-                Debug.Log("m_pSteamClient");
-                return false; }
+			if (m_pSteamClient == IntPtr.Zero) { return false; }
 
 			m_pSteamUser = SteamClient.GetISteamUser(hSteamUser, hSteamPipe, Constants.STEAMUSER_INTERFACE_VERSION);
-			if (m_pSteamUser == IntPtr.Zero) {
-                Debug.Log("m_pSteamUser");
-                return false; }
+			if (m_pSteamUser == IntPtr.Zero) { return false; }
 
 			m_pSteamFriends = SteamClient.GetISteamFriends(hSteamUser, hSteamPipe, Constants.STEAMFRIENDS_INTERFACE_VERSION);
-			if (m_pSteamFriends == IntPtr.Zero) {
-                Debug.Log("m_pSteamFriends");
-                return false; }
+			if (m_pSteamFriends == IntPtr.Zero) { return false; }
 
 			m_pSteamUtils = SteamClient.GetISteamUtils(hSteamPipe, Constants.STEAMUTILS_INTERFACE_VERSION);
-			if (m_pSteamUtils == IntPtr.Zero) {
-                Debug.Log("m_pSteamUtils");
-                return false; }
+			if (m_pSteamUtils == IntPtr.Zero) { return false; }
 
 			m_pSteamMatchmaking = SteamClient.GetISteamMatchmaking(hSteamUser, hSteamPipe, Constants.STEAMMATCHMAKING_INTERFACE_VERSION);
-			if (m_pSteamMatchmaking == IntPtr.Zero) {
-                Debug.Log("m_pSteamMatchmaking");
-                return false; }
+			if (m_pSteamMatchmaking == IntPtr.Zero) { return false; }
 
 			m_pSteamMatchmakingServers = SteamClient.GetISteamMatchmakingServers(hSteamUser, hSteamPipe, Constants.STEAMMATCHMAKINGSERVERS_INTERFACE_VERSION);
 			if (m_pSteamMatchmakingServers == IntPtr.Zero) { return false; }

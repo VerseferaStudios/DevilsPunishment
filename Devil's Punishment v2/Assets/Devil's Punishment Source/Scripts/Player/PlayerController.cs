@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void VerticalLocomotion() {
+    public void VerticalLocomotion() {
         if(!isClimbing) {
             controller.Move(Vector3.down * Time.deltaTime * 9.81f);            
         } else {

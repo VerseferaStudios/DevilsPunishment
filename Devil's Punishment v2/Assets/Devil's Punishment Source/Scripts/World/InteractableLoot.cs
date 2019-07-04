@@ -24,6 +24,14 @@ public class InteractableLoot : MonoBehaviour, IInteractable
         Debug.Log("Picked up " + item.name + " x" + stock + ".");
 		gameObject.SetActive(false);
 		Inventory.instance.AddItem(item, stock);
+		if (gameObject.name.Contains("(Clone)"))
+		{
+			Destroy(gameObject);
+		}
+        if (item is AmmoItem){
+            GunController gc = Inventory.instance.gameObject.transform.parent.GetComponentInChildren<GunController>();
+            gc.UpdateClipStock();
+        }
 	}
 
 

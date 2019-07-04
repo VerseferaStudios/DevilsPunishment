@@ -21,9 +21,9 @@ public class CorridorNew : MonoBehaviour
 
     public List<Vector3> rooms = new List<Vector3>();
 
-    public string KOrL;
+    //public string KOrL;
 
-    public List<Vector3> theEqualOnes = new List<Vector3>();
+    //public List<Vector3> theEqualOnes = new List<Vector3>();
 
     //public GameObject collisionDetector;
 
@@ -51,6 +51,10 @@ public class CorridorNew : MonoBehaviour
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject
             ////Debug.Log("!");
+        }
+        else if (otherTag.Equals("VentI") || otherTag.Equals("VentL") || otherTag.Equals("VentT") || otherTag.Equals("VentX"))
+        {
+            Data.instance.collidedVents.Add(gameObject);
         }
     }
 
