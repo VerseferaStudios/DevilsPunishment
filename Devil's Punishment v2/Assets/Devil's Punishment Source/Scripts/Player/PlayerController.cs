@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
 
-    [Range(0f, 3f)]
+    [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
 
@@ -208,4 +209,10 @@ public class PlayerController : MonoBehaviour
             controller.height = 1.75f;
         }
     }
+
+    public void ChangePlayerSpeed(Slider slider)
+    {
+        movementSpeed = slider.value * 25;
+    }
+
 }
