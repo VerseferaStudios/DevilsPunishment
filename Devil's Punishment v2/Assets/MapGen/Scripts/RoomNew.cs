@@ -250,8 +250,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
-                StartCoroutine(Data.instance.DoVents());
-                StartCoroutine(Data.instance.DoCheckVentsPerSecond());
+                //StartCoroutine(Data.instance.DoVents());
+                //StartCoroutine(Data.instance.DoCheckVentsPerSecond());
                 Debug.Log("No. of vent covers = " + GameObject.FindGameObjectsWithTag("Vent Cover").Length);
             }
 

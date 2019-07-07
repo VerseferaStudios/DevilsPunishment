@@ -242,7 +242,7 @@ public class Data : MonoBehaviour
         //for putting corridors so that connected components does correctly
         for (int i = 0; i < 3; i++)
         {
-            CheckForCollision(collidedCorridors);
+            CheckForCollision(false); // collidedCorridors);
             yield return new WaitUntil(() => isFinishedCheckCorridorCollisions = true);
             isFinishedCheckCorridorCollisions = false;
         }
@@ -273,8 +273,8 @@ public class Data : MonoBehaviour
                 }
                 else
                 {
-                //    Debug.Log("innnnnnnnnnnnnn");
-                    CheckForCollision(collidedCorridors);
+                    //    Debug.Log("innnnnnnnnnnnnn");
+                    CheckForCollision(false); // collidedCorridors);
                     count++;
                     yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
                     isFinishedCheckVentCollisions = false;
@@ -292,7 +292,7 @@ public class Data : MonoBehaviour
         //for putting corridors so that connected components does correctly
         for (int i = 0; i < 3; i++)
         {
-            CheckForCollision(collidedVents);
+            CheckForCollision(true); // collidedVents);
             yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
             isFinishedCheckCorridorCollisions = false;
         }
@@ -323,7 +323,7 @@ public class Data : MonoBehaviour
                 else
                 {*/
                 //    Debug.Log("innnnnnnnnnnnnn");
-                CheckForCollision(collidedVents);
+                CheckForCollision(true); // collidedVents);
                 countVents++;
                 yield return new WaitUntil(() => isFinishedCheckVentCollisions = true);
                 isFinishedCheckVentCollisions = false;
@@ -629,16 +629,26 @@ public class Data : MonoBehaviour
 
     }
 
-    private void CheckForCollision(List<GameObject> collidedCorridorsOrVents)
+    private void CheckForCollision(bool isVents)
     {
+        List<GameObject> collidedCorridorsOrVents;
+        if (isVents)
+        {
+            collidedCorridorsOrVents = new List<GameObject>(collidedCorridors);
+        }
+        else
+        {
+            collidedCorridorsOrVents = new List<GameObject>(collidedVents);
+        }
         //Debug.Log("Count Olaf =" + collidedCorridors.Count);
 
+        /*
         bool isVents = true;
         if (collidedCorridorsOrVents.Count != 0 && collidedCorridorsOrVents[0].name.StartsWith("Corridor"))
         {
             isVents = false;
         }
-
+        */
         Debug.Log("Count Olaf =" + collidedCorridorsOrVents.Count);
 
         //FindDuplicates(); //use this to group corridors at the same place use ConvertToOpenings and Linq.Distinct and do the necessary
