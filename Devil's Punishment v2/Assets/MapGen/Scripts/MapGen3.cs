@@ -97,23 +97,14 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            switch (Random.Range(0, 2))
+            switch (Random.Range(0, 3))
             {
                 case 0 :
                     roomToSpawn = startRoom;
                     break;
                 case 1:
                     roomToSpawn = endRoom;
-                    break;/*
-                case 2:
-                    roomToSpawn = roomL;
                     break;
-                case 3:
-                    roomToSpawn = roomT;
-                    break;
-                case 4:
-                    roomToSpawn = room4;
-                    break;*/
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 3) * 90;
