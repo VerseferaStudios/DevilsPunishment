@@ -184,12 +184,13 @@ public class PlayerController : MonoBehaviour
     }
 
     void Animation() {
-
+        /*
         characterAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
         characterAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
+    */
     }
 
     void CameraUpdate() {

@@ -632,7 +632,7 @@ public class Data : MonoBehaviour
     private void CheckForCollision(bool isVents)
     {
         List<GameObject> collidedCorridorsOrVents;
-        if (isVents)
+        if (!isVents)
         {
             collidedCorridorsOrVents = new List<GameObject>(collidedCorridors);
         }
@@ -650,11 +650,12 @@ public class Data : MonoBehaviour
         }
         */
         Debug.Log("Count Olaf =" + collidedCorridorsOrVents.Count);
+        Debug.Log("Count Olaf 2 =" + collidedCorridors.Count);
 
         //FindDuplicates(); //use this to group corridors at the same place use ConvertToOpenings and Linq.Distinct and do the necessary
 
 
-        
+
         //Debug.Log("----------------------wargarsg----------------------");
         for (int i = 0; i < collidedCorridorsOrVents.Count; i++)
         {

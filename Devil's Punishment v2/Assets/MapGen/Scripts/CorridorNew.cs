@@ -37,6 +37,7 @@ public class CorridorNew : MonoBehaviour
         string otherTag = other.transform.parent.tag;
         if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
         {
+            Debug.Log("HII");
             Data.instance.isCollided = true;
             Data.instance.collisionCount++;
             

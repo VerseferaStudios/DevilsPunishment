@@ -30,7 +30,7 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("HI");
+        //Debug.Log("HI");
         ventCoverProbabilty = 24f / n;
         Rooms();
         Data.instance.corridorT1 = corridors[3];
