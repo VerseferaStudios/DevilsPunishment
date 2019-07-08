@@ -195,7 +195,7 @@ public class GunController : MonoBehaviour
             running = playerController.IsSprinting();
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
-            trigger = shootTimer <= 0f && Input.GetButton("Fire1") && clip > 0;
+            trigger = !running && shootTimer <= 0f && Input.GetButton("Fire1") && clip > 0;
 
 			if (trigger)
 			{
@@ -238,10 +238,11 @@ public class GunController : MonoBehaviour
 			}
 		}
 
-        shootTimer -= Time.deltaTime;
-
-        muzzleFlashLight.intensity = 2f*Mathf.Clamp01(shootTimer * fireRate);
-
+		// Update muzzle flash light intensity every frame, and in this order:
+		{
+        	muzzleFlashLight.intensity = 2f*Mathf.Clamp01(shootTimer * fireRate);
+        	shootTimer -= Time.deltaTime;
+		}
     }
 
 	//Don't allow multiple activations of the fire method just because you're waiting for an animation to finish...
