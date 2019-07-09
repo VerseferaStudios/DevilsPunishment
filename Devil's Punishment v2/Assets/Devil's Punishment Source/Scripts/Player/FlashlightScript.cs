@@ -1,8 +1,8 @@
 ﻿//Author: Dave Bird
 //Date: Sunday, June 23, 2019
-    //Last Edited: Sunday, June 23, 2019
+    //Last Edited: Tuesday, July 9, 2019
         //By: Dave Bird
-            //Purpose: Write the script
+            //Purpose: Include ability to turn the glowstick on and off even without the lsdupgrade
 //Written For: Devil's Punishment v2
 //Purpose: This script details all things that has to do with the limitations of the cuffed mechanic.
 //Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
@@ -57,7 +57,22 @@ public class FlashlightScript : MonoBehaviour
         //    Debug.Log("You have set the upgrade to being true temporarily.");
         //}
         //////////////////////////////////////////////////////////////////////////
-        
+        if (Input.GetKeyDown(KeyCode.G) && isUpgraded == false && count == 0)
+        {
+            glow.enabled = false;
+            dark = true;
+            count++;
+            Debug.Log("You have covered the glowstick.");
+        }
+        else if (Input.GetKeyDown(KeyCode.G) && !isUpgraded && dark && count == 1)
+        {
+            glow.enabled = true;
+            dark = false;
+            count--;
+            Debug.Log("You have uncovered the glowstick.");
+        }
+
+
         //Glow stick to flashlight
         if (isUpgraded == true && Input.GetKeyDown(KeyCode.G) && count == 0)
         {
@@ -96,7 +111,6 @@ public class FlashlightScript : MonoBehaviour
             Debug.Log("Count is reset to 0.");
             dark = false;
         }
-
         ////Making it so that the player can move the light.
         //if (Input.GetAxis("Mouse ScrollWheel") && isUpgraded)
         //{
