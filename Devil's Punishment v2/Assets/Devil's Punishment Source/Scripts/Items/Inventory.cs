@@ -246,7 +246,11 @@ public class Inventory : MonoBehaviour
 		{
 			if (inventory[index].item != null && inventory[index].stack > 1 && amount <= inventory[index].stack)
 			{
+                bool isAmmo = inventory[index].item is AmmoItem;
 				inventory[index].stack -= amount;
+                if (isAmmo){
+                    transform.parent.GetComponentInChildren<GunController>().UpdateClipStock();
+                }
 				if (!consume)
 				{
 					DropGameObject(inventory[index].item, amount);

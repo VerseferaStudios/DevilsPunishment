@@ -104,6 +104,7 @@ public class GunController : MonoBehaviour
 
     void Update()
 	{
+		UpdateClipStock();
 		GatherInput();
         if(!busyFiringAlready && equippedGun != null)
 		{

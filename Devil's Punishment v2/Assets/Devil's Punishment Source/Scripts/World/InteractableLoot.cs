@@ -28,10 +28,6 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 		{
 			Destroy(gameObject);
 		}
-        if (item is AmmoItem){
-            GunController gc = Inventory.instance.gameObject.transform.parent.GetComponentInChildren<GunController>();
-            gc.UpdateClipStock();
-        }
 	}
 
 
