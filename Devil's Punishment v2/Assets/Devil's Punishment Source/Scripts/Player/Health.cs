@@ -1,8 +1,8 @@
 ﻿//Author: Dave Bird
 //Date: Sunday, June 23, 2019
-    //Last Edited: Monday, July 1, 2019
+    //Last Edited: Monday, July 7, 2019
         //By: Dave Bird
-            //Purpose: Write the script
+            //Purpose: Finish health will be back to work on death sequences
 //Written For: Devil's Punishment v2
 //Purpose: This script details all things that has to do with the health and infection rate.
 //Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
@@ -100,8 +100,8 @@ public class Health : MonoBehaviour
     public void InfectChance()
     {
         chanceToInfect = Random.Range(0, 150);
-        Debug.Log("The attack dealth damage and you rolled a " + chanceToInfect + " if it was below 20 you are infected.");
-        if (chanceToInfect <= 150)
+        Debug.Log("The attack dealth damage and you rolled a " + chanceToInfect + " if it was below 15 you are infected.");
+        if (chanceToInfect <= 10)
         {
             Debug.Log("You were infected.");
             infected = true;
@@ -149,7 +149,12 @@ public class Health : MonoBehaviour
 
     private void Update()
     {
-        //Add infection meter call and connect it to the infection game object 
+        if (curHealth <= 0)//Add infection meter call and connect it to the infection game object
+        {
+            curHealth = 0;
+            StartCoroutine("NormalDeath");
+        }
+
 
         if (infected)
         {
