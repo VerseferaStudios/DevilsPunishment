@@ -244,7 +244,7 @@ public class Inventory : MonoBehaviour
 		}
 		else if (index > -1)
 		{
-			if (inventory[index].item != null && inventory[index].stack >= 1 && amount <= inventory[index].stack)
+			if (inventory[index].item != null && inventory[index].stack > 1 && amount <= inventory[index].stack)
 			{
 				inventory[index].stack -= amount;
 				if (!consume)
