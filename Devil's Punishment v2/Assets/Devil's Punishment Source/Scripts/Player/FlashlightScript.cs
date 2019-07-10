@@ -18,9 +18,7 @@ public class FlashlightScript : MonoBehaviour
     public GameObject pickUp;
     public Light glow;
     public Light beam;
-    public bool dark;
     public bool isUpgraded;
-    public int count;
     public int countno;
 
     [Header("Player controlling LSD angle")]
@@ -35,8 +33,6 @@ public class FlashlightScript : MonoBehaviour
         flashLight.SetActive(false);
         beam.enabled = false;
         isUpgraded = false;
-        dark = false;
-        count = 0;
     }
 
     public void ToggleUpgraded()
@@ -66,17 +62,6 @@ public class FlashlightScript : MonoBehaviour
     //Swtich levels of light - DONE
     void Update()
     {
-        ////Switching the different levels of light.
-
-        ///////////////////////////////////////////////////////////////////////////
-        ////FOR TESTING ONLY REMOVE AFTER TESTING
-        //if (isUpgraded == false && Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    Upgraded();
-        //    Debug.Log("You have set the upgrade to being true temporarily.");
-        //}
-        //////////////////////////////////////////////////////////////////////////
-        
         if (Input.GetKeyDown(KeyCode.G))
         {
             if (isUpgraded)
@@ -89,86 +74,54 @@ public class FlashlightScript : MonoBehaviour
                 if (countno == 0)
                 {
                     glow.enabled = false;
-                    dark = true;
                     countno++;
                     Debug.Log("You have covered the glowstick.");
                 }
                 else if (countno == 1)
                 {
                     glow.enabled = true;
-                    dark = false;
                     countno--;
                     Debug.Log("You have uncovered the glowstick.");
                 }
             }
         }
 
+    //    //Making it so that the player can move the light.
+    //    // if the wheel scrolled up light rotates up max 10 degrees (+); if wheel scrolled down light rotates down max 10 degrees (-).
+    //    if (Input.mouseScrollDelta)
+    //    {
+    //        //moving in positive, (scroll away from you) rotation goes up
+    //        return;
+    //    }
+    //    else if (Input.mouseScrollDelta)
+    //    {
+    //        //moving in negative, (scroll towards you) rotation goes down
+    //        return;
+    //    }
 
+    //    //Toggling the other function.
+    //    //Scroll Up widens the beam of light on flashlight. Scroll Down narrows the beam of light (Max of 50% either direction.
+    //    if (Input.GetKeyDown(KeyCode.Q))
+    //    {
+    //        if (Input.mouseScrollDelta)
+    //        {
+    //            //widen beam (+) (spotlight angle wider) (up to 63)
+    //            return;
+    //        }
+    //        else if (Input.mouseScrollDelta)
+    //        {
+    //            //narrow beam (-) (spotlight angle narrow) (down to 21)
+    //            return;
+    //        }
+    //    }
 
-
-
-
-
-
-
-        //if (Input.GetKeyDown(KeyCode.G) && isUpgraded == false && count == 0)
-        //{
-        //    glow.enabled = false;
-        //    dark = true;
-        //    count++;
-        //    Debug.Log("You have covered the glowstick.");
-        //}
-        //else if (Input.GetKeyDown(KeyCode.G) && !isUpgraded && dark && count == 1)
-        //{
-        //    glow.enabled = true;
-        //    dark = false;
-        //    count--;
-        //    Debug.Log("You have uncovered the glowstick.");
-        //}
-
-
-        ////Glow stick to flashlight
-        //if (isUpgraded == true && Input.GetKeyDown(KeyCode.G) && count == 0)
-        //{
-        //    glow.enabled = false;
-        //    beam.enabled = true;
-        //    Debug.Log("You have covered your glowstick and turned on your flashlight.");
-        //    count++;
-        //    Debug.Log("Count now set to 1.");
-        //}
-        ////Flashlight to glowstick
-        //else if (isUpgraded == true && Input.GetKeyDown(KeyCode.G)  && count == 1)
-        //{
-        //    glow.enabled = true;
-        //    beam.enabled = false;
-        //    Debug.Log("You have uncovered your glowstick.");
-        //    count++;
-        //    Debug.Log("Count now set to 2.");
-        //}
-        ////Glowstick to darkness
-        //else if (isUpgraded == true && Input.GetKeyDown(KeyCode.G) && count == 2)
-        //{
-        //    glow.enabled = false;
-        //    beam.enabled = false;
-        //    Debug.Log("You have plunged yourself in complete darkness.");
-        //    dark = true;
-        //    count++;
-        //    Debug.Log("Count now set to 3.");
-        //}
-        ////Darkness to glowstick
-        //else if (isUpgraded == true && Input.GetKeyDown(KeyCode.G) && count == 3)
-        //{
-        //    glow.enabled = true;
-        //    beam.enabled = false;
-        //    Debug.Log("You have uncovered your glowstick.");
-        //    count = 0; //This represents ONLY glowstick is glowing <0 = glowstick, 1 = flashlight, 2 = all off>
-        //    Debug.Log("Count is reset to 0.");
-        //    dark = false;
-        //}
-        ////Making it so that the player can move the light.
-        //if (Input.GetAxis("Mouse ScrollWheel") && isUpgraded)
-        //{
-
-        //}
+    //    //Snapping it back to the normal postion
+    //    if (Input.GetKeyDown(KeyCode.mouseScrollDelta)) //Clicking down the mouse wheel snaps rotation back to normal
+    //    {
+    //        //normal position is x0, y0, z0
+    //        //normal rotation is x7.113, y-0.708, z0.5560001
+    //        //normal angle is 42 
+    //        return;
+    //    }
     }
 }
