@@ -48,6 +48,12 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController instance;
 
+    public static GameObject[] HANDGUN_PARTS;
+
+    public static GameObject[] SHOTGUN_PARTS;
+
+    public static GameObject[] ASSAULT_RIFLE_PARTS;
+
     void Awake() {
         instance = this;
     }

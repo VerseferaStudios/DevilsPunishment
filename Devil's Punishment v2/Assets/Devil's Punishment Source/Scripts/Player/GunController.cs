@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
 public class GunController : MonoBehaviour
@@ -131,6 +132,21 @@ public class GunController : MonoBehaviour
         return clipStock;
     }
 
+
+    public GameObject[] HANDGUN_PARTS;
+
+    public GameObject[] SHOTGUN_PARTS;
+
+    public GameObject[] ASSAULT_RIFLE_PARTS;
+
+	public void Hide3rdPersonGuns(){
+		foreach (GameObject part in HANDGUN_PARTS.Concat(SHOTGUN_PARTS).Concat(ASSAULT_RIFLE_PARTS))
+		{
+			//part.SetActive(enabled);
+			part.SetActive(false);
+		}
+	}
+
     public void InitGun() {
 
         raised = false;
@@ -166,6 +182,37 @@ public class GunController : MonoBehaviour
 					clipSize = equippedGun.gunItem.clipSize;
 					clipStock = inventory.GetEquippedGunAmmo();
 
+					Hide3rdPersonGuns();
+					if (Inventory.instance.equippedGun != null){
+						switch (Inventory.instance.equippedGun.weaponClassification)
+						{
+							case GunItem.WeaponClassification.HANDGUN:
+								foreach (GameObject part in HANDGUN_PARTS)
+								{
+									//part.SetActive(enabled);
+									part.SetActive(true);
+								}
+								break;
+							case GunItem.WeaponClassification.SHOTGUN:
+								foreach (GameObject part in SHOTGUN_PARTS)
+								{
+									//part.SetActive(enabled);
+									part.SetActive(true);
+								}
+								break;
+							case GunItem.WeaponClassification.ASSAULTRIFLE:
+								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+								{
+									//part.SetActive(enabled);
+									part.SetActive(true);
+								}
+								break;
+
+							default: // Pass
+								break;
+						}
+					}
+
 					break;
 				}
 			}
@@ -180,7 +227,7 @@ public class GunController : MonoBehaviour
 			clip = 0;
 			clipSize = 0;
 			clipStock = 0;
-
+			Hide3rdPersonGuns();
 		}
 
     }
