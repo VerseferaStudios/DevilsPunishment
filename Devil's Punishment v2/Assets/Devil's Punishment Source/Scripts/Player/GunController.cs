@@ -459,7 +459,7 @@ public class GunController : MonoBehaviour
 
 	private bool weaponIsShotgun()
 	{
-		return equippedGun.gunItem.ammunitionType == (ResourceManager.instance.getResource("Pickup_Shotgun").GetComponent<InteractableLoot>().item as GunItem).ammunitionType;
+		return equippedGun.gunItem.weaponClassification == GunItem.WeaponClassification.SHOTGUN;
 	}
 
 	public void UpdateClipStock(){
