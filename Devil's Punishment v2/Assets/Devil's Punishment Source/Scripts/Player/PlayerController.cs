@@ -190,6 +190,13 @@ public class PlayerController : MonoBehaviour
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
+        if (Inventory.instance.equippedGun == null){
+            characterAnimator.SetLayerWeight(0,1);
+            characterAnimator.SetLayerWeight(1,0);
+        } else {
+            characterAnimator.SetLayerWeight(0,0);
+            characterAnimator.SetLayerWeight(1,1);
+        }
     }
 
     void CameraUpdate() {
