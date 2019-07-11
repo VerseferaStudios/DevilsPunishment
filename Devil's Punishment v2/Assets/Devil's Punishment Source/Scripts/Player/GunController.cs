@@ -243,7 +243,8 @@ public class GunController : MonoBehaviour
             running = playerController.IsSprinting();
             moving = playerController.IsMoving();
             crouching = playerController.IsCrouching();
-            trigger = !running && shootTimer <= 0f && Input.GetButton("Fire1") && clip > 0;
+            trigger = !running && Input.GetButton("Fire1") && clip > 0;
+
 
 			if (trigger)
 			{
@@ -288,8 +289,11 @@ public class GunController : MonoBehaviour
 		}
 
 		// Update muzzle flash light intensity every frame, and in this order:
-		{
-        	muzzleFlashLight.intensity = 2f*Mathf.Clamp01(shootTimer * fireRate);
+		{	
+			if (muzzleFlashLight.intensity > 0)
+			{
+        		muzzleFlashLight.intensity = 2f*Mathf.Clamp01(shootTimer * fireRate);
+			}
         	shootTimer -= Time.deltaTime;
 		}
     }
@@ -297,10 +301,12 @@ public class GunController : MonoBehaviour
 	//Don't allow multiple activations of the fire method just because you're waiting for an animation to finish...
 	bool busyFiringAlready = false;
 	async Task Fire()
-	{
+	{	
+		if (shootTimer > 0f) return;
 		if (busyFiringAlready) return;
 		busyFiringAlready = true;
 		
+		shootTimer = timeBetweenShots;
         clipStock = inventory.GetEquippedGunAmmo();
 		// Make sure muzzle and ejector are attached to root bone on guns, otherwise the positions will move unpredictably
 		muzzle.position = equippedGun.muzzle.position;
@@ -325,8 +331,9 @@ public class GunController : MonoBehaviour
 			
 		//}
 		//await Task.Run(() =>wait4ReloadAsync());
+        
+		muzzleFlashLight.intensity = 0.5F;
 
-		shootTimer = timeBetweenShots;
 		bool isShotgun = weaponIsShotgun();
 
 		for (int i = 0; i < (isShotgun?10:1); i++)
@@ -510,7 +517,6 @@ public class GunController : MonoBehaviour
 	}
 
 	public void UpdateClipStock(){
-		Debug.Log("Updating Clipstock...");
         clipStock = inventory.GetEquippedGunAmmo();
 	}
 
