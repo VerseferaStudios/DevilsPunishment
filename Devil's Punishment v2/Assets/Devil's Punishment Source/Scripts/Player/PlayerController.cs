@@ -26,7 +26,8 @@ public class PlayerController : MonoBehaviour
     private bool isClimbing;
     private float originalHeight;
 
-    public Animator characterAnimator;
+    public GameObject playerModel;
+    private Animator characterAnimator;
     private CharacterController controller;
     private Camera headCamera;
 
@@ -48,14 +49,16 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController instance;
 
-    public static GameObject[] HANDGUN_PARTS;
-
-    public static GameObject[] SHOTGUN_PARTS;
-
-    public static GameObject[] ASSAULT_RIFLE_PARTS;
-
+    public bool Visible = false;
     void Awake() {
         instance = this;
+        characterAnimator = playerModel.GetComponent<Animator>();
+        if(!Visible){
+            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            }
+        }
     }
 
     void Start() {
