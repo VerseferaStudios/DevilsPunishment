@@ -193,9 +193,13 @@ public class PlayerController : MonoBehaviour
         if (Inventory.instance.equippedGun == null){
             characterAnimator.SetLayerWeight(0,1);
             characterAnimator.SetLayerWeight(1,0);
+            characterAnimator.SetLayerWeight(2,0);
+            characterAnimator.SetLayerWeight(3,0);
         } else {
             characterAnimator.SetLayerWeight(0,0);
             characterAnimator.SetLayerWeight(1,1);
+            characterAnimator.SetLayerWeight(2,0);
+            characterAnimator.SetLayerWeight(3,0);
         }
     }
 
