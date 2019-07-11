@@ -190,14 +190,35 @@ public class PlayerController : MonoBehaviour
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
-        if (Inventory.instance.equippedGun == null){
+
+        if (Inventory.instance.equippedGun != null){
+            switch (Inventory.instance.equippedGun.weaponClassification)
+            {
+                case GunItem.WeaponClassification.HANDGUN:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,1);
+                    characterAnimator.SetLayerWeight(2,0);
+                    characterAnimator.SetLayerWeight(3,0);
+                    break;
+                case GunItem.WeaponClassification.SHOTGUN:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,0);
+                    characterAnimator.SetLayerWeight(2,1);
+                    characterAnimator.SetLayerWeight(3,0);
+                    break;
+                case GunItem.WeaponClassification.ASSAULTRIFLE:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,0);
+                    characterAnimator.SetLayerWeight(2,0);
+                    characterAnimator.SetLayerWeight(3,1);
+                    break;
+
+                default: // Pass
+                    break;
+            }
+        } else {
             characterAnimator.SetLayerWeight(0,1);
             characterAnimator.SetLayerWeight(1,0);
-            characterAnimator.SetLayerWeight(2,0);
-            characterAnimator.SetLayerWeight(3,0);
-        } else {
-            characterAnimator.SetLayerWeight(0,0);
-            characterAnimator.SetLayerWeight(1,1);
             characterAnimator.SetLayerWeight(2,0);
             characterAnimator.SetLayerWeight(3,0);
         }

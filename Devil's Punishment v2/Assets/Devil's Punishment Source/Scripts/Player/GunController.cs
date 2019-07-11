@@ -231,6 +231,7 @@ public class GunController : MonoBehaviour
 		{
 			if (trigger)
 			{
+				/*await (should be put here, but it just propagates up the code. This may be problematic) */
 				Fire();
 			}
 			else if (triggerReload)

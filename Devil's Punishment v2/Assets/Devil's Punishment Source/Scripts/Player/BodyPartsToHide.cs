@@ -5,7 +5,6 @@ using UnityEngine;
 public class BodyPartsToHide : MonoBehaviour
 {
 	public GameObject[] bodyParts;
-	bool enabled = false;
 	void awake()
 	{
 		foreach (GameObject part in bodyParts)
