@@ -94,7 +94,6 @@ public class GunController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
         inventory = Inventory.instance;
-
 	}
 
     void SetFireRate(float f) {
@@ -105,7 +104,7 @@ public class GunController : MonoBehaviour
     void InitTimeBetweenShots() {
         timeBetweenShots = 1.00f/fireRate;
     }
-
+	private bool used1 = false;
     void Update()
 	{
 		UpdateClipStock();
@@ -326,6 +325,30 @@ public class GunController : MonoBehaviour
 			{
 				gunAnimator.SetBool("Reload", false);
 				gunAnimator.SetTrigger("Fire");
+				switch (Inventory.instance.equippedGun.weaponClassification)
+				{
+					case GunItem.WeaponClassification.HANDGUN:
+						foreach (GameObject part in HANDGUN_PARTS)
+						{
+							playerAnimator.SetLayerWeight(7,1);
+						}
+						break;
+					case GunItem.WeaponClassification.SHOTGUN:
+						foreach (GameObject part in SHOTGUN_PARTS)
+						{
+							playerAnimator.SetLayerWeight(8,1);
+						}
+						break;
+					case GunItem.WeaponClassification.ASSAULTRIFLE:
+						foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+						{
+							playerAnimator.SetLayerWeight(9,1);
+						}
+						break;
+
+					default: // Pass
+						break;
+				}
 				await Task.Delay(1);
 			} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 			
@@ -382,7 +405,8 @@ public class GunController : MonoBehaviour
 	{
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
-		gunAnimator.SetTrigger("Reload");						switch (Inventory.instance.equippedGun.weaponClassification)
+		gunAnimator.SetTrigger("Reload");
+		switch (Inventory.instance.equippedGun.weaponClassification)
 		{
 			case GunItem.WeaponClassification.HANDGUN:
 				foreach (GameObject part in HANDGUN_PARTS)
@@ -556,5 +580,34 @@ public class GunController : MonoBehaviour
         {
             enemyHit.TakeDamage(equippedGun.gunItem.damage);
         }
+    }
+
+	public void EndOfFireAnim()
+	{
+        switch (Inventory.instance.equippedGun.weaponClassification)
+        {
+            case GunItem.WeaponClassification.HANDGUN:
+                foreach (GameObject part in HANDGUN_PARTS)
+                {
+                    playerAnimator.SetLayerWeight(7,0);
+                }
+                break;
+            case GunItem.WeaponClassification.SHOTGUN:
+                foreach (GameObject part in SHOTGUN_PARTS)
+                {
+                    playerAnimator.SetLayerWeight(8,0);
+                }
+                break;
+            case GunItem.WeaponClassification.ASSAULTRIFLE:
+                foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+                {
+                    playerAnimator.SetLayerWeight(9,0);
+                }
+                break;
+
+            default: // Pass
+                break;
+        }
+        Debug.Log("Fire animation end-event triggered.");
     }
 }
