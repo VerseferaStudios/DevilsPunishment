@@ -438,10 +438,10 @@ public class GunController : MonoBehaviour
 			else
 			{
 				gunAnimator.SetBool("Reload", false);
-			playerAnimator.SetLayerWeight(5,0);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
+				playerAnimator.SetLayerWeight(5,0);
 			}
 		}
 		else if (clipStock >= clipSize - clip)
@@ -452,11 +452,11 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
-			playerAnimator.SetLayerWeight(4,0);
-			playerAnimator.SetLayerWeight(6,0);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
+			playerAnimator.SetLayerWeight(4,0);
+			playerAnimator.SetLayerWeight(6,0);
 		}
 		else
 		{
@@ -465,11 +465,11 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
-			playerAnimator.SetLayerWeight(4,0);
-			playerAnimator.SetLayerWeight(6,0);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
+			playerAnimator.SetLayerWeight(4,0);
+			playerAnimator.SetLayerWeight(6,0);
 		}
 	}
 

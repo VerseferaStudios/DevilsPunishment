@@ -49,16 +49,10 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController instance;
 
-    public bool Visible = false;
+    public bool shadowOnly = false;
     void Awake() {
         instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
-        if(!Visible){
-            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-            }
-        }
     }
 
     void Start() {
@@ -193,6 +187,17 @@ public class PlayerController : MonoBehaviour
     }
 
     void Animation() {
+        if(shadowOnly){
+            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            }
+        } else {
+            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            }
+        }
 
         characterAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
         characterAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
