@@ -19,7 +19,7 @@ public class ShootAnimationBehaviors : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GunController.instance.ShootAnimationBehviorsOnStateExitCallback();
+        GunController.instance.ShootAnimationBehvioursOnStateExitCallback();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
