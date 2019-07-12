@@ -192,21 +192,18 @@ public class GunController : MonoBehaviour
 							case GunItem.WeaponClassification.HANDGUN:
 								foreach (GameObject part in HANDGUN_PARTS)
 								{
-									//part.SetActive(enabled);
 									part.SetActive(true);
 								}
 								break;
 							case GunItem.WeaponClassification.SHOTGUN:
 								foreach (GameObject part in SHOTGUN_PARTS)
 								{
-									//part.SetActive(enabled);
 									part.SetActive(true);
 								}
 								break;
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
 								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
 								{
-									//part.SetActive(enabled);
 									part.SetActive(true);
 								}
 								break;
@@ -385,8 +382,30 @@ public class GunController : MonoBehaviour
 	{
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
-		gunAnimator.SetTrigger("Reload");
-		playerAnimator.SetTrigger("Reload");
+		gunAnimator.SetTrigger("Reload");						switch (Inventory.instance.equippedGun.weaponClassification)
+		{
+			case GunItem.WeaponClassification.HANDGUN:
+				foreach (GameObject part in HANDGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(4,1);
+				}
+				break;
+			case GunItem.WeaponClassification.SHOTGUN:
+				foreach (GameObject part in SHOTGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(5,1);
+				}
+				break;
+			case GunItem.WeaponClassification.ASSAULTRIFLE:
+				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+				{
+					playerAnimator.SetLayerWeight(6,1);
+				}
+				break;
+
+			default: // Pass
+				break;
+		}
 		float breakPoint = .5f;
 		// Wait for other states to finish
 		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -419,7 +438,7 @@ public class GunController : MonoBehaviour
 			else
 			{
 				gunAnimator.SetBool("Reload", false);
-				playerAnimator.SetBool("Reload", false);
+			playerAnimator.SetLayerWeight(5,0);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
@@ -433,7 +452,8 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
-			playerAnimator.SetBool("Reload", false);
+			playerAnimator.SetLayerWeight(4,0);
+			playerAnimator.SetLayerWeight(6,0);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -445,7 +465,8 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
-			playerAnimator.SetBool("Reload", false);
+			playerAnimator.SetLayerWeight(4,0);
+			playerAnimator.SetLayerWeight(6,0);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
