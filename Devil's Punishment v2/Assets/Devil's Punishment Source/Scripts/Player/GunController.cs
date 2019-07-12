@@ -386,6 +386,7 @@ public class GunController : MonoBehaviour
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
+		playerAnimator.SetTrigger("Reload");
 		float breakPoint = .5f;
 		// Wait for other states to finish
 		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -431,6 +432,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			playerAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -442,6 +444,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			playerAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
