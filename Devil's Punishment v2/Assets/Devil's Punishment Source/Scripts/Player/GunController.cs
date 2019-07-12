@@ -72,6 +72,9 @@ public class GunController : MonoBehaviour
 
     private Animator gunAnimator;
 
+	[SerializeField]
+    private Animator playerAnimator;
+
     private int clipStock;
     private int clipSize;
     private int clip;
