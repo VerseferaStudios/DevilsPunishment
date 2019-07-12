@@ -582,7 +582,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-	public void EndOfFireAnim()
+	public void ShootAnimationBehviorsOnStateExitCallback()
 	{
         switch (Inventory.instance.equippedGun.weaponClassification)
         {
