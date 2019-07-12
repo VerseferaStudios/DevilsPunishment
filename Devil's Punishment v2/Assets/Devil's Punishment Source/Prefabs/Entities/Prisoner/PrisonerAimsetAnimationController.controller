@@ -108,6 +108,9 @@ AnimatorController:
     - serializedVersion: 2
       m_State: {fileID: 1102813979959076884}
       m_Motion: {fileID: 7400040, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
+    - serializedVersion: 2
+      m_State: {fileID: 1102997288684658680}
+      m_Motion: {fileID: 7400056, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: 0
@@ -132,6 +135,9 @@ AnimatorController:
     - serializedVersion: 2
       m_State: {fileID: 1102899381547655750}
       m_Motion: {fileID: 206211543845047470}
+    - serializedVersion: 2
+      m_State: {fileID: 1102997288684658680}
+      m_Motion: {fileID: 7400114, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: 0
@@ -957,6 +963,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: IsCrouching
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Reload
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102052747268343384}
   m_Solo: 0
@@ -1150,7 +1159,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: Reload
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102899381547655750}
   m_Solo: 0
@@ -1388,7 +1400,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Reload
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101772015701408742}

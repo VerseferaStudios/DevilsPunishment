@@ -419,6 +419,7 @@ public class GunController : MonoBehaviour
 			else
 			{
 				gunAnimator.SetBool("Reload", false);
+				playerAnimator.SetBool("Reload", false);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
