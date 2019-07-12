@@ -470,10 +470,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             spawnNowAt.z += increment;
 
+            //Spawn I corridors
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, new Vector3(spawnNowAt.x - 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
+                /*
+                //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
+                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
+                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x + 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
+                */
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 Data.instance.corridorCount++;
@@ -566,10 +572,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             spawnNowAt.x += increment;
 
+            //Spawn I corridors
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, new Vector3(spawnNowAt.x + 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
+                /*
+                //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
+                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
+                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
+                */
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);

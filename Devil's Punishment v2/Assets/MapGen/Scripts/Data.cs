@@ -623,9 +623,9 @@ public class Data : MonoBehaviour
                 ////Debug.Log(collidedCorridors[j].transform.position);
                 bool isError = false;
 
-                if (collidedCorridors[i].transform.position == collidedCorridors[j].transform.position)
-                //if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
-                //    && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
+                //if (collidedCorridors[i].transform.position == collidedCorridors[j].transform.position)
+                if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
+                    && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                 {
                     //Make condition perfect er
 
