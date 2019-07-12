@@ -59,8 +59,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(1, 6) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(1, 6) + 28;
+            arr[0] = 48 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 9) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -97,14 +97,23 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            switch (Random.Range(0, 3))
+            switch (Random.Range(0, 2))
             {
                 case 0 :
                     roomToSpawn = startRoom;
                     break;
                 case 1:
                     roomToSpawn = endRoom;
+                    break;/*
+                case 2:
+                    roomToSpawn = roomL;
                     break;
+                case 3:
+                    roomToSpawn = roomT;
+                    break;
+                case 4:
+                    roomToSpawn = room4;
+                    break;*/
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 3) * 90;
