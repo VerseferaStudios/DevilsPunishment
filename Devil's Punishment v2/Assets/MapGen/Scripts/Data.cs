@@ -633,7 +633,7 @@ public class Data : MonoBehaviour
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
-                        && (collidedCorridors[i].transform.rotation == collidedCorridors[j].transform.rotation))
+                        && (collidedCorridors[i].transform.parent.transform.rotation == collidedCorridors[j].transform.parent.transform.rotation))
                     {
                         ////Debug.Log("Leave");
 
@@ -645,8 +645,8 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y);
+                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.parent.transform.rotation.eulerAngles.y);
+                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.parent.transform.rotation.eulerAngles.y);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -771,12 +771,12 @@ public class Data : MonoBehaviour
                 isNotFirstTime = false;
             }
         }
-
+        /*
         if (collidedCorridors.Count == 1)
         {
             Destroy(collidedCorridors[0].transform.parent.gameObject);
         }
-
+        */
         //Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
         for (int q = 0; q < collidedCorridors.Count; q++)
         {
