@@ -79,7 +79,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
             else if (isLowered)
             {
-                flashlightCase.GetComponent<Animation>().Play("DownUp");
+                flashlightCase.GetComponent<Animation>().Play("DownCenter");
                 isCenter = true;
                 isLowered = false;
                 Debug.Log("Player has raised the light from the floor.");
@@ -164,7 +164,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
             else if (isCenter && isWide)
             {
-                flashlightCase.GetComponent<Animation>().Play("WideCenter");
+                flashlightCase.GetComponent<Animation>().Play("WidenCenter");
             }
             else if (isCenter && isNarrow)
             {
