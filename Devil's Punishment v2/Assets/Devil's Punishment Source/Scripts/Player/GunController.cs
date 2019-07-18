@@ -144,7 +144,6 @@ public class GunController : MonoBehaviour
 	public void Hide3rdPersonGuns(){
 		foreach (GameObject part in HANDGUN_PARTS.Concat(SHOTGUN_PARTS).Concat(ASSAULT_RIFLE_PARTS))
 		{
-			//part.SetActive(enabled);
 			part.SetActive(false);
 		}
 	}
@@ -307,7 +306,7 @@ public class GunController : MonoBehaviour
 		
 		shootTimer = timeBetweenShots;
         clipStock = inventory.GetEquippedGunAmmo();
-		// Make sure muzzle and ejector are attached to root bone on guns, otherwise the positions will move unpredictably
+		// Make sure muzzle and ejector are childed to root bone on guns, otherwise the positions will move unpredictably
 		muzzle.position = equippedGun.muzzle.position;
 		ejector.position = equippedGun.ejector.position;
 
@@ -325,30 +324,6 @@ public class GunController : MonoBehaviour
 			{
 				gunAnimator.SetBool("Reload", false);
 				gunAnimator.SetTrigger("Fire");
-				switch (Inventory.instance.equippedGun.weaponClassification)
-				{
-					case GunItem.WeaponClassification.HANDGUN:
-						foreach (GameObject part in HANDGUN_PARTS)
-						{
-							playerAnimator.SetLayerWeight(7,1);
-						}
-						break;
-					case GunItem.WeaponClassification.SHOTGUN:
-						foreach (GameObject part in SHOTGUN_PARTS)
-						{
-							playerAnimator.SetLayerWeight(8,1);
-						}
-						break;
-					case GunItem.WeaponClassification.ASSAULTRIFLE:
-						foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-						{
-							playerAnimator.SetLayerWeight(9,1);
-						}
-						break;
-
-					default: // Pass
-						break;
-				}
 				await Task.Delay(1);
 			} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 			
@@ -406,30 +381,6 @@ public class GunController : MonoBehaviour
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
-		switch (Inventory.instance.equippedGun.weaponClassification)
-		{
-			case GunItem.WeaponClassification.HANDGUN:
-				foreach (GameObject part in HANDGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(4,1);
-				}
-				break;
-			case GunItem.WeaponClassification.SHOTGUN:
-				foreach (GameObject part in SHOTGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(5,1);
-				}
-				break;
-			case GunItem.WeaponClassification.ASSAULTRIFLE:
-				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-				{
-					playerAnimator.SetLayerWeight(6,1);
-				}
-				break;
-
-			default: // Pass
-				break;
-		}
 		float breakPoint = .5f;
 		// Wait for other states to finish
 		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -465,7 +416,6 @@ public class GunController : MonoBehaviour
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
-				playerAnimator.SetLayerWeight(5,0);
 			}
 		}
 		else if (clipStock >= clipSize - clip)
@@ -479,8 +429,6 @@ public class GunController : MonoBehaviour
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
-			playerAnimator.SetLayerWeight(4,0);
-			playerAnimator.SetLayerWeight(6,0);
 		}
 		else
 		{
@@ -492,8 +440,6 @@ public class GunController : MonoBehaviour
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
-			playerAnimator.SetLayerWeight(4,0);
-			playerAnimator.SetLayerWeight(6,0);
 		}
 	}
 
@@ -582,6 +528,77 @@ public class GunController : MonoBehaviour
         }
     }
 
+	public void ReloadAnimationBehvioursOnStateEnterCallback()
+	{
+		playerAnimator.SetTrigger("Reload");
+		switch (Inventory.instance.equippedGun.weaponClassification)
+		{
+			case GunItem.WeaponClassification.HANDGUN:
+				foreach (GameObject part in HANDGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(4,1);
+				}
+				break;
+			case GunItem.WeaponClassification.SHOTGUN:
+				foreach (GameObject part in SHOTGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(5,1);
+				}
+				break;
+			case GunItem.WeaponClassification.ASSAULTRIFLE:
+				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+				{
+					playerAnimator.SetLayerWeight(6,1);
+				}
+				break;
+
+			default: // Pass
+				break;
+		}
+        Debug.Log("Reload animation start-event triggered.");
+    }
+
+	public void ReloadAnimationBehvioursOnStateExitCallback()
+	{
+		reloading = gunAnimator.GetBool("Reload");
+		playerAnimator.SetBool("Reload", reloading);
+		if(!reloading){
+			playerAnimator.SetLayerWeight(5,0);
+			playerAnimator.SetLayerWeight(4,0);
+			playerAnimator.SetLayerWeight(6,0);
+		}
+        Debug.Log("Reload animation end-event triggered.");
+    }
+
+	public void ShootAnimationBehvioursOnStateEnterCallback()
+	{
+		switch (Inventory.instance.equippedGun.weaponClassification)
+		{
+			case GunItem.WeaponClassification.HANDGUN:
+				foreach (GameObject part in HANDGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(7,1);
+				}
+				break;
+			case GunItem.WeaponClassification.SHOTGUN:
+				foreach (GameObject part in SHOTGUN_PARTS)
+				{
+					playerAnimator.SetLayerWeight(8,1);
+				}
+				break;
+			case GunItem.WeaponClassification.ASSAULTRIFLE:
+				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+				{
+					playerAnimator.SetLayerWeight(9,1);
+				}
+				break;
+
+			default: // Pass
+				break;
+		}
+        //Debug.Log("Fire animation start-event triggered.");
+    }
+
 	public void ShootAnimationBehvioursOnStateExitCallback()
 	{
         switch (Inventory.instance.equippedGun.weaponClassification)
@@ -608,6 +625,6 @@ public class GunController : MonoBehaviour
             default: // Pass
                 break;
         }
-        Debug.Log("Fire animation end-event triggered.");
+        //Debug.Log("Fire animation end-event triggered.");
     }
 }
