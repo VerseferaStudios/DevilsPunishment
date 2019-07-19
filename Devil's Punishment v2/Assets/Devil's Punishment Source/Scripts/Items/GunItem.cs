@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Gun", menuName = "Item/Gun")]
-public class GunItem : Item
+public class GunItem : ScriptableObject, Item
 {
 
     //Different weapon types, used for selecting different animations, and different code, such as "reloading style"
@@ -16,7 +16,6 @@ public class GunItem : Item
         ASSAULTRIFLE = 3,
     }
 
-    [SerializeField]
     public WeaponClassification weaponClassification = WeaponClassification.NONE;
 
     public Item ammunitionType;

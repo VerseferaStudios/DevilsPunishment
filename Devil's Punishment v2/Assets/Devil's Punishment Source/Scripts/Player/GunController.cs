@@ -184,31 +184,39 @@ public class GunController : MonoBehaviour
 					clipStock = inventory.GetEquippedGunAmmo();
 
 					Hide3rdPersonGuns();
+									Debug.Log("GUNS HIDDEN!!!!!!");	
 					if (Inventory.instance.equippedGun != null){
+						Debug.Log("EQUIPPED GUN WAS NOT NULL!!!!"+Inventory.instance.equippedGun.weaponClassification);
 						switch (Inventory.instance.equippedGun.weaponClassification)
 						{
 							case GunItem.WeaponClassification.HANDGUN:
 								foreach (GameObject part in HANDGUN_PARTS)
 								{
 									part.SetActive(true);
+									playerAnimator.SetLayerWeight(1,1);
 								}
 								break;
 							case GunItem.WeaponClassification.SHOTGUN:
 								foreach (GameObject part in SHOTGUN_PARTS)
 								{
 									part.SetActive(true);
+									playerAnimator.SetLayerWeight(2,1);
 								}
 								break;
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
 								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
 								{
+									Debug.Log("RIFLE SWITCH STATEMENT THING!!!!!");	
 									part.SetActive(true);
+									playerAnimator.SetLayerWeight(3,1);
 								}
 								break;
 
 							default: // Pass
 								break;
 						}
+					} else {
+						Debug.Log("EQUIPPED GUN WAS NULL!!!!");
 					}
 
 					break;
@@ -572,29 +580,33 @@ public class GunController : MonoBehaviour
 
 	public void ShootAnimationBehvioursOnStateEnterCallback()
 	{
-		switch (Inventory.instance.equippedGun.weaponClassification)
-		{
-			case GunItem.WeaponClassification.HANDGUN:
-				foreach (GameObject part in HANDGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(7,1);
-				}
-				break;
-			case GunItem.WeaponClassification.SHOTGUN:
-				foreach (GameObject part in SHOTGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(8,1);
-				}
-				break;
-			case GunItem.WeaponClassification.ASSAULTRIFLE:
-				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-				{
-					playerAnimator.SetLayerWeight(9,1);
-				}
-				break;
+		bool shooting = gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shoot");
+		if(shooting){
+			playerAnimator.SetTrigger("Fire");
+			switch (Inventory.instance.equippedGun.weaponClassification)
+			{
+				case GunItem.WeaponClassification.HANDGUN:
+					foreach (GameObject part in HANDGUN_PARTS)
+					{
+						//playerAnimator.SetLayerWeight(7,1);
+					}
+					break;
+				case GunItem.WeaponClassification.SHOTGUN:
+					foreach (GameObject part in SHOTGUN_PARTS)
+					{
+						playerAnimator.SetLayerWeight(8,1);
+					}
+					break;
+				case GunItem.WeaponClassification.ASSAULTRIFLE:
+					foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+					{
+						playerAnimator.SetLayerWeight(9,1);
+					}
+					break;
 
-			default: // Pass
-				break;
+				default: // Pass
+					break;
+			}
 		}
         //Debug.Log("Fire animation start-event triggered.");
     }
