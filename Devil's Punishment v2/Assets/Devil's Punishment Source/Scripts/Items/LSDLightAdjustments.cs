@@ -1,6 +1,6 @@
 ﻿//Author: Dave Bird
 //Date: Saturday, July 13, 2019
-    //Last Edited: Saturday, July 14, 2019
+    //Last Edited: Friday, July 19, 2019
         //By: Dave Bird
             //Purpose: Finish the script.
 //Written For: Devil's Punishment v2
@@ -130,35 +130,33 @@ public class LSDLightAdjustments : MonoBehaviour
         //Snapping the light back to its home position.
         if (Input.GetButtonDown("Flashlight Home"))
         {
-            if (isRaised && isWide)
+            if (!isNormal && isNarrow || isWide)
             {
-                flashlightCase.GetComponent<Animation>().Play("UpCenter");
-                flashlightCase.GetComponent<Animation>().Play("WidenCenter");
+                if (isNarrow)
+                {
+                    flashlightCase.GetComponent<Animation>().Play("NarrowCenter");
+                    isNormal = true;
+                }
+                else if (isWide)
+                {
+                    flashlightCase.GetComponent<Animation>().Play("WidenCenter");
+                    isNormal = true;
+                }
             }
-            else if (isRaised && isNarrow)
+            if (!isCenter && isRaised || isLowered)
             {
-                flashlightCase.GetComponent<Animation>().Play("UpCenter");
-                flashlightCase.GetComponent<Animation>().Play("NarrowCenter");
+                if (isRaised)
+                {
+                    flashlightCase.GetComponent<Animation>().Play("UpCenter");
+                    isCenter = true;
+                }
+                else if (isLowered)
+                {
+                    flashlightCase.GetComponent<Animation>().Play("DownCenter");
+                    isCenter = true;
+                }
             }
-            else if (isLowered && isWide)
-            {
-                flashlightCase.GetComponent<Animation>().Play("DownCenter");
-                flashlightCase.GetComponent<Animation>().Play("WidenCenter");
-            }
-            else if (isLowered && isNarrow)
-            {
-                flashlightCase.GetComponent<Animation>().Play("DownCenter");
-                flashlightCase.GetComponent<Animation>().Play("NarrowCenter");
-            }
-            else if (isCenter && isWide)
-            {
-                flashlightCase.GetComponent<Animation>().Play("WidenCenter");
-            }
-            else if (isCenter && isNarrow)
-            {
-                flashlightCase.GetComponent<Animation>().Play("NarrowCenter");
-            }
-            beam.spotAngle = homeAngle;
+            beam.GetComponent<Light>().spotAngle = 30;
             SetToNormal();
             Debug.Log("Player has reset the location of the light source");
         }
