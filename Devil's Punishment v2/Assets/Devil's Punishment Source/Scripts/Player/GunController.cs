@@ -571,9 +571,9 @@ public class GunController : MonoBehaviour
 		reloading = gunAnimator.GetBool("Reload");
 		playerAnimator.SetBool("Reload", reloading);
 		if(!reloading){
-			playerAnimator.SetLayerWeight(5,0);
-			playerAnimator.SetLayerWeight(4,0);
-			playerAnimator.SetLayerWeight(6,0);
+			//playerAnimator.SetLayerWeight(5,0);
+			//playerAnimator.SetLayerWeight(4,0);
+			//playerAnimator.SetLayerWeight(6,0);
 		}
         Debug.Log("Reload animation end-event triggered.");
     }
@@ -589,6 +589,7 @@ public class GunController : MonoBehaviour
 					foreach (GameObject part in HANDGUN_PARTS)
 					{
 						//playerAnimator.SetLayerWeight(7,1);
+						playerAnimator.SetLayerWeight(4,1);
 					}
 					break;
 				case GunItem.WeaponClassification.SHOTGUN:
@@ -613,30 +614,34 @@ public class GunController : MonoBehaviour
 
 	public void ShootAnimationBehvioursOnStateExitCallback()
 	{
-        switch (Inventory.instance.equippedGun.weaponClassification)
-        {
-            case GunItem.WeaponClassification.HANDGUN:
-                foreach (GameObject part in HANDGUN_PARTS)
-                {
-                    playerAnimator.SetLayerWeight(7,0);
-                }
-                break;
-            case GunItem.WeaponClassification.SHOTGUN:
-                foreach (GameObject part in SHOTGUN_PARTS)
-                {
-                    playerAnimator.SetLayerWeight(8,0);
-                }
-                break;
-            case GunItem.WeaponClassification.ASSAULTRIFLE:
-                foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-                {
-                    playerAnimator.SetLayerWeight(9,0);
-                }
-                break;
+		bool shooting = gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shoot");
+		if(!shooting){
+			playerAnimator.SetBool("Fire",shooting);
+			switch (Inventory.instance.equippedGun.weaponClassification)
+			{
+				case GunItem.WeaponClassification.HANDGUN:
+					foreach (GameObject part in HANDGUN_PARTS)
+					{
+						playerAnimator.SetLayerWeight(7,0);
+					}
+					break;
+				case GunItem.WeaponClassification.SHOTGUN:
+					foreach (GameObject part in SHOTGUN_PARTS)
+					{
+						playerAnimator.SetLayerWeight(8,0);
+					}
+					break;
+				case GunItem.WeaponClassification.ASSAULTRIFLE:
+					foreach (GameObject part in ASSAULT_RIFLE_PARTS)
+					{
+						playerAnimator.SetLayerWeight(9,0);
+					}
+					break;
 
-            default: // Pass
-                break;
-        }
+				default: // Pass
+					break;
+			}
+		}
         //Debug.Log("Fire animation end-event triggered.");
     }
 }
