@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Gun", menuName = "Item/Gun")]
-public class GunItem : ScriptableObject, Item
+public class GunItem : Item
 {
 
     //Different weapon types, used for selecting different animations, and different code, such as "reloading style"
