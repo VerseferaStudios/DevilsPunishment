@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Gun", menuName = "Item/Gun")]
+[CreateAssetMenu(fileName = "GunItem", menuName = "Item/GunItem")]
 public class GunItem : Item
 {
 
@@ -16,7 +16,7 @@ public class GunItem : Item
         ASSAULTRIFLE = 3,
     }
 
-    public WeaponClassification weaponClassification = WeaponClassification.NONE;
+    public WeaponClassification weaponClassification;
 
     public Item ammunitionType;
 
