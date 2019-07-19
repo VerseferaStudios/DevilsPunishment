@@ -148,6 +148,12 @@ public class GunController : MonoBehaviour
 		}
 	}
 
+	public void DeactivateWeaponArmsBlendingLayers(){
+		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),0);
+		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),0);
+		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),0);
+	}
+
     public void InitGun() {
 
         raised = false;
@@ -184,6 +190,7 @@ public class GunController : MonoBehaviour
 					clipStock = inventory.GetEquippedGunAmmo();
 
 					Hide3rdPersonGuns();
+					DeactivateWeaponArmsBlendingLayers();
 					if (Inventory.instance.equippedGun != null){
 						switch (Inventory.instance.equippedGun.weaponClassification)
 						{
@@ -229,6 +236,7 @@ public class GunController : MonoBehaviour
 			clipSize = 0;
 			clipStock = 0;
 			Hide3rdPersonGuns();
+			DeactivateWeaponArmsBlendingLayers();
 		}
 
     }
