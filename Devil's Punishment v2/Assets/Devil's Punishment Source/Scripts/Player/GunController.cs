@@ -184,7 +184,6 @@ public class GunController : MonoBehaviour
 					clipStock = inventory.GetEquippedGunAmmo();
 
 					Hide3rdPersonGuns();
-									Debug.Log("GUNS HIDDEN!!!!!!");	
 					if (Inventory.instance.equippedGun != null){
 						Debug.Log("EQUIPPED GUN WAS NOT NULL!!!!"+Inventory.instance.equippedGun.weaponClassification);
 						switch (Inventory.instance.equippedGun.weaponClassification)
@@ -206,7 +205,6 @@ public class GunController : MonoBehaviour
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
 								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
 								{
-									Debug.Log("RIFLE SWITCH STATEMENT THING!!!!!");	
 									part.SetActive(true);
 									playerAnimator.SetLayerWeight(3,1);
 								}
@@ -595,7 +593,8 @@ public class GunController : MonoBehaviour
 				case GunItem.WeaponClassification.SHOTGUN:
 					foreach (GameObject part in SHOTGUN_PARTS)
 					{
-						playerAnimator.SetLayerWeight(8,1);
+						//playerAnimator.SetLayerWeight(8,1);
+						playerAnimator.SetLayerWeight(5,1);
 					}
 					break;
 				case GunItem.WeaponClassification.ASSAULTRIFLE:
