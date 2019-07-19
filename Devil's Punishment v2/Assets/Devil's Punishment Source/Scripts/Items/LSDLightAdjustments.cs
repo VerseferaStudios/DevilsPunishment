@@ -33,26 +33,13 @@ public class LSDLightAdjustments : MonoBehaviour
     [SerializeField]
     private bool isNormal = true;
 
-    public float homeX, homeY, homeZ = 0;
 
     public void Awake()
     {
         beam = GetComponent<Light>();
         beam.GetComponent<Light>().range = 30;
-        beam.GetComponent<Light>().spotAngle = 45;
+        beam.GetComponent<Light>().spotAngle = 30;
     }
-
-    /*Possible States 
-     * Center / Normal
-     * Center / Wide
-     * Center / Narrow
-     * Raised / Normal
-     * Raised / Wide
-     * Raised / Narrow
-     * Lowered / Normal
-     * Lowered / Wide
-     * Lowered / Narrow 
-     */
 
     void SetToNormal()
     {
@@ -67,8 +54,9 @@ public class LSDLightAdjustments : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Raising the light.
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetButtonDown("Flashlight Up"))
         {
             if (isCenter)
             {
@@ -86,7 +74,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
         }
         //Lowering the light.
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetButtonDown("Flashlight Down"))
         {
             if (isCenter)
             {
@@ -104,7 +92,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
         }
         //Widening the light.
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetButtonDown("Flashlight Wide"))
         {
             if (isNormal)
             {
@@ -122,7 +110,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
         }
         //Narrowing the light.
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetButtonDown("Flashlight Narrow"))
         {
             if (isNormal)
             {
@@ -140,7 +128,7 @@ public class LSDLightAdjustments : MonoBehaviour
             }
         }
         //Snapping the light back to its home position.
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetButtonDown("Flashlight Home"))
         {
             if (isRaised && isWide)
             {
