@@ -41,6 +41,7 @@ public class OptionsMenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        controlPanel.SetActive(false);
         optionsPanel.SetActive(false);
         audioMusic = GetComponent<AudioSource>();
         audioSFX = GetComponent<AudioSource>();
@@ -53,6 +54,11 @@ public class OptionsMenuController : MonoBehaviour
         menuPanel.SetActive(true);
     }
 
+    public void ControlClose()
+    {
+        controlPanel.SetActive(false);
+    }
+
     public void Credits()
     {
         SceneManager.LoadScene(3);
@@ -60,7 +66,7 @@ public class OptionsMenuController : MonoBehaviour
 
     public void Controls()
     {
-        controlPanel.SetActive(false);
+        controlPanel.SetActive(true);
     }
 
     public void Contact()
@@ -71,16 +77,6 @@ public class OptionsMenuController : MonoBehaviour
     public void SFXController()
     {
         audioSFX.volume = sfxVol;
-    }
-
-    public void MusicController()
-    {
-        audioMusic.volume = musicVol;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         if (sfxOff)
         {
             sfxVol = 0.0f;
@@ -91,6 +87,11 @@ public class OptionsMenuController : MonoBehaviour
             SFXController();
             sfx.enabled = true;
         }
+    }
+
+    public void MusicController()
+    {
+        audioMusic.volume = musicVol;
         if (musicOff)
         {
             musicVol = 0.0f;
@@ -101,5 +102,35 @@ public class OptionsMenuController : MonoBehaviour
             MusicController();
             music.enabled = true;
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        MusicController();
+        SFXController();
+
+
+
+        //if (sfxOff)
+        //{
+        //    sfxVol = 0.0f;
+        //    sfx.enabled = false;
+        //}
+        //else
+        //{
+        //    SFXController();
+        //    sfx.enabled = true;
+        //}
+        //if (musicOff)
+        //{
+        //    musicVol = 0.0f;
+        //    music.enabled = false;
+        //}
+        //else
+        //{
+        //    MusicController();
+        //    music.enabled = true;
+        //}
     }
 }
