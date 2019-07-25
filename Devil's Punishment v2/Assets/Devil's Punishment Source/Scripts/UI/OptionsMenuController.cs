@@ -16,9 +16,8 @@ using UnityEngine.SceneManagement;
 
 public class OptionsMenuController : MonoBehaviour
 {
+    AudioController sound;
     public GameObject playerCont;
-    public AudioSource audioMusic;
-    public AudioSource audioSFX;
     public GameObject optionsPanel;
     public GameObject menuPanel;
     public GameObject contactPanel;
@@ -27,110 +26,51 @@ public class OptionsMenuController : MonoBehaviour
     public Button credits;
     public Button contact;
     public Button controls;
-    public Slider music;
-    public Slider sfx;
-
-    public Toggle sfxOff;
-    public Toggle musicOff;
-
-    public float musicVol = 1f;
-    public float sfxVol = 1f;
-
-
 
     // Start is called before the first frame update
     void Start()
     {
         controlPanel.SetActive(false);
         optionsPanel.SetActive(false);
-        audioMusic = GetComponent<AudioSource>();
-        audioSFX = GetComponent<AudioSource>();
     }
 
 
     public void Close()
     {
+        //play audio click.
         optionsPanel.SetActive(false);
         menuPanel.SetActive(true);
     }
 
     public void ControlClose()
     {
+        //play audio click.
         controlPanel.SetActive(false);
     }
 
-    public void Credits()
-    {
-        SceneManager.LoadScene(3);
-    }
+    //public void Credits()
+    //{
+    //    SceneManager.LoadScene(3);
+    //}
 
     public void Controls()
     {
+        //play audio click.
         controlPanel.SetActive(true);
     }
 
     public void Contact()
     {
+        //play audio click.
         contactPanel.SetActive(true);
-    }
-
-    public void SFXController()
-    {
-        audioSFX.volume = sfxVol;
-        if (sfxOff)
-        {
-            sfxVol = 0.0f;
-            sfx.enabled = false;
-        }
-        else
-        {
-            SFXController();
-            sfx.enabled = true;
-        }
-    }
-
-    public void MusicController()
-    {
-        audioMusic.volume = musicVol;
-        if (musicOff)
-        {
-            musicVol = 0.0f;
-            music.enabled = false;
-        }
-        else
-        {
-            MusicController();
-            music.enabled = true;
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        MusicController();
-        SFXController();
-
-
-
-        //if (sfxOff)
-        //{
-        //    sfxVol = 0.0f;
-        //    sfx.enabled = false;
-        //}
-        //else
-        //{
-        //    SFXController();
-        //    sfx.enabled = true;
-        //}
-        //if (musicOff)
-        //{
-        //    musicVol = 0.0f;
-        //    music.enabled = false;
-        //}
-        //else
-        //{
-        //    MusicController();
-        //    music.enabled = true;
-        //}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            controlPanel.SetActive(false);
+        }
     }
 }

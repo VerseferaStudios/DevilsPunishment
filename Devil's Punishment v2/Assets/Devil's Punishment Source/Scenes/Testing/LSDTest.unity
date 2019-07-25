@@ -982,6 +982,7 @@ GameObject:
   m_Component:
   - component: {fileID: 257116299}
   - component: {fileID: 257116300}
+  - component: {fileID: 257116301}
   m_Layer: 10
   m_Name: SFXAudioSource
   m_TagString: Untagged
@@ -1014,7 +1015,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1099,6 +1100,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &257116301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257116298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d341d4aa3fb6e824780d2eb63aaafa73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 853912640}
+  sfxSource: {fileID: 257116300}
+  sfxOff: {fileID: 353113953}
+  musicOff: {fileID: 1623433158}
+  sfxSlide: {fileID: 710054396}
+  musicSlide: {fileID: 649668853}
 --- !u!1001 &258697200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2324,9 +2343,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1839161943}
-        m_MethodName: MusicController
-        m_Mode: 1
+      - m_Target: {fileID: 853912641}
+        m_MethodName: SetMusicVolume
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2459,9 +2478,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1839161943}
-        m_MethodName: SFXController
-        m_Mode: 1
+      - m_Target: {fileID: 257116301}
+        m_MethodName: SetSFXVolume
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3336,6 +3355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 853912639}
   - component: {fileID: 853912640}
+  - component: {fileID: 853912641}
   m_Layer: 10
   m_Name: MusicAudioSource
   m_TagString: Untagged
@@ -3368,8 +3388,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: f9f5955b526da484d982273c590eca3a, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3454,6 +3474,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &853912641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853912638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d341d4aa3fb6e824780d2eb63aaafa73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 853912640}
+  sfxSource: {fileID: 257116300}
+  sfxOff: {fileID: 353113953}
+  musicOff: {fileID: 1623433158}
+  sfxSlide: {fileID: 710054396}
+  musicSlide: {fileID: 649668853}
 --- !u!1 &866510905
 GameObject:
   m_ObjectHideFlags: 0
@@ -5391,9 +5429,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1839161943}
-        m_MethodName: MusicController
-        m_Mode: 1
+      - m_Target: {fileID: 853912641}
+        m_MethodName: SetMusicVolume
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5735,8 +5773,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCont: {fileID: 807255553}
-  audioMusic: {fileID: 853912640}
-  audioSFX: {fileID: 257116300}
   optionsPanel: {fileID: 1839161941}
   menuPanel: {fileID: 1765552862}
   contactPanel: {fileID: 2051086439}
@@ -5745,12 +5781,6 @@ MonoBehaviour:
   credits: {fileID: 170670892}
   contact: {fileID: 2051086441}
   controls: {fileID: 549886899}
-  music: {fileID: 649668853}
-  sfx: {fileID: 710054396}
-  sfxOff: {fileID: 353113953}
-  musicOff: {fileID: 1623433158}
-  musicVol: 1
-  sfxVol: 1
 --- !u!114 &1839161944
 MonoBehaviour:
   m_ObjectHideFlags: 0
