@@ -97,7 +97,7 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            switch (Random.Range(0, 2))
+            switch (Random.Range(0, 3))
             {
                 case 0 :
                     roomToSpawn = startRoom;
