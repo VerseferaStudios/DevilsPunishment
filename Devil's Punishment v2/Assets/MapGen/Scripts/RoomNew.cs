@@ -474,7 +474,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, new Vector3(spawnNowAt.x - 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
@@ -489,6 +489,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //check current corridor and rotation. check the already instantiated once type AND rotation (using other) ?????//check later
 
                 }
+                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
                 spawnNowAt.z += increment;
             }
         }
@@ -576,7 +577,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, new Vector3(spawnNowAt.x + 0.25f, spawnNowAt.y, spawnNowAt.z), Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
@@ -587,7 +588,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
 
-
+                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
 
                 spawnNowAt.x += increment;
             }
