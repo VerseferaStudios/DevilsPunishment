@@ -8,7 +8,7 @@ public class MapGen3 : MonoBehaviour
     //10 x 10 cube
     //later//private int gridSize;
     [Header("Rooms")]
-    private int n = 8;
+    private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -127,6 +127,18 @@ public class MapGen3 : MonoBehaviour
             if(yRotation == 90)
             {
                 spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
+                //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
+                //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
+                //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
+
+                /*
+                Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+                for (int z = 0; z < corridorsOfRoom.childCount; z++)
+                {
+                    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+                }
+                */
+
             }
             else if(yRotation == 180 || yRotation == 270 || yRotation == -90)
             {
@@ -139,6 +151,18 @@ public class MapGen3 : MonoBehaviour
                 else if (yRotation == 270 || yRotation == -90)
                 {
                     spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+                    //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
+                    //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
+                    //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
+
+                    /*
+                    Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+                    for (int z = 0; z < corridorsOfRoom.childCount; z++)
+                    {
+                        corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+                    }
+                    */
+
                     reqYRotationForCorridor = 90;
                 }
 
@@ -146,6 +170,11 @@ public class MapGen3 : MonoBehaviour
                 {
                     spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
                 }
+
+            }
+            //probably +z....
+            else
+            {
 
             }
             
