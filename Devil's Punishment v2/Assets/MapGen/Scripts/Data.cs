@@ -686,7 +686,11 @@ public class Data : MonoBehaviour
                         if (openings1.Count == 3)
                         {
                             float yRotation = ConvertToRotation(openings1);
-                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
+                            Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
+                            spawnAtPos.x = Mathf.Round(spawnAtPos.x);
+                            spawnAtPos.y = Mathf.Round(spawnAtPos.y);
+                            spawnAtPos.z = Mathf.Round(spawnAtPos.z);
+                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity);
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
                                 //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
@@ -699,7 +703,12 @@ public class Data : MonoBehaviour
                         }
                         else if (openings1.Count == 4)
                         {
-                            Instantiate(corridorX, collidedCorridors[j].transform.parent.transform.position, Quaternion.identity);
+
+                            Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
+                            spawnAtPos.x = Mathf.Round(spawnAtPos.x);
+                            spawnAtPos.y = Mathf.Round(spawnAtPos.y);
+                            spawnAtPos.z = Mathf.Round(spawnAtPos.z);
+                            Instantiate(corridorX, spawnAtPos, Quaternion.identity);
                         }
                         else
                         {
