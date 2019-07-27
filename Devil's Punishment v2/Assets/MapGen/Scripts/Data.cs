@@ -688,7 +688,6 @@ public class Data : MonoBehaviour
                             float yRotation = ConvertToRotation(openings1);
                             Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
-                            spawnAtPos.y = Mathf.Round(spawnAtPos.y);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity);
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
@@ -706,7 +705,6 @@ public class Data : MonoBehaviour
 
                             Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
-                            spawnAtPos.y = Mathf.Round(spawnAtPos.y);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             Instantiate(corridorX, spawnAtPos, Quaternion.identity);
                         }
