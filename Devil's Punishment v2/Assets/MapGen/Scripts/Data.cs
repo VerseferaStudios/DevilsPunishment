@@ -659,6 +659,8 @@ public class Data : MonoBehaviour
                             }
                         }
                         */
+
+                        /*
                         Debug.Log("Before combining");
                         Debug.Log("openings1");
 
@@ -671,16 +673,18 @@ public class Data : MonoBehaviour
                         {
                             Debug.Log(item);
                         }
-
+                        */
                         openings1.AddRange(openings2);
 
 
                         openings1 = openings1.Distinct().ToList();
+                        /*
                         Debug.Log("After combining");
                         foreach (var item in openings1)
                         {
                             Debug.Log(item);
                         }
+                        */
                         isError = false;
 
                         if (openings1.Count == 3)
@@ -690,8 +694,19 @@ public class Data : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity);
+                            if (yRotation == 0)
+                            {
+                                currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
+                            }
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
+
+                                if (yRotation == -90 || yRotation == 270)
+                                {
+                                    Debug.Log("2346");
+                                    currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
+                                }
+
                                 //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
                                 //Destroy(bc);
                                 currCorridor.transform.localScale = new Vector3(-1, 1, 1);
@@ -918,11 +933,11 @@ public class Data : MonoBehaviour
     {
         for (int i = 0; i < roomsArray.Length; i++)
         {
-            Debug.Log(roomsArray[i].transform.position);
+            //Debug.Log(roomsArray[i].transform.position);
             if(roomsArray[i].transform.position == roomPos)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name);
+                //Debug.Log("found = " + roomsArray[i].name);
                 return roomsArray[i].transform.GetChild(1);
             }
         }
