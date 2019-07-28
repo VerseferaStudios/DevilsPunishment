@@ -1,7 +1,7 @@
 ﻿//Author: Dave Bird
 //Date: Tuesday, July 23, 2019
-    //Last Edited: Tuesdau, July 23, 2019
-        //By: Dave Bird
+    //Last Edited: Saturday, July 27, 2019
+        //By: Dave Bird w/ help from Unity Tutorial from Brackeys.
             //Purpose: Write the script.
 //Written For: Devil's Punishment v2
 //Purpose: This script handles the controls for the game options.
@@ -23,15 +23,38 @@ public class OptionsMenuController : MonoBehaviour
     public GameObject contactPanel;
     public GameObject controlPanel;
     public Button close;
-    public Button credits;
     public Button contact;
     public Button controls;
+    Resolution[] resolutions;
+    public Dropdown resolutionOptions;
+    public GameObject statusCanvas;
 
     // Start is called before the first frame update
     void Start()
     {
+        statusCanvas.SetActive(false);
         controlPanel.SetActive(false);
         optionsPanel.SetActive(false);
+        resolutions = Screen.resolutions;
+
+        resolutionOptions.ClearOptions();
+
+        List<string> options = new List<string>();
+
+        int currentResOption = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+
+            if(resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResOption = i;
+            }
+        }
+        resolutionOptions.AddOptions(options);
+        resolutionOptions.value = currentResOption;
+        resolutionOptions.RefreshShownValue();
     }
 
 
@@ -40,6 +63,7 @@ public class OptionsMenuController : MonoBehaviour
         //play audio click.
         optionsPanel.SetActive(false);
         menuPanel.SetActive(true);
+        statusCanvas.SetActive(true);
     }
 
     public void ControlClose()
@@ -47,11 +71,6 @@ public class OptionsMenuController : MonoBehaviour
         //play audio click.
         controlPanel.SetActive(false);
     }
-
-    //public void Credits()
-    //{
-    //    SceneManager.LoadScene(3);
-    //}
 
     public void Controls()
     {
@@ -65,12 +84,29 @@ public class OptionsMenuController : MonoBehaviour
         contactPanel.SetActive(true);
     }
 
+    public void QualitySetter(int qualitySet)
+    {
+        QualitySettings.SetQualityLevel(qualitySet);
+    }
+
+    public void FullScreen(bool FullScreen)
+    {
+        Screen.fullScreen = FullScreen;
+    }
+
+    public void ResolutionPick(int resolutionIndex)
+    {
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             controlPanel.SetActive(false);
+            statusCanvas.SetActive(true);
         }
     }
 }
