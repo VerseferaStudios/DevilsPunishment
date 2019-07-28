@@ -202,6 +202,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
+        //making all y coordinates of all corridors equal to 0.5f
+        kPos.y = lPos.y = 0.5f;
+
+
         Vector3 targetPos = new Vector3(0, 3, 0);
 
         Vector3 From = kPos;
