@@ -893,8 +893,17 @@ public class Data : MonoBehaviour
                         Transform door0 = FindDoor(connectedRooms[i][0]);
                         //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
                         Transform door1 = FindDoor(connectedRooms[i + 1][0]);
+
+                        Vector3 door0Pos = door0.position;
+                        door0Pos.x = Mathf.Round(door0Pos.x);
+                        door0Pos.z = Mathf.Round(door0Pos.z);
+
+                        Vector3 door1Pos = door1.position;
+                        door1Pos.x = Mathf.Round(door1Pos.x);
+                        door1Pos.z = Mathf.Round(door1Pos.z);
+
                         //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                        roomNewScript.ConnectTwoRooms(door0.position, door1.position, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                        roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
                     }
 
                 }

@@ -303,7 +303,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
 
         //Add L corridor to door at end room 
-        GameObject currCorridor1 = Instantiate(corridors[1], lPos, Quaternion.identity);
+        GameObject currCorridor1 = Instantiate(corridors[1], lPos, Quaternion.identity); // how do you know its corridors[1] / Corridor_L_1
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
         List<int> openings = new List<int>();
