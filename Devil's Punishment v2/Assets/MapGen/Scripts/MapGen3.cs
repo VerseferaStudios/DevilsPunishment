@@ -8,6 +8,7 @@ public class MapGen3 : MonoBehaviour
     //10 x 10 cube
     //later//private int gridSize;
     [Header("Rooms")]
+    public GameObject doorPrefab;
     private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
@@ -97,12 +98,14 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1f;
+            float yCoord = 1f, xCoord = 0, zCoord = 0;
             switch (Random.Range(0, 3))
             {
                 case 0 :
                     roomToSpawn = startRoom;
                     yCoord = 0.064f;
+                    xCoord = 0.06f;
+                    zCoord = -0.075f;
                     break;
                 case 1:
                     roomToSpawn = endRoom;
@@ -120,7 +123,7 @@ public class MapGen3 : MonoBehaviour
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 3) * 90;
-            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
+            GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1] + xCoord, yCoord, -((float[])allRooms[i])[0] + zCoord), Quaternion.Euler(0, yRotation, 0));
 
             if(Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
             {
@@ -141,6 +144,11 @@ public class MapGen3 : MonoBehaviour
                     corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
                 }
                 */
+
+                GameObject door = Instantiate(doorPrefab/*door*/, spawnedRoom.transform.position + new Vector3(24, 0, 0), Quaternion.identity, spawnedRoom.transform);
+                door.transform.SetParent(spawnedRoom.transform);
+                door.transform.SetSiblingIndex(1);
+
 
             }
             else if(yRotation == 180 || yRotation == 270 || yRotation == -90)
