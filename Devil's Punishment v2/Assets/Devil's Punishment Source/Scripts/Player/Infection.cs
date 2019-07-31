@@ -79,7 +79,7 @@ public class Infection : MonoBehaviour
             }
             else
             {
-                health.InflictDamage(infection_DamageAmount);
+                //health.InflictDamage(infection_DamageAmount);
             }
         }
         else

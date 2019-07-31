@@ -85,13 +85,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fa7f72db085eb4ba82c3d28d3b3d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
-  HP: 25
-  onPlayerDeath:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  curHealth: 0
+  maxHealth: 0
+  player: {fileID: 0}
+  pillsConsumed: 0
+  chanceToInfect: 0
+  infected: 0
+  canInfect: 0
+  infectRate: 900
+  infectionRate: 0
+  infectMore: 0
+  infectStatus: {fileID: 0}
+  pill1Used: 0
+  pill2Used: 0
+  pill3Used: 0
+  nightTerror: {fileID: 0}
 --- !u!114 &1038660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,14 +171,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abe63da92ee0ed438601913b42a2147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowStick: {fileID: 2066383300482497999}
-  flashLight: {fileID: 370638473807345078}
+  glowStick: {fileID: 3092561618543773482}
+  flashLight: {fileID: 3702941288667074387}
   pickUp: {fileID: 460845081, guid: b738eafc6140f5240a078954ba645946, type: 3}
-  glow: {fileID: 4025633155743808537}
-  beam: {fileID: 4044717081000591885}
-  dark: 0
+  glow: {fileID: 115497954267432700}
+  beam: {fileID: 1037516766600706280}
   isUpgraded: 0
-  count: 0
+  countno: 0
 --- !u!1 &3650151
 GameObject:
   m_ObjectHideFlags: 0
@@ -41496,7 +41503,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2031591255101582331
 Transform:
   m_ObjectHideFlags: 0
@@ -42791,7 +42798,8 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3059652488972947742}
   m_Father: {fileID: 3835696650050137169}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53435,3 +53443,102 @@ Transform:
   m_Father: {fileID: 4580370990978444516}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1481627562231653303
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3835696650050137159}
+    m_Modifications:
+    - target: {fileID: 4496052591761941661, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_Name
+      value: GlowStick_Flashlight GameObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0222
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.322
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1864
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.07730493
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.05872435
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.046827197
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.99417436
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -9.161
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -353.631
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 4.8830004
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7f8ca105867743c44be7ca17b3dd849a, type: 3}
+--- !u!108 &1037516766600706280 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1939305871968426847, guid: 7f8ca105867743c44be7ca17b3dd849a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481627562231653303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3702941288667074387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2876868950151277796, guid: 7f8ca105867743c44be7ca17b3dd849a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481627562231653303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &115497954267432700 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1519288322136728907, guid: 7f8ca105867743c44be7ca17b3dd849a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481627562231653303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3092561618543773482 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4496052591761941661, guid: 7f8ca105867743c44be7ca17b3dd849a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481627562231653303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3059652488972947742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4537901987750064809, guid: 7f8ca105867743c44be7ca17b3dd849a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481627562231653303}
+  m_PrefabAsset: {fileID: 0}

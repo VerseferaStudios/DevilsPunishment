@@ -15,7 +15,7 @@ public class StatusDisplayUI : MonoBehaviour
 
     // Status: Infection
     public GameObject infectionDisplay;
-    private Infection infection;
+    //private Infection infection;
     private Slider infectionSlider;
     private TextMeshProUGUI infectionPerecentage;
 
@@ -26,7 +26,6 @@ public class StatusDisplayUI : MonoBehaviour
         deepRed = new Color(.5f,0,0);
 
         // Infection setup
-        infection = Player.instance.GetComponent<Infection>();
         infectionSlider = infectionDisplay.GetComponentInChildren<Slider>();
         infectionPerecentage = infectionDisplay.GetComponentInChildren<TextMeshProUGUI>();
         InvokeRepeating("UpdateInfectionDisplay", 0f, 1f);
@@ -41,35 +40,37 @@ public class StatusDisplayUI : MonoBehaviour
         float HPPercentage = health.GetHPPercentage();
         healthSlider.value = HPPercentage;
 
-        percentageText.text = Mathf.FloorToInt(HPPercentage*100f) + "%";
+        percentageText.text = Mathf.FloorToInt(HPPercentage * 100f) + "%";
 
-        if(HPPercentage > .2f) {
+        if (HPPercentage > .2f)
+        {
             deepRed.a = 0;
-        } else {
-            deepRed.a = Mathf.Sin(10f*Time.time)*.02f + (.2f-HPPercentage)*2f;
+        }
+        else
+        {
+            deepRed.a = Mathf.Sin(10f * Time.time) * .02f + (.2f - HPPercentage) * 2f;
         }
 
         bloodOnScreen.color = deepRed;
 
     }
 
-    private void UpdateInfectionDisplay()
+    public void UpdateInfectionDisplay()
     {
-        float infectionAmount = infection.GetInfectionAmount();
+        float infectionAmount = health.InfectionRate();
 
-        if (infectionDisplay.activeSelf == false && infectionAmount > 0f) 
+        if (!infectionDisplay.activeSelf && health.infected) //infectionDisplay.activeSelf == false && infectionAmount > 0f
         {
             infectionDisplay.SetActive(true);
         }
-        else if (infectionAmount <= 0f)
+        else if (infectionDisplay.activeSelf && !health.infected) // infectionAmount <= 0f
         {
             infectionDisplay.SetActive(false);
+        }  
+        if (infectionDisplay.activeSelf)
+        {
+            infectionSlider.value = infectionAmount / 100;
+            infectionPerecentage.text = infectionAmount.ToString("0.##") + "%";
         }
-            
-
-        infectionSlider.value = infectionAmount / 100;
-        infectionPerecentage.text = infectionAmount.ToString("0.##") + "%";
     }
-
-
 }
