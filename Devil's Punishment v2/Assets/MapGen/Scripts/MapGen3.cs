@@ -119,7 +119,7 @@ public class MapGen3 : MonoBehaviour
                     break;*/
             }
             Room roomScript = roomToSpawn.GetComponent<Room>();
-            float yRotation = Random.Range(0, 3) * 90;
+            float yRotation = Random.Range(0, 4) * 90;
             GameObject spawnedRoom = Instantiate(roomToSpawn, new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]), Quaternion.Euler(0, yRotation, 0));
 
             if(Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
@@ -130,6 +130,7 @@ public class MapGen3 : MonoBehaviour
             if(yRotation == 90)
             {
                 spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
+                GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
                 //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
@@ -149,11 +150,13 @@ public class MapGen3 : MonoBehaviour
                 if (yRotation == 180)
                 {
                     spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+                    GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                     reqYRotationForCorridor = 0;
                 }
                 else if (yRotation == 270 || yRotation == -90)
                 {
                     spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+                    GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                     //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                     //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
                     //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
@@ -178,9 +181,9 @@ public class MapGen3 : MonoBehaviour
             //probably +z....
             else
             {
-
+                GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
             }
-            
+
 
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
@@ -211,6 +214,17 @@ public class MapGen3 : MonoBehaviour
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
         */
+    }
+
+    // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------
+    public void GiveOffsetToRoom(Transform spawnedRoom, float offset)
+    {
+        spawnedRoom.GetChild(0).localPosition = new Vector3(spawnedRoom.GetChild(0).localPosition.x, spawnedRoom.GetChild(0).localPosition.y, spawnedRoom.GetChild(0).localPosition.z + offset);
+        Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
+        for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
+        {
+            corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
+        }
     }
 
     // --------------------------------- Checks for collisions between ROOMS ---------------------------------
