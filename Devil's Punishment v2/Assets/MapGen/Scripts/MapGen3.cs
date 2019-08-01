@@ -154,7 +154,7 @@ public class MapGen3 : MonoBehaviour
                     reqYRotationForCorridor = 0;
 
                     //-----------------234567-----------------
-                    if (spawnedRoom.name.Equals("End Room(Clone)"))
+                    //if (spawnedRoom.name.Equals("End Room(Clone)"))
                     {
                         spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.303f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + 0.31f);
                     }
@@ -179,7 +179,7 @@ public class MapGen3 : MonoBehaviour
                     reqYRotationForCorridor = 90;
 
                     //-----------------234567-----------------
-                    if (spawnedRoom.name.Equals("End Room(Clone)"))
+                    //if (spawnedRoom.name.Equals("End Room(Clone)"))
                     {
                         spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.31f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z - 0.303f);
                     }
