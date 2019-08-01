@@ -350,7 +350,7 @@ public class GunController : MonoBehaviour
 			//Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
 			Random.seed = Random.Range(-9999, 9999);
 			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
-			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
+			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 
 			Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset);
 			RaycastHit hit;
