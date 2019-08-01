@@ -152,6 +152,13 @@ public class MapGen3 : MonoBehaviour
                     spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
                     GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                     reqYRotationForCorridor = 0;
+
+                    //-----------------234567-----------------
+                    if (spawnedRoom.name.Equals("End Room(Clone)"))
+                    {
+                        spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.303f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + 0.31f);
+                    }
+
                 }
                 else if (yRotation == 270 || yRotation == -90)
                 {
@@ -170,12 +177,21 @@ public class MapGen3 : MonoBehaviour
                     */
 
                     reqYRotationForCorridor = 90;
+
+                    //-----------------234567-----------------
+                    if (spawnedRoom.name.Equals("End Room(Clone)"))
+                    {
+                        spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.31f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z - 0.303f);
+                    }
+
                 }
 
                 for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
                 {
                     spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
                 }
+
+                
 
             }
             //probably +z....
