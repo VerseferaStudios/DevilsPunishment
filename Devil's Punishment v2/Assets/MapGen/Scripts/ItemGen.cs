@@ -98,7 +98,7 @@ public class ItemGen : MonoBehaviour
     int startingRoomSpawns;
 
     private List<Vector3> itemPositions = new List<Vector3>();
-
+    
     public void FindLocations()
     {
         List<Transform> all = new List<Transform>();
@@ -157,7 +157,7 @@ public class ItemGen : MonoBehaviour
             float randomPositionX = Random.Range(bottomLeftCorner.x, topRightCorner.x);
             float randomPositionZ = Random.Range(bottomLeftCorner.z, topRightCorner.z);
 
-            Vector3 currentItemPos = new Vector3(randomPositionX, 0, randomPositionZ);
+            Vector3 currentItemPos = new Vector3(randomPositionX, 3, randomPositionZ);
 
 
             //Get the size of the itemToSpawn
@@ -189,8 +189,8 @@ public class ItemGen : MonoBehaviour
             if(itemToSpawn != null)
             {
                 GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity);
-                gb.GetComponent<Rigidbody>().useGravity = false;
-                gb.GetComponent<Rigidbody>().isKinematic = true;
+                //gb.GetComponent<Rigidbody>().useGravity = false;
+                //gb.GetComponent<Rigidbody>().isKinematic = true;
                 itemPositions.Add(currentItemPos);
             }
 
