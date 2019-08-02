@@ -189,6 +189,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Should only happen once!!!
             if(k == spawnPoints.Count - 1)
             {
+
+                //MakeInitHallways();
+
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
@@ -687,6 +690,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 }
             }
         }
+    }
+
+    private void MakeInitHallways()
+    {
+        ConnectTwoRooms(new Vector3(-16, 0, 0), new Vector3(4, 0, 0), "Door+x", "Door-x", new Vector3(-16 - 24, 0, 0), new Vector3(4 + 24, 0, 0), true);
+        ConnectTwoRooms(new Vector3(-4, 0, 0), new Vector3(-4, 0, -8), "Door-z", "Door+z", new Vector3(-4, 0, -24), new Vector3(-4, 0, -8 + 24), true);
     }
 
 }
