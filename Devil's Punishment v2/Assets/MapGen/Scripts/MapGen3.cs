@@ -211,6 +211,9 @@ public class MapGen3 : MonoBehaviour
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
                 Data.instance.roomNewScript = roomNewScript;
+
+                //ConnectToMapGen(roomNewScript);
+
             }
 
             //gameObjectDetails.Add(roomScript);
@@ -231,14 +234,39 @@ public class MapGen3 : MonoBehaviour
         //Debug.Log("_________________DONE___________________");
         */
 
-        Data.instance.allRooms = this.allRooms;
+        Data.instance.allRooms = allRooms;
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
         
     }
 
+    // ---------------------------- Connect init pos to map gen nearest room ----------------------------
+    private void ConnectToMapGen(RoomNew roomNewScript)
+    {
+        float max = 0;
+        int maxIdx = -1;
+        //-40, 0, -20
+        for (int i = 0; i < allRooms.Count; i++)
+        {
+            float current = -40 + ((float[])allRooms[i])[1] + -20 + ((float[])allRooms[i])[0];
+            if(current > max)
+            {
+                max = current;
+                maxIdx = i;
+            }
+        }
+        if(maxIdx != -1)
+        {
+            roomNewScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[maxIdx])[1], 1, -((float[])allRooms[maxIdx])[0]), new Vector3(-40, 1, -20), "Door+x", "Door-z", Vector3.zero, new Vector3(-40, 1, -20 + 24), true); 
+        }
+        else
+        {
+            Debug.Log("ERROR!!!!");
+        }
+    }
+
     // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------
-    public void GiveOffsetToRoom(Transform spawnedRoom, float offset)
+    private void GiveOffsetToRoom(Transform spawnedRoom, float offset)
     {
         spawnedRoom.GetChild(0).localPosition = new Vector3(spawnedRoom.GetChild(0).localPosition.x, spawnedRoom.GetChild(0).localPosition.y, spawnedRoom.GetChild(0).localPosition.z + offset);
         Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
