@@ -315,14 +315,14 @@ public class Data : MonoBehaviour
                                 if (connectedRooms[l][m] == connectedRoomsThroughCollision[k].rooms[q])
                                 {
                                     connectedRoomsThroughCollision.Add(new ConnectedComponent(connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, connectedRooms[l]));
-
+                                    /*
                                     GameObject gb = Instantiate(roomIndicator, connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, Quaternion.identity);
                                     CorridorNew cn = gb.AddComponent<CorridorNew>();
                                     cn.rooms = connectedRooms[l];
                                     cn.KOrL = "l";
                                     cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[0]);
                                     cn.theEqualOnes.Add(connectedRoomsThroughCollision[k].rooms[1]);
-
+                                    */
                                     isFoundK = true;
 
                                     connectedRooms.RemoveAt(l);
@@ -343,12 +343,12 @@ public class Data : MonoBehaviour
                     if (/*k >= connectedRooms.Count - 1 &&*/ isFoundK && reqK != -1)
                     {
                         //connectedRoomsThroughCollision.Add(new ConnectedComponent(connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, connectedRoomsThroughCollision[reqK].rooms));
-
+                        /*
                         GameObject gb = Instantiate(roomIndicator, connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, Quaternion.identity);
                         CorridorNew cn = gb.AddComponent<CorridorNew>();
                         cn.rooms = connectedRoomsThroughCollision[reqK].rooms;
                         cn.KOrL = "k";
-
+                        */
                         connectedRooms.RemoveAt(reqK);
                         //k--;
                         reqK = -1;
@@ -842,7 +842,7 @@ public class Data : MonoBehaviour
 
                 
                 
-
+                /*
                 int z = 1;
 
                 foreach (var item in connectedRooms)
@@ -888,7 +888,7 @@ public class Data : MonoBehaviour
                     }
                     ++z;
                 }
-
+                */
                 yield return new WaitForSeconds(2.0f);
 
                 for (int i = 0; i + 1 < connectedRooms.Count; i += 2)
