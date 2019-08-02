@@ -226,10 +226,12 @@ public class MapGen3 : MonoBehaviour
             //Debug.Log(ddd[1]);
         }
         //Debug.Log("_________________DONE___________________");
+        */
+
         Data.instance.allRooms = this.allRooms;
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
-        */
+        
     }
 
     // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------

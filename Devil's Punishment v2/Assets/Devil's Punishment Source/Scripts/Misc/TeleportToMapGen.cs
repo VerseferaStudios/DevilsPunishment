@@ -5,8 +5,6 @@ using UnityEngine;
 public class TeleportToMapGen : MonoBehaviour
 {
 
-    public Transform player;
-
     private void Start()
     {
         //StartCoroutine(TeleportCo());
@@ -41,8 +39,8 @@ public class TeleportToMapGen : MonoBehaviour
             Vector3 playerPos = other.transform.position;
             //if (Data.instance.allRooms.Count > 0)
             {
-                //other.transform.position = new Vector3(-((float[])Data.instance.allRooms[0])[1], 0, -((float[])Data.instance.allRooms[0])[0]);
-                other.transform.position = new Vector3(playerPos.x - 220, playerPos.y + 3, playerPos.z - 2);
+                other.transform.position = new Vector3(-((float[])Data.instance.allRooms[0])[1], 0, -((float[])Data.instance.allRooms[0])[0]);
+                //other.transform.position = new Vector3(playerPos.x - 220, playerPos.y + 3, playerPos.z - 2);
                 other.transform.eulerAngles = new Vector3(0, 180, 0);
             }
             //else
