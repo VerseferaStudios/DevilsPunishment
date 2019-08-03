@@ -68,8 +68,6 @@ public class Data : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        //Random.InitState(10);
-        //Random.state = JsonUtility.FromJson<Random.State>("{\"s0\":1252075656,\"s1\":1756889672,\"s2\":100038291,\"s3\":-1311783885}");
     }
 
     private void Start()

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7846860429511563593}
   - component: {fileID: 7846860429511563598}
   - component: {fileID: 1281746008400077949}
+  - component: {fileID: 8860471303958467399}
   m_Layer: 0
   m_Name: RoomsLoader
   m_TagString: Rooms(MapGen)
@@ -45,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomsLoaderPrefab: {fileID: 7846860429511563592}
+  mapGenHolder: {fileID: 0}
+  mapGenHolderTransform: {fileID: 0}
   mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
     type: 3}
   generatorRoom: {fileID: 8265298613614494518, guid: cdc841e9f42bc134fa7ddd7991067b2a,
@@ -113,3 +116,15 @@ MonoBehaviour:
   RadioSpots: 3
   CaveSpots: 1
   StartingRoomSpots: 5
+--- !u!114 &8860471303958467399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846860429511563592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076223150b6fcb84b9b9a5a84ef7753c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

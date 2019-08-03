@@ -35,8 +35,8 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        wsrdfty();
-        
+        CreateHolderForMapGen();
+        Random.state = GoodStates.states[1];
         StateData.states.Add(Random.state);
         rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
@@ -47,18 +47,19 @@ public class MapGen3 : MonoBehaviour
         Data.instance.zSize = zSize;
     }
 
-    public void wsrdfty()
+    public void CreateHolderForMapGen()
     {
         mapGenHolder = new GameObject();
-        mapGenHolderTransform = Instantiate(mapGenHolder).transform;
+        mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
-
+    
     // ---------------- Reload Map Gen with good states ----------------
     public void ReloadMapGen()
     {
-        ReloadGoodStatesData.isReloadingGoodStates = true;
 
+        ReloadGoodStatesData.isReloadingGoodStates = true;
+        /*
         Random.state = GoodStates.states[1];
         //ReloadGoodStatesData.isReloadingGoodStates = false;
         ReloadGoodStatesData.i++;
@@ -66,13 +67,13 @@ public class MapGen3 : MonoBehaviour
         {
             ReloadGoodStatesData.i = 0;
         }
-
+        */
         //Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         //Data.instance.StartInstantiateCo();
 
         Destroy(mapGenHolderTransform.gameObject);
 
-        wsrdfty();
+        CreateHolderForMapGen();
 
         rooms();
 
@@ -82,10 +83,10 @@ public class MapGen3 : MonoBehaviour
 
     public void rooms()
     {
-
+        /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
         {
-            Random.state = GoodStates.states[1];
+            Random.state = GoodStates.states[ReloadGoodStatesData.i];
             //ReloadGoodStatesData.isReloadingGoodStates = false;
             ReloadGoodStatesData.i++;
             if (ReloadGoodStatesData.i >= GoodStates.states.Count)
@@ -93,7 +94,7 @@ public class MapGen3 : MonoBehaviour
                 ReloadGoodStatesData.i = 0;
             }
         }
-
+        */
         //Make this while and next loop into one? will Collisions be a prob?
         int k = 0, l = 0;
         while (k < n && l < 1000)
