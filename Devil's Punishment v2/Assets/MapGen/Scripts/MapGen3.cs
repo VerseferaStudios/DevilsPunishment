@@ -8,6 +8,10 @@ public class MapGen3 : MonoBehaviour
     //first we'll see the ground floor
     //10 x 10 cube
     //later//private int gridSize;
+
+    public GameObject roomsLoaderPrefab, mapGenHolder;
+    public Transform mapGenHolderTransform;
+
     [Header("Rooms")]
     private int n = 10;
     public ArrayList allRooms = new ArrayList();
@@ -31,18 +35,11 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        if (ReloadGoodStatesData.isReloadingGoodStates)
-        {
-            Random.state = GoodStates.states[1];
-            //ReloadGoodStatesData.isReloadingGoodStates = false;
-            ReloadGoodStatesData.i++;
-            if(ReloadGoodStatesData.i >= GoodStates.states.Count)
-            {
-               ReloadGoodStatesData.i = 0;
-            }
-        }
+        wsrdfty();
+        
         StateData.states.Add(Random.state);
         rooms();
+        Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
@@ -50,16 +47,53 @@ public class MapGen3 : MonoBehaviour
         Data.instance.zSize = zSize;
     }
 
+    public void wsrdfty()
+    {
+        mapGenHolder = new GameObject();
+        mapGenHolderTransform = Instantiate(mapGenHolder).transform;
+        Data.instance.mapGenHolderTransform = mapGenHolderTransform;
+    }
+
     // ---------------- Reload Map Gen with good states ----------------
     public void ReloadMapGen()
     {
         ReloadGoodStatesData.isReloadingGoodStates = true;
-        SceneManager.LoadScene(0);
+
+        Random.state = GoodStates.states[1];
+        //ReloadGoodStatesData.isReloadingGoodStates = false;
+        ReloadGoodStatesData.i++;
+        if (ReloadGoodStatesData.i >= GoodStates.states.Count)
+        {
+            ReloadGoodStatesData.i = 0;
+        }
+
+        //Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
+        //Data.instance.StartInstantiateCo();
+
+        Destroy(mapGenHolderTransform.gameObject);
+
+        wsrdfty();
+
+        rooms();
+
+        //rooms();
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void rooms()
     {
-        
+
+        if (ReloadGoodStatesData.isReloadingGoodStates)
+        {
+            Random.state = GoodStates.states[1];
+            //ReloadGoodStatesData.isReloadingGoodStates = false;
+            ReloadGoodStatesData.i++;
+            if (ReloadGoodStatesData.i >= GoodStates.states.Count)
+            {
+                ReloadGoodStatesData.i = 0;
+            }
+        }
+
         //Make this while and next loop into one? will Collisions be a prob?
         int k = 0, l = 0;
         while (k < n && l < 1000)
@@ -144,13 +178,13 @@ public class MapGen3 : MonoBehaviour
             Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
-            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0));
+            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
             itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 4);
 
             if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0));
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
             }
 
             if(yRotation == 90)

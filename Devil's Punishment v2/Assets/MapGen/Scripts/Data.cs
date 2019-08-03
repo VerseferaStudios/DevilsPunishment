@@ -5,6 +5,9 @@ using System.Linq;
 
 public class Data : MonoBehaviour
 {
+    public GameObject roomsLoaderPrefab;
+    public Transform mapGenHolderTransform;
+
     public static Data instance = null;
     public ArrayList allRooms = new ArrayList();
     public float xSize, zSize, corridorSize = 4;
@@ -79,6 +82,20 @@ public class Data : MonoBehaviour
         prevCount = connectedRoomsThroughCollision.Count;
         //StartCoroutine(DoCheckPerSecond());
         //StartCoroutine(DoConnectedComponents());
+    }
+
+    public void StartInstantiateCo()
+    {
+        StartCoroutine(InstantiateRoomsLoader());
+    }
+
+    private IEnumerator InstantiateRoomsLoader()
+    {
+        Debug.Log("123456712345");
+        yield return new WaitForSeconds(5f);
+        Debug.Log("345");
+        Instantiate(roomsLoaderPrefab);
+        Debug.Log("123456712234567345");
     }
 
     // --------------------- Converts corridorOpening indices/numbers into yRotations for corridor prefabs ---------------------
@@ -316,7 +333,7 @@ public class Data : MonoBehaviour
                                 {
                                     connectedRoomsThroughCollision.Add(new ConnectedComponent(connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, connectedRooms[l]));
                                     /*
-                                    GameObject gb = Instantiate(roomIndicator, connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, Quaternion.identity);
+                                    GameObject gb = Instantiate(roomIndicator, connectedRooms[l][0] / 2 + connectedRooms[l][1] / 2, Quaternion.identity, mapGenHolderTransform);
                                     CorridorNew cn = gb.AddComponent<CorridorNew>();
                                     cn.rooms = connectedRooms[l];
                                     cn.KOrL = "l";
@@ -344,7 +361,7 @@ public class Data : MonoBehaviour
                     {
                         //connectedRoomsThroughCollision.Add(new ConnectedComponent(connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, connectedRoomsThroughCollision[reqK].rooms));
                         /*
-                        GameObject gb = Instantiate(roomIndicator, connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, Quaternion.identity);
+                        GameObject gb = Instantiate(roomIndicator, connectedRoomsThroughCollision[reqK].rooms[0] / 2 + connectedRoomsThroughCollision[reqK].rooms[1] / 2, Quaternion.identity, mapGenHolderTransform);
                         CorridorNew cn = gb.AddComponent<CorridorNew>();
                         cn.rooms = connectedRoomsThroughCollision[reqK].rooms;
                         cn.KOrL = "k";
@@ -693,7 +710,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity);
+                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
                             if (yRotation == 0)
                             {
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
@@ -721,7 +738,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            Instantiate(corridorX, spawnAtPos, Quaternion.identity);
+                            Instantiate(corridorX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
                         }
                         else
                         {
@@ -737,7 +754,7 @@ public class Data : MonoBehaviour
                         //If I and I collides with different rotations
                         if (collidedCorridors[i].transform.rotation != collidedCorridors[j].transform.rotation)
                         {
-                            GameObject currCorridor1 = Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity);
+                            GameObject currCorridor1 = Instantiate(corridorX, collidedCorridors[j].transform.position, Quaternion.identity, mapGenHolderTransform);
                         }
                         //If I and L collides
                         else if (!collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name))
@@ -750,7 +767,7 @@ public class Data : MonoBehaviour
                         }
                         */
                         //Debug.Log("Destroying " + collidedCorridors[i].transform.parent);
-                        if(!isError)
+                        if (!isError)
                             Destroy(collidedCorridors[i].transform.parent.gameObject);
                     }
 
@@ -840,8 +857,8 @@ public class Data : MonoBehaviour
 
                 roomsArray = GameObject.FindGameObjectsWithTag("Room");
 
-                
-                
+
+
                 /*
                 int z = 1;
 
@@ -851,7 +868,7 @@ public class Data : MonoBehaviour
                     foreach (var item1 in item)
                     {
                         //Debug.Log(item1);
-                        GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity);
+                        GameObject gb = Instantiate(roomIndicator, item1, Quaternion.identity, mapGenHolderTransform);
                         //Colour scheme
                         if (z == 1)
                         {

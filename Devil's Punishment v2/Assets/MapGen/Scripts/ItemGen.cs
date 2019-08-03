@@ -188,7 +188,7 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity);
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, transform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
                 itemPositions.Add(currentItemPos);
@@ -260,15 +260,15 @@ public class ItemGen : MonoBehaviour
     //    randomLoc = Random.Range(0, locate.Length);
     //    //if (randomLoc.position.y <=8 randomLoc.Length)
     //    //    {
-    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation, transform);
     //    //    //Delete or deactivate the spawn location
     //    //    }
 
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation, transform);
     //    //Delete or deactivate the spawn location
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation, transform);
     //    //Delete or deactivate the spawn location
     //    Debug.Log("All generator pieces have been placed!");
     //    Debug.Log("Spawning all other items now!");

@@ -65,7 +65,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
                 if (spawnPoints[i].name.EndsWith("x"))
@@ -124,7 +124,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         */
 
         //give data the first door according to which we r sorting
-        Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
+        if(spawnPoints.Count > 0)
+        {
+            Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
+        }
 
         //sort according to the comparer (ie according to the distance from the first door)
         //spawnPoints.Sort(Compare);
@@ -309,7 +312,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos);
         }
 
-        //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);
+        //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
 
         // --------------- Add L corridor to door at end room ---------------
         List<int> openings = new List<int>();
@@ -336,7 +339,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity); 
+        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform); 
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -439,7 +442,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -473,7 +476,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -491,7 +494,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
@@ -539,7 +542,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -574,7 +577,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -594,7 +597,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
