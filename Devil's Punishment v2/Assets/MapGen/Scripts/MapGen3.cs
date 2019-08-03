@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 
@@ -8,7 +9,7 @@ public class MapGen3 : MonoBehaviour
     //10 x 10 cube
     //later//private int gridSize;
     [Header("Rooms")]
-    private int n = 14;
+    private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -23,15 +24,37 @@ public class MapGen3 : MonoBehaviour
     public float ventCoverProbabilty = 0.050f;
     public GameObject ventCover;
 
+    [Header("ScriptableObjects")]
+    public StateData StateData, GoodStates;
+    public ReloadGoodStates ReloadGoodStatesData;
+
 
     private void Start()
     {
+        if (ReloadGoodStatesData.isReloadingGoodStates)
+        {
+            Random.state = GoodStates.states[1];
+            //ReloadGoodStatesData.isReloadingGoodStates = false;
+            ReloadGoodStatesData.i++;
+            if(ReloadGoodStatesData.i >= GoodStates.states.Count)
+            {
+               ReloadGoodStatesData.i = 0;
+            }
+        }
+        StateData.states.Add(Random.state);
         rooms();
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
+    }
+
+    // ---------------- Reload Map Gen with good states ----------------
+    public void ReloadMapGen()
+    {
+        ReloadGoodStatesData.isReloadingGoodStates = true;
+        SceneManager.LoadScene(0);
     }
 
     public void rooms()
@@ -59,8 +82,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 9) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 9) + 28;
+            arr[0] = 48 * Random.Range(0, 5) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 5) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -243,21 +266,21 @@ public class MapGen3 : MonoBehaviour
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
     private void ConnectToMapGen(RoomNew roomNewScript)
     {
-        float max = 0;
-        int maxIdx = -1;
-        //-40, 0, -20
+        float min = 9999;
+        int minIdx = -1;
+        //-48, 0, -24
         for (int i = 0; i < allRooms.Count; i++)
         {
-            float current = -40 + ((float[])allRooms[i])[1] + -20 + ((float[])allRooms[i])[0];
-            if(current > max)
+            float current = -48 + ((float[])allRooms[i])[1] + -24 + ((float[])allRooms[i])[0];
+            if(current < min)
             {
-                max = current;
-                maxIdx = i;
+                min = current;
+                minIdx = i;
             }
         }
-        if(maxIdx != -1)
+        if(minIdx != -1)
         {
-            roomNewScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[maxIdx])[1], 1, -((float[])allRooms[maxIdx])[0]), new Vector3(-40, 1, -20), "Door+x", "Door-z", Vector3.zero, new Vector3(-40, 1, -20 + 24), true); 
+            roomNewScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[minIdx])[1] + 24, 1, -((float[])allRooms[minIdx])[0]), new Vector3(-48, 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, 1, -24 + 24), true); 
         }
         else
         {
