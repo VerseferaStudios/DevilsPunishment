@@ -34,7 +34,7 @@ public class AudioController : MonoBehaviour
         {
             //Must stop all music, make the slider inoperable and grayed out, slider goes all the way to the left.
             musicSource.volume = 0.0f;
-            //musicSlide.GetComponent<Slider>().interactable = false;
+            musicSlide.GetComponent<Slider>().interactable = false;
             musicSource.mute = true;
             musicSlide.interactable = false;
         }

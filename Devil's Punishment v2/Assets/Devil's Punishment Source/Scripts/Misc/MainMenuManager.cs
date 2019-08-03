@@ -31,7 +31,7 @@ public class MainMenuManager : MonoBehaviour
         reportBug.GetComponent<Button>().enabled = true;
         settings.GetComponent<Button>().enabled = true;
         quit.GetComponent<Button>().enabled = true;
-        reportPanel.SetActive(false);
+        //reportPanel.SetActive(false);
         settingsCanvas.SetActive(false);
     }
 
