@@ -36,7 +36,7 @@ public class MapGen3 : MonoBehaviour
     private void Start()
     {
         CreateHolderForMapGen();
-        Random.state = GoodStates.states[1];
+        Random.state = GoodStates.states[0];
         StateData.states.Add(Random.state);
         rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
@@ -181,7 +181,7 @@ public class MapGen3 : MonoBehaviour
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 4);
+            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
             if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
             {
