@@ -156,7 +156,7 @@ public class MapGen3 : MonoBehaviour
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1f;
-            switch (Random.Range(0, 3))
+            switch (Random.Range(1, 3))
             {
                 case 0 :
                     roomToSpawn = startRoom;
