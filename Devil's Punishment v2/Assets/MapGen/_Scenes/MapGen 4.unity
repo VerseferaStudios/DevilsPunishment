@@ -355,6 +355,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 96744409}
   m_Mesh: {fileID: 4300014, guid: 887ea641ce0be9c40b2c3f82f3ac644f, type: 3}
+--- !u!1 &116493001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7846860429511563592, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8687177794943754389}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &116493006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116493001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffec21f8202b0a4a91316e122c4e2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 1841075158073676714, guid: 49b4b1d208cb32845b13db9d7fe330c3, type: 3}
 --- !u!1 &151828759
 GameObject:
   m_ObjectHideFlags: 0
@@ -5746,6 +5765,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsLoaderPrefab: {fileID: 0}
+  mapGenHolder: {fileID: 0}
+  mapGenHolderTransform: {fileID: 0}
   mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
     type: 3}
   generatorRoom: {fileID: 8265298613614494518, guid: cdc841e9f42bc134fa7ddd7991067b2a,
@@ -5764,6 +5786,9 @@ MonoBehaviour:
   - {fileID: 342825950719613298, guid: 739e385e28ab8e94cb8262a2802ae471, type: 3}
   ventCoverProbabilty: 0.05
   ventCover: {fileID: 100000, guid: 5d32429074f54134787a0a21ccf8fb9f, type: 3}
+  StateData: {fileID: 0}
+  GoodStates: {fileID: 0}
+  ReloadGoodStatesData: {fileID: 0}
 --- !u!1 &1867701977
 GameObject:
   m_ObjectHideFlags: 0
