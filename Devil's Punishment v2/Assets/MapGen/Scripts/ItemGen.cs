@@ -98,7 +98,7 @@ public class ItemGen : MonoBehaviour
     int startingRoomSpawns;
 
     private List<Vector3> itemPositions = new List<Vector3>();
-
+    
     public void FindLocations()
     {
         List<Transform> all = new List<Transform>();
@@ -157,7 +157,7 @@ public class ItemGen : MonoBehaviour
             float randomPositionX = Random.Range(bottomLeftCorner.x, topRightCorner.x);
             float randomPositionZ = Random.Range(bottomLeftCorner.z, topRightCorner.z);
 
-            Vector3 currentItemPos = new Vector3(randomPositionX, 0, randomPositionZ);
+            Vector3 currentItemPos = new Vector3(randomPositionX, 3, randomPositionZ);
 
 
             //Get the size of the itemToSpawn
@@ -188,9 +188,9 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity);
-                gb.GetComponent<Rigidbody>().useGravity = false;
-                gb.GetComponent<Rigidbody>().isKinematic = true;
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                //gb.GetComponent<Rigidbody>().useGravity = false;
+                //gb.GetComponent<Rigidbody>().isKinematic = true;
                 itemPositions.Add(currentItemPos);
             }
 
@@ -260,15 +260,15 @@ public class ItemGen : MonoBehaviour
     //    randomLoc = Random.Range(0, locate.Length);
     //    //if (randomLoc.position.y <=8 randomLoc.Length)
     //    //    {
-    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //    //Delete or deactivate the spawn location
     //    //    }
 
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //Delete or deactivate the spawn location
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //Delete or deactivate the spawn location
     //    Debug.Log("All generator pieces have been placed!");
     //    Debug.Log("Spawning all other items now!");
