@@ -436,7 +436,6 @@ GameObject:
   - component: {fileID: 34944111}
   - component: {fileID: 34944110}
   - component: {fileID: 34944112}
-  - component: {fileID: 34944113}
   m_Layer: 5
   m_Name: Panel"Controls"
   m_TagString: Untagged
@@ -535,18 +534,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &34944113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 34944108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d9c4051b77e904cbf4869815f53fdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &46291142
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +854,7 @@ GameObject:
   - component: {fileID: 61262140}
   - component: {fileID: 61262139}
   m_Layer: 5
-  m_Name: Button"Interact"
+  m_Name: Button.Interact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1357,8 +1344,9 @@ GameObject:
   - component: {fileID: 131577907}
   - component: {fileID: 131577906}
   - component: {fileID: 131577905}
+  - component: {fileID: 131577909}
   m_Layer: 5
-  m_Name: Image"ButtonListContent"
+  m_Name: Image.ButtonListContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1474,6 +1462,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131577903}
   m_CullTransparentMesh: 0
+--- !u!114 &131577909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131577903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74d9c4051b77e904cbf4869815f53fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newKey: 0
 --- !u!1 &135314338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1548,6 +1549,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135314338}
   m_CullTransparentMesh: 0
+--- !u!1 &160823517
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 160823519}
+  - component: {fileID: 160823518}
+  m_Layer: 0
+  m_Name: _GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &160823518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160823517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4068bc1ea3fcfa439aafa0d1c165eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &160823519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160823517}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 503.63425, y: 227.55397, z: -2.6290584}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &161094969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,7 +1605,7 @@ GameObject:
   - component: {fileID: 161094972}
   - component: {fileID: 161094971}
   m_Layer: 5
-  m_Name: Button"Sprint"
+  m_Name: Button.Sprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3627,7 +3671,7 @@ GameObject:
   - component: {fileID: 386230233}
   - component: {fileID: 386230232}
   m_Layer: 5
-  m_Name: Button"FlashlightNarrow"
+  m_Name: Button.FlashlightNarrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4166,7 +4210,7 @@ GameObject:
   - component: {fileID: 443811217}
   - component: {fileID: 443811216}
   m_Layer: 5
-  m_Name: Button"Back"
+  m_Name: Button.Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4473,7 +4517,7 @@ GameObject:
   - component: {fileID: 485224084}
   - component: {fileID: 485224083}
   m_Layer: 5
-  m_Name: Button"FlashlightUp"
+  m_Name: Button.FlashlightUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4591,7 +4635,7 @@ GameObject:
   - component: {fileID: 491195302}
   - component: {fileID: 491195301}
   m_Layer: 5
-  m_Name: Button"Reload"
+  m_Name: Button.Reload
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5163,7 +5207,7 @@ GameObject:
   - component: {fileID: 584824936}
   - component: {fileID: 584824935}
   m_Layer: 5
-  m_Name: Button"Left"
+  m_Name: Button.Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6605,7 +6649,7 @@ GameObject:
   - component: {fileID: 793933967}
   - component: {fileID: 793933966}
   m_Layer: 5
-  m_Name: Button"FlashlightDown"
+  m_Name: Button.FlashlightDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6797,7 +6841,7 @@ GameObject:
   - component: {fileID: 817790029}
   - component: {fileID: 817790028}
   m_Layer: 5
-  m_Name: Button"FlashlightWiden"
+  m_Name: Button.FlashlightWiden
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8858,7 +8902,7 @@ GameObject:
   - component: {fileID: 1082915623}
   - component: {fileID: 1082915622}
   m_Layer: 5
-  m_Name: Button"FlashlightHome"
+  m_Name: Button.FlashlightHome
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10892,7 +10936,7 @@ GameObject:
   - component: {fileID: 1372649775}
   - component: {fileID: 1372649774}
   m_Layer: 5
-  m_Name: Image"ButtonListViewport"
+  m_Name: Image.ButtonListViewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11054,7 +11098,7 @@ GameObject:
   - component: {fileID: 1409580702}
   - component: {fileID: 1409580701}
   m_Layer: 5
-  m_Name: Button"Inventory"
+  m_Name: Button.Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12439,7 +12483,7 @@ GameObject:
   - component: {fileID: 1648667582}
   - component: {fileID: 1648667581}
   m_Layer: 5
-  m_Name: Button"Forward"
+  m_Name: Button.Forward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13237,7 +13281,7 @@ GameObject:
   - component: {fileID: 1787373576}
   - component: {fileID: 1787373575}
   m_Layer: 5
-  m_Name: Button"Shoot"
+  m_Name: Button.Shoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13549,7 +13593,7 @@ GameObject:
   - component: {fileID: 1864065341}
   - component: {fileID: 1864065340}
   m_Layer: 5
-  m_Name: Button"Pause"
+  m_Name: Button.Pause
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13973,7 +14017,7 @@ GameObject:
   - component: {fileID: 1872364579}
   - component: {fileID: 1872364578}
   m_Layer: 5
-  m_Name: Button"Right"
+  m_Name: Button.Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14467,7 +14511,7 @@ GameObject:
   - component: {fileID: 1960389263}
   - component: {fileID: 1960389262}
   m_Layer: 5
-  m_Name: Button"Crouch"
+  m_Name: Button.Crouch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14772,7 +14816,7 @@ GameObject:
   - component: {fileID: 2028708833}
   - component: {fileID: 2028708832}
   m_Layer: 5
-  m_Name: Button"FlashlightToggle"
+  m_Name: Button.FlashlightToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
