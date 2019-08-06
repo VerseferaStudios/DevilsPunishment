@@ -20,5 +20,5 @@ After an automerge attempt, the system will ask you if the merge was succesful.
 >- If this happens, make sure to "handle" the remaining uncommitted changes shown in "git status" (shown in red).
 >>- My strategy is to "checkout" the files that unity deletes, and use ``` git clean -fd ``` to remove unessary generated temp files.
 >>- After cleaning up this conflicted merge you should have only "green" files in your current "commit".
->>>- If the merge is completed "commit" your merge using ```git commit``` or ```git commit -m "[Message]``` to commit your "merge"
+>>>- If the merge is completed "commit" your merge using ```git commit``` or ```git commit -m "[Message]"``` to commit your "merge"
 If all is successful, I recommend "pushing your changes" to your "work branch" and continue developing happily.
