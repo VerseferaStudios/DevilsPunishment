@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public KeyCode flashlightCenter { get; set; } //defined 1
     public KeyCode pause { get; set; } //defined 1
     public KeyCode inventory { get; set; } //defined 1
+    public KeyCode aim { get; set; } //defined 1
 
 
     public void Awake()
@@ -37,23 +38,24 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        forward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Vertical", "W"));
-        backward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Vertical", "S"));
-        left = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Horizontal", "A"));
-        right = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Horizontal", "D"));
-        crouch = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Crouch", "LeftControl"));
-        sprint = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift"));
-        interact = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Interact", "E"));
-        reload = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reload", "R"));
-        shoot = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Fire1", "Mouse0")); 
-        flashlightToggle = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("toggleflashlight", "G"));
-        flashlightNarrow = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Narrow", "RightArrow"));
-        flashlightWiden = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Wide", "LeftArrow"));
-        flashlightUp = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Up", "UpArrow"));
-        flashlightDown = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Down", "DownArrow"));
-        flashlightCenter = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Home", "Q"));
-        inventory = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Open Inventory", "Tab"));
-        pause = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Cancel", "Escape"));
+        //forward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Vertical", "W"));
+        //backward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Vertical", "S"));
+        //left = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Horizontal", "A"));
+        //right = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Horizontal", "D"));
+        //crouch = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Crouch", "LeftControl"));
+        //sprint = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift"));
+        //interact = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Interact", "E"));
+        //reload = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reload", "R"));
+        //shoot = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Fire1", "Mouse0")); 
+        //flashlightToggle = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Toggle Flashlight", "G"));
+        //flashlightNarrow = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Narrow", "RightArrow"));
+        //flashlightWiden = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Wide", "LeftArrow"));
+        //flashlightUp = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Up", "UpArrow"));
+        //flashlightDown = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Down", "DownArrow"));
+        //flashlightCenter = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Flashlight Home", "Q"));
+        //inventory = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Open Inventory", "Tab"));
+        //pause = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Cancel", "Escape"));
+        //aim = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Aim", "Mouse1"));
     }
 
 
