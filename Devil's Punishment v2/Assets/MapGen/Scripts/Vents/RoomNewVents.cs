@@ -173,9 +173,9 @@ public class RoomNewVents : MonoBehaviour
                 // ------------------------ if k and i are not in the same room ------------------------
                 if (!checkIfSameOrAdjacentRoom(k, l))
                 {
-                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
-                                    spawnPoints[k].name, spawnPoints[l].name,
-                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);
+                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position);//,
+                                    /*spawnPoints[k].name, spawnPoints[l].name,
+                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);*/
                     break;
                 }
             }
@@ -208,7 +208,7 @@ public class RoomNewVents : MonoBehaviour
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     //Start EDITING vents from somewhere here
-    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
+    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //making all y coordinates of all corridors equal to 0.5f
         kPos.y = lPos.y = 0.5f;
@@ -217,7 +217,7 @@ public class RoomNewVents : MonoBehaviour
         Vector3 targetPos = new Vector3(0, 3, 0);
 
         Vector3 From = kPos;
-
+        /*
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
         if (kName.EndsWith("x") && lName.EndsWith("z"))
         {
@@ -266,52 +266,54 @@ public class RoomNewVents : MonoBehaviour
                 //Debug.Log(targetPos);
                 //Debug.Log(spawnPoints[i].transform.position);
                 */
-            }
-            //-------------- Connects x and x doors with I shape since there's no hindrance --------------
-            else
-            {
-                targetPos = lPos;
-            }
-        }
+        /*
+    }
+    //-------------- Connects x and x doors with I shape since there's no hindrance --------------
+    else
+    {
+        targetPos = lPos;
+    }
+}
 
-        // --------------------- Connects z and z doors ---------------------
-        else if (kName.EndsWith("z") && lName.EndsWith("z"))
-        {
-            //-------------- Connects z and z doors with `L shape to avoid hindrance --------------
-            if (kPos.z != lPos.z)
-            {
-                //check and go nearer to destination
-                Vector3 to = kPos;
-                to.x += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                // ------------------- Calls the actual spawning function -------------------
-                spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
-                isExtraTurn = true;
-                From = to;
-                targetPos = new Vector3(From.x, 0.5f, lPos.z);
-                //Debug.Log("Spawn6");
-                /*
-                //Debug.Log("From = " + From);
-                //Debug.Log(targetPos);
-                //Debug.Log(spawnPoints[i].transform.position);
-                */
-            }
-            //-------------- Connects z and z doors with I shape since there's no hindrance --------------
-            else
-            {
-                targetPos = lPos;
-            }
-        }
-
+// --------------------- Connects z and z doors ---------------------
+else if (kName.EndsWith("z") && lName.EndsWith("z"))
+{
+    //-------------- Connects z and z doors with `L shape to avoid hindrance --------------
+    if (kPos.z != lPos.z)
+    {
+        //check and go nearer to destination
+        Vector3 to = kPos;
+        to.x += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // ------------------- Calls the actual spawning function -------------------
-        spawnHalf(From, targetPos, !isExtraTurn, kName, lName, kParentPos, lParentPos);
+        spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
+        isExtraTurn = true;
+        From = to;
+        targetPos = new Vector3(From.x, 0.5f, lPos.z);
+        //Debug.Log("Spawn6");
+        /*
+        //Debug.Log("From = " + From);
+        //Debug.Log(targetPos);
+        //Debug.Log(spawnPoints[i].transform.position);
+        */
+        /*
+    }
+    //-------------- Connects z and z doors with I shape since there's no hindrance --------------
+    else
+    {
+        targetPos = lPos;
+    }
+}
+*/
+
+        // ------------------- Calls the actual spawning function -------------------
+        spawnHalf(From, targetPos, !isExtraTurn);//, kName, lName, kParentPos, lParentPos);
 
         isExtraTurn = false;
 
         if (targetPos != lPos)
         {
-            spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos);
+            spawnHalf(targetPos, lPos, false);//, kName, lName, kParentPos, lParentPos);
         }
 
         //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
@@ -330,8 +332,8 @@ public class RoomNewVents : MonoBehaviour
             openings.Add(storedOpening);
         }
 
-        //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-        openings.Add(Data.instance.NeardoorLIndexSearch(lName[4].ToString() + lName[5].ToString()));
+        // -------------- Add opening according to the door type wuth the help of Data.instance.nearDoorL --------------
+        //openings.Add(Data.instance.NeardoorLIndexSearch(lName[4].ToString() + lName[5].ToString()));
         /*
         //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (lName[4].ToString() + lName[5].ToString())
                 + " " + kPos + " " + lPos + " "
@@ -342,21 +344,22 @@ public class RoomNewVents : MonoBehaviour
 
         float yRotation = Data.instance.ConvertToRotation(openings);
         GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         if (yRotation == 0)
         {
             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-            currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+            //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+            //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
         }
 
 
         // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-        visitedRooms.Add(lParentPos);
-        visitedRooms.Add(kParentPos);
+        //visitedRooms.Add(lParentPos);
+        //visitedRooms.Add(kParentPos);
 
         //CheckDuplicatesAndConnect(lParentPos, spawnPoints[k].transform.parent.transform.position);
 
@@ -385,7 +388,7 @@ public class RoomNewVents : MonoBehaviour
 
         // ---------------------- Removes the used doors ----------------------
 
-        if (!fromDataSingleton)
+        //if (!fromDataSingleton)
         {
             spawnPoints.RemoveAt(l);
 
@@ -409,8 +412,9 @@ public class RoomNewVents : MonoBehaviour
     }
 
     // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
-    private void spawnHalf(Vector3 From, Vector3 to, bool isFirst, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
+    private void spawnHalf(Vector3 From, Vector3 to, bool isFirst)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
     {
+        Debug.Log("sdfgh");
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
         // ----------- Variable for corridor to spawn at each for loop step -----------                
@@ -445,16 +449,16 @@ public class RoomNewVents : MonoBehaviour
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
                 isFirst = false;
@@ -480,15 +484,15 @@ public class RoomNewVents : MonoBehaviour
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
             }
             spawnNowAt.z += increment;
@@ -503,8 +507,8 @@ public class RoomNewVents : MonoBehaviour
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
                 collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x + 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
                 */
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 Data.instance.corridorCount++;
                 if (Data.instance.isCollided)
                 {
@@ -546,17 +550,17 @@ public class RoomNewVents : MonoBehaviour
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
                 if (yRotation == 0)
                 {
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
                 isFirst = false;
@@ -582,16 +586,16 @@ public class RoomNewVents : MonoBehaviour
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
                 if (yRotation == 0)
                 {
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
                     //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
 
             }
@@ -607,8 +611,8 @@ public class RoomNewVents : MonoBehaviour
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
                 collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
                 */
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
 
@@ -698,13 +702,13 @@ public class RoomNewVents : MonoBehaviour
             }
         }
     }
-
+    /*
     private void MakeInitHallways()
     {
         ConnectTwoRooms(new Vector3(-16, 0, 0), new Vector3(4, 0, 0), "Door+x", "Door-x", new Vector3(-16 - 24, 0, 0), new Vector3(4 + 24, 0, 0), true);
         ConnectTwoRooms(new Vector3(-4, 0, 0), new Vector3(-4, 0, -8), "Door-z", "Door+z", new Vector3(-4, 0, -24), new Vector3(-4, 0, -8 + 24), true);
     }
-
+    */
 }
 /*
 private string checkCollisions(Vector3 From, Vector3 to)
