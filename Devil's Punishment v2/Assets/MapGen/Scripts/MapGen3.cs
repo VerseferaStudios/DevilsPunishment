@@ -25,6 +25,7 @@ public class MapGen3 : MonoBehaviour
 
     //For Vents
     [Header("Vents")]
+    public GameObject[] vents;
     public float ventCoverProbabilty = 0.050f;
     public GameObject ventCover;
 
@@ -183,9 +184,17 @@ public class MapGen3 : MonoBehaviour
 
             itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
-            if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+            if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                if(i == k - 1)
+                {
+                    GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                    StartCoroutine(AddRoomNewVents(gb));
+                }
+                else
+                {
+                    Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                }
             }
 
             if(yRotation == 90)
@@ -268,6 +277,11 @@ public class MapGen3 : MonoBehaviour
             {
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
+                roomNewScript.vents = vents;
+                roomNewScript.allRooms = allRooms;
+                roomNewScript.ventCover = ventCover;
+                roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+                roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 
                 //ConnectToMapGen(roomNewScript);
@@ -296,6 +310,13 @@ public class MapGen3 : MonoBehaviour
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
         
+    }
+
+    // ------------------------ Add RoomNewVents script after delay ------------------------
+    private IEnumerator AddRoomNewVents(GameObject gb)
+    {
+        yield return new WaitForSeconds(5f);
+        gb.AddComponent<RoomNewVents>().corridors = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
