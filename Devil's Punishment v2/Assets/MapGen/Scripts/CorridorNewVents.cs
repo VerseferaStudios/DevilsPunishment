@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CorridorNew : MonoBehaviour
+public class CorridorNewVents : MonoBehaviour
 {
     //[SerializeField]
     //private bool isPipeFromLeft, isPipeToLeft, isNeedL = false, isNeedT = false, isNeedX = false;
@@ -35,18 +35,18 @@ public class CorridorNew : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string otherTag = other.transform.parent.tag;
-        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
+        if (otherTag.Equals("VentI") || otherTag.Equals("VentL") || otherTag.Equals("VentT") || otherTag.Equals("VentX"))
         {
             //Data.instance.isCollided = true;
             //Data.instance.collisionCount++;
-            
-            if(!(transform.parent.tag.Equals("CorridorI") && otherTag.Equals("CorridorI")))
+            /*
+            if(!(transform.parent.tag.Equals("VentI") && otherTag.Equals("VentI")))
             {
                 Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(transform.position, rooms));
             }
-
+            */
             //isNeedL = true;
-            Data.instance.collidedCorridors.Add(gameObject);
+            Data.instance.collidedVents.Add(gameObject);
             ////Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject
