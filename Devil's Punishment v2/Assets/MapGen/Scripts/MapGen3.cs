@@ -177,7 +177,6 @@ public class MapGen3 : MonoBehaviour
                     roomToSpawn = room4;
                     break;*/
             }
-            Room roomScript = roomToSpawn.GetComponent<Room>();
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);

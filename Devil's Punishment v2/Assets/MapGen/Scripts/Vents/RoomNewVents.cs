@@ -518,7 +518,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                     //check current corridor and rotation. check the already instantiated once type AND rotation (using other) ?????//check later
 
                 }
-                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
+                //currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
                 spawnNowAt.z += increment;
             }
         }
@@ -619,7 +619,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 Data.instance.corridorCount++;
 
-                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
+                //currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
 
                 spawnNowAt.x += increment;
             }
