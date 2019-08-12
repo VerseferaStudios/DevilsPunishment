@@ -211,12 +211,15 @@ public class RoomNewVents : MonoBehaviour
     public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //making all y coordinates of all corridors equal to 0.5f
-        kPos.y = lPos.y = 0.5f;
+        kPos.y = lPos.y = 0.5f - 2f;
 
 
-        Vector3 targetPos = new Vector3(0, 3, 0);
+        //Vector3 targetPos = new Vector3(0, 3, 0);
 
         Vector3 From = kPos;
+
+        Vector3 targetPos = new Vector3(From.x, 0.5f - 2f, lPos.z);
+
         /*
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
         if (kName.EndsWith("x") && lName.EndsWith("z"))
@@ -346,7 +349,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
+        currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         if (yRotation == 0)
         {
@@ -414,7 +417,6 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
     // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
     private void spawnHalf(Vector3 From, Vector3 to, bool isFirst)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
     {
-        Debug.Log("sdfgh");
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
         // ----------- Variable for corridor to spawn at each for loop step -----------                
@@ -451,7 +453,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
+                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
@@ -552,7 +554,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(-90, 0, 0);
+                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
                 if (yRotation == 0)
@@ -601,6 +603,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             }
             spawnNowAt.x += increment;
 
+            Debug.Log(From.z + " " + to.z + "!!!!!");
             //Spawn I corridors
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
