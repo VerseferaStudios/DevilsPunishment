@@ -40,9 +40,9 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 
     private IEnumerator OpenVentCover()
     {
-        while (transform.localEulerAngles.z >= 89) //get sth better
+        while (transform.parent.localEulerAngles.z <= 80)
         {
-            transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, transform.localEulerAngles + new Vector3(0, 0, 90), Time.deltaTime);
+            transform.parent.localEulerAngles += Vector3.Lerp(transform.parent.localEulerAngles, transform.parent.localEulerAngles + new Vector3(0, 0, 90), Time.deltaTime);
             yield return new WaitForSeconds(0.1f);
         }
     }
