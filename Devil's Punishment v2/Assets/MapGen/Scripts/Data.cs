@@ -169,13 +169,13 @@ public class Data : MonoBehaviour
     public List<int> ConvertToOpenings(string tag, float yRotation)
     {
         List<int> openings = new List<int>();
-        if (tag.Equals("CorridorI"))
+        if (tag.Equals("CorridorI") || tag.Equals("VentI"))
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
             ////Debug.Log(openings[0] + " " + openings[1]);
         }
-        else if (tag.Equals("CorridorL"))
+        else if (tag.Equals("CorridorL") || tag.Equals("VentL"))
         {
             if(yRotation == 270 || yRotation == -90)
             {
@@ -188,7 +188,7 @@ public class Data : MonoBehaviour
                 openings.Add(openings[0] + 1);
             }
         }
-        else if (tag.Equals("CorridorT"))
+        else if (tag.Equals("CorridorT") || tag.Equals("VentT"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -198,7 +198,7 @@ public class Data : MonoBehaviour
             oneToFour.Remove((int)(yRotation / 90f));
             openings.AddRange(oneToFour);
         }
-        else if (tag.Equals("CorridorX"))
+        else if (tag.Equals("CorridorX") || tag.Equals("VentX"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -1097,7 +1097,7 @@ public class Data : MonoBehaviour
                             }
                             */
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                            Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+                            Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
                         {
