@@ -511,6 +511,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 */
                 //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                /*
                 Data.instance.corridorCount++;
                 if (Data.instance.isCollided)
                 {
@@ -518,6 +519,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                     //check current corridor and rotation. check the already instantiated once type AND rotation (using other) ?????//check later
 
                 }
+                */
                 //currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
                 spawnNowAt.z += increment;
             }
@@ -617,7 +619,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                Data.instance.corridorCount++;
+                //Data.instance.corridorCount++;
 
                 //currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
 
