@@ -23,7 +23,7 @@ public class Data : MonoBehaviour
     ///The direction of the opening for the L corridor near door of type stored in this list
     ///</summary>
     public List<string> nearDoorL = new List<string>();
-    public GameObject corridorT1, corridorT2, corridorX;
+    public GameObject corridorT1, corridorT2, corridorX, ventT, ventX;
 
     public Dictionary<Vector3, int> corridorPosDict = new Dictionary<Vector3, int>();
 
@@ -48,7 +48,7 @@ public class Data : MonoBehaviour
 
     public List<ConnectedComponent> temp = new List<ConnectedComponent>();
 
-    public bool isFinishedCheckCollisions = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
+    public bool isFinishedCheckCollisions = false, isFinishedCheckCollisionsVents = false, isFinishedAddAndRemoveConnectedRooms = false, isConnectedComponentsCheckDone = false;
     
     public RoomNew roomNewScript;
 
@@ -248,6 +248,46 @@ public class Data : MonoBehaviour
             }
         }
         return flag;
+    }
+
+    public IEnumerator DoCheckVentsPerSecond()
+    {
+        /*
+        //for putting corridors so that connected components does correctly
+        for (int i = 0; i < 3; i++)
+        {
+            CheckForCollisionVents();
+            yield return new WaitUntil(() => isFinishedCheckCollisions = true);
+            isFinishedCheckCollisions = false;
+        }
+        isFirstPassDone = true;
+
+        yield return new WaitUntil(() => isConnectedComponentsCheckDone == true);
+        */
+        yield return new WaitForSeconds(5f);
+        float startTime1 = Time.time;
+        while (true)
+        {
+            if (Time.time - startTime1 >= 10f)
+            {
+                break;
+            }
+
+            Debug.Log(collidedVents.Count + " " + count + "#################################");
+            if (count < 6 /*&& collidedCorridors.Count != 0*/)
+            {
+                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+                
+                {
+                    Debug.Log("innnnnnnnnnnnnn");
+                    CheckForCollisionVents();
+                    count++;
+                    yield return new WaitUntil(() => isFinishedCheckCollisionsVents = true);
+                    isFinishedCheckCollisionsVents = false;
+                }
+            }
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     public IEnumerator DoCheckPerSecond()
@@ -1076,7 +1116,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            GameObject currCorridor = Instantiate(ventT, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
                             /*
                             if (yRotation == 0)
                             {
@@ -1105,7 +1145,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            Instantiate(corridorX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            Instantiate(ventX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
                         }
                         else
                         {
@@ -1121,7 +1161,7 @@ public class Data : MonoBehaviour
                         //If I and I collides with different rotations
                         if (collidedVents[i].transform.rotation != collidedVents[j].transform.rotation)
                         {
-                            GameObject currCorridor1 = Instantiate(corridorX, collidedVents[j].transform.position, Quaternion.identity, mapGenHolderTransform);
+                            GameObject currCorridor1 = Instantiate(ventX, collidedVents[j].transform.position, Quaternion.identity, mapGenHolderTransform);
                         }
                         //If I and L collides
                         else if (!collidedVents[i].transform.parent.name.Equals(collidedVents[j].transform.parent.name))

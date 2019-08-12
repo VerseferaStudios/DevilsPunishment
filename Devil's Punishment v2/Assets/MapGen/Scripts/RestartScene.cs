@@ -21,7 +21,7 @@ public class RestartScene : MonoBehaviour
         Data.instance.ctr = 0;
         Data.instance.prevCount = 0;
 
-        Data.instance.isFinishedAddAndRemoveConnectedRooms = Data.instance.isFinishedCheckCollisions = Data.instance.isConnectedComponentsCheckDone = false;
+        Data.instance.isFinishedAddAndRemoveConnectedRooms = Data.instance.isFinishedCheckCollisionsVents = Data.instance.isFinishedCheckCollisions = Data.instance.isConnectedComponentsCheckDone = false;
         Data.instance.temp = new List<ConnectedComponent>();
         Data.instance.counter = Data.instance.counter1 = 0;
 
