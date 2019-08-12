@@ -188,12 +188,12 @@ public class MapGen3 : MonoBehaviour
             {
                 if(i == k - 1)
                 {
-                    GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                    GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                     StartCoroutine(AddRoomNewVents(gb));
                 }
                 else
                 {
-                    Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                    Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 }
             }
 
@@ -281,7 +281,7 @@ public class MapGen3 : MonoBehaviour
                 roomNewScript.allRooms = allRooms;
                 roomNewScript.ventCover = ventCover;
                 roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
-                roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
+                //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 
                 //ConnectToMapGen(roomNewScript);

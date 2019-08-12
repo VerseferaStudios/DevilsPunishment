@@ -709,6 +709,7 @@ public class Data : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            /*
                             if (yRotation == 0)
                             {
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
@@ -718,7 +719,6 @@ public class Data : MonoBehaviour
 
                                 if (yRotation == -90 || yRotation == 270)
                                 {
-                                    Debug.Log("2346");
                                     currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
                                 }
 
@@ -727,6 +727,7 @@ public class Data : MonoBehaviour
                                 currCorridor.transform.localScale = new Vector3(-1, 1, 1);
                                 //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
+                            */
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                             Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }

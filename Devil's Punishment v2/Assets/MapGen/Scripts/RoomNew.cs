@@ -28,7 +28,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public ArrayList allRooms = new ArrayList();
     public Transform mapGenHolderTransform;
-    public float ventCoverProbabilty = 0.050f;
+    public float ventCoverProbabilty = 0.010f;
     public GameObject ventCover;
 
     void Start()
@@ -202,7 +202,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //MakeInitHallways();
 
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
-                StartCoroutine(Data.instance.DoConnectedComponents());
+                //StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
             }
 
@@ -516,13 +516,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 }
                 currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
-                spawnNowAt.z += increment;
 
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 }
 
+                spawnNowAt.z += increment;
             }
         }
 
@@ -622,12 +622,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
 
-                spawnNowAt.x += increment;
-
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 }
+
+                spawnNowAt.x += increment;
 
             }
         }
