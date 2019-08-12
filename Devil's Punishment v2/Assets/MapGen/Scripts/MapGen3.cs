@@ -44,6 +44,8 @@ public class MapGen3 : MonoBehaviour
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
+        Data.instance.ventT = vents[3];
+        Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
     }
