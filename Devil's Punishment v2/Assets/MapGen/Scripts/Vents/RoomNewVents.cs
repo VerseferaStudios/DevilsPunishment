@@ -356,7 +356,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
+        currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         if (yRotation == 0)
         {
@@ -460,7 +460,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
+                currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                 if (yRotation == 0)
                 {
@@ -563,7 +563,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
                 GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).GetChild(0).localEulerAngles = new Vector3(0, 90, 0);
+                currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
                 if (yRotation == 0)
