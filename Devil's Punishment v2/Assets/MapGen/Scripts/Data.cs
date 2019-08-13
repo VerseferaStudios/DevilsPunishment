@@ -170,13 +170,13 @@ public class Data : MonoBehaviour
     public List<int> ConvertToOpenings(string tag, float yRotation)
     {
         List<int> openings = new List<int>();
-        if (tag.Equals("CorridorI") || tag.Equals("VentI"))
+        if (tag.Equals("CorridorI"))
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
             ////Debug.Log(openings[0] + " " + openings[1]);
         }
-        else if (tag.Equals("CorridorL") || tag.Equals("VentL"))
+        else if (tag.Equals("CorridorL"))
         {
             if(yRotation == 270 || yRotation == -90)
             {
@@ -189,7 +189,7 @@ public class Data : MonoBehaviour
                 openings.Add(openings[0] + 1);
             }
         }
-        else if (tag.Equals("CorridorT") || tag.Equals("VentT"))
+        else if (tag.Equals("CorridorT"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -199,7 +199,71 @@ public class Data : MonoBehaviour
             oneToFour.Remove((int)(yRotation / 90f));
             openings.AddRange(oneToFour);
         }
-        else if (tag.Equals("CorridorX") || tag.Equals("VentX"))
+        else if (tag.Equals("CorridorX"))
+        {
+            List<int> oneToFour = new List<int>();
+            for (int i = 0; i < 4; i++)
+            {
+                oneToFour.Add(i);
+            }
+            openings.AddRange(oneToFour);
+        }
+        return openings;
+    }
+
+    public List<int> ConvertToOpenings(string tag, float yRotation, float holderZRotation, float holderXRotation)
+    {
+        List<int> openings = new List<int>();
+        if (tag.Equals("VentI"))
+        {
+            openings.Add((int)(yRotation / 90f));
+            openings.Add(openings[0] + 2);
+            ////Debug.Log(openings[0] + " " + openings[1]);
+        }
+        else if (tag.Equals("VentL"))
+        {
+            if (yRotation == 270 || yRotation == -90)
+            {
+                if (holderZRotation == 0)
+                {
+                    openings.Add(0);
+                }
+                else
+                {
+                    openings.Add(-2);
+                }
+                openings.Add(3);
+            }
+            else
+            {
+                openings.Add((int)(yRotation / 90f));
+                if (holderZRotation == 0)
+                {
+                    openings.Add(openings[0] + 1);
+                }
+                else
+                {
+                    openings.Add(-2);
+                }
+            }
+        }
+        else if (tag.Equals("VentT"))
+        {
+            List<int> oneToFour = new List<int>();
+            for (int i = 0; i < 4; i++)
+            {
+                oneToFour.Add(i);
+            }
+            int rot = (int)(yRotation / 90f);
+            oneToFour.Remove(rot);
+            if(holderXRotation != 0)
+            {
+                oneToFour.Remove((rot + 2) % 4);
+                openings.Add(-2);
+            }
+            openings.AddRange(oneToFour);
+        }
+        else if (tag.Equals("VentX"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -1066,8 +1130,12 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedVents[i].transform.parent.name + " " + collidedVents[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y);
-                        openings2 = ConvertToOpenings(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y);
+
+                        openings1 = ConvertToOpenings(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
+                            collidedVents[i].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[i].transform.parent.GetChild(0).localEulerAngles.x);
+
+                        openings2 = ConvertToOpenings(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
+                            collidedVents[j].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[j].transform.parent.GetChild(0).localEulerAngles.x);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -1113,6 +1181,23 @@ public class Data : MonoBehaviour
 
                         if (openings1.Count == 3)
                         {
+                            openings1.Sort();
+                            bool isThereVentCoverAbove = false;
+                            Debug.Log("========");
+                            foreach (var item in openings1)
+                            {
+                                Debug.Log(item);
+                            }
+                            if (openings1[0] == -2)
+                            {
+                                isThereVentCoverAbove = true;
+                                openings1.RemoveAt(0);
+                                openings1.Add((openings1[1] + 1) % 4);
+                            }
+                            foreach (var item in openings1)
+                            {
+                                Debug.Log(item);
+                            }
                             float yRotation = ConvertToRotation(openings1);
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
@@ -1137,6 +1222,10 @@ public class Data : MonoBehaviour
                                 //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
                             }
                             */
+                            if (isThereVentCoverAbove)
+                            {
+                                currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(90, 0, 0);
+                            }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
                             Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }

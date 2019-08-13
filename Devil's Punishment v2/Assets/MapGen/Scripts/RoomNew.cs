@@ -28,7 +28,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public ArrayList allRooms = new ArrayList();
     public Transform mapGenHolderTransform;
-    public float ventCoverProbabilty = 0.050f;
+    public float ventCoverProbabilty = 0.090f;
     public GameObject ventCover;
 
     void Start()
