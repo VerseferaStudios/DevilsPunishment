@@ -1240,6 +1240,8 @@ public class Data : MonoBehaviour
                             {
                                 isThereVentCoverAbove = true;
                                 openings1.RemoveAt(0);
+                                Destroy((collidedVents[j].transform.parent.name.EndsWith("L")) ? collidedVents[j].transform.parent.parent.gameObject : collidedVents[i].transform.parent.parent.gameObject);
+                                collidedVents[j].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
                             }
                             foreach (var item in openings1)
                             {
@@ -1248,7 +1250,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            Instantiate(ventX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            Instantiate((isThereVentCoverAbove) ? ventT : ventX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
                         }
                         else
                         {
