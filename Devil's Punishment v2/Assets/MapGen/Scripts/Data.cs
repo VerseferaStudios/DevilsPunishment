@@ -1240,8 +1240,16 @@ public class Data : MonoBehaviour
                             {
                                 isThereVentCoverAbove = true;
                                 openings1.RemoveAt(0);
-                                Destroy((collidedVents[j].transform.parent.name.EndsWith("L")) ? collidedVents[j].transform.parent.parent.gameObject : collidedVents[i].transform.parent.parent.gameObject);
-                                collidedVents[j].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
+                                if (collidedVents[j].transform.parent.name.EndsWith("L"))
+                                {
+                                    Destroy(collidedVents[j].transform.parent.parent.gameObject);
+                                    collidedVents[j].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
+                                }
+                                else if (collidedVents[i].transform.parent.name.EndsWith("L"))
+                                {
+                                    Destroy(collidedVents[i].transform.parent.parent.gameObject);
+                                    collidedVents[i].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
+                                }
                             }
                             foreach (var item in openings1)
                             {
