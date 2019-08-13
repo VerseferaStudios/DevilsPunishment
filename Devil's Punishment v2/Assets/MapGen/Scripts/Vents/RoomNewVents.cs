@@ -173,9 +173,7 @@ public class RoomNewVents : MonoBehaviour
                 // ------------------------ if k and i are not in the same room ------------------------
                 if (!checkIfSameOrAdjacentRoom(k, l))
                 {
-                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position);//,
-                                    /*spawnPoints[k].name, spawnPoints[l].name,
-                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);*/
+                    ConnectTwoRooms(spawnPoints[k].transform, spawnPoints[l].transform);
                     break;
                 }
             }
@@ -208,8 +206,10 @@ public class RoomNewVents : MonoBehaviour
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     //Start EDITING vents from somewhere here
-    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
+    public void ConnectTwoRooms(Transform spawnPointk, Transform spawnPointl)
     {
+        Vector3 kPos = spawnPointk.position;
+        Vector3 lPos = spawnPointl.position;
         //making all y coordinates of all corridors equal to 0.5f
         kPos.y = lPos.y = 0.5f - 2f;
 
@@ -315,14 +315,14 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
     }
 }
 */
-
+        //Spawn first vent near vent cover 
+        SpawnFirstVent(From, targetPos);
         // ------------------- Calls the actual spawning function -------------------
-        spawnHalf(From, targetPos, !isExtraTurn);//, kName, lName, kParentPos, lParentPos);
-
-        isExtraTurn = false;
+        spawnHalf(From, targetPos, true);//, kName, lName, kParentPos, lParentPos);
 
         if (targetPos != lPos)
         {
+            //SpawnFirstVent(targetPos, lPos);
             spawnHalf(targetPos, lPos, false);//, kName, lName, kParentPos, lParentPos);
         }
 
@@ -421,6 +421,77 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
     }
 
+    // ---------------- Instantiates L vent in correct rotation at the start vent cover ----------------
+    public void SpawnFirstVent(Vector3 From, Vector3 to)
+    {
+        spawnNowAt = From;
+        if (From.x == to.x)
+        {
+            List<int> openings = new List<int>();
+
+            //Add opening according to the door type wuth the help of Data.instance.nearDoorL
+            //openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
+
+            //storedOpening is for the next L corridor in line
+            storedOpening = (From.z > to.z) ? 0 : 2;
+
+            //Add the opposite of storedOpening since this one will be facing the next L corridor
+            openings.Add(storedOpening == 0 ? 2 : 0);
+
+            //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (kName[4].ToString() + kName[5].ToString())
+            //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
+            //+ kName + " " + lName);
+
+            float yRotation = Data.instance.ConvertToRotation(openings);
+
+            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+            //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+            //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+            currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
+            currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+            if (yRotation == 0)
+            {
+                //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+        }        
+        else if (From.z == to.z)
+        {
+            List<int> openings = new List<int>();
+
+            //Add opening according to the door type wuth the help of Data.instance.nearDoorL
+            //openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
+
+            //storedOpening is for the next L corridor in line
+            storedOpening = (From.x > to.x) ? 1 : 3;
+
+            //Add the opposite of storedOpening since this one will be facing the next L corridor
+            openings.Add(storedOpening == 1 ? 3 : 1);
+
+            //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (kName[4].ToString() + kName[5].ToString())
+            //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
+            //+ kName + " " + lName);
+
+            float yRotation = Data.instance.ConvertToRotation(openings);
+
+            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+            //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+            //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+            currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
+            currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+
+            if (yRotation == 0)
+            {
+                //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+                //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+                //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+                //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+        }
+    }
+
     // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
     private void spawnHalf(Vector3 From, Vector3 to, bool isFirst)//, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
     {
@@ -437,43 +508,8 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             // ----------- Skips required corridors ----------- 
             int i = 1;
 
-            //Instantiates L corridor in correct rotation at the door of a room
-            if (isFirst)
-            {
-                List<int> openings = new List<int>();
-
-                //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                //openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.z > to.z) ? 0 : 2;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 0 ? 2 : 0);
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (kName[4].ToString() + kName[5].ToString())
-                //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                //+ kName + " " + lName);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-
-                isFirst = false;
-            }
             //Instantiate L corridor in correct rotation at the join of two straight corridors (which are in L shape)
-            else
+            if(!isFirst)
             {
                 List<int> openings = new List<int>();
 
@@ -540,44 +576,8 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             // ----------- Skips required corridors ----------- 
             int i = 1;
 
-            //Instantiates L corridor in correct rotation at the door of a room
-            if (isFirst)
-            {
-                List<int> openings = new List<int>();
-
-                //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                //openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.x > to.x) ? 1 : 3;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 1 ? 3 : 1);
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (kName[4].ToString() + kName[5].ToString())
-                //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                //+ kName + " " + lName);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    //currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    //currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-
-                isFirst = false;
-            }
             //Instantiate L corridor in correct rotation at the join of two straight corridors (which are in L shape)
-            else
+            if(!isFirst)
             {
                 List<int> openings = new List<int>();
 
