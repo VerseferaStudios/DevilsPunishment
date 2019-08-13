@@ -214,11 +214,18 @@ public class RoomNewVents : MonoBehaviour
         kPos.y = lPos.y = 0.5f - 2f;
 
 
-        //Vector3 targetPos = new Vector3(0, 3, 0);
+        Vector3 targetPos = new Vector3(0, 3, 0);
 
         Vector3 From = kPos;
 
-        Vector3 targetPos = new Vector3(From.x, 0.5f - 2f, lPos.z);
+        if(From.x == lPos.x)
+        {
+            targetPos = new Vector3(From.x, 0.5f - 2f, lPos.z);
+        }
+        else
+        {
+            targetPos = new Vector3(lPos.x, 0.5f - 2f, From.z);
+        }
 
         /*
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
