@@ -1070,9 +1070,7 @@ public class Data : MonoBehaviour
     {
         //Debug.Log("Count Olaf =" + collidedVents.Count);
 
-
         //FindDuplicates(); //use this to group corridors at the same place use ConvertToOpenings and Linq.Distinct and do the necessary
-
 
         //Debug.Log("----------------------wargarsg----------------------");
         for (int i = 0; i < collidedVents.Count; i++)
@@ -1231,7 +1229,22 @@ public class Data : MonoBehaviour
                         }
                         else if (openings1.Count == 4)
                         {
-
+                            openings1.Sort();
+                            bool isThereVentCoverAbove = false;
+                            Debug.Log("========");
+                            foreach (var item in openings1)
+                            {
+                                Debug.Log(item);
+                            }
+                            if (openings1[0] == -2)
+                            {
+                                isThereVentCoverAbove = true;
+                                openings1.RemoveAt(0);
+                            }
+                            foreach (var item in openings1)
+                            {
+                                Debug.Log(item);
+                            }
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
