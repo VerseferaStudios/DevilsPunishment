@@ -1121,10 +1121,10 @@ public class Data : MonoBehaviour
                         ////Debug.Log("Leave");
 
                     }
-                    else if (!isNotFirstTimeVents)
+                    else if (!isNotFirstTimeVents) // why the variable
                     {
 
-                        ////Debug.Log("in at " + collidedVents[i].transform.position);
+                        Debug.Log("QWERTY in at " + collidedVents[i].transform.position);
                         ////Debug.Log(collidedVents[i].transform.parent.name + " " + collidedVents[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
@@ -1229,6 +1229,7 @@ public class Data : MonoBehaviour
                         }
                         else if (openings1.Count == 4)
                         {
+                            float yRotation = 0;
                             openings1.Sort();
                             bool isThereVentCoverAbove = false;
                             Debug.Log("========");
@@ -1250,6 +1251,7 @@ public class Data : MonoBehaviour
                                     Destroy(collidedVents[i].transform.parent.parent.gameObject);
                                     collidedVents[i].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
                                 }
+                                yRotation = ConvertToRotation(openings1);
                             }
                             foreach (var item in openings1)
                             {
@@ -1258,7 +1260,7 @@ public class Data : MonoBehaviour
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
-                            Instantiate((isThereVentCoverAbove) ? ventT : ventX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            Instantiate((isThereVentCoverAbove) ? ventT : ventX, spawnAtPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
                         }
                         else
                         {
