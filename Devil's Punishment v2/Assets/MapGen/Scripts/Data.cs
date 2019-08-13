@@ -18,6 +18,7 @@ public class Data : MonoBehaviour
 
     public float startTime;
     private bool isNotFirstTime = false;
+    private bool isNotFirstTimeVents = false;
 
     ///<summary>
     ///The direction of the opening for the L corridor near door of type stored in this list
@@ -852,11 +853,11 @@ public class Data : MonoBehaviour
         {
             Destroy(collidedCorridors[0].transform.parent.gameObject);
         }
-
-        //Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
+        /*
+        Debug.Log("Count Olaf AFTER =" + collidedCorridors.Count);
         for (int q = 0; q < collidedCorridors.Count; q++)
         {
-            ////Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
+            Debug.Log(collidedCorridors[q].transform.position + " " + collidedCorridors[q].transform.parent.name);
         }
 
         if (isDonePrevFnCall && connectedRoomsThroughCollision.Count != prevCount)
@@ -867,7 +868,7 @@ public class Data : MonoBehaviour
         }
 
         prevCount = connectedRoomsThroughCollision.Count;
-
+        */
         isFinishedCheckCollisions = true;
         
     }
@@ -1058,7 +1059,7 @@ public class Data : MonoBehaviour
                         ////Debug.Log("Leave");
 
                     }
-                    else if (!isNotFirstTime)
+                    else if (!isNotFirstTimeVents)
                     {
 
                         ////Debug.Log("in at " + collidedVents[i].transform.position);
@@ -1183,7 +1184,7 @@ public class Data : MonoBehaviour
                         Destroy(collidedVents[j].transform.parent.gameObject);
 
                     // !!!!!!!!!!!!!!!!! Take care of collisions that happen when the above corridors (T and X) are instantiated, if any !!!!!!!!!!!!!!!!!
-                    if (!isNotFirstTime)
+                    if (!isNotFirstTimeVents)
                     {
                         collidedVents.RemoveAt(i);
 
@@ -1197,21 +1198,21 @@ public class Data : MonoBehaviour
 
                     collidedVents.RemoveAt(j);
 
-                    if (!isNotFirstTime && i > j)
+                    if (!isNotFirstTimeVents && i > j)
                     {
                         i--;
                     }
                     j--;
 
-                    isNotFirstTime = true;
+                    isNotFirstTimeVents = true;
                     break;
                 }
 
             }
 
-            if (isNotFirstTime)
+            if (isNotFirstTimeVents)
             {
-                isNotFirstTime = false;
+                isNotFirstTimeVents = false;
             }
         }
 
@@ -1220,10 +1221,11 @@ public class Data : MonoBehaviour
             Destroy(collidedVents[0].transform.parent.gameObject);
         }
 
-        //Debug.Log("Count Olaf AFTER =" + collidedVents.Count);
+        /*
+        Debug.Log("Count Olaf AFTER =" + collidedVents.Count);
         for (int q = 0; q < collidedVents.Count; q++)
         {
-            ////Debug.Log(collidedVents[q].transform.position + " " + collidedVents[q].transform.parent.name);
+            Debug.Log(collidedVents[q].transform.position + " " + collidedVents[q].transform.parent.name);
         }
 
         if (isDonePrevFnCall && connectedRoomsThroughCollision.Count != prevCount)
@@ -1234,8 +1236,8 @@ public class Data : MonoBehaviour
         }
 
         prevCount = connectedRoomsThroughCollision.Count;
-
-        isFinishedCheckCollisions = true;
+        */
+        isFinishedCheckCollisionsVents = true;
 
     }
 
