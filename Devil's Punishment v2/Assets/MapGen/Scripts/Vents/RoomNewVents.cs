@@ -316,13 +316,12 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 }
 */
         //Spawn first vent near vent cover 
-        SpawnFirstVent(From, targetPos);
+        SpawnFirstVent(From, targetPos, spawnPointk);
         // ------------------- Calls the actual spawning function -------------------
         spawnHalf(From, targetPos, true);//, kName, lName, kParentPos, lParentPos);
 
         if (targetPos != lPos)
         {
-            //SpawnFirstVent(targetPos, lPos);
             spawnHalf(targetPos, lPos, false);//, kName, lName, kParentPos, lParentPos);
         }
 
@@ -353,9 +352,12 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+        currCorridor1.transform.SetParent(spawnPointl);
+
         currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         if (yRotation == 0)
@@ -422,7 +424,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
     }
 
     // ---------------- Instantiates L vent in correct rotation at the start vent cover ----------------
-    public void SpawnFirstVent(Vector3 From, Vector3 to)
+    public void SpawnFirstVent(Vector3 From, Vector3 to, Transform spawnPointk)
     {
         spawnNowAt = From;
         if (From.x == to.x)
@@ -444,9 +446,12 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+            currCorridor1.transform.SetParent(spawnPointk);
+
             currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
             currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
             if (yRotation == 0)
@@ -476,9 +481,12 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+            currCorridor1.transform.SetParent(spawnPointk);
+
             currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 90);
             currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
