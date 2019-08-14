@@ -123,7 +123,7 @@ public class Inventory : MonoBehaviour
         // Also sorts the whole inventory...
         // Confirmed: This will break the algorithm that the inventory uses...For whatever reason, this messes stuff up...
         // gunController.UpdateClipStock();
-
+        Sort();
     }
 
     public void DropItemAll(string name) {
@@ -321,6 +321,44 @@ public class Inventory : MonoBehaviour
     public void Sort() {
         CompoundInventory();
         inventory.Sort();
+
+        /* If gen parts found, 
+            move them to inventory spots 10, 11 and 12 for A B, and C respectively (13 is for gun... kinda) */
+        for(int i = 0; i < inventory.Count-3/*3 special treatment slots at the end */; i++) {
+            if(inventory[i].item != null && inventory[i].item is GeneratorPart) {
+                int genPartIndex =-1;
+                switch(inventory[i].item.name){
+                    case "Generator Part A":
+                        genPartIndex = 10;
+                        break;
+                    case "Generator Part B":
+                        genPartIndex = 11;
+                        break;
+                    case "Generator Part C":
+                        genPartIndex = 12;
+                        break;
+                    default:
+                        break;
+                }
+                
+                if(inventory[genPartIndex].item is GeneratorPart){
+                    //DropGameObject(inventory[i].item.name,1);
+                    //inventory[i] = new InventorySlot();
+                } else {
+                    InventorySlot swapper = inventory[genPartIndex];
+                    inventory[genPartIndex] = inventory[i];
+                    inventory[i] = swapper;
+                    //scooch parts down in index
+                    for(int k=i+1; k<inventory.Count-3 /*3 special treatment slots at the end */;k++){
+                        swapper = inventory[k];
+                        inventory[k] = inventory[k-1];
+                        inventory[k-1] = swapper;
+                    }
+                    // Start over at this i value, because parts were scooched down
+                    i--;
+                }
+            }
+        }
 	}
 
     public int GetIndexOfItem(string name) {
@@ -334,6 +372,7 @@ public class Inventory : MonoBehaviour
     }
 
     private void CompoundInventory() {
+
         for(int i = 0; i < inventory.Count; i++) {
 
             if(inventory[i].item != null) {
