@@ -7,10 +7,9 @@ public class InvAmmoDisplay : MonoBehaviour
 {
     public TextMeshProUGUI clipText;
     public TextMeshProUGUI clipStockText;
-    GunController gunController;
+    public GunController gunController;
 
     void Awake(){
-        gunController = GunController.instance;
     }
 
     // Start is called before the first frame update
