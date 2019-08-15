@@ -98,6 +98,29 @@ public class Inventory : MonoBehaviour
             return;
         }
 
+        //Reject duplicate Generator Parts
+        if (item is GeneratorPart){
+            int genPartIndex =-1;
+            switch(item.name){
+                case "Generator Part A":
+                    genPartIndex = 10;
+                    break;
+                case "Generator Part B":
+                    genPartIndex = 11;
+                    break;
+                case "Generator Part C":
+                    genPartIndex = 12;
+                    break;
+                default:
+                    break;
+            }
+            if (inventory[genPartIndex].item is GeneratorPart){
+                // Spit part back into world before it makes it into the inventory.
+                DropGameObject(item.name.Replace(" ","_"),1);
+                return;
+            }
+        }
+
         for(int k = 0; k < stack; k++) {
 
             for(int i = 0; i < inventory.Count; i++) {
