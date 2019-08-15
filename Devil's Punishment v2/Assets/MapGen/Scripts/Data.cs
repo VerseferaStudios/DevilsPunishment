@@ -1243,7 +1243,7 @@ public class Data : MonoBehaviour
                                 openings1.RemoveAt(0);
                                 if (collidedVents[j].transform.parent.name.EndsWith("L"))
                                 {
-                                    Destroy(collidedVents[j].transform.parent.parent.gameObject);
+                                    Destroy(collidedVents[j].transform.parent.parent.gameObject); // DONT DESTROY "New Game Object" (put condition)
                                     collidedVents[j].transform.parent.transform.SetParent(mapGenHolderTransform);//but it will be destroyed anyway later... check performance(meh) THIS may not work.. but its fine for now
                                 }
                                 else if (collidedVents[i].transform.parent.name.EndsWith("L"))
