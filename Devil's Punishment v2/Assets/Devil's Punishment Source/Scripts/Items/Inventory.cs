@@ -237,8 +237,13 @@ public class Inventory : MonoBehaviour
 				{
 					DropGameObject(inventory[index].item,inventory[index].stack);
 				}
-				inventory.RemoveAt(index);
-				inventory.Add(new InventorySlot());
+            /* Original
+                inventory.RemoveAt(index);
+                inventory.Add(new InventorySlot());
+            */
+                EmptySlot(index);
+
+
 				size--;
 			}
         }
