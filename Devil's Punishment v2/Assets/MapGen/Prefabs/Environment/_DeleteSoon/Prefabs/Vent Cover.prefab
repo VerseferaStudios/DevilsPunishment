@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4011636208813875534
+--- !u!1 &2858143592153576208
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4011636208813875533}
-  - component: {fileID: 4011636208813875504}
-  - component: {fileID: 4011636208813875535}
-  - component: {fileID: 4478783719512935547}
+  - component: {fileID: 2858143592153576211}
+  - component: {fileID: 2858143592153576302}
+  - component: {fileID: 2858143592153576209}
+  - component: {fileID: 3324163969453809189}
   m_Layer: 9
   m_Name: Pickup_9mm_Ammo
   m_TagString: Untagged
@@ -19,40 +19,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4011636208813875533
+--- !u!4 &2858143592153576211
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4011636208813875534}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_GameObject: {fileID: 2858143592153576208}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0.7, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 99.99997, z: 99.99997}
   m_Children: []
   m_Father: {fileID: 4708392103948042544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4011636208813875504
+--- !u!65 &2858143592153576302
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4011636208813875534}
+  m_GameObject: {fileID: 2858143592153576208}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.005052491, y: 0.003165673, z: 0.0031656714}
   m_Center: {x: 0.00003486185, y: 0.00008853576, z: 0.0015828357}
---- !u!114 &4011636208813875535
+--- !u!114 &2858143592153576209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4011636208813875534}
+  m_GameObject: {fileID: 2858143592153576208}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55c93522399cc39448e36cc4276ccdad, type: 3}
@@ -61,14 +61,14 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: c1252c3491ed0fe429f9d7a1f8d9b221, type: 2}
   stock: 11
   timeToPickUp: 1
-  isDoor: 1
---- !u!54 &4478783719512935547
+  isDoor: 0
+--- !u!54 &3324163969453809189
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4011636208813875534}
+  m_GameObject: {fileID: 2858143592153576208}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -138,7 +138,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1269018173682860793}
-  - {fileID: 4011636208813875533}
+  - {fileID: 2858143592153576211}
   m_Father: {fileID: 3191884272952604725}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -22,29 +22,13 @@ public class InteractableLoot : MonoBehaviour, IInteractable
     }
 
     public void OnInteract() {
-        if (isDoor)
+        Debug.Log("Picked up " + item.name + " x" + stock + ".");
+        gameObject.SetActive(false);
+        Inventory.instance.AddItem(item, stock);
+        if (gameObject.name.Contains("(Clone)"))
         {
-            StartCoroutine(OpenVentCover());
-        }
-        else
-        {
-            Debug.Log("Picked up " + item.name + " x" + stock + ".");
-            gameObject.SetActive(false);
-            Inventory.instance.AddItem(item, stock);
-            if (gameObject.name.Contains("(Clone)"))
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
 	}
-
-    private IEnumerator OpenVentCover()
-    {
-        while (transform.parent.localEulerAngles.z <= 80)
-        {
-            transform.parent.localEulerAngles += Vector3.Lerp(transform.parent.localEulerAngles, transform.parent.localEulerAngles + new Vector3(0, 0, 90), Time.deltaTime);
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
 
 }
