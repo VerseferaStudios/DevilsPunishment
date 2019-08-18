@@ -6,6 +6,7 @@ using UnityEngine;
 public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
     //private List<Transform> spawnPoints = new List<Transform>();
+    public bool isSecondFloor = false;
     private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
     public GameObject[] vents;
@@ -71,7 +72,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
                 if (spawnPoints[i].name.EndsWith("x"))
@@ -215,7 +216,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //making all y coordinates of all corridors equal to 0.5f
-        kPos.y = lPos.y = 0.5f;
+        kPos.y = lPos.y = 0.5f + ((isSecondFloor) ? 25f : 0f);
 
 
         Vector3 targetPos = new Vector3(0, 3, 0);
@@ -225,14 +226,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
         if (kName.EndsWith("x") && lName.EndsWith("z"))
         {
-            targetPos = new Vector3(From.x, 0.5f, lPos.z);
+            targetPos = new Vector3(From.x, 0.5f + ((isSecondFloor) ? 25f : 0f), lPos.z);
             //Debug.Log("Spawn2");
         }
 
         // ------------------- Connects z and x doors with L shape with no hindrance -------------------
         else if (kName.EndsWith("z") && lName.EndsWith("x"))
         {
-            targetPos = new Vector3(lPos.x, 0.5f, From.z);
+            targetPos = new Vector3(lPos.x, 0.5f + ((isSecondFloor) ? 25f : 0f), From.z);
             //Debug.Log("Spawn3");
         }
 
@@ -263,7 +264,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
                 isExtraTurn = true;
                 From = to;
-                targetPos = new Vector3(lPos.x, 0.5f, From.z);
+                targetPos = new Vector3(lPos.x, 0.5f + (isSecondFloor ? 25f : 0f), From.z);
                 //Debug.Log("Spawn5");
                 /*
                 //Debug.Log("From = " + From);
@@ -292,7 +293,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
                 isExtraTurn = true;
                 From = to;
-                targetPos = new Vector3(From.x, 0.5f, lPos.z);
+                targetPos = new Vector3(From.x, 0.5f + (isSecondFloor ? 25f : 0f), lPos.z);
                 //Debug.Log("Spawn6");
                 /*
                 //Debug.Log("From = " + From);
@@ -318,7 +319,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos);
         }
 
-        //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
 
         // --------------- Add L corridor to door at end room ---------------
         List<int> openings = new List<int>();
@@ -345,7 +346,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform); 
+        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform); 
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -448,7 +449,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
+                Debug.Log(currCorridor1.transform.parent.name);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -482,7 +484,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, 
+                    (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -500,7 +503,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
@@ -556,7 +559,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -591,7 +594,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -611,7 +614,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, (!isSecondFloor) ? Data.instance.mapGenHolderTransform : Data.instance.mapGenHolderFloor2Transform);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
                 Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);

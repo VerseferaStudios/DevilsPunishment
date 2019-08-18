@@ -6,6 +6,7 @@ using UnityEngine;
 public class RoomNewVents : MonoBehaviour
 {
     //private List<Transform> spawnPoints = new List<Transform>();
+    public bool isSecondFloor = false;
     private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
     private Transform corridorsParent;
@@ -211,7 +212,7 @@ public class RoomNewVents : MonoBehaviour
         Vector3 kPos = spawnPointk.position;
         Vector3 lPos = spawnPointl.position;
         //making all y coordinates of all corridors equal to 0.5f
-        kPos.y = lPos.y = 0.5f - 2f;
+        kPos.y = lPos.y = 0.5f - 2f + (isSecondFloor ? 25f : 0f);
 
 
         Vector3 targetPos = new Vector3(0, 3, 0);
@@ -220,11 +221,11 @@ public class RoomNewVents : MonoBehaviour
 
         if(From.x == lPos.x)
         {
-            targetPos = new Vector3(From.x, 0.5f - 2f, lPos.z);
+            targetPos = new Vector3(From.x, 0.5f - 2f + (isSecondFloor ? 25f : 0f), lPos.z);
         }
         else
         {
-            targetPos = new Vector3(lPos.x, 0.5f - 2f, From.z);
+            targetPos = new Vector3(lPos.x, 0.5f - 2f + (isSecondFloor ? 25f : 0f), From.z);
         }
 
         /*

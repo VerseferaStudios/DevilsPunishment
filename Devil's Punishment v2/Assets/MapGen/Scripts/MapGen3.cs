@@ -11,6 +11,7 @@ public class MapGen3 : MonoBehaviour
 
     public GameObject roomsLoaderPrefab, mapGenHolder;
     public Transform mapGenHolderTransform;
+    public float yCoordAdditionIfFloor2;
 
     [Header("Rooms")]
     private int n = 10;
@@ -53,8 +54,19 @@ public class MapGen3 : MonoBehaviour
     public void CreateHolderForMapGen()
     {
         mapGenHolder = new GameObject();
-        mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
-        Data.instance.mapGenHolderTransform = mapGenHolderTransform;
+        mapGenHolderTransform = mapGenHolder.transform;
+        if(yCoordAdditionIfFloor2 == 0)
+        {
+            Debug.Log("1");
+            Data.instance.mapGenHolderTransform = mapGenHolderTransform;
+        }
+        else
+        {
+            Debug.Log("2");
+            mapGenHolder.name = "New";
+            mapGenHolderTransform.position = new Vector3(0, 25f, 0);
+            Data.instance.mapGenHolderFloor2Transform = mapGenHolderTransform;
+        }
     }
     
     // ---------------- Reload Map Gen with good states ----------------
@@ -158,16 +170,16 @@ public class MapGen3 : MonoBehaviour
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1f;
+            float yCoord = 1f + (yCoordAdditionIfFloor2 == 0 ? 0f : 25f);
             switch (Random.Range(1, 3))
             {
                 case 0 :
                     roomToSpawn = startRoom;
-                    yCoord = 0.064f;
+                    yCoord = 0.064f + (yCoordAdditionIfFloor2 == 0 ? 0f : 25f);
                     break;
                 case 1:
                     roomToSpawn = endRoom;
-                    yCoord = 0.5f;
+                    yCoord = 0.5f + (yCoordAdditionIfFloor2 == 0 ? 0f : 25f);
                     break;/*
                 case 2:
                     roomToSpawn = roomL;
@@ -189,12 +201,12 @@ public class MapGen3 : MonoBehaviour
             {
                 if(i == k - 1)
                 {
-                    GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                    GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f + (yCoordAdditionIfFloor2 == 0 ? 0f : 25f), -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                     StartCoroutine(AddRoomNewVents(gb));
                 }
                 else
                 {
-                    Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                    Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f + (yCoordAdditionIfFloor2 == 0 ? 0f : 25f), -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 }
             }
 
@@ -282,6 +294,18 @@ public class MapGen3 : MonoBehaviour
                 roomNewScript.allRooms = allRooms;
                 roomNewScript.ventCover = ventCover;
                 roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+                if(yCoordAdditionIfFloor2 == 0)
+                {
+                    Debug.Log("3");
+                    Debug.Log(roomNewScript.transform.parent.name);
+                    roomNewScript.isSecondFloor = false;
+                }
+                else
+                {
+                    Debug.Log("4");
+                    Debug.Log(roomNewScript.transform.parent.name);
+                    roomNewScript.isSecondFloor = true;
+                }
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 
@@ -317,7 +341,9 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().corridors = vents;
+        RoomNewVents roomNewVentsScript = gb.AddComponent<RoomNewVents>();
+        roomNewVentsScript.corridors = vents;
+        roomNewVentsScript.isSecondFloor = yCoordAdditionIfFloor2 == 0 ? false : true;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------

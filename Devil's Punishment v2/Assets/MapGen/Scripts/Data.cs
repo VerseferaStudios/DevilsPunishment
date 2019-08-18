@@ -6,7 +6,7 @@ using System.Linq;
 public class Data : MonoBehaviour
 {
     public GameObject roomsLoaderPrefab;
-    public Transform mapGenHolderTransform;
+    public Transform mapGenHolderTransform, mapGenHolderFloor2Transform;
 
     public static Data instance = null;
     public ArrayList allRooms = new ArrayList();
