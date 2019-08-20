@@ -52,7 +52,7 @@ public class MapGen3 : MonoBehaviour
 
     public void CreateHolderForMapGen()
     {
-        mapGenHolder = new GameObject();
+        mapGenHolder = new GameObject("1st Floor");
         mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
