@@ -201,7 +201,8 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity,
+                    (bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
                 if (bottomLeftCorner.y == 0)
