@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class MapGen3 : MonoBehaviour
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
-    public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom;
+    public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom;
     
     private float xSize = 48f, zSize = 48f;
 
@@ -151,6 +152,17 @@ public class MapGen3 : MonoBehaviour
                 ++k;
             }
             ++l;
+        }
+
+        List<GameObject> staticRooms = new List<GameObject>();
+        staticRooms.Add(liftRoom);
+        staticRooms.Add(startRoom);
+        staticRooms.Add(generatorRoom);
+        staticRooms.Add(endRoom);
+        // ------------------- Static Rooms ------------------- 
+        for (int i = 0; i < staticRooms.Count; i++)
+        {
+            Instantiate(staticRooms[i], )
         }
 
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
