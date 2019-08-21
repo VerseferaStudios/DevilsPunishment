@@ -153,7 +153,7 @@ public class MapGen3 : MonoBehaviour
             }
             ++l;
         }
-
+        /*
         List<GameObject> staticRooms = new List<GameObject>();
         staticRooms.Add(liftRoom);
         staticRooms.Add(startRoom);
@@ -164,7 +164,7 @@ public class MapGen3 : MonoBehaviour
         {
             Instantiate(staticRooms[i], )
         }
-
+        */
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
         ItemGen itemGenScript = GetComponent<ItemGen>();
         for (int i = 0; i < k; i++)
