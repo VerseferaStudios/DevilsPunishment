@@ -8,6 +8,7 @@ public class Data2ndFloor : MonoBehaviour
     public GameObject roomsLoaderPrefab;
     public Transform mapGenHolderTransform;
     public float floor2Height = 50f;
+    public Vector3 liftRoomPos;
 
     public static Data2ndFloor instance = null;
     public ArrayList allRooms = new ArrayList();
