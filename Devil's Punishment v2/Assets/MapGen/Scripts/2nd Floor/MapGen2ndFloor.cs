@@ -107,7 +107,10 @@ public class MapGen2ndFloor : MonoBehaviour
         }
         */
         //Make this while and next loop into one? will Collisions be a prob?
-        int k = 0, l = 0;
+
+        allRooms.Add(Data2ndFloor.instance.liftRoomPos);
+
+        int k = 1, l = 1;
         while (k < n && l < 1000)
         {
             float[] arr = new float[2];
