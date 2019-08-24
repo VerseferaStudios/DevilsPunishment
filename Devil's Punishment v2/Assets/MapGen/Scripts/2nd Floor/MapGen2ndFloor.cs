@@ -108,7 +108,10 @@ public class MapGen2ndFloor : MonoBehaviour
         */
         //Make this while and next loop into one? will Collisions be a prob?
 
-        allRooms.Add(Data2ndFloor.instance.liftRoomPos);
+        float[] arr1 = new float[2];
+        arr1[0] = -Data2ndFloor.instance.liftRoomPos.y;
+        arr1[1] = -Data2ndFloor.instance.liftRoomPos.x;
+        allRooms.Add(arr1);
 
         int k = 1, l = 1;
         while (k < n && l < 1000)
@@ -166,7 +169,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
         ItemGen itemGenScript = GetComponent<ItemGen>();
-        for (int i = 0; i < k; i++)
+        for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1f; // Beware, its for gen room
