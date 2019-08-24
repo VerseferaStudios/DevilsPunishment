@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Loader : MonoBehaviour
 {
-    public GameObject data;//, roomsLoaderPrefab;
+    public GameObject data, data2ndFloor;//, roomsLoaderPrefab;
     //public Button reloadMapGenBtn;
 
     private void Awake()
@@ -15,6 +15,11 @@ public class Loader : MonoBehaviour
             Instantiate(data);
             //GameObject gb = Instantiate(roomsLoaderPrefab);
             //reloadMapGenBtn.onClick.AddListener(gb.GetComponent<MapGen3>().ReloadMapGen);
+        }
+
+        if(Data2ndFloor.instance == null)
+        {
+            Instantiate(data2ndFloor);
         }
     }
 }
