@@ -13,7 +13,7 @@ public class MapGen2ndFloor : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 10;
+    private int n = 24;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -109,10 +109,10 @@ public class MapGen2ndFloor : MonoBehaviour
         //Make this while and next loop into one? will Collisions be a prob?
 
         float[] arr1 = new float[2];
-        arr1[0] = -Data2ndFloor.instance.liftRoomPos.y;
+        arr1[0] = -Data2ndFloor.instance.liftRoomPos.z;
         arr1[1] = -Data2ndFloor.instance.liftRoomPos.x;
         allRooms.Add(arr1);
-
+        n++;
         int k = 1, l = 1;
         while (k < n && l < 1000)
         {
@@ -204,12 +204,14 @@ public class MapGen2ndFloor : MonoBehaviour
 
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + yCoord, -((float[])allRooms[i])[0]);
-            if(i == 0)
+            /*
+            if (i == 0)
             {
                 float oldY = roomPos.y;
                 roomPos = Data2ndFloor.instance.liftRoomPos;
                 roomPos.y = oldY;
             }
+            */
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
             spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
