@@ -12,6 +12,11 @@ public class SettingsManager : MonoBehaviour
 {
     Resolution[] resolutions;
     public Dropdown resolutionOptions;
+
+    public GameObject graphicView;
+    public GameObject audioView;
+    public GameObject controlView;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +56,27 @@ public class SettingsManager : MonoBehaviour
     {
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
+    public void GraphicView()
+    {
+        graphicView.SetActive(true);
+        audioView.SetActive(false);
+        controlView.SetActive(false);
+    }
+
+    public void AudioView()
+    {
+        graphicView.SetActive(false);
+        audioView.SetActive(true);
+        controlView.SetActive(false);
+    }
+
+    public void ControlView()
+    {
+        graphicView.SetActive(false);
+        audioView.SetActive(false);
+        controlView.SetActive(true);
     }
 
     // Update is called once per frame

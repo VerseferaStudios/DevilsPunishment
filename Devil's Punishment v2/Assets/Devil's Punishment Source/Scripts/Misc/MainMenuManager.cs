@@ -20,6 +20,10 @@ public class MainMenuManager : MonoBehaviour
 
     public int[] scenes;
     public Cursor pointer;
+
+    public GameObject graphicPanel;
+    public GameObject audioPanel;
+    public GameObject controlPanel;
        
     
     // Start is called before the first frame update
@@ -31,7 +35,7 @@ public class MainMenuManager : MonoBehaviour
         reportBug.GetComponent<Button>().enabled = true;
         settings.GetComponent<Button>().enabled = true;
         quit.GetComponent<Button>().enabled = true;
-        //reportPanel.SetActive(false);
+        reportPanel.SetActive(false);
         settingsCanvas.SetActive(false);
     }
 
@@ -58,6 +62,9 @@ public class MainMenuManager : MonoBehaviour
     public void Settings()
     {
         settingsCanvas.SetActive(true);
+        graphicPanel.SetActive(true);
+        audioPanel.SetActive(false);
+        controlPanel.SetActive(false);
     }
 
     public void QuitGame()
@@ -73,7 +80,12 @@ public class MainMenuManager : MonoBehaviour
     public void SettingsExit()
     {
         settingsCanvas.SetActive(false);
+        graphicPanel.SetActive(false);
+        audioPanel.SetActive(false);
+        controlPanel.SetActive(false);
     }
+
+
 
     // Update is called once per frame
     void Update()
