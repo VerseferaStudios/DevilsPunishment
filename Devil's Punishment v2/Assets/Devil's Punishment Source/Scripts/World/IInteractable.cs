@@ -8,6 +8,7 @@ public interface IInteractable {
     GameObject GetGameObject();
     void OnInteract();
     float TimeToInteract();
+    Item GetGunItem();
 
 
 }

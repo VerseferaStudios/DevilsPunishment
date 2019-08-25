@@ -14,7 +14,7 @@ public class InteractBehaviour : MonoBehaviour
     public Image interactablePromptBackground;
     public TextMeshProUGUI interactablePrompt;
 
-    private InteractableLoot focusedInteractable;
+    private IInteractable focusedInteractable;
     private bool interactableInVicinity = false;
 
     private float interactMaxTime;
@@ -50,11 +50,11 @@ public class InteractBehaviour : MonoBehaviour
             
             float maxDot = -1.0f;
 
-            InteractableLoot interactableToFocus = null;
+            IInteractable interactableToFocus = null;
             
             foreach (Collider col in hitColliders) {
 
-                InteractableLoot nearbyInteractable = col.GetComponent<InteractableLoot>();
+                IInteractable nearbyInteractable = col.GetComponent<IInteractable>();
                 if(nearbyInteractable != null) {
 
                     Vector3 pickupToCam = col.transform.position - Camera.main.transform.position;
@@ -111,7 +111,7 @@ public class InteractBehaviour : MonoBehaviour
 	private bool canPickUp()
 	{
 		CuffController cc = gameObject.transform.parent.gameObject.GetComponent<CuffController>();
-		if (focusedInteractable.item is GunItem) return true || !cc.isCuffed;
+		if (focusedInteractable.GetGunItem() is GunItem) return true || !cc.isCuffed;
 		inventory = gameObject.transform.parent.transform.Find("Inventory").GetComponent<Inventory>();
 		if (inventory == null)
 		{

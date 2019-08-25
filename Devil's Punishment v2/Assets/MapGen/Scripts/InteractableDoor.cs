@@ -59,4 +59,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         }
     }
 
+    public Item GetGunItem()
+    {
+        return null;
+    }
 }
