@@ -46,7 +46,7 @@ public class CorridorNewVents : MonoBehaviour
             }
             */
             //isNeedL = true;
-            Debug.Log("adding collided vents");
+            //Debug.Log("adding collided vents");
             Data.instance.collidedVents.Add(gameObject);
             ////Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;

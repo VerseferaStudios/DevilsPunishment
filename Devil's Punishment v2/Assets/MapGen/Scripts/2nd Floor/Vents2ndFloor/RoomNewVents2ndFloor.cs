@@ -31,7 +31,7 @@ public class RoomNewVents2ndFloor : MonoBehaviour
 
         // ------------------- Get array of doors / spawnPoints -------------------
         GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Cover 2nd Floor");
-        Debug.Log("DEBUG VENTS COVER NO = " + tempSpawnPoints.Length);
+        //Debug.Log("DEBUG VENTS COVER NO = " + tempSpawnPoints.Length);
         //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
         //GameObjects to transform
         /*
