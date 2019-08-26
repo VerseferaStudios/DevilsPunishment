@@ -962,7 +962,7 @@ public class Data2ndFloor : MonoBehaviour
                 //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
 
-                roomsArray = GameObject.FindGameObjectsWithTag("Room");
+                roomsArray = GameObject.FindGameObjectsWithTag("Room 2nd Floor");
 
 
 
