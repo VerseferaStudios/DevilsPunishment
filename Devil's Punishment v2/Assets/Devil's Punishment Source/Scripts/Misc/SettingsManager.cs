@@ -1,5 +1,11 @@
 ﻿//Author: David Bird
-
+//Date: 
+    //Last Edited: 
+        //By: David Bird
+            //Purpose: Finish the script/clean up the scripts readability.
+//Written For: Devil's Punishment v2
+//Purpose: This script handles the settings menu options and changes.
+//Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
 
 
 using System.Collections;
@@ -16,6 +22,7 @@ public class SettingsManager : MonoBehaviour
     public GameObject graphicView;
     public GameObject audioView;
     public GameObject controlView;
+
 
     // Start is called before the first frame update
     void Start()

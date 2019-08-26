@@ -1,4 +1,15 @@
-﻿using System.Collections;
+﻿//Author: David Bird
+//Date:
+    //Last Edited:
+        //By: David Bird
+            //Purpose: Finish the script/clean up the scripts readability.
+//Written For: Devil's Punishment v2
+//Purpose: This script handles main menu buttons and functionality.
+//Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
+
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,8 +23,6 @@ public class MainMenuManager : MonoBehaviour
     public Button reportBug;
     public Button settings;
     public Button quit;
-    public Button setEx;
-    public Button repEx;
 
     public GameObject reportPanel;
     public GameObject settingsCanvas;
@@ -24,7 +33,6 @@ public class MainMenuManager : MonoBehaviour
     public GameObject graphicPanel;
     public GameObject audioPanel;
     public GameObject controlPanel;
-       
     
     // Start is called before the first frame update
     void Awake()

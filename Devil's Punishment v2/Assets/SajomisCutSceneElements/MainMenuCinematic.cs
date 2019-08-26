@@ -1,4 +1,13 @@
-﻿using System.Collections;
+﻿//Author: David Bird
+//Date:
+    //Last Edited:
+        //By: David Bird
+            //Purpose: Finish the script/clean up the scripts readability.
+//Written For: Devil's Punishment v2
+//Purpose: This script handles the entire cinematic for the splashscreen cinematic leading to Main Menu scene.
+//Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
