@@ -1049,12 +1049,6 @@ public class Data : MonoBehaviour
             }
             yield return new WaitForSeconds(2.0f);
         }
-        GameObject[] gg = GameObject.FindGameObjectsWithTag("Room");
-        Debug.Log("Floor1 rooms");
-        foreach (GameObject item in gg)
-        {
-            Debug.Log(item.name);
-        }
     }
 
     private Transform FindDoor(Vector3 roomPos)

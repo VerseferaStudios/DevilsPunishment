@@ -1051,12 +1051,6 @@ public class Data2ndFloor : MonoBehaviour
             }
             yield return new WaitForSeconds(2.0f);
         }
-        GameObject[] gg = GameObject.FindGameObjectsWithTag("Room 2nd Floor");
-        Debug.Log("Floor2 rooms");
-        foreach (GameObject item in gg)
-        {
-            Debug.Log(item.name);
-        }
     }
 
     private Transform FindDoor(Vector3 roomPos)

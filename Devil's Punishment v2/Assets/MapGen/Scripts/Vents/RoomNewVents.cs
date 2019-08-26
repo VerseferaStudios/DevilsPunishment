@@ -30,7 +30,7 @@ public class RoomNewVents : MonoBehaviour
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
-        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Cover");
+        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Spawn Points");
         Debug.Log("DEBUG VENTS COVER NO = " + tempSpawnPoints.Length);
         //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
         //GameObjects to transform

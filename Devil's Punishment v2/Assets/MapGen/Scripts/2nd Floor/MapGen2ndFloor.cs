@@ -315,12 +315,12 @@ public class MapGen2ndFloor : MonoBehaviour
             if (i == k - 1)
             {
                 GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
-                gb.transform.tag = "Vent Cover 2nd Floor";
+                gb.transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
                 StartCoroutine(AddRoomNewVents2ndFloor(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform).tag = "Vent Cover 2nd Floor";
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
         }
     }

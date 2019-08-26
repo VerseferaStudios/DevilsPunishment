@@ -30,7 +30,7 @@ public class RoomNewVents2ndFloor : MonoBehaviour
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
-        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Cover 2nd Floor");
+        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Spawn Points 2nd Floor");
         //Debug.Log("DEBUG VENTS COVER NO = " + tempSpawnPoints.Length);
         //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
         //GameObjects to transform
@@ -620,7 +620,6 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             }
             spawnNowAt.x += increment;
 
-            Debug.Log(From.z + " " + to.z + "!!!!!");
             //Spawn I corridors
             for (; i < Mathf.Abs(From.x - to.x) / Data2ndFloor.instance.corridorSize + 1 - 1; i++)
             {
