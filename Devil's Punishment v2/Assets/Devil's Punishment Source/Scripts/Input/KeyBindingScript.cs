@@ -17,7 +17,8 @@ using System;
 
 public class KeyBindingScript : MonoBehaviour
 {
-    private Dictionary<string, KeyCode> keyBinds = new Dictionary<string, KeyCode>();
+    
+    private Dictionary<string, InputBinding> keyBinds = new Dictionary<string, InputBinding>();
     public Text forward, backward, left, right, crouch, sprint, shoot, reload, aim, flashlightToggle, flashlightNarrow, flashlightWiden, flashlightUp, flashlightDown, flashlightHome, interact, pause, inventory;
     private GameObject curKey;
     private Color32 normal = new Color32(157, 125, 52, 255);
@@ -26,24 +27,24 @@ public class KeyBindingScript : MonoBehaviour
 
     private void Start()
     {
-        keyBinds.Add("forward", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("forward", "W")));
-        keyBinds.Add("backward", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("backward", "S")));
-        keyBinds.Add("left", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("left", "A")));
-        keyBinds.Add("right", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("right", "D")));
-        keyBinds.Add("crouch", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("crouch", "LeftControl")));
-        keyBinds.Add("sprint", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("sprint", "LeftShift")));
-        keyBinds.Add("shoot", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("shoot", "Mouse0")));
-        keyBinds.Add("aim", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("aim", "Mouse1")));
-        keyBinds.Add("reload", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("reload", "R")));
-        keyBinds.Add("flashlightToggle", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightToggle", "G")));
-        keyBinds.Add("flashlightNarrow", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightNarrow", "RightArrow")));
-        keyBinds.Add("flashlightWiden", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightWiden", "LeftArrow")));
-        keyBinds.Add("flashlightUp", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightUp", "UpArrow")));
-        keyBinds.Add("flashlightDown", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightDown", "DownArrow")));
-        keyBinds.Add("flashlightHome", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightHome", "Q")));
-        keyBinds.Add("interact", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("interact", "E")));
-        keyBinds.Add("inventory", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("inventory", "Tab")));
-        keyBinds.Add("pause", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("pause", "Escape")));
+        keyBinds.Add("forward", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("forward", "W"))));
+        keyBinds.Add("backward", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("backward", "S"))));
+        keyBinds.Add("left", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("left", "A"))));
+        keyBinds.Add("right", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("right", "D"))));
+        keyBinds.Add("crouch", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("crouch", "LeftControl"))));
+        keyBinds.Add("sprint", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("sprint", "LeftShift"))));
+        keyBinds.Add("shoot", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("shoot", "Mouse0"))));
+        keyBinds.Add("aim", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("aim", "Mouse1"))));
+        keyBinds.Add("reload", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("reload", "R"))));
+        keyBinds.Add("flashlightToggle", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightToggle", "G"))));
+        keyBinds.Add("flashlightNarrow", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightNarrow", "RightArrow"))));
+        keyBinds.Add("flashlightWiden", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightWiden", "LeftArrow"))));
+        keyBinds.Add("flashlightUp", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightUp", "UpArrow"))));
+        keyBinds.Add("flashlightDown", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightDown", "DownArrow"))));
+        keyBinds.Add("flashlightHome", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("flashlightHome", "Q"))));
+        keyBinds.Add("interact", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("interact", "E"))));
+        keyBinds.Add("inventory", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("inventory", "Tab"))));
+        keyBinds.Add("pause", new InputBinding((KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("pause", "Escape"))));
 
         forward.text = keyBinds["forward"].ToString();
         backward.text = keyBinds["backward"].ToString();
@@ -68,90 +69,107 @@ public class KeyBindingScript : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(keyBinds["forward"]))
+        if (keyBinds["forward"].GetKeyDown())
         {
             Debug.Log("Forward " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["backward"]))
+        if (keyBinds["backward"].GetKeyDown())
         {
             Debug.Log("Backward " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["left"]))
+        if (keyBinds["left"].GetKeyDown())
         {
             Debug.Log("Left " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["right"]))
+        if (keyBinds["right"].GetKeyDown())
         {
             Debug.Log("Right " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["crouch"]))
+        if (keyBinds["crouch"].GetKeyDown())
         {
             Debug.Log("Crouch " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["sprint"]))
+        if (keyBinds["sprint"].GetKeyDown())
         {
             Debug.Log("Sprint " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["shoot"]))
+        if (keyBinds["shoot"].GetKeyDown())
         {
             Debug.Log("Shoot " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["aim"]))
+        if (keyBinds["aim"].GetKeyDown())
         {
             Debug.Log("Aim " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["reload"]))
+        if (keyBinds["reload"].GetKeyDown())
         {
             Debug.Log("Reload " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightToggle"]))
+        if (keyBinds["flashlightToggle"].GetKeyDown())
         {
             Debug.Log("Flashlight Toggle " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightNarrow"]))
+        if (keyBinds["flashlightNarrow"].GetKeyDown())
         {
             Debug.Log("Flashlight Narrow " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightWiden"]))
+        if (keyBinds["flashlightWiden"].GetKeyDown())
         {
             Debug.Log("Flashlight Widen " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightUp"]))
+        if (keyBinds["flashlightUp"].GetKeyDown())
         {
             Debug.Log("Flashlight Up " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightDown"]))
+        if (keyBinds["flashlightDown"].GetKeyDown())
         {
             Debug.Log("Flashlight Down " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["flashlightHome"]))
+        if (keyBinds["flashlightHome"].GetKeyDown())
         {
             Debug.Log("Flashlight Home " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["interact"]))
+        if (keyBinds["interact"].GetKeyDown())
         {
             Debug.Log("Interact " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["inventory"]))
+        if (keyBinds["inventory"].GetKeyDown())
         {
             Debug.Log("Inventory " + "using " + Input.inputString.ToString());
         }
-        if (Input.GetKeyDown(keyBinds["pause"]))
+        if (keyBinds["pause"].GetKeyDown())
         {
             Debug.Log("Pause " + "using " + Input.inputString.ToString());
         }
+    }
+
+    InputBinding CaptureFirstInput()
+    {
+
+        Event f = Event.current;
+
+        if (f.isKey && f.keyCode != KeyCode.None)
+            return new InputBinding(f.keyCode);
+
+        for (int i = 0; i < 3; i++)
+            if (Input.GetMouseButtonDown(i))
+                return new InputBinding(i);
+
+        if (Input.mouseScrollDelta != Vector2.zero)
+            return new InputBinding(Input.mouseScrollDelta);
+
+        return null;
     }
 
     private void OnGUI()
     {
         if (curKey != null)
         {
-            Event e = Event.current;
-            if (e.isKey)
+            var input = CaptureFirstInput();
+            if (input != null && input.type != BindingType.None)
             {
-                keyBinds[curKey.name] = e.keyCode;
-                curKey.transform.GetChild(0).GetComponent<Text>().text = e.keyCode.ToString();
-                Debug.Log("Key has been changed.");
+                keyBinds[curKey.name] = input;
+                curKey.transform.GetChild(0).GetComponent<Text>().text = input.ToString();
                 curKey.GetComponent<Image>().color = normal;
                 curKey = null;
             }
