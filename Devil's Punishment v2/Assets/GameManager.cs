@@ -13,24 +13,7 @@ using UnityEngine;
 using System;
 
 public class GameManager : MonoBehaviour
-{
-    public enum BindingType
-    {
-        Unset,
-        KeyBoard,
-        MouseButton,
-        MouseWheel
-    }
-
-    [System.Serializable]
-    public struct InputBinding
-    {
-        public BindingType type;
-        public KeyCode key;
-        public int mouseButton;
-        public Vector2 scrollDirection;
-    }
-
+{ 
     public static GameManager gm;
 
     public KeyCode forward { get; set; } //defined 1
