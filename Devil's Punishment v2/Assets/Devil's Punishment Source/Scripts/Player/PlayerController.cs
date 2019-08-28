@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour
     void CrouchControllerColliderHeight() {
         if(isCrouching) {
             controller.center = Vector3.up * .625f;
-            controller.height = 1.25f;
+            controller.height = 1f;
         } else {
             controller.center = Vector3.up * .875f;
             controller.height = 1.75f;
