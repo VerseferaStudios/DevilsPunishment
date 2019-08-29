@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 8627239477719459995}
   - component: {fileID: 8627239477719459994}
   - component: {fileID: 8627239477719460006}
-  - component: {fileID: 2438851756788092426}
+  - component: {fileID: 5557122663185055440}
   m_Layer: 0
   m_Name: GenSlot A
   m_TagString: Untagged
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 10
   itemImage: {fileID: 8627239478241398097}
-  dropdown: {fileID: 0}
+  dropdown: {fileID: 5557122663185055440}
   quantityObject: {fileID: 8627239477952116319}
   quantityText: {fileID: 8627239478079084457}
 --- !u!114 &8627239477719460006
@@ -241,7 +241,7 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
---- !u!114 &2438851756788092426
+--- !u!114 &5557122663185055440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,7 +277,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 8627239477719459995}
+  m_TargetGraphic: {fileID: 8627239478241398097}
   m_Template: {fileID: 8627239479496531462}
   m_CaptionText: {fileID: 0}
   m_CaptionImage: {fileID: 0}
@@ -287,6 +287,10 @@ MonoBehaviour:
   m_Options:
     m_Options:
     - m_Text: Use
+      m_Image: {fileID: 0}
+    - m_Text: Drop
+      m_Image: {fileID: 0}
+    - m_Text: Drop All
       m_Image: {fileID: 0}
     - m_Text: Cancel
       m_Image: {fileID: 0}
