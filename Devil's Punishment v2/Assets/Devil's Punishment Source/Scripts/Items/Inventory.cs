@@ -84,7 +84,7 @@ public class Inventory : MonoBehaviour
     }
 	
 	private int size;
-	public bool hasSpace() {return size < PseudoCount(); }
+	public bool hasSpace() {return size < inventory.Count; }
 
     // The direct value of "inventory.Count" is NOT valid, since the inventory list ends with Three special slots (for gen parts);
     // So use this "PseudoCount()" function everywhere you would normally be using inventory.Count; Except when inventory.Count is referring to the "gun slot"; I apologize for this being so confusing...
@@ -143,9 +143,26 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        OrganizeInventory();
         // If the "item" makes it here, it should be a "regular" item that doesn't have a reserved index position.
         // Might as well just add it to an empty spot, or combine it with something that's already there.
+        // First, to make sure that the invenory REALLY hasSpace() for the item, we have to account for the fact that the only empty space might be a RESERVED "generator slot"
+        int genPartCount = 0;
+        // Loop over the last three inventory slots, reserved for gen parts, and count how many there are
+        for(int i=inventory.Count-4;i<inventory.Count;i++){
+            if(inventory[i]!=null && inventory[i].item!=null && inventory[i].item is GeneratorPart){
+                genPartCount++;
+            }
+        }
+        // account for existence of gen parts, and see if there's still room in the inventory.
+        Debug.Log("Size is: "+size);
+        Debug.Log("GenPartCount is: "+genPartCount);
+        bool hasSpace = size + (3-genPartCount) < inventory.Count;
+        // If it turns out you didn't have space, after all, drop the item back into the world, and stop here.
+        if (!hasSpace){
+            DropGameObject(item,stack);
+            return;
+        }
+        // Otherwise you're free to add the item to the inventory.
         for(int k = 0; k < stack; k++) {
 
             for(int i = 0; i < PseudoCount(); i++) {
@@ -159,7 +176,7 @@ public class Inventory : MonoBehaviour
 
 
                 } else {
-                    inventory[i] = new InventorySlot(item, 1);
+                    inventory[i] = new InventorySlot(item, stack);
                     break;
                 }
 
@@ -177,8 +194,9 @@ public class Inventory : MonoBehaviour
     }
 
 	public GameObject DropGameObject(string ResourceID, int count = 1)
-	{
-		//Debug.Log("Creating game object from item at "+gameObject.name+"'s position.");
+	{   
+        if (count < 1) return null;
+		Debug.Log("Creating "+count+" "+ResourceID+"'s from item at "+gameObject.name+"'s position.");
 		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
 		//Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
 		drop.GetComponent<InteractableLoot>().stock = count;
@@ -422,7 +440,7 @@ public class Inventory : MonoBehaviour
     //
     private void CullNulls() {
 		size = 0;
-        for(int i = 0; i < PseudoCount(); i++) {
+        for(int i = 0; i < inventory.Count; i++) {
             if(inventory[i] == null || inventory[i].item == null || inventory[i].stack <= 0) {
                 DropItemAll(i);
 			}
