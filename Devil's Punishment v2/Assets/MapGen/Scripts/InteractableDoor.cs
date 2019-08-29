@@ -9,6 +9,9 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     //public int stock;
     public float timeToPickUp = .5f;
     public bool isVentCover = true;
+
+    public GameObject brokenFloorCollidors;
+
     public string Prompt()
     {
         return "Open vent cover";// + item.name + " (" + stock + ")";
@@ -26,7 +29,19 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
+
+        Debug.Log("Opened vent cover");
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+
+        Transform t = transform.parent.parent.parent.GetChild(2).GetChild(0);
+        Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
+        t.gameObject.SetActive(false);
+        //timeToPickUp = float.MaxValue;
+
         StartCoroutine(OpenVentCoverOrDoor());
+
+
+
         /*
         else
         {
@@ -47,8 +62,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         {
             if (isVentCover)
             {
-                Debug.Log("Opened vent cover");
                 transform.parent.localEulerAngles += Vector3.Lerp(transform.parent.localEulerAngles, transform.parent.localEulerAngles + new Vector3(0, 0, 90), Time.deltaTime);
+                //gameObject.SetActive(false);
             }
             else
             {
@@ -59,4 +74,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         }
     }
 
+    public Item GetGunItem()
+    {
+        return null;
+    }
 }

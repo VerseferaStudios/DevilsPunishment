@@ -944,7 +944,7 @@ public class Data2ndFloor : MonoBehaviour
         yield return new WaitUntil(() => isFirstPassDone == true);
         isFirstPassDone = false;
         yield return new WaitForSeconds(2f);
-        while (true)
+        while (isOnce)
         {
             if (Time.time - startTime >= 3f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
             {
@@ -962,7 +962,7 @@ public class Data2ndFloor : MonoBehaviour
                 //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
 
-                roomsArray = GameObject.FindGameObjectsWithTag("Room");
+                roomsArray = GameObject.FindGameObjectsWithTag("Room 2nd Floor");
 
 
 

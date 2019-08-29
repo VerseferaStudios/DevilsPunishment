@@ -304,12 +304,22 @@ public class MapGen3 : MonoBehaviour
         }
     }
 
+    // -------------------- Change door names --------------------
+    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
+    {
+        GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
+        for (int i = 0; i < doors.Length; i++)
+        {
+            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
+        }
+    }
+
     // ---------------------------- Call offset functions accordingly ----------------------------
     public void CallOffsetAndDoorFns(GameObject spawnedRoom, float yRotation)
     {
         if (yRotation == 90)
         {
-            spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
+            ChangeDoorNames(spawnedRoom, "Door+x");
             GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
             //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
@@ -329,7 +339,7 @@ public class MapGen3 : MonoBehaviour
             float reqYRotationForCorridor = 0;
             if (yRotation == 180)
             {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+                ChangeDoorNames(spawnedRoom, "Door-z");
                 GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                 reqYRotationForCorridor = 0;
 
@@ -342,7 +352,7 @@ public class MapGen3 : MonoBehaviour
             }
             else if (yRotation == 270 || yRotation == -90)
             {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+                ChangeDoorNames(spawnedRoom, "Door-x");
                 GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room

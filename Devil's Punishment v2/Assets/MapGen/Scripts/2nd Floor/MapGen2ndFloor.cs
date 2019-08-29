@@ -214,6 +214,8 @@ public class MapGen2ndFloor : MonoBehaviour
             */
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
+            spawnedRoom.tag = "Room 2nd Floor";
+
             spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
 
             itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, Data2ndFloor.instance.floor2Height, roomPos.z - 5), new Vector3(roomPos.x + 5, Data2ndFloor.instance.floor2Height, roomPos.z + 5), 6);
@@ -313,13 +315,23 @@ public class MapGen2ndFloor : MonoBehaviour
             if (i == k - 1)
             {
                 GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
-                gb.transform.tag = "Vent Cover 2nd Floor";
+                gb.transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
                 StartCoroutine(AddRoomNewVents2ndFloor(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform).tag = "Vent Cover 2nd Floor";
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
+        }
+    }
+
+    // -------------------- Change door names --------------------
+    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
+    {
+        GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
+        for (int i = 0; i < doors.Length; i++)
+        {
+            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
         }
     }
 
@@ -328,7 +340,7 @@ public class MapGen2ndFloor : MonoBehaviour
     {
         if (yRotation == 90)
         {
-            spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
+            ChangeDoorNames(spawnedRoom, "Door+x");
             GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
             //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
@@ -348,7 +360,7 @@ public class MapGen2ndFloor : MonoBehaviour
             float reqYRotationForCorridor = 0;
             if (yRotation == 180)
             {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
+                ChangeDoorNames(spawnedRoom, "Door-z");
                 GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                 reqYRotationForCorridor = 0;
 
@@ -361,7 +373,8 @@ public class MapGen2ndFloor : MonoBehaviour
             }
             else if (yRotation == 270 || yRotation == -90)
             {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
+                
+                ChangeDoorNames(spawnedRoom, "Door-x");
                 GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
