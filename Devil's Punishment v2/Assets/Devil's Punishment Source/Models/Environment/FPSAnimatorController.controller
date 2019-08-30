@@ -151,7 +151,7 @@ BlendTree:
     m_Motion: {fileID: 7400012, guid: 1cfba0497b063e743b3af5191b6286e6, type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: Aiming
     m_Mirror: 0
@@ -159,7 +159,7 @@ BlendTree:
   m_BlendParameterY: Aiming
   m_MinThreshold: 0
   m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
+  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!206 &206829859487101200
@@ -260,12 +260,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
-  m_TransitionOffset: 0
-  m_ExitTime: 0.0000000016299401
+  m_TransitionDuration: 0.06732558
+  m_TransitionOffset: 0.0646477
+  m_ExitTime: 0.013610075
   m_HasExitTime: 0
   m_HasFixedDuration: 0
-  m_InterruptionSource: 0
+  m_InterruptionSource: 4
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &1101494815053685536
@@ -326,8 +326,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: Raised
+  - m_ConditionMode: 2
+    m_ConditionEvent: Reload
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102312482225277998}
