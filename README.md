@@ -2,7 +2,7 @@
 DevilsPunishment Repository
 
 Note:
-To use the UnityYAMLMerge.exe tool for merging .unity and .prefab files, add the [merge] section from the provided .gitconfig to your own ~/.gitconfig file
+To use the UnityYAMLMerge.exe tool for merging .unity and .prefab files, add the [merge] section from the provided .gitconfig to your own ~/.gitconfig file (This is something that cannot be done automatically for you, Git's system has forbidden it as a security vulnerability)
 
 If you choose to do this, you should also install "Diff Merge" https://www.sourcegear.com/diffmerge/downloaded.php which will automatically be chosen as a "fallback merger" for files that UnityYAMLMerge cannot handle, by default.
 
