@@ -8,6 +8,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     //private List<Transform> spawnPoints = new List<Transform>();
     private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
+    public GameObject[] vents;
     private Transform corridorsParent;
     //private MapGen3 mapGen3;
     private float nextTime = 0f;
@@ -24,6 +25,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     //storedOpening is for the next L corridor in line
     private int storedOpening;
+
+    public ArrayList allRooms = new ArrayList();
+    public Transform mapGenHolderTransform;
+    public float ventCoverProbabilty = 0.090f;
+    public GameObject ventCover;
 
     void Start()
     {
@@ -73,7 +79,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
                 }
                 //Debug.Log("Spawn1");
-                Data.instance.corridorCount++;
+                //Data.instance.corridorCount++;
 
                 // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
                 visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
@@ -502,6 +508,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 */
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                /*
                 Data.instance.corridorCount++;
                 if (Data.instance.isCollided)
                 {
@@ -509,7 +516,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //check current corridor and rotation. check the already instantiated once type AND rotation (using other) ?????//check later
 
                 }
+                */
                 currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
+
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+                {
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
                 spawnNowAt.z += increment;
             }
         }
@@ -606,11 +620,17 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                Data.instance.corridorCount++;
+                //Data.instance.corridorCount++;
 
                 currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
 
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+                {
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
                 spawnNowAt.x += increment;
+
             }
         }
     }

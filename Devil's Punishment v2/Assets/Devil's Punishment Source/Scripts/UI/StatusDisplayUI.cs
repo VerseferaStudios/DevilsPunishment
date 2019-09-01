@@ -15,6 +15,7 @@ public class StatusDisplayUI : MonoBehaviour
 
     // Status: Infection
     public GameObject infectionDisplay;
+    public GameObject tubePoison;
     //private Infection infection;
     private Slider infectionSlider;
     private TextMeshProUGUI infectionPerecentage;
@@ -62,10 +63,12 @@ public class StatusDisplayUI : MonoBehaviour
         if (!infectionDisplay.activeSelf && health.infected) //infectionDisplay.activeSelf == false && infectionAmount > 0f
         {
             infectionDisplay.SetActive(true);
+            tubePoison.SetActive(true);
         }
         else if (infectionDisplay.activeSelf && !health.infected) // infectionAmount <= 0f
         {
             infectionDisplay.SetActive(false);
+            tubePoison.SetActive(false);
         }  
         if (infectionDisplay.activeSelf)
         {

@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class MapGen3 : MonoBehaviour
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
-    public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom;
+    public GameObject[] staticRooms;
+    public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom;
     
     private float xSize = 48f, zSize = 48f;
 
@@ -25,6 +27,7 @@ public class MapGen3 : MonoBehaviour
 
     //For Vents
     [Header("Vents")]
+    public GameObject[] vents;
     public float ventCoverProbabilty = 0.050f;
     public GameObject ventCover;
 
@@ -36,20 +39,22 @@ public class MapGen3 : MonoBehaviour
     private void Start()
     {
         CreateHolderForMapGen();
-        Random.state = GoodStates.states[0];
+        //Random.state = GoodStates.states[0];
         StateData.states.Add(Random.state);
-        rooms();
+        Rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
         Data.instance.corridorX = corridors[5];
+        Data.instance.ventT = vents[3];
+        Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
     }
 
     public void CreateHolderForMapGen()
     {
-        mapGenHolder = new GameObject();
+        mapGenHolder = new GameObject("1st Floor");
         mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
@@ -75,13 +80,13 @@ public class MapGen3 : MonoBehaviour
 
         CreateHolderForMapGen();
 
-        rooms();
+        Rooms();
 
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void rooms()
+    public void Rooms()
     {
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
@@ -149,23 +154,41 @@ public class MapGen3 : MonoBehaviour
             }
             ++l;
         }
-
+        /*
+        List<GameObject> staticRooms = new List<GameObject>();
+        staticRooms.Add(liftRoom);
+        staticRooms.Add(startRoom);
+        staticRooms.Add(generatorRoom);
+        staticRooms.Add(endRoom);
+        // ------------------- Static Rooms ------------------- 
+        for (int i = 0; i < staticRooms.Count; i++)
+        {
+            Instantiate(staticRooms[i], )
+        }
+        */
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
         ItemGen itemGenScript = GetComponent<ItemGen>();
         for (int i = 0; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1f;
-            switch (Random.Range(1, 3))
+            float yCoord = 1f; // Beware, its for gen room
+            if(i < staticRooms.Length)
             {
-                case 0 :
-                    roomToSpawn = startRoom;
-                    yCoord = 0.064f;
-                    break;
-                case 1:
-                    roomToSpawn = endRoom;
-                    yCoord = 0.5f;
-                    break;/*
+                roomToSpawn = staticRooms[i];
+                yCoord = 0f;
+            }
+            else
+            {
+                switch (Random.Range(1, 3))
+                {
+                    case 0:
+                        roomToSpawn = startRoom;
+                        yCoord = 0.064f;
+                        break;
+                    case 1:
+                        roomToSpawn = endRoom;
+                        yCoord = 0.5f;
+                        break;/*
                 case 2:
                     roomToSpawn = roomL;
                     break;
@@ -175,99 +198,33 @@ public class MapGen3 : MonoBehaviour
                 case 4:
                     roomToSpawn = room4;
                     break;*/
+                }
             }
-            Room roomScript = roomToSpawn.GetComponent<Room>();
+            
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
+            if (i == 0)
+            {
+                Data2ndFloor.instance.liftRoomPos = roomPos;
+            }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
             itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
-            if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
-            {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
-            }
+            SpawnVentCoverInRoom(i, k);
 
-            if(yRotation == 90)
-            {
-                spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door+x";
-                GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
-                //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
-                //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
-                //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
-
-                /*
-                Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-                for (int z = 0; z < corridorsOfRoom.childCount; z++)
-                {
-                    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-                }
-                */
-
-            }
-            else if(yRotation == 180 || yRotation == 270 || yRotation == -90)
-            {
-                float reqYRotationForCorridor = 0; 
-                if (yRotation == 180)
-                {
-                    spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-z";
-                    GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
-                    reqYRotationForCorridor = 0;
-
-                    //-----------------234567-----------------
-                    //if (spawnedRoom.name.Equals("End Room(Clone)"))
-                    {
-                        spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.303f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + 0.31f);
-                    }
-
-                }
-                else if (yRotation == 270 || yRotation == -90)
-                {
-                    spawnedRoom.GetComponent<RoomReferences>().doors[0].name = "Door-x";
-                    GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
-                    //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
-                    //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
-                    //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
-
-                    /*
-                    Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-                    for (int z = 0; z < corridorsOfRoom.childCount; z++)
-                    {
-                        corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-                    }
-                    */
-
-                    reqYRotationForCorridor = 90;
-
-                    //-----------------234567-----------------
-                    //if (spawnedRoom.name.Equals("End Room(Clone)"))
-                    {
-                        spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.31f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z - 0.303f);
-                    }
-
-                }
-
-                for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
-                {
-                    spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
-                }
-
-                
-
-            }
-            //probably +z....
-            else
-            {
-                GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
-            }
-
-
+            CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
             {
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
+                roomNewScript.vents = vents;
+                roomNewScript.allRooms = allRooms;
+                roomNewScript.ventCover = ventCover;
+                roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+                //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 
                 //ConnectToMapGen(roomNewScript);
@@ -298,6 +255,13 @@ public class MapGen3 : MonoBehaviour
         
     }
 
+    // ------------------------ Add RoomNewVents script after delay ------------------------
+    private IEnumerator AddRoomNewVents(GameObject gb)
+    {
+        yield return new WaitForSeconds(5f);
+        gb.AddComponent<RoomNewVents>().corridors = vents;
+    }
+
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
     private void ConnectToMapGen(RoomNew roomNewScript)
     {
@@ -320,6 +284,110 @@ public class MapGen3 : MonoBehaviour
         else
         {
             Debug.Log("ERROR!!!!");
+        }
+    }
+
+    // ----------------------- Spawn Vent Cover in room -----------------------
+    public void SpawnVentCoverInRoom(int i, int k)
+    {
+        if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
+        {
+            if (i == k - 1)
+            {
+                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                StartCoroutine(AddRoomNewVents(gb));
+            }
+            else
+            {
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+            }
+        }
+    }
+
+    // -------------------- Change door names --------------------
+    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
+    {
+        GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
+        for (int i = 0; i < doors.Length; i++)
+        {
+            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
+        }
+    }
+
+    // ---------------------------- Call offset functions accordingly ----------------------------
+    public void CallOffsetAndDoorFns(GameObject spawnedRoom, float yRotation)
+    {
+        if (yRotation == 90)
+        {
+            ChangeDoorNames(spawnedRoom, "Door+x");
+            GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
+            //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
+            //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
+            //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
+
+            /*
+            Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+            for (int z = 0; z < corridorsOfRoom.childCount; z++)
+            {
+                corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+            }
+            */
+
+        }
+        else if (yRotation == 180 || yRotation == 270 || yRotation == -90)
+        {
+            float reqYRotationForCorridor = 0;
+            if (yRotation == 180)
+            {
+                ChangeDoorNames(spawnedRoom, "Door-z");
+                GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
+                reqYRotationForCorridor = 0;
+
+                //-----------------234567-----------------
+                //if (spawnedRoom.name.Equals("End Room(Clone)"))
+                {
+                    spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.303f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + 0.31f);
+                }
+
+            }
+            else if (yRotation == 270 || yRotation == -90)
+            {
+                ChangeDoorNames(spawnedRoom, "Door-x");
+                GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
+                //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
+                //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
+                //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
+
+                /*
+                Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+                for (int z = 0; z < corridorsOfRoom.childCount; z++)
+                {
+                    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+                }
+                */
+
+                reqYRotationForCorridor = 90;
+
+                //-----------------234567-----------------
+                //if (spawnedRoom.name.Equals("End Room(Clone)"))
+                {
+                    spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.31f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z - 0.303f);
+                }
+
+            }
+
+            for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
+            {
+                spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
+            }
+
+
+
+        }
+        //probably +z....
+        else
+        {
+            GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
         }
     }
 

@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameMenuUI : MonoBehaviour
 {
     public static InGameMenuUI instance;
+    public GameObject optionsPanel;
     
     void Awake() 
     {
@@ -18,7 +20,8 @@ public class InGameMenuUI : MonoBehaviour
 
     public void Btn_Options()
     {
-        Player.instance.ToggleOptionsMenu();
+        optionsPanel.SetActive(true);
+        //Player.instance.ToggleOptionsMenu();
     }
 
     public void Btn_Exit()

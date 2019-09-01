@@ -21,9 +21,9 @@ public class CorridorNew : MonoBehaviour
 
     public List<Vector3> rooms = new List<Vector3>();
 
-    public string KOrL;
+    //public string KOrL;
 
-    public List<Vector3> theEqualOnes = new List<Vector3>();
+    //public List<Vector3> theEqualOnes = new List<Vector3>();
 
     //public GameObject collisionDetector;
 
@@ -37,8 +37,8 @@ public class CorridorNew : MonoBehaviour
         string otherTag = other.transform.parent.tag;
         if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
         {
-            Data.instance.isCollided = true;
-            Data.instance.collisionCount++;
+            //Data.instance.isCollided = true;
+            //Data.instance.collisionCount++;
             
             if(!(transform.parent.tag.Equals("CorridorI") && otherTag.Equals("CorridorI")))
             {

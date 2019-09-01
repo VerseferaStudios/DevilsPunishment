@@ -7,10 +7,10 @@ public class RestartScene : MonoBehaviour
 {
     public void restartScene()
     {
-        Data.instance.collisionCount = Data.instance.corridorCount = 0;
+        //Data.instance.collisionCount = Data.instance.corridorCount = 0;
         Data.instance.allRooms = new ArrayList();
         Data.instance.startTime = Time.time;
-        Data.instance.isCollided = false;
+        //Data.instance.isCollided = false;
         Data.instance.collidedCorridors = new List<GameObject>();
         Data.instance.corridorPosDict = new Dictionary<Vector3, int>();
         Data.instance.connectedRoomsThroughCollision = new List<ConnectedComponent>();
@@ -21,7 +21,7 @@ public class RestartScene : MonoBehaviour
         Data.instance.ctr = 0;
         Data.instance.prevCount = 0;
 
-        Data.instance.isFinishedAddAndRemoveConnectedRooms = Data.instance.isFinishedCheckCollisions = Data.instance.isConnectedComponentsCheckDone = false;
+        Data.instance.isFinishedAddAndRemoveConnectedRooms = Data.instance.isFinishedCheckCollisionsVents = Data.instance.isFinishedCheckCollisions = Data.instance.isConnectedComponentsCheckDone = false;
         Data.instance.temp = new List<ConnectedComponent>();
         Data.instance.counter = Data.instance.counter1 = 0;
 

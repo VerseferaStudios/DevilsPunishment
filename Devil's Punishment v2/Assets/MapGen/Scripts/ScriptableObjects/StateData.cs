@@ -6,4 +6,5 @@ using UnityEngine;
 public class StateData : ScriptableObject
 {
     public List<Random.State> states = new List<Random.State>();
+    public List<int> noOfRooms, mapGenSize;
 }
