@@ -9,9 +9,9 @@ public class Item : ScriptableObject, IComparable<Item>
 
     //Only for use with base items
     public enum ItemClassification {
-        NONE,
-        BULLET,
-        KEY,
+        NONE= 0,
+        BULLET= 1,
+        KEY= 2,
     }
 
     //Does this item get consumed when used? true - yes false - no

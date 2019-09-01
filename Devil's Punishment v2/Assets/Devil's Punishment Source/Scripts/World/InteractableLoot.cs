@@ -30,5 +30,9 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 		}
 	}
 
+    public Item GetGunItem()
+    {
+        return item;
+    }
 
 }

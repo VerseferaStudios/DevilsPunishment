@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
 
-    [Range(0f, 3f)]
+    [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
 
@@ -26,7 +27,8 @@ public class PlayerController : MonoBehaviour
     private bool isClimbing;
     private float originalHeight;
 
-    public Animator characterAnimator;
+    public GameObject playerModel;
+    private Animator characterAnimator;
     private CharacterController controller;
     private Camera headCamera;
 
@@ -48,8 +50,10 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController instance;
 
+    public bool shadowOnly = false;
     void Awake() {
         instance = this;
+        characterAnimator = playerModel.GetComponent<Animator>();
     }
 
     void Start() {
@@ -184,12 +188,55 @@ public class PlayerController : MonoBehaviour
     }
 
     void Animation() {
+        if(shadowOnly){
+            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            }
+        } else {
+            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            }
+        }
 
         characterAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
         characterAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
+
+        if (Inventory.instance.equippedGun != null){
+            switch (Inventory.instance.equippedGun.weaponClassification)
+            {
+                case GunItem.WeaponClassification.HANDGUN:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,1);
+                    characterAnimator.SetLayerWeight(2,0);
+                    characterAnimator.SetLayerWeight(3,0);
+                    break;
+                case GunItem.WeaponClassification.SHOTGUN:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,0);
+                    characterAnimator.SetLayerWeight(2,1);
+                    characterAnimator.SetLayerWeight(3,0);
+                    break;
+                case GunItem.WeaponClassification.ASSAULTRIFLE:
+                    characterAnimator.SetLayerWeight(0,0);
+                    characterAnimator.SetLayerWeight(1,0);
+                    characterAnimator.SetLayerWeight(2,0);
+                    characterAnimator.SetLayerWeight(3,1);
+                    break;
+
+                default: // Pass
+                    break;
+            }
+        } else {
+            characterAnimator.SetLayerWeight(0,1);
+            characterAnimator.SetLayerWeight(1,0);
+            characterAnimator.SetLayerWeight(2,0);
+            characterAnimator.SetLayerWeight(3,0);
+        }
     }
 
     void CameraUpdate() {
@@ -208,4 +255,10 @@ public class PlayerController : MonoBehaviour
             controller.height = 1.75f;
         }
     }
+
+    public void ChangePlayerSpeed(Slider slider)
+    {
+        movementSpeed = slider.value * 25;
+    }
+
 }

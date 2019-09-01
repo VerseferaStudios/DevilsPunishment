@@ -97,8 +97,8 @@ public class ItemGen : MonoBehaviour
     int caveSpawns;
     int startingRoomSpawns;
 
-    private List<Vector3> itemPositions = new List<Vector3>();
-
+    private List<Vector3> itemPositions = new List<Vector3>(), itemPositions2ndFloor = new List<Vector3>();
+    
     public void FindLocations()
     {
         List<Transform> all = new List<Transform>();
@@ -157,7 +157,7 @@ public class ItemGen : MonoBehaviour
             float randomPositionX = Random.Range(bottomLeftCorner.x, topRightCorner.x);
             float randomPositionZ = Random.Range(bottomLeftCorner.z, topRightCorner.z);
 
-            Vector3 currentItemPos = new Vector3(randomPositionX, 0, randomPositionZ);
+            Vector3 currentItemPos = new Vector3(randomPositionX, bottomLeftCorner.y, randomPositionZ);
 
 
             //Get the size of the itemToSpawn
@@ -165,11 +165,24 @@ public class ItemGen : MonoBehaviour
             //Make sure previous items in the same room do not overlap
 
             isOverlapping = false;
-            for (int j = 0; j < itemPositions.Count; j++)
+            if(bottomLeftCorner.y == 0)
             {
-                if(Vector3.Distance(currentItemPos, itemPositions[j]) < maxSizeOfItem)
+                for (int j = 0; j < itemPositions.Count; j++)
                 {
-                    isOverlapping = true;
+                    if (Vector3.Distance(currentItemPos, itemPositions[j]) < maxSizeOfItem)
+                    {
+                        isOverlapping = true;
+                    }
+                }
+            }
+            else
+            {
+                for (int j = 0; j < itemPositions2ndFloor.Count; j++)
+                {
+                    if (Vector3.Distance(currentItemPos, itemPositions2ndFloor[j]) < maxSizeOfItem)
+                    {
+                        isOverlapping = true;
+                    }
                 }
             }
 
@@ -188,10 +201,18 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity);
-                gb.GetComponent<Rigidbody>().useGravity = false;
-                gb.GetComponent<Rigidbody>().isKinematic = true;
-                itemPositions.Add(currentItemPos);
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity,
+                    (bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
+                //gb.GetComponent<Rigidbody>().useGravity = false;
+                //gb.GetComponent<Rigidbody>().isKinematic = true;
+                if (bottomLeftCorner.y == 0)
+                {
+                    itemPositions.Add(currentItemPos);
+                }
+                else
+                {
+                    itemPositions2ndFloor.Add(currentItemPos);
+                }
             }
 
 
@@ -260,15 +281,15 @@ public class ItemGen : MonoBehaviour
     //    randomLoc = Random.Range(0, locate.Length);
     //    //if (randomLoc.position.y <=8 randomLoc.Length)
     //    //    {
-    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    //    Instantiate(gen1, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //    //Delete or deactivate the spawn location
     //    //    }
 
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen2, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //Delete or deactivate the spawn location
     //    randomLoc = Random.Range(0, locate.Length);
-    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation);
+    //    Instantiate(gen3, locate[randomLoc].position, locate[randomLoc].rotation, Data.instance.mapGenHolderTransform);
     //    //Delete or deactivate the spawn location
     //    Debug.Log("All generator pieces have been placed!");
     //    Debug.Log("Spawning all other items now!");
