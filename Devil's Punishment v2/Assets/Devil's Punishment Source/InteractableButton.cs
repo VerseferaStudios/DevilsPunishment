@@ -27,4 +27,9 @@ public class InteractableButton : MonoBehaviour, IInteractable
         onPressed.Invoke();
     }
 
+    public Item GetGunItem()
+    {
+        return null;
+    }
+
 }
