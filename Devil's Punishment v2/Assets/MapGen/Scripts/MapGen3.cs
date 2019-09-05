@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 10;
+    private int n = 8;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -122,8 +122,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 5) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 5) + 28;
+            arr[0] = 48 * Random.Range(0, 4) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 4) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -209,7 +209,7 @@ public class MapGen3 : MonoBehaviour
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
+            //itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
             SpawnVentCoverInRoom(i, k);
 
@@ -294,12 +294,12 @@ public class MapGen3 : MonoBehaviour
         {
             if (i == k - 1)
             {
-                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 StartCoroutine(AddRoomNewVents(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
             }
         }
     }
