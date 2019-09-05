@@ -177,9 +177,9 @@ public class MapGen3 : MonoBehaviour
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1f; // Beware, its for gen room
-            if(i < staticRooms.Length)
+            if(i - 1 < staticRooms.Length)
             {
-                roomToSpawn = staticRooms[i];
+                roomToSpawn = staticRooms[i - 1];
                 yCoord = 0f;
             }
             else
@@ -412,7 +412,6 @@ public class MapGen3 : MonoBehaviour
     {
         for (int i = 0; i < allRooms.Count; i++)
         {
-            Debug.Log("i = " + i + "Allrooms = " + (((float[])allRooms[i])[0]) + " " + (((float[])allRooms[i])[1]));
             if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
             {
                 return false;
