@@ -38,6 +38,11 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
+        float[] arr = new float[2];
+        arr[0] = 28;
+        arr[1] = 28;
+        allRooms.Add(arr);
+
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
         StateData.states.Add(Random.state);
@@ -168,7 +173,7 @@ public class MapGen3 : MonoBehaviour
         */
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
         ItemGen itemGenScript = GetComponent<ItemGen>();
-        for (int i = 0; i < k; i++)
+        for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1f; // Beware, its for gen room
@@ -203,7 +208,7 @@ public class MapGen3 : MonoBehaviour
             
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
-            if (i == 0)
+            if (i == 1)
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;
             }
@@ -407,6 +412,7 @@ public class MapGen3 : MonoBehaviour
     {
         for (int i = 0; i < allRooms.Count; i++)
         {
+            Debug.Log("i = " + i + "Allrooms = " + (((float[])allRooms[i])[0]) + " " + (((float[])allRooms[i])[1]));
             if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
             {
                 return false;
