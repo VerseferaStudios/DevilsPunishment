@@ -36,7 +36,7 @@ public class ItemGen : MonoBehaviour
     //Define the need of 100% having some items drop (ie generator parts, set bool if it spawns to not spawnable again)
     //Turn off the spawn point once the item spawns.
     //Define if drops a gun it drops ammo as well. 
-
+    /*
     [Space]
     [Header("How many?")]
     public int noArmory; //Number of Armory this will get set in the room mapgen script
@@ -55,7 +55,7 @@ public class ItemGen : MonoBehaviour
     public Transform[] locate;
     int randomLoc;
     int locationSet;
-
+    */
     [Space]
     [Header("Lootables")]
     //Setting the items
@@ -72,7 +72,7 @@ public class ItemGen : MonoBehaviour
     public GameObject shotgun; //15% spawnrate
     public GameObject rifle; //10% spawnrate
     public GameObject flashlight; //30% spawnrate
-
+    /*
     [Space]
     [Header("Number of said room * number of spawnspots")]
     public int ArmorySpots = 8;
@@ -96,9 +96,9 @@ public class ItemGen : MonoBehaviour
     int radioSpawns;
     int caveSpawns;
     int startingRoomSpawns;
-
+    */
     private List<Vector3> itemPositions = new List<Vector3>(), itemPositions2ndFloor = new List<Vector3>();
-    
+    /*
     public void FindLocations()
     {
         List<Transform> all = new List<Transform>();
@@ -138,7 +138,7 @@ public class ItemGen : MonoBehaviour
 
         //SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
     }
-
+    */
 
     // 1. Item overlap - 
     // 2. Inside room - Done
@@ -201,11 +201,12 @@ public class ItemGen : MonoBehaviour
 
             if(itemToSpawn != null)
             {
+                currentItemPos.y += 2;
                 GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity,
                     (bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
-                if (bottomLeftCorner.y == 0)
+                if (bottomLeftCorner.y == 0 + 2)
                 {
                     itemPositions.Add(currentItemPos);
                 }
