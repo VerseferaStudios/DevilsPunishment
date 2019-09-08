@@ -8,6 +8,7 @@ public class LaserCutter : MonoBehaviour
     private int healthStart;
     private float timeToRelease = 15;
     public Player cuffed;
+    public BoxCollider enemyEnter;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +27,7 @@ public class LaserCutter : MonoBehaviour
                 cuffed.GetComponent<CuffController>().isCuffed = false;
                 Debug.Log("Cuffs have been removed");
             }
-            else if (Input.GetKeyUp("Interact"))
+            else if (Input.GetKeyUp("Interact") && timeToRelease <= 15f && timeToRelease >= 0f)
             {
                 timeToRelease = 15f;
             }
@@ -34,13 +35,31 @@ public class LaserCutter : MonoBehaviour
         yield return null;
     }
 
-    //public void OnTriggerEnter(Collider enemy)
-    //{
-    //    if ()
-    //    {
-    //        return;
-    //    }
-    //}
+    public void OnTriggerEnter(Collider enemy)
+    {
+        if (tag == "Enemy")
+        {
+            timeToRelease = 15f;
+            Input.GetKeyUp("Interact");
+        }
+    }
+
+    public void OnTriggerStay(Collider enemy)
+    {
+       if (tag == "Enemy")
+        {
+            timeToRelease = 15f;
+            Input.GetKeyUp("Interact");
+        }
+    }
+
+    public void OnTriggerExit(Collider enemy)
+    {
+        if (tag == "Enemy")
+        {
+            
+        }        
+    }
 
     // Update is called once per frame
     void Update()
