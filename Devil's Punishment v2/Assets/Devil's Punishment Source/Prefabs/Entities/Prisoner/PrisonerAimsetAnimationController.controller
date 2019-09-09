@@ -222,6 +222,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1d097d81a394f499b16ba786375bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!206 &206005582719572666
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: walk_bwd
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400004, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: RightSpeed
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400126, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: RightSpeed
+    m_Mirror: 0
+  m_BlendParameter: isCuffed_Normalized
+  m_BlendParameterY: RightSpeed
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
 --- !u!206 &206014601624581826
 BlendTree:
   m_ObjectHideFlags: 1
@@ -714,7 +745,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: RightSpeed
     m_Mirror: 0
-  m_BlendParameter: RightSpeed
+  m_BlendParameter: isCuffed_Normalized
   m_BlendParameterY: RightSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -971,7 +1002,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: RightSpeed
     m_Mirror: 0
-  m_BlendParameter: RightSpeed
+  m_BlendParameter: isCuffed_Normalized
   m_BlendParameterY: RightSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -1002,7 +1033,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: RightSpeed
     m_Mirror: 0
-  m_BlendParameter: RightSpeed
+  m_BlendParameter: isCuffed_Normalized
   m_BlendParameterY: RightSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -1073,12 +1104,12 @@ BlendTree:
     m_DirectBlendParameter: RightSpeed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400004, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
+    m_Motion: {fileID: 206005582719572666}
     m_Threshold: 0.45000002
     m_Position: {x: -1, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: ForwardSpeed
+    m_DirectBlendParameter: RightSpeed
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400006, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
