@@ -335,6 +335,7 @@ public class Data : MonoBehaviour
         {
             if (Time.time - startTime1 >= 10f)
             {
+                //RemoveStrayVentCovers();
                 break;
             }
 
@@ -351,8 +352,29 @@ public class Data : MonoBehaviour
                     isFinishedCheckCollisionsVents = false;
                 }
             }
+            else
+            {
+                //RemoveStrayVentCovers();
+            }
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    public void NumberOfVentCoversInScene()
+    {
+        Debug.LogError("No of vent covers" + GameObject.FindGameObjectsWithTag("Vent Cover").Length);
+    }
+
+    public void RemoveStrayVentCovers()
+    {
+        NumberOfVentCoversInScene();
+        Debug.LogError("removing stray vents" + collidedVents.Count);
+        for (int i = 0; i < collidedVents.Count; i++)
+        {
+            Destroy(collidedVents[i].transform.parent.gameObject); //REMOVES VENTS NOT VENT COVERS xd
+        }
+        collidedVents.Clear();
+        NumberOfVentCoversInScene();
     }
 
     public IEnumerator DoCheckPerSecond()
@@ -1354,6 +1376,8 @@ public class Data : MonoBehaviour
         prevCount = connectedRoomsThroughCollision.Count;
         */
         isFinishedCheckCollisionsVents = true;
+
+
 
     }
 
