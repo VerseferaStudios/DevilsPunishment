@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 10;
+    private int n = 8;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -38,6 +38,11 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
+        float[] arr = new float[2];
+        arr[0] = 28;
+        arr[1] = 28;
+        allRooms.Add(arr);
+
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
         StateData.states.Add(Random.state);
@@ -122,8 +127,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 5) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 5) + 28;
+            arr[0] = 48 * Random.Range(0, 4) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 4) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -168,13 +173,13 @@ public class MapGen3 : MonoBehaviour
         */
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
         ItemGen itemGenScript = GetComponent<ItemGen>();
-        for (int i = 0; i < k; i++)
+        for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1f; // Beware, its for gen room
-            if(i < staticRooms.Length)
+            if(i - 1 < staticRooms.Length)
             {
-                roomToSpawn = staticRooms[i];
+                roomToSpawn = staticRooms[i - 1];
                 yCoord = 0f;
             }
             else
@@ -203,13 +208,13 @@ public class MapGen3 : MonoBehaviour
             
             float yRotation = Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
-            if (i == 0)
+            if (i == 1)
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
+            //itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
             SpawnVentCoverInRoom(i, k);
 
@@ -294,12 +299,12 @@ public class MapGen3 : MonoBehaviour
         {
             if (i == k - 1)
             {
-                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
                 StartCoroutine(AddRoomNewVents(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0.5f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
             }
         }
     }
