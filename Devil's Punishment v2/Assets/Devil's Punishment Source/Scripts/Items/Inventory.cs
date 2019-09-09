@@ -350,6 +350,7 @@ public class Inventory : MonoBehaviour
     }
 
     public int GetEquippedGunAmmo() {
+        if (equippedGun == null) return 0;
         return GetQuantityOfItem(equippedGun.ammunitionType.name);
     }
 
