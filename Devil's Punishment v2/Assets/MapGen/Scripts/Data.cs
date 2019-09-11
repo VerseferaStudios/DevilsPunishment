@@ -167,7 +167,7 @@ public class Data : MonoBehaviour
     }
 
     //Check if it works-------------------------
-    public List<int> ConvertToOpenings(string tag, float yRotation)
+    public List<int> ConvertToOpenings(string tag, float yRotation, bool isNegativeScale)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("CorridorI"))
@@ -208,10 +208,70 @@ public class Data : MonoBehaviour
             }
             openings.AddRange(oneToFour);
         }
+
+        //Adding scale -1 case
+        if (isNegativeScale)
+        {
+            if ((int)(yRotation / 90) == 0 || (int)(yRotation / 90) == 2)
+            {
+                int onesToAdd = 0, threesToAdd = 0;
+                for (int i = 0; i < openings.Count; i++)
+                {
+                    if (openings[i] == 1)
+                    {
+                        openings.RemoveAt(i);
+                        threesToAdd++;
+                        //openings.Add(3);
+                    }
+                    else if (openings[i] == 3)
+                    {
+                        openings.RemoveAt(i);
+                        onesToAdd++;
+                        //openings.Add(1);
+                    }
+                }
+                for (int i = 0; i < onesToAdd; i++)
+                {
+                    openings.Add(1);
+                }
+                for (int i = 0; i < threesToAdd; i++)
+                {
+                    openings.Add(3);
+                }
+            }
+            else if ((int)(yRotation / 90) == 1 || (int)(yRotation / 90) == 3)
+            {
+                int zerosToAdd = 0, twosToAdd = 0;
+                for (int i = 0; i < openings.Count; i++)
+                {
+                    if (openings[i] == 0)
+                    {
+                        openings.RemoveAt(i);
+                        twosToAdd++;
+                        //openings.Add(2);
+                    }
+                    else if (openings[i] == 2)
+                    {
+                        openings.RemoveAt(i);
+                        zerosToAdd++;
+                        //openings.Add(0);
+                    }
+                }
+                for (int i = 0; i < zerosToAdd; i++)
+                {
+                    openings.Add(0);
+                }
+                for (int i = 0; i < twosToAdd; i++)
+                {
+                    openings.Add(2);
+                }
+            }
+        }
+
         return openings;
     }
 
-    public List<int> ConvertToOpenings(string tag, float yRotation, float holderZRotation, float holderXRotation)
+    public List<int> ConvertToOpeningsVents(string tag, float yRotation, float holderZRotation, float holderXRotation)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("VentI"))
@@ -770,6 +830,8 @@ public class Data : MonoBehaviour
                 if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
                     && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                 {
+
+                    bool isErroneousTCorr = false;
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
@@ -785,8 +847,10 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y);
+                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y,
+                                                        (collidedCorridors[i].transform.parent.localScale.x == -1) ? true : false);
+                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y,
+                                                        (collidedCorridors[j].transform.parent.localScale.x == -1) ? true : false);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -840,7 +904,9 @@ public class Data : MonoBehaviour
                             
                             if (yRotation == 0)
                             {
+                                isErroneousTCorr = true;
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
+                                currCorridor.transform.localPosition += new Vector3(0, 5, 0);
                             }
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
@@ -894,12 +960,12 @@ public class Data : MonoBehaviour
                         }
                         */
                         //Debug.Log("Destroying " + collidedCorridors[i].transform.parent);
-                        if (!isError)
+                        if (!isError)// && !isErroneousTCorr)
                             Destroy(collidedCorridors[i].transform.parent.gameObject);
                     }
 
                     //Debug.Log("Destroying " + collidedCorridors[j].transform.parent);
-                    if(!isError)
+                    if(!isError)// && !isErroneousTCorr)
                         Destroy(collidedCorridors[j].transform.parent.gameObject);
 
                     // !!!!!!!!!!!!!!!!! Take care of collisions that happen when the above corridors (T and X) are instantiated, if any !!!!!!!!!!!!!!!!!
@@ -1151,10 +1217,10 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
 
-                        openings1 = ConvertToOpenings(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
+                        openings1 = ConvertToOpeningsVents(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
                             collidedVents[i].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[i].transform.parent.GetChild(0).localEulerAngles.x);
 
-                        openings2 = ConvertToOpenings(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
+                        openings2 = ConvertToOpeningsVents(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
                             collidedVents[j].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[j].transform.parent.GetChild(0).localEulerAngles.x);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
