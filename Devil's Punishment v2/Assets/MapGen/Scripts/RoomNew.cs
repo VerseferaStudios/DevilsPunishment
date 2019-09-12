@@ -497,7 +497,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnNowAt.z += increment;
 
             //Spawn I corridors
-            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
@@ -608,7 +608,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnNowAt.x += increment;
 
             //Spawn I corridors
-            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);

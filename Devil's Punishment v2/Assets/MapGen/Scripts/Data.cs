@@ -1115,20 +1115,41 @@ public class Data : MonoBehaviour
                     }
                     if (connectedRooms[i].Count != 0 && connectedRooms[i + 1].Count != 0)
                     {
-                        Transform door0 = FindDoor(connectedRooms[i][0]);
-                        //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
-                        Transform door1 = FindDoor(connectedRooms[i + 1][0]);
+                        int j = 0, k = 0;
+                        while(j < connectedRooms[i].Count && j < connectedRooms[i + 1].Count 
+                            && k < connectedRooms[i].Count && k < connectedRooms[i + 1].Count)
+                        {
+                            Transform door0 = FindDoor(connectedRooms[i][j]);
+                            //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
+                            Transform door1 = FindDoor(connectedRooms[i + 1][k]);
+                            if (door0 != null && door1 != null)
+                            {
+                                Vector3 door0Pos = door0.position;
+                                door0Pos.x = Mathf.Round(door0Pos.x);
+                                door0Pos.z = Mathf.Round(door0Pos.z);
 
-                        Vector3 door0Pos = door0.position;
-                        door0Pos.x = Mathf.Round(door0Pos.x);
-                        door0Pos.z = Mathf.Round(door0Pos.z);
+                                Vector3 door1Pos = door1.position;
+                                door1Pos.x = Mathf.Round(door1Pos.x);
+                                door1Pos.z = Mathf.Round(door1Pos.z);
 
-                        Vector3 door1Pos = door1.position;
-                        door1Pos.x = Mathf.Round(door1Pos.x);
-                        door1Pos.z = Mathf.Round(door1Pos.z);
-
-                        //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                        roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                                //Debug.Log(door0.parent.position + " " + door1.parent.position);
+                                roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
+                                break;
+                            }
+                            else
+                            {
+                                if(door0 == null)
+                                {
+                                    j++;
+                                }
+                                else
+                                {
+                                    k++;
+                                }
+                                Debug.LogError("null" + ((door0 == null) ? " door0" : " door1"));
+                            }
+                        }
+                        
                     }
 
                 }
