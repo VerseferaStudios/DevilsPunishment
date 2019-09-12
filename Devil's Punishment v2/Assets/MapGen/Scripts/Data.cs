@@ -31,6 +31,7 @@ public class Data : MonoBehaviour
     public List<ConnectedComponent> connectedRoomsThroughCollision = new List<ConnectedComponent>();
 
     public List<List<Vector3>> connectedRooms = new List<List<Vector3>>();
+    public List<List<Vector3>> connectedRoomsVents = new List<List<Vector3>>();
 
     public Vector3 spawnPointsFirstPos;
 
@@ -1146,7 +1147,16 @@ public class Data : MonoBehaviour
                                 {
                                     k++;
                                 }
+                                /*
                                 Debug.LogError("null" + ((door0 == null) ? " door0" : " door1"));
+                                Debug.LogError(connectedRooms[i][j]);
+                                Debug.LogError(connectedRooms[i + 1][k]);
+                                Debug.LogError(roomsArray.Length);
+                                for (int l = 0; l < roomsArray.Length; l++)
+                                {
+                                    Debug.LogError(roomsArray[l].transform.position);
+                                }
+                                */
                             }
                         }
                         
@@ -1165,13 +1175,15 @@ public class Data : MonoBehaviour
         for (int i = 0; i < roomsArray.Length; i++)
         {
             //Debug.Log(roomsArray[i].transform.position);
-            if(roomsArray[i].transform.position == roomPos)
+            if(roomsArray[i].transform.position.x == roomPos.x 
+                && roomsArray[i].transform.position.z == roomPos.z)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name);
+                Debug.Log("found = " + roomsArray[i].name + " childCount = " + roomsArray[i].transform.childCount + " " + roomsArray[i].transform.position);
                 return roomsArray[i].transform.GetChild(1);
             }
         }
+        Debug.Log("Didnt find");
         return null;
     }
 

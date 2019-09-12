@@ -72,8 +72,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             if (isFound)
             {
                 GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
                 if (spawnPoints[i].name.EndsWith("x"))
                 {
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -82,8 +82,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //Data.instance.corridorCount++;
 
                 // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-                visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
-                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
+                visitedRooms.Add(spawnPoints[i].transform.parent.position);
+                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.position);
 
                 //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 

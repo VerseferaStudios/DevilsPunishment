@@ -15,6 +15,7 @@ public class RestartScene : MonoBehaviour
         Data.instance.corridorPosDict = new Dictionary<Vector3, int>();
         Data.instance.connectedRoomsThroughCollision = new List<ConnectedComponent>();
         Data.instance.connectedRooms = new List<List<Vector3>>();
+        Data.instance.connectedRoomsVents = new List<List<Vector3>>();
         Data.instance.count =   0;
         Data.instance.isOnce = true;
         Data.instance.isDonePrevFnCall = true;
