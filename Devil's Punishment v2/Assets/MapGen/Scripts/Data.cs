@@ -906,7 +906,7 @@ public class Data : MonoBehaviour
                             {
                                 isErroneousTCorr = true;
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
-                                currCorridor.transform.localPosition += new Vector3(0, 5, 0);
+                                //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
                             }
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
