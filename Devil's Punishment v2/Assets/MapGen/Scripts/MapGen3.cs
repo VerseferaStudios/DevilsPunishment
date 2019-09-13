@@ -38,12 +38,12 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        /*
+        
         float[] arr = new float[2];
         arr[0] = 28;
         arr[1] = 28;
         allRooms.Add(arr);
-        */
+        
 
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
@@ -216,7 +216,7 @@ public class MapGen3 : MonoBehaviour
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            //itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
+            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
             SpawnVentCoverInRoom(i, k);
 
