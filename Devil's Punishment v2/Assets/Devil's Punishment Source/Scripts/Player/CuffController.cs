@@ -66,4 +66,13 @@ public class CuffController : MonoBehaviour
             playercontroller.SetIsClimbing(false);
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            playercontroller.SetIsClimbing(false);
+        }
+    }
+
 }
