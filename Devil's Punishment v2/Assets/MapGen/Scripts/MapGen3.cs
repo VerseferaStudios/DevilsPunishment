@@ -231,6 +231,7 @@ public class MapGen3 : MonoBehaviour
                 roomNewScript.allRooms = allRooms;
                 roomNewScript.ventCover = ventCover;
                 roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+                roomNewScript.itemGenScript = itemGenScript;
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 

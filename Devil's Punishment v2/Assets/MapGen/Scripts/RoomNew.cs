@@ -31,6 +31,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public float ventCoverProbabilty = 0.390f;
     public GameObject ventCover;
 
+    public ItemGen itemGenScript;
+
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
@@ -205,6 +207,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
             }
+            Debug.LogError(Data.instance.ctr1);
 
         }
 
@@ -524,6 +527,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
                 }
 
+                // ----------- Item Gen -----------
+                if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    Data.instance.ctr1++;
+                }
+
                 spawnNowAt.z += increment;
             }
         }
@@ -627,6 +637,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    Data.instance.ctr1++;
                 }
 
                 spawnNowAt.x += increment;
