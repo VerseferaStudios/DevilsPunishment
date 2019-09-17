@@ -59,6 +59,7 @@ public class Data : MonoBehaviour
     private bool isFirstPassDone = false;
 
     public int ctr1 = 0;
+    public int ctr2 = 0;
 
     //public bool isPipeAtLeft = true;
 
@@ -1166,6 +1167,7 @@ public class Data : MonoBehaviour
 
                 }
                 Debug.LogError(ctr1);
+                Debug.LogError(ctr2);
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
