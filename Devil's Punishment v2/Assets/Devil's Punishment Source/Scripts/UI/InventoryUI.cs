@@ -15,7 +15,7 @@ public class InventoryUI : MonoBehaviour
 
     public static InventoryUI instance;
 
-    public InventorySlotUI[] inventorySlots;
+    private InventorySlotUI[] inventorySlots;
 
     private RectTransform rectTransform;
 
@@ -25,6 +25,7 @@ public class InventoryUI : MonoBehaviour
     void Awake() {
         instance = this;
         rectTransform = GetComponent<RectTransform>();
+        inventorySlots = GetComponentsInChildren<InventorySlotUI>();
     }
 
     void Start() {
