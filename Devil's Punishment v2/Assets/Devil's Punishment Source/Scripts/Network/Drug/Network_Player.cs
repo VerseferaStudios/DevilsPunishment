@@ -13,6 +13,7 @@ public class Network_Player : MonoBehaviour
     Player playerMenu;
     Infection infection;
     Health health;
+    public GameObject ShotRenderer;
     public Network_Chat chat;
 
     public Network_Player(GameObject playerO)
@@ -84,10 +85,17 @@ public class Network_Player : MonoBehaviour
        
     }
 
+    public void receiveShot(Vector3 start, Vector3 end)
+    {
+        ShotRenderer.GetComponent<RegisterShot>().registerShot(start, end);
+    }
+
     public void SendChatMessage(string username, string text)
     {
         chat.addMessage(text, username);
     }
+
+
     
 
     void fetchPlayer()

@@ -108,6 +108,8 @@ public class NetworkManager_Drug : MonoBehaviour
         throw new MissingComponentException("Whoops.. player " + username + " not found"); // nasty! take care
     }
 
+    
+
     ///<summary>
     ///Sends a text to all player without a given username
     ///</summary>
@@ -118,6 +120,16 @@ public class NetworkManager_Drug : MonoBehaviour
         {
             player.SendChatMessage(text);
         }
+    }
+
+    public void BroadcastShot(Vector3 start, Vector3 end)
+    {
+        foreach (Network_Player ply in playerlist)
+        {
+            ply.receiveShot(start, end);
+        }
+
+        Debug.Log("Shot!");
     }
 
     ///<summary>

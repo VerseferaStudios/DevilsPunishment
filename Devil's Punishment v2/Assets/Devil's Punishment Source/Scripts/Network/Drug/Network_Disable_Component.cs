@@ -33,10 +33,11 @@ public  class Network_Disable_Component : NetworkBehaviour
 
             chat.GetComponent<CanvasGroup>().alpha = 0; // Hide chat
             InvView.SetActive(false);
+            
         }
         else
         {
-
+            InvView.SetActive(false);
             Third_Person_Model.SetActive(false);
         }
 
