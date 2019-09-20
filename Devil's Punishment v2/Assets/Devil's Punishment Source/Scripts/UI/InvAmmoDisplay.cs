@@ -8,6 +8,9 @@ public class InvAmmoDisplay : MonoBehaviour
     public TextMeshProUGUI clipText;
     public TextMeshProUGUI clipStockText;
     public GunController gunController;
+    public GameObject HandgunIcon;
+    public GameObject ShotgunIcon;
+    public GameObject AssaultRifleIcon;
 
     void Awake(){
     }
@@ -35,5 +38,28 @@ public class InvAmmoDisplay : MonoBehaviour
 
         clipStockText.text = gunController.GetClipStock() + "";
         
+    }
+
+    public void SetGunIcons(){
+		HandgunIcon.SetActive(false);
+		ShotgunIcon.SetActive(false);
+		AssaultRifleIcon.SetActive(false);
+        if (Inventory.instance.equippedGun != null){
+            switch (Inventory.instance.equippedGun.weaponClassification)
+            {
+                case GunItem.WeaponClassification.HANDGUN:
+                    HandgunIcon.SetActive(true);
+                    break;
+                case GunItem.WeaponClassification.SHOTGUN:
+                    ShotgunIcon.SetActive(true);
+                    break;
+                case GunItem.WeaponClassification.ASSAULTRIFLE:
+                    AssaultRifleIcon.SetActive(true);
+                    break;
+
+                default: // Pass
+                    break;
+            }
+        }
     }
 }

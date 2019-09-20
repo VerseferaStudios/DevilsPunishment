@@ -69,7 +69,8 @@ public class GunController : MonoBehaviour
     public static GunController instance;
 
     private Inventory inventory;
-
+	[SerializeField]
+	private InvAmmoDisplay invAmmoDisplay;
     private Animator gunAnimator;
 
 	[SerializeField]
@@ -85,15 +86,15 @@ public class GunController : MonoBehaviour
     }
 
     void Start() {
-        defaultFOV = Camera.main.fieldOfView;
         playerController = PlayerController.instance;
-        InitTimeBetweenShots();
         soundManager = SoundManager.instance;
+        inventory = Inventory.instance;
+        defaultFOV = Camera.main.fieldOfView;
+        InitTimeBetweenShots();
         guns = GetComponentsInChildren<Gun>();
         foreach(Gun gun in guns) {
             gun.gameObject.SetActive(false);
         }
-        inventory = Inventory.instance;
 	}
 
     void SetFireRate(float f) {
@@ -238,6 +239,7 @@ public class GunController : MonoBehaviour
 			Hide3rdPersonGuns();
 			DeactivateWeaponArmsBlendingLayers();
 		}
+		invAmmoDisplay.SetGunIcons();
 
     }
 
