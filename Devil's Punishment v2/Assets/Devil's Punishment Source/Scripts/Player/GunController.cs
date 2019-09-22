@@ -199,22 +199,22 @@ public class GunController : MonoBehaviour
 								foreach (GameObject part in HANDGUN_PARTS)
 								{
 									part.SetActive(true);
-									playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun"),1);
 								}
+								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun"),1);
 								break;
 							case GunItem.WeaponClassification.SHOTGUN:
 								foreach (GameObject part in SHOTGUN_PARTS)
 								{
 									part.SetActive(true);
-									playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
 								}
+								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
 								break;
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
 								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
 								{
 									part.SetActive(true);
-									playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
 								}
+								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
 								break;
 
 							default: // Pass
