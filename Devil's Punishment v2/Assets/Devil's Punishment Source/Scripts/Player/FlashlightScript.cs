@@ -27,7 +27,6 @@ public class FlashlightScript : MonoBehaviour
         glow.enabled = true;
         flashLight.SetActive(false);
         beam.enabled = false;
-        isUpgraded = false;
     }
 
     public void ToggleUpgraded()
