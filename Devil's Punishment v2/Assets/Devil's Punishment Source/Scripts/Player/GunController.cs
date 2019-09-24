@@ -353,18 +353,13 @@ public class GunController : MonoBehaviour
 			Random.seed = Random.Range(-9999, 9999);
 			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
 			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-            //Say hey we're shooting to server
-            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset*2);
+
+			Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset);
 			RaycastHit hit;
 
-
-            
-
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, hittableMask.value))
+			if (Physics.Raycast(ray.origin, ray.direction, out hit, 20f, hittableMask.value))
 			{
-                NetworkManager_Drug.instance.BroadcastShot(ray.origin, hit.point);
-
-                targetPoint.position = hit.point;
+				targetPoint.position = hit.point;
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
 
@@ -464,21 +459,17 @@ public class GunController : MonoBehaviour
 	void Animation() {
         Sway();
 
-        if (gunAnimator != null)
-        {
+        gunAnimator.SetFloat("Aiming", aiming);
+        gunAnimator.SetBool("Running", running);
+        gunAnimator.SetBool("Raised", raised);
+		
 
 
-            gunAnimator.SetFloat("Aiming", aiming);
-            gunAnimator.SetBool("Running", running);
-            gunAnimator.SetBool("Raised", raised);
+		//	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
+			gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
+			gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
 
 
-
-            //	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
-            gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
-            gunAnimator.transform.localRotation = Quaternion.Lerp(standardRotation, Quaternion.Euler(equippedGun.gameObject.GetComponent<OffsetTransform>().rotation), aiming);
-
-        }
 
 
 		if (trigger)
