@@ -313,12 +313,14 @@ public class MapGen3 : MonoBehaviour
     }
 
     // -------------------- Change door names --------------------
-    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
+    public void ChangeDoorNames(GameObject spawnedRoom, float yRotation)
     {
         GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
         for (int i = 0; i < doors.Length; i++)
         {
-            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
+            string doorName = spawnedRoom.GetComponent<RoomReferences>().doors[i].name;
+            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = "Door" + Data.instance.nearDoorL[
+                (Data.instance.NeardoorLIndexSearch(doorName[4].ToString() + doorName[5].ToString()) + (int)(yRotation / 90)) % 4];
         }
     }
 
@@ -327,7 +329,7 @@ public class MapGen3 : MonoBehaviour
     {
         if (yRotation == 90)
         {
-            ChangeDoorNames(spawnedRoom, "Door+x");
+            ChangeDoorNames(spawnedRoom, yRotation);
             GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
             //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
@@ -347,7 +349,7 @@ public class MapGen3 : MonoBehaviour
             float reqYRotationForCorridor = 0;
             if (yRotation == 180)
             {
-                ChangeDoorNames(spawnedRoom, "Door-z");
+                ChangeDoorNames(spawnedRoom, yRotation);
                 GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                 reqYRotationForCorridor = 0;
 
@@ -360,7 +362,7 @@ public class MapGen3 : MonoBehaviour
             }
             else if (yRotation == 270 || yRotation == -90)
             {
-                ChangeDoorNames(spawnedRoom, "Door-x");
+                ChangeDoorNames(spawnedRoom, yRotation);
                 GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
