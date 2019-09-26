@@ -167,18 +167,11 @@ public class PlayerController : MonoBehaviour
 
     public void VerticalLocomotion() {
         if(!isClimbing) {
-            //Debug.Log("not is Climbing");
             controller.Move(Vector3.down * Time.deltaTime * 9.81f);            
         } else {
-            //Debug.Log("yes is Climbing");
             controller.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
             climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;                
         }
-    }
-
-    public void SetIsClimbing(bool isClimbing)
-    {
-        this.isClimbing = isClimbing;
     }
 
     void Turning() {

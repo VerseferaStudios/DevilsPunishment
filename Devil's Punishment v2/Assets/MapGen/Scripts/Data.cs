@@ -31,7 +31,6 @@ public class Data : MonoBehaviour
     public List<ConnectedComponent> connectedRoomsThroughCollision = new List<ConnectedComponent>();
 
     public List<List<Vector3>> connectedRooms = new List<List<Vector3>>();
-    public List<List<Vector3>> connectedRoomsVents = new List<List<Vector3>>();
 
     public Vector3 spawnPointsFirstPos;
 
@@ -57,9 +56,6 @@ public class Data : MonoBehaviour
     private GameObject[] roomsArray;
 
     private bool isFirstPassDone = false;
-
-    public int ctr1 = 0;
-    public int ctr2 = 0;
 
     //public bool isPipeAtLeft = true;
 
@@ -171,7 +167,7 @@ public class Data : MonoBehaviour
     }
 
     //Check if it works-------------------------
-    public List<int> ConvertToOpenings(string tag, float yRotation, bool isNegativeScale)
+    public List<int> ConvertToOpenings(string tag, float yRotation)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("CorridorI"))
@@ -212,70 +208,10 @@ public class Data : MonoBehaviour
             }
             openings.AddRange(oneToFour);
         }
-
-        //Adding scale -1 case
-        if (isNegativeScale)
-        {
-            if ((int)(yRotation / 90) == 0 || (int)(yRotation / 90) == 2)
-            {
-                int onesToAdd = 0, threesToAdd = 0;
-                for (int i = 0; i < openings.Count; i++)
-                {
-                    if (openings[i] == 1)
-                    {
-                        openings.RemoveAt(i);
-                        threesToAdd++;
-                        //openings.Add(3);
-                    }
-                    else if (openings[i] == 3)
-                    {
-                        openings.RemoveAt(i);
-                        onesToAdd++;
-                        //openings.Add(1);
-                    }
-                }
-                for (int i = 0; i < onesToAdd; i++)
-                {
-                    openings.Add(1);
-                }
-                for (int i = 0; i < threesToAdd; i++)
-                {
-                    openings.Add(3);
-                }
-            }
-            else if ((int)(yRotation / 90) == 1 || (int)(yRotation / 90) == 3)
-            {
-                int zerosToAdd = 0, twosToAdd = 0;
-                for (int i = 0; i < openings.Count; i++)
-                {
-                    if (openings[i] == 0)
-                    {
-                        openings.RemoveAt(i);
-                        twosToAdd++;
-                        //openings.Add(2);
-                    }
-                    else if (openings[i] == 2)
-                    {
-                        openings.RemoveAt(i);
-                        zerosToAdd++;
-                        //openings.Add(0);
-                    }
-                }
-                for (int i = 0; i < zerosToAdd; i++)
-                {
-                    openings.Add(0);
-                }
-                for (int i = 0; i < twosToAdd; i++)
-                {
-                    openings.Add(2);
-                }
-            }
-        }
-
         return openings;
     }
 
-    public List<int> ConvertToOpeningsVents(string tag, float yRotation, float holderZRotation, float holderXRotation)
+    public List<int> ConvertToOpenings(string tag, float yRotation, float holderZRotation, float holderXRotation)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("VentI"))
@@ -834,8 +770,6 @@ public class Data : MonoBehaviour
                 if(Mathf.Abs(collidedCorridors[i].transform.position.x - collidedCorridors[j].transform.position.x) <= 0.6f
                     && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                 {
-
-                    bool isErroneousTCorr = false;
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
@@ -851,10 +785,8 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y,
-                                                        (collidedCorridors[i].transform.parent.localScale.x == -1) ? true : false);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y,
-                                                        (collidedCorridors[j].transform.parent.localScale.x == -1) ? true : false);
+                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y);
+                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -908,9 +840,7 @@ public class Data : MonoBehaviour
                             
                             if (yRotation == 0)
                             {
-                                isErroneousTCorr = true;
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
-                                //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
                             }
                             if (yRotation == 270 || yRotation == -90 || yRotation == 180)
                             {
@@ -964,12 +894,12 @@ public class Data : MonoBehaviour
                         }
                         */
                         //Debug.Log("Destroying " + collidedCorridors[i].transform.parent);
-                        if (!isError)// && !isErroneousTCorr)
+                        if (!isError)
                             Destroy(collidedCorridors[i].transform.parent.gameObject);
                     }
 
                     //Debug.Log("Destroying " + collidedCorridors[j].transform.parent);
-                    if(!isError)// && !isErroneousTCorr)
+                    if(!isError)
                         Destroy(collidedCorridors[j].transform.parent.gameObject);
 
                     // !!!!!!!!!!!!!!!!! Take care of collisions that happen when the above corridors (T and X) are instantiated, if any !!!!!!!!!!!!!!!!!
@@ -1119,55 +1049,24 @@ public class Data : MonoBehaviour
                     }
                     if (connectedRooms[i].Count != 0 && connectedRooms[i + 1].Count != 0)
                     {
-                        int j = 0, k = 0;
-                        while(j < connectedRooms[i].Count && j < connectedRooms[i + 1].Count 
-                            && k < connectedRooms[i].Count && k < connectedRooms[i + 1].Count)
-                        {
-                            Transform door0 = FindDoor(connectedRooms[i][j]);
-                            //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
-                            Transform door1 = FindDoor(connectedRooms[i + 1][k]);
-                            if (door0 != null && door1 != null)
-                            {
-                                Vector3 door0Pos = door0.position;
-                                door0Pos.x = Mathf.Round(door0Pos.x);
-                                door0Pos.z = Mathf.Round(door0Pos.z);
+                        Transform door0 = FindDoor(connectedRooms[i][0]);
+                        //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
+                        Transform door1 = FindDoor(connectedRooms[i + 1][0]);
 
-                                Vector3 door1Pos = door1.position;
-                                door1Pos.x = Mathf.Round(door1Pos.x);
-                                door1Pos.z = Mathf.Round(door1Pos.z);
+                        Vector3 door0Pos = door0.position;
+                        door0Pos.x = Mathf.Round(door0Pos.x);
+                        door0Pos.z = Mathf.Round(door0Pos.z);
 
-                                //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
-                                break;
-                            }
-                            else
-                            {
-                                if(door0 == null)
-                                {
-                                    j++;
-                                }
-                                else
-                                {
-                                    k++;
-                                }
-                                /*
-                                Debug.LogError("null" + ((door0 == null) ? " door0" : " door1"));
-                                Debug.LogError(connectedRooms[i][j]);
-                                Debug.LogError(connectedRooms[i + 1][k]);
-                                Debug.LogError(roomsArray.Length);
-                                for (int l = 0; l < roomsArray.Length; l++)
-                                {
-                                    Debug.LogError(roomsArray[l].transform.position);
-                                }
-                                */
-                            }
-                        }
-                        
+                        Vector3 door1Pos = door1.position;
+                        door1Pos.x = Mathf.Round(door1Pos.x);
+                        door1Pos.z = Mathf.Round(door1Pos.z);
+
+                        //Debug.Log(door0.parent.position + " " + door1.parent.position);
+                        roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
                     }
 
                 }
-                Debug.LogError(ctr1);
-                Debug.LogError(ctr2);
+
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
@@ -1179,15 +1078,13 @@ public class Data : MonoBehaviour
         for (int i = 0; i < roomsArray.Length; i++)
         {
             //Debug.Log(roomsArray[i].transform.position);
-            if(roomsArray[i].transform.position.x == roomPos.x 
-                && roomsArray[i].transform.position.z == roomPos.z)
+            if(roomsArray[i].transform.position == roomPos)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name + " childCount = " + roomsArray[i].transform.childCount + " " + roomsArray[i].transform.position);
+                Debug.Log("found = " + roomsArray[i].name);
                 return roomsArray[i].transform.GetChild(1);
             }
         }
-        Debug.Log("Didnt find");
         return null;
     }
 
@@ -1254,10 +1151,10 @@ public class Data : MonoBehaviour
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
 
-                        openings1 = ConvertToOpeningsVents(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
+                        openings1 = ConvertToOpenings(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
                             collidedVents[i].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[i].transform.parent.GetChild(0).localEulerAngles.x);
 
-                        openings2 = ConvertToOpeningsVents(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
+                        openings2 = ConvertToOpenings(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
                             collidedVents[j].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[j].transform.parent.GetChild(0).localEulerAngles.x);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
