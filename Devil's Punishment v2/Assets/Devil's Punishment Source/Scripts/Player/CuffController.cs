@@ -48,11 +48,31 @@ public class CuffController : MonoBehaviour
         Debug.Log("You have picked up a gun.");
     }
 
-    public void OnTriggerEnter(Collider Ladder)
+    public void OnTriggerEnter(Collider other)
     {
-        if (tag == "Player" && Input.GetKeyDown(KeyCode.E))
+        Debug.Log("Trigger for ladder & tag = " + other.tag);
+        if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
+            Debug.Log("Climbing Ladder");
+            playercontroller.SetIsClimbing(true);
             playercontroller.VerticalLocomotion();
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
+        {
+            playercontroller.SetIsClimbing(false);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            playercontroller.SetIsClimbing(false);
+        }
+    }
+
 }

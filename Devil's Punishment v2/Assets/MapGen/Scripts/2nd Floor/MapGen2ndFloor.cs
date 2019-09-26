@@ -233,6 +233,7 @@ public class MapGen2ndFloor : MonoBehaviour
                 roomNew2ndFloorScript.allRooms = allRooms;
                 roomNew2ndFloorScript.ventCover = ventCover;
                 roomNew2ndFloorScript.mapGenHolderTransform = mapGenHolderTransform;
+                roomNew2ndFloorScript.itemGenScript = itemGenScript;
                 //roomNew2ndFloorScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data2ndFloor.instance.roomNew2ndFloorScript = roomNew2ndFloorScript;
 

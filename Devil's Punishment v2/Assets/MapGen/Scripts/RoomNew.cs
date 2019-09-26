@@ -31,6 +31,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public float ventCoverProbabilty = 0.390f;
     public GameObject ventCover;
 
+    public ItemGen itemGenScript;
+
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
@@ -72,8 +74,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             if (isFound)
             {
                 GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
                 if (spawnPoints[i].name.EndsWith("x"))
                 {
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -82,8 +84,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //Data.instance.corridorCount++;
 
                 // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-                visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
-                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
+                visitedRooms.Add(spawnPoints[i].transform.parent.position);
+                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.position);
 
                 //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 
@@ -205,6 +207,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
             }
+            Debug.LogError(Data.instance.ctr1);
 
         }
 
@@ -497,7 +500,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnNowAt.z += increment;
 
             //Spawn I corridors
-            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
@@ -522,6 +525,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    Data.instance.ctr1++;
                 }
 
                 spawnNowAt.z += increment;
@@ -608,7 +618,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             spawnNowAt.x += increment;
 
             //Spawn I corridors
-            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
+            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
@@ -627,6 +637,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
                     Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    Data.instance.ctr1++;
                 }
 
                 spawnNowAt.x += increment;

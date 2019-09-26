@@ -375,7 +375,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
         //CheckDuplicatesAndConnect(lParentPos, spawnPoints[k].transform.parent.transform.position);
 
-        Data.instance.connectedRooms.Add(visitedRooms);
+        Data.instance.connectedRoomsVents.Add(visitedRooms);
 
         /*
         //Debug.Log("VISITED ROOMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -682,11 +682,11 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
     private void CheckDuplicatesAndConnect(List<Vector3> rooms)
     {
-        for (int i = 0; i < Data.instance.connectedRooms.Count; i++)
+        for (int i = 0; i < Data.instance.connectedRoomsVents.Count; i++)
         {
-            for (int j = 0; j < Data.instance.connectedRooms[i].Count; j++)
+            for (int j = 0; j < Data.instance.connectedRoomsVents[i].Count; j++)
             {
-                if (rooms[0] == Data.instance.connectedRooms[i][j])
+                if (rooms[0] == Data.instance.connectedRoomsVents[i][j])
                 {
                     Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(rooms[0] / 2 + rooms[1] / 2, rooms));
                 }
@@ -702,18 +702,18 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             for (int j = 0; j < Data.instance.connectedRoomsThroughCollision[i].rooms.Count; j++)
             {
                 collidedConnectedRoomToSearch = Data.instance.connectedRoomsThroughCollision[i].rooms[j];
-                for (int k = 0; k < Data.instance.connectedRooms.Count; k++)
+                for (int k = 0; k < Data.instance.connectedRoomsVents.Count; k++)
                 {
-                    for (int q = 0; q < Data.instance.connectedRooms[k].Count; q++)
+                    for (int q = 0; q < Data.instance.connectedRoomsVents[k].Count; q++)
                     {
                         // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
                         // -------------- and comparing it with every element of connectedRooms -------------- 
                         // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
                         // -------------- and removing the same ones from connectedRooms --------------
-                        if (collidedConnectedRoomToSearch == Data.instance.connectedRooms[k][q])
+                        if (collidedConnectedRoomToSearch == Data.instance.connectedRoomsVents[k][q])
                         {
-                            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data.instance.connectedRooms[k]));
-                            Data.instance.connectedRooms.RemoveAt(k);
+                            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data.instance.connectedRoomsVents[k]));
+                            Data.instance.connectedRoomsVents.RemoveAt(k);
                             k--;
                             break;
                         }
