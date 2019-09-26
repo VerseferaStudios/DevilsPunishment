@@ -31,6 +31,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
     public float ventCoverProbabilty = 0.090f;
     public GameObject ventCover;
 
+    public ItemGen itemGenScript;
+
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();

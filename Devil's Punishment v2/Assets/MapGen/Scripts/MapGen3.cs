@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 8;
+    private int n = 10;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -38,10 +38,12 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
+        
         float[] arr = new float[2];
         arr[0] = 28;
         arr[1] = 28;
         allRooms.Add(arr);
+        
 
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
@@ -127,8 +129,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 4) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 4) + 28;
+            arr[0] = 48 * Random.Range(0, 6) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 6) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -214,7 +216,7 @@ public class MapGen3 : MonoBehaviour
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            //itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
+            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
 
             SpawnVentCoverInRoom(i, k);
 
@@ -229,6 +231,7 @@ public class MapGen3 : MonoBehaviour
                 roomNewScript.allRooms = allRooms;
                 roomNewScript.ventCover = ventCover;
                 roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+                roomNewScript.itemGenScript = itemGenScript;
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
 
