@@ -15,7 +15,7 @@ using UnityEngine.UI;
 public class CuffController : MonoBehaviour
 {
     public static CuffController instance;
-    public PlayerController playercontroller;
+    //public PlayerController playercontroller;
     public bool isCuffed;
     private bool pisLocked; //Pistol
     private bool risLocked; //Assault Rifle
@@ -54,8 +54,8 @@ public class CuffController : MonoBehaviour
         if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
             Debug.Log("Climbing Ladder");
-            playercontroller.SetIsClimbing(true);
-            playercontroller.VerticalLocomotion();
+            Data.instance.playerController.SetIsClimbing(true);
+            Data.instance.playerController.VerticalLocomotion();
         }
     }
 
@@ -63,7 +63,7 @@ public class CuffController : MonoBehaviour
     {
         if (other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
         {
-            playercontroller.SetIsClimbing(false);
+            Data.instance.playerController.SetIsClimbing(false);
         }
     }
 
@@ -71,7 +71,7 @@ public class CuffController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            playercontroller.SetIsClimbing(false);
+            Data.instance.playerController.SetIsClimbing(false);
         }
     }
 
