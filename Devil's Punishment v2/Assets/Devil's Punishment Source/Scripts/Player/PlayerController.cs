@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         gunController = GunController.instance;
-
+        Data.instance.playerController = this;
     }
 
     void Update() {

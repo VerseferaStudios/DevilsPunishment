@@ -352,7 +352,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+        GameObject currCorridor1 = Instantiate(corridors[8], lPos, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
@@ -446,7 +446,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
@@ -481,7 +481,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 

@@ -61,6 +61,8 @@ public class Data : MonoBehaviour
     public int ctr1 = 0;
     public int ctr2 = 0;
 
+    public PlayerController playerController;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
