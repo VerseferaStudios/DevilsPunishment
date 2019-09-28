@@ -21,6 +21,7 @@ public class CuffController : MonoBehaviour
     private bool risLocked; //Assault Rifle
     private bool sisLocked; //Shotgun
 
+    private PlayerController playerController;
 
     void Awake()
     {
@@ -53,9 +54,10 @@ public class CuffController : MonoBehaviour
         Debug.Log("Trigger for ladder & tag = " + other.tag);
         if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
+            playerController = other.GetComponent<PlayerController>();
             Debug.Log("Climbing Ladder");
-            Data.instance.playerController.SetIsClimbing(true);
-            Data.instance.playerController.VerticalLocomotion();
+            playerController.SetIsClimbing(true);
+            playerController.VerticalLocomotion();
         }
     }
 
@@ -63,7 +65,7 @@ public class CuffController : MonoBehaviour
     {
         if (other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
         {
-            Data.instance.playerController.SetIsClimbing(false);
+            playerController.SetIsClimbing(false);
         }
     }
 
@@ -71,7 +73,7 @@ public class CuffController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            Data.instance.playerController.SetIsClimbing(false);
+            playerController.SetIsClimbing(false);
         }
     }
 
