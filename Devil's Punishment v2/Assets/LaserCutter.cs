@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class LaserCutter : MonoBehaviour
 {
-    public Player health;
-    private int healthStart;
-    private float timeToRelease = 15;
+    private float timeToRelease = 4;
     public Player cuffed;
     public BoxCollider enemyEnter;
-
 
     public GameObject arch1;
     public GameObject arch2;
@@ -19,68 +16,108 @@ public class LaserCutter : MonoBehaviour
     public GameObject zap3;
 
     public Animation spinner;
+    public Animation windDown;
 
     bool interacting;
     bool canInteract;
+
+    public GameObject fauxBlock;
+    public GameObject realBlock;
+    public GameObject laser;
+
+    float coolDown = 5f;
+    public GameObject smoked;
+
+    bool enemyContested;
 
     // Start is called before the first frame update
     void Start()
     {
         interacting = false;
         canInteract = true;
+        fauxBlock.SetActive(true);
+        realBlock.SetActive(false);
+        laser.SetActive(false);
+        enemyContested = false;
     }
-    //public void BeginSequences()
-    //{
-    //    if (Input.GetKeyDown("Interact"))
-    //    {
-    //        interacting = true;
-    //        while (Input.GetKeyDown("Interact"))
-    //        {
-    //            spinner.Play("Spinner");
-    //        }
-    //    }
-    //}
+
+    public void BeginSequences()
+    {
+        StartCoroutine("WindUp");
+    }
 
     IEnumerator WindUp()
     {
-        yield return new WaitForSeconds(2f);
-        arch1.SetActive(true);
-        yield return new WaitForSeconds(.05f);
-        arch1.SetActive(false);
-        yield return new WaitForSeconds(1f);
-        arch2.SetActive(true);
-        yield return new WaitForSeconds(.05f);
-        arch2.SetActive(false);
-        yield return new WaitForSeconds(.05f);
-        arch3.SetActive(true);
-        yield return new WaitForSeconds(.05f);
-        arch3.SetActive(false);
+        fauxBlock.SetActive(false);
+        realBlock.SetActive(true);
+        spinner.GetComponent<Animation>().Play("Spinner");
         yield return new WaitForSeconds(1.5f);
         arch1.SetActive(true);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.5f);
         arch1.SetActive(false);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.75f);
         arch2.SetActive(true);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.5f);
         arch2.SetActive(false);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.75f);
         arch3.SetActive(true);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.5f);
         arch3.SetActive(false);
         yield return new WaitForSeconds(1f);
-        zap1.SetActive(true);
         arch1.SetActive(true);
-        yield return new WaitForSeconds(.05f);
+        arch2.SetActive(true);
+        yield return new WaitForSeconds(.5f);
         arch1.SetActive(false);
-        StartCoroutine("StartZappin");
+        arch2.SetActive(false);
+        yield return new WaitForSeconds(.75f);
+        arch2.SetActive(true);
+        arch3.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        arch2.SetActive(false);
+        arch3.SetActive(false);
+        yield return new WaitForSeconds(.75f);
+        arch3.SetActive(true);
+        arch1.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        arch3.SetActive(false);
+        arch1.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        arch1.SetActive(true);
+        arch2.SetActive(true);
+        arch3.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        zap1.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        zap2.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        zap3.SetActive(true);
+        laser.SetActive(true);
+        interacting = true;
         yield return null;
     }
 
-    IEnumerator StartZappin()
+    public void LaserCoolDown()
     {
-        //as long as the players health doesnt drop below players health at the start and the interact button is being pressed
-        //laserBox.SetActive(true);
-        while (interacting && Input.GetKeyDown("Interact"))
+        canInteract = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (enemyEnter.tag == "Enemy")
+        {
+            enemyContested = true;
+            timeToRelease = 4f;
+            StopAllCoroutines();
+            interacting = false;
+            canInteract = false;
+        }
+        else if (enemyEnter.tag != "Enemy")
+        {
+            enemyContested = false;
+        }
+
+        if (interacting && !enemyContested)
         {
             timeToRelease -= Time.deltaTime;
             if (timeToRelease <= 0)
@@ -88,61 +125,30 @@ public class LaserCutter : MonoBehaviour
                 cuffed.GetComponent<CuffController>().isCuffed = false;
                 interacting = false;
                 Debug.Log("Cuffs have been removed");
+                fauxBlock.SetActive(true);
+                windDown.Play("WindDown");
+                realBlock.SetActive(false);
+                arch1.SetActive(false);
+                arch2.SetActive(false);
+                arch3.SetActive(false);
+                zap1.SetActive(false);
+                zap2.SetActive(false);
+                zap3.SetActive(false);
+                laser.SetActive(false);
+                LaserCoolDown();
             }
-            else if (Input.GetKeyUp("Interact") && timeToRelease <= 15f && timeToRelease >= 0f)
+        }
+        if (!canInteract)
+        {
+            smoked.SetActive(true);
+            coolDown -= Time.deltaTime;
+            if (coolDown <= 0)
             {
-                timeToRelease = 15f;
-                interacting = false;
-            }
-        }
-        yield return null;
-    }
-
-
-    public void OnTriggerEnter(Collider enemy)
-    {
-        if (tag == "Enemy")
-        {
-            //laserBox.SetActive(false);
-            timeToRelease = 15f;
-            Input.GetKeyUp("Interact");
-            interacting = false;
-            canInteract = false;
-            spinner.Stop();
-        }
-    }
-
-    public void OnTriggerStay(Collider enemy)
-    {
-       if (tag == "Enemy")
-        {
-            //laserBox.SetActive(false);
-            spinner.Stop();
-            timeToRelease = 15f;
-            Input.GetKeyUp("Interact");
-            interacting = false;
-            canInteract = false;
-        }
-    }
-
-    public void OnTriggerExit(Collider enemy)
-    {
-        if (tag == "Enemy")
-        {
-            canInteract = true;
-        }        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown("Interact"))
-        {
-            interacting = true;
-            while (Input.GetKeyDown("Interact"))
-            {
-                spinner.Play("Spinner");
+                canInteract = true;
+                smoked.SetActive(false);
+                coolDown = 5f;
             }
         }
     }
+
 }
