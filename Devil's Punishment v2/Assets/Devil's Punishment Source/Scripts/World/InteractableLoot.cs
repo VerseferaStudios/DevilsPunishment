@@ -35,4 +35,8 @@ public class InteractableLoot : MonoBehaviour, IInteractable
         return item;
     }
 
+    public void SetPlayerController(PlayerController playerController)
+    {
+
+    }
 }

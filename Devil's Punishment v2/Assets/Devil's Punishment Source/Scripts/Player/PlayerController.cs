@@ -52,7 +52,9 @@ public class PlayerController : MonoBehaviour
     private float verticalAngleSubtractive;
 
 
-    public static PlayerController instance;
+    public static PlayerController instance; // wouldn't work with networking!!!
+
+    public bool isInteractLaser = false;
 
     public bool shadowOnly = false;
     void Awake() {
@@ -75,12 +77,25 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
+
         GatherInput();
-        if(!isClimbing) {
+
+        if (isInteractLaser)
+        {
+            Debug.Log("moving player");
+            movementInputRaw = new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z);
             Locomotion();
         }
+        else
+        {
+            if (!isClimbing)
+            {
+                Locomotion();
+            }
+            Turning();
+        }
+
         VerticalLocomotion();
-        Turning();
         Animation();
         CameraUpdate();
     }
@@ -269,6 +284,7 @@ public class PlayerController : MonoBehaviour
     void Locomotion() {
 
         Vector2 movementDirection = movementInputRaw.normalized;
+        Debug.Log(movementDirection + " " + movementInputRaw);
         float generalSpeedMultiplier = 1.0f *
             (isCrouching? .5f : 1.0f) *
             (isSprinting? 2f : 1.0f) *
