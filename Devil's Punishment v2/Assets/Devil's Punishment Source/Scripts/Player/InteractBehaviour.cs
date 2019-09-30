@@ -105,6 +105,7 @@ public class InteractBehaviour : MonoBehaviour
         interactableInVicinity = true;
         interactablePrompt.text = focusedInteractable.Prompt();
         interactMaxTime = focusedInteractable.TimeToInteract();
+        focusedInteractable.SetPlayerController(transform.parent.GetComponent<PlayerController>());
     }
 
 	Inventory inventory;
