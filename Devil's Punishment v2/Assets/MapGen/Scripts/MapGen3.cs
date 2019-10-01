@@ -385,12 +385,12 @@ public class MapGen3 : MonoBehaviour
                 }
 
             }
-
+            /*
             for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
             {
                 spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
             }
-
+            */
 
 
         }
