@@ -378,7 +378,8 @@ public class Data2ndFloor : MonoBehaviour
                 break;
             }
 
-            Debug.Log(collidedCorridors.Count + " " + count + "#################################");
+            // TODO: Disabled for console clear 10/02/19
+           // Debug.Log(collidedCorridors.Count + " " + count + "#################################");
             if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");

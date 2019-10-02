@@ -929,7 +929,8 @@ public class Data : MonoBehaviour
                             }
                             
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                            Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+                            // TODO: Commented out for console clear 10/02/19
+                           // Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
                         {

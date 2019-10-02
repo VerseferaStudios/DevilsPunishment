@@ -21,6 +21,11 @@ public class PlayerController : MonoBehaviour
     public float lookSensitivityVertical = 4.0f;
     public bool invertY;
 
+    //Drug 10/02/2019
+    PlayerControls Controls;
+    PlayerControls.InputDevice inputDev;
+    public float inputAngle;
+
     [HideInInspector]
     public bool inputEnabled = true;
 
@@ -52,12 +57,15 @@ public class PlayerController : MonoBehaviour
 
     public bool shadowOnly = false;
     void Awake() {
+       
+
         instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
     }
 
     void Start() {
-
+        Controls = ControlsManager.instance.claimPlayer();
+        inputDev = Controls.input;
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         gunController = GunController.instance;
@@ -98,9 +106,95 @@ public class PlayerController : MonoBehaviour
     public void ToggleSprinting() {isSprinting = !isSprinting;}
 
 
+
     void GatherInput() {
         if(inputEnabled) {
-            movementInputRaw = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+            #region Input Direction Angle
+            Vector2 input;
+            if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
+            {
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            }
+            else // Controller
+            {
+                input = new Vector2(Input.GetAxis("JAxisX"), Input.GetAxis("JAxisY"));
+            }
+
+            //forward
+            if (input.x > 0 && input.y > 0)
+            {
+
+                inputAngle = 270 + Mathf.Atan(input.y / input.x) * 58f;
+            }
+            else if (input.x < 0 && input.y > 0)
+            {
+
+                inputAngle = Mathf.Atan(-input.x / input.y) * 58f;
+            }
+
+            else if (input.x == 0 && input.y > 0)
+            {
+                //De  Debug.Log("Forward");
+                inputAngle = 360f;
+            }
+
+            //Right
+            else if (input.x > 0 && input.y == 0)
+            {
+                //    Debug.Log("Right");
+                inputAngle = 270f;
+            }
+            //Left
+            else if (input.x < 0 && input.y == 0)
+            {
+                //   Debug.Log("Left");
+                inputAngle = 90f;
+            }
+
+            //Backward
+
+            else if (input.x == 0 && input.y < 0)
+            {
+                //  Debug.Log("Backward");
+                inputAngle = 180;
+            }
+
+            else if (input.x > 0 && input.y < 0)
+            {
+
+                inputAngle = 180 + (-1f) * Mathf.Atan(input.x / input.y) * 58f;
+            }
+
+            else if (input.x < 0 && input.y < 0)
+            {
+
+                inputAngle = 90 + Mathf.Atan(-input.y / -input.x) * 58f;
+            }
+
+
+            //Not Moving
+            if (float.IsNaN(inputAngle))
+            {
+                inputAngle = 0f;
+            }
+
+            Debug.Log(inputAngle);
+
+            #endregion
+
+            Vector2 moveInputRaw = Vector2.zero;
+
+            if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
+            {
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            }
+            else if (inputDev == PlayerControls.InputDevice.XBox360) 
+            {
+                input = new Vector2(Input.GetAxis("JAxisX"), Input.GetAxis("JAxisY"));
+            }
+
+            movementInputRaw = input;
 
             switch(sprintTH) {
                 case ToggleHold.TOGGLE:
@@ -118,13 +212,32 @@ public class PlayerController : MonoBehaviour
 
             switch(sprintTH) {
                 case ToggleHold.TOGGLE:
-                    if(Input.GetButtonDown("Sprint")){
-                        ToggleSprinting();
+                    if (inputDev == PlayerControls.InputDevice.Keyboard)
+                    {
+                        if (Input.GetButtonDown("Sprint"))
+                        {
+                            ToggleSprinting();
+                        }
+                    }
+                    else if(inputDev == PlayerControls.InputDevice.XBox360)
+                    {
+                        if (Input.GetKeyDown(Controls.Run))
+                        {
+                            ToggleSprinting();
+                        }
                     }
                 break;
                 default:
                 case ToggleHold.HOLD:
-                    isSprinting = Input.GetButton("Sprint");
+                    if (inputDev == PlayerControls.InputDevice.Keyboard)
+                    {
+                        isSprinting = Input.GetButton("Sprint");
+                    }
+                    else if (inputDev == PlayerControls.InputDevice.XBox360)
+                    {
+                        isSprinting = Input.GetKey(Controls.Run);
+                    }
+                    
                 break;
             }
 
@@ -132,8 +245,18 @@ public class PlayerController : MonoBehaviour
 
             float aimMultiplier = Mathf.Lerp(1.0f, lookSensitivityAimingMultiplier, gunController.GetAimingCoefficient());
 
-            horizontalAngle += Input.GetAxisRaw("Mouse X") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal * aimMultiplier;
-            verticalAngle += (invertY? 1.0f : -1.0f) * Input.GetAxisRaw("Mouse Y") * Time.deltaTime * lookSensitivity * lookSensitivityVertical * aimMultiplier;
+            if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
+            {
+                horizontalAngle += Input.GetAxisRaw("Mouse X") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal * aimMultiplier;
+                verticalAngle += (invertY ? 1.0f : -1.0f) * Input.GetAxisRaw("Mouse Y") * Time.deltaTime * lookSensitivity * lookSensitivityVertical * aimMultiplier;
+            }
+            else if (inputDev == PlayerControls.InputDevice.XBox360)
+            {
+                horizontalAngle += Input.GetAxisRaw("XBOX X L") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal * aimMultiplier;
+                verticalAngle += (invertY ? 1.0f : -1.0f) * Input.GetAxisRaw("XBOX Y R") * Time.deltaTime * lookSensitivity * lookSensitivityVertical * aimMultiplier;
+            }
+            //shrug
+
         } else {
             movementInputRaw = Vector2.zero;
         }
