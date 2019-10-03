@@ -21,13 +21,14 @@ public class ControlsManager : MonoBehaviour
 
     public PlayerControls claimPlayer()
     {
-        if(player1taken)
-        {
-            return Player2;
-        }
-
-        player1taken = true;
         return Player1;
+     //   if(player1taken)
+    //    {
+    //        return Player2;
+    //    }
+
+    //    player1taken = true;
+     //   return Player1;
     }
 
 

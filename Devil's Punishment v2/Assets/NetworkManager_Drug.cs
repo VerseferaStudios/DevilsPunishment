@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class NetworkManager_Drug : MonoBehaviour
+public class NetworkManager_Drug : NetworkBehaviour
 {
     // Check to see if we're about to be destroyed.
     private static bool m_ShuttingDown = false;
