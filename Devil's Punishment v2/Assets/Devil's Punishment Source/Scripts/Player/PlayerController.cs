@@ -73,8 +73,16 @@ public class PlayerController : MonoBehaviour
         if (isInteractLaser)
         {
             Debug.Log("moving player");
-            movementInputRaw = new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z);
+            //movementInputRaw = new Vector2(1, 1);
+            movementInputRaw = new Vector2(0, 1);//new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z) - new Vector2(0, 0)/*(0, 0) is the position of InteractableLaser Script*/;
+            horizontalAngle = Quaternion.LookRotation(new Vector3(-2, 0, 0) - transform.position, transform.up).eulerAngles.y;
+            Debug.Log(horizontalAngle);
+            Turning();
             Locomotion();
+            if (Vector2.Distance(new Vector3(-2, 0, 0), transform.position) < 0.2f) //Mathf.Approximately(transform.position.x/10, -2/10) && Mathf.Approximately(transform.position.z/10, 0/10))
+            {
+                isInteractLaser = false;
+            }
         }
         else
         {
@@ -116,7 +124,7 @@ public class PlayerController : MonoBehaviour
     void GatherInput() {
         if(inputEnabled) {
             movementInputRaw = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
+            //Debug.Log(movementInputRaw);
             switch(sprintTH) {
                 case ToggleHold.TOGGLE:
                     if(Input.GetButtonDown("Crouch")){
@@ -157,7 +165,7 @@ public class PlayerController : MonoBehaviour
     void Locomotion() {
 
         Vector2 movementDirection = movementInputRaw.normalized;
-        Debug.Log(movementDirection + " " + movementInputRaw);
+        //Debug.Log(movementDirection + " " + movementInputRaw);
         float generalSpeedMultiplier = 1.0f *
             (isCrouching? .5f : 1.0f) *
             (isSprinting? 2f : 1.0f) *
