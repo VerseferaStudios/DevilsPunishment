@@ -87,7 +87,6 @@ public class Network_Player : MonoBehaviour
 
     public void receiveShot(Vector3 start, Vector3 end)
     {
-        Debug.Log("Received shot!");
         ShotRenderer.GetComponent<RegisterShot>().registerShot(start, end);
     }
 
