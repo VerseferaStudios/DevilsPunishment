@@ -81,7 +81,10 @@ public class PlayerController : MonoBehaviour
     void Update() {
 
         GatherInput();
-
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            isInteractLaser = false; // do in other script if needed
+        }
         if (isInteractLaser)
         {
             Debug.Log("moving player");

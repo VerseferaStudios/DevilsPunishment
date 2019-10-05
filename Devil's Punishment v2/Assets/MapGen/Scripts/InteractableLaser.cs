@@ -19,8 +19,6 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public Transform laserSpotTransform;
 
-    private bool isFirstInteract = true;
-
     private void Start()
     {
         laserCutterScript = GetComponent<LaserCutter>();
@@ -43,11 +41,10 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        if (isFirstInteract)
-        {
-            playerController.isInteractLaser = true;
-            isFirstInteract = false;
-        }
+        playerController.isInteractLaser = true;
+        GetComponent<MeshCollider>().enabled = false; // Just for now. Get Interactabe Laser into a different gameobject later on
+        //gameObject.SetActive(false);
+        //timeToPickUp = float.PositiveInfinity;
         //laserCutterScript.BeginSequences();
     }
 
@@ -62,13 +59,5 @@ public class InteractableLaser : MonoBehaviour, IInteractable
         playerController.laserSpot = laserSpotTransform.position;
         playerController.laserMonitor = transform.position; //cube.014 Monitor
         playerController.laserCutterScript = laserCutterScript;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            playerController.isInteractLaser = false;
-        }
     }
 }
