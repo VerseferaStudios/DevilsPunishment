@@ -15,9 +15,20 @@ public class InteractableLaser : MonoBehaviour, IInteractable
     //private int l = 0;
     private PlayerController playerController;
 
+    private LaserCutter laserCutterScript;
+
+    public Transform laserSpotTransform;
+
+    private bool isFirstInteract = true;
+
+    private void Start()
+    {
+        laserCutterScript = GetComponent<LaserCutter>();
+    }
+
     public string Prompt()
     {
-        return "Using laset";// + item.name + " (" + stock + ")";
+        return "Using monitor for laser";// + item.name + " (" + stock + ")";
     }
 
     public float TimeToInteract()
@@ -32,7 +43,12 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        playerController.isInteractLaser = true;
+        if (isFirstInteract)
+        {
+            playerController.isInteractLaser = true;
+            isFirstInteract = false;
+        }
+        //laserCutterScript.BeginSequences();
     }
 
     public Item GetGunItem()
@@ -43,6 +59,9 @@ public class InteractableLaser : MonoBehaviour, IInteractable
     public void SetPlayerController(PlayerController playerController) //use int and network playerlist?
     {
         this.playerController = playerController;
+        playerController.laserSpot = laserSpotTransform.position;
+        playerController.laserMonitor = transform.position; //cube.014 Monitor
+        playerController.laserCutterScript = laserCutterScript;
     }
 
     private void Update()
