@@ -20,6 +20,8 @@ public class InteractBehaviour : MonoBehaviour
     private float interactMaxTime;
     private float interactElapsedTime;
 
+    private bool isStartedToInteract = false;
+
     void Start() {
         InteractableUnFocus();
     }
@@ -105,6 +107,7 @@ public class InteractBehaviour : MonoBehaviour
         interactableInVicinity = true;
         interactablePrompt.text = focusedInteractable.Prompt();
         interactMaxTime = focusedInteractable.TimeToInteract();
+        focusedInteractable.SetPlayerController(transform.parent.GetComponent<PlayerController>());
     }
 
 	Inventory inventory;
@@ -137,8 +140,18 @@ public class InteractBehaviour : MonoBehaviour
 
         if (Input.GetButton("Interact"))
         {
+            if (!isStartedToInteract)
+            {
+                focusedInteractable.OnFocus();
+                isStartedToInteract = true;
+            }
             interactElapsedTime += Time.deltaTime;
         } else {
+            if (isStartedToInteract)
+            {
+                focusedInteractable.OnReleaseFocus();
+                isStartedToInteract = false;
+            }
             interactElapsedTime = 0;
         }
 
