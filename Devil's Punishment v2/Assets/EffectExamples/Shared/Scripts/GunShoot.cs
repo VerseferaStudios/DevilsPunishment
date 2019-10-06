@@ -44,6 +44,8 @@ public class GunShoot : MonoBehaviour {
 			{
 				HandleHit(hit);
 			}
+
+            NPCManager.instance.alertClosestNPCs(25f, this.transform);
 		}
 	}
 

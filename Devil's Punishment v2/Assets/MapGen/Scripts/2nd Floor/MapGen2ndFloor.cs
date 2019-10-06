@@ -9,6 +9,8 @@ public class MapGen2ndFloor : MonoBehaviour
     //10 x 10 cube
     //later//private int gridSize;
 
+    public GameObject GUIProgress;
+
     public GameObject roomsLoaderPrefab, mapGenHolder;
     public Transform mapGenHolderTransform;
 
@@ -37,6 +39,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
     private void Start()
     {
+        GUIProgress.SetActive(true);
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
         StateData.states.Add(Random.state);
@@ -49,6 +52,7 @@ public class MapGen2ndFloor : MonoBehaviour
         Data2ndFloor.instance.ventX = vents[5];
         Data2ndFloor.instance.xSize = xSize;
         Data2ndFloor.instance.zSize = zSize;
+        NavMeshScript.instance.updateNavMesh();
     }
 
     public void CreateHolderForMapGen()
@@ -241,6 +245,8 @@ public class MapGen2ndFloor : MonoBehaviour
 
             }
 
+            MapgenProgress.instance.addProgress(1);
+
             //gameObjectDetails.Add(roomScript);
 
         }
@@ -262,8 +268,11 @@ public class MapGen2ndFloor : MonoBehaviour
         Data2ndFloor.instance.allRooms = allRooms;
         Data2ndFloor.instance.xSize = xSize;
         Data2ndFloor.instance.zSize = zSize;
+
         
     }
+
+    
 
     // ------------------------ Add RoomNewVents script after delay ------------------------
     private IEnumerator AddRoomNewVents2ndFloor(GameObject gb)

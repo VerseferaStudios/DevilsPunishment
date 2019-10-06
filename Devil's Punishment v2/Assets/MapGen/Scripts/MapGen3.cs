@@ -57,6 +57,9 @@ public class MapGen3 : MonoBehaviour
         Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
+
+       
+        
     }
 
     public void CreateHolderForMapGen()
@@ -88,7 +91,7 @@ public class MapGen3 : MonoBehaviour
         CreateHolderForMapGen();
 
         Rooms();
-
+        
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -160,7 +163,11 @@ public class MapGen3 : MonoBehaviour
                 ++k;
             }
             ++l;
+            MapgenProgress.instance.addProgress(3);
+
         }
+
+      //  MapgenProgress.instance.addProgress(3);
         /*
         List<GameObject> staticRooms = new List<GameObject>();
         staticRooms.Add(liftRoom);
@@ -397,6 +404,8 @@ public class MapGen3 : MonoBehaviour
         {
             GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
         }
+
+
     }
 
     // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------

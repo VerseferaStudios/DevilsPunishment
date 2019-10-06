@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Data2ndFloor : MonoBehaviour
 {
-    public GameObject roomsLoaderPrefab;
+    public GameObject roomsLoaderPrefab;  
     public Transform mapGenHolderTransform;
     public float floor2Height = 50f;
     public Vector3 liftRoomPos;
@@ -59,10 +59,13 @@ public class Data2ndFloor : MonoBehaviour
 
     private bool isFirstPassDone = false;
 
+   // public GameObject Loader;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
     {
+
         if(instance == null)
         {
             instance = this;
@@ -341,9 +344,12 @@ public class Data2ndFloor : MonoBehaviour
             }
 
             Debug.Log(collidedVents.Count + " " + count + "#################################");
+            MapgenProgress.instance.addProgress(1);
+
             if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+
                 
                 {
                     Debug.Log("innnnnnnnnnnnnn");
@@ -353,8 +359,16 @@ public class Data2ndFloor : MonoBehaviour
                     isFinishedCheckCollisionsVents = false;
                 }
             }
+
+            MapgenProgress.instance.addProgress(1);
             yield return new WaitForSeconds(1f);
         }
+
+
+        NavMeshScript.instance.updateNavMesh();
+        MapgenProgress.instance.loadedMap(); // done!
+
+
     }
 
     public IEnumerator DoCheckPerSecond()
@@ -384,6 +398,8 @@ public class Data2ndFloor : MonoBehaviour
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
+                MapgenProgress.instance.addProgress(4);
+
                 if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
                     AddAndRemoveAdjacentRooms();
@@ -394,6 +410,7 @@ public class Data2ndFloor : MonoBehaviour
                 }
                 else
                 {
+                    MapgenProgress.instance.addProgress(1);
                     Debug.Log("innnnnnnnnnnnnn");
                     CheckForCollision();
                     count++;
@@ -403,6 +420,7 @@ public class Data2ndFloor : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
         }
+        MapgenProgress.instance.addProgress(3);
     }
 
     private void AddAndRemoveAdjacentRooms()   // Dead Code xD
@@ -461,6 +479,7 @@ public class Data2ndFloor : MonoBehaviour
                                     //no break keep looking
                                     //break;
                                 }
+                                MapgenProgress.instance.addProgress(1);
                             }
                         }
                     }
@@ -818,7 +837,7 @@ public class Data2ndFloor : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
-                            
+                            MapgenProgress.instance.addProgress(1);
                             if (yRotation == 0)
                             {
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
@@ -847,6 +866,7 @@ public class Data2ndFloor : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             Instantiate(corridorX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            MapgenProgress.instance.addProgress(2);
                         }
                         else
                         {
@@ -1204,6 +1224,7 @@ public class Data2ndFloor : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate(ventT, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            MapgenProgress.instance.addProgress(2);
                             /*
                             if (yRotation == 0)
                             {
@@ -1274,7 +1295,7 @@ public class Data2ndFloor : MonoBehaviour
                             //Debug.Log("rotation = " + collidedVents[j].transform.rotation.eulerAngles.y);
                             //Debug.Log("parent name " + collidedVents[j].transform.parent.name);
                         }
-
+                        MapgenProgress.instance.addProgress(2);
                         /*
                         //If I and I collides with different rotations
                         if (collidedVents[i].transform.rotation != collidedVents[j].transform.rotation)

@@ -200,8 +200,10 @@ public class PlayerController : MonoBehaviour
                 case ToggleHold.TOGGLE:
                     if(Input.GetButtonDown("Crouch")){
                         ToggleCrouch();
+
+                        NPCManager.instance.alertClosestNPCs(25f, transform);
                     }
-                break;
+                    break;
                 default:
                 case ToggleHold.HOLD:
                     isCrouching = Input.GetButton("Crouch");

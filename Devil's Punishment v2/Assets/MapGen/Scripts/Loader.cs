@@ -21,5 +21,7 @@ public class Loader : MonoBehaviour
         {
             Instantiate(data2ndFloor);
         }
+
+      //  NavMeshScript.instance.updateNavMesh();
     }
 }

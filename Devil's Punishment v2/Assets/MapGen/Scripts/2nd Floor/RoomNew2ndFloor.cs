@@ -204,6 +204,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
                 //MakeInitHallways();
 
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
+                MapgenProgress.instance.addProgress(2);
+
                 StartCoroutine(Data2ndFloor.instance.DoConnectedComponents());
                 StartCoroutine(Data2ndFloor.instance.DoCheckPerSecond());
             }

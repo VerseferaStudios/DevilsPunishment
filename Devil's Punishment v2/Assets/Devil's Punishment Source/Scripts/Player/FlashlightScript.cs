@@ -1,12 +1,13 @@
 ﻿//Author: Dave Bird
 //Date: Sunday, June 23, 2019
-    //Last Edited: Tuesday, July 16, 2019
-        //By: Dave Bird
-            //Purpose: Cleanup Script
+//Last Edited: Tuesday, July 16, 2019
+//By: Dave Bird
+//Purpose: Cleanup Script
 //Written For: Devil's Punishment v2
 //Purpose: This script details all things that has to do with the limitations of the cuffed mechanic.
 //Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
 
+using Aura2API;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,8 @@ public class FlashlightScript : MonoBehaviour
     public GameObject glowStick;
     public GameObject flashLight;
     public GameObject pickUp;
-    public Light glow;
-    public Light beam;
+    public AuraLight glow;
+    public AuraLight beam;
     public bool isUpgraded;
     public int countno;
 
