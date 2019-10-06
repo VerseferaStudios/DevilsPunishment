@@ -43,6 +43,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
     {
         //GetComponent<MeshCollider>().enabled = false; // Just for now. Get Interactabe Laser into a different gameobject later on
         //NO INPUT FROM USER
+
         //gameObject.SetActive(false);
         //timeToPickUp = float.PositiveInfinity;
         //laserCutterScript.BeginSequences();
@@ -64,5 +65,11 @@ public class InteractableLaser : MonoBehaviour, IInteractable
     public void OnFocus()
     {
         playerController.isInteractLaser = true;
+    }
+
+    public void OnReleaseFocus()
+    {
+        laserCutterScript.ResetLaser();
+        laserCutterScript.StopLaser();
     }
 }

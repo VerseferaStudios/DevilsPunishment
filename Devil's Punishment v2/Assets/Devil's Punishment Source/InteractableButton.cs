@@ -41,4 +41,9 @@ public class InteractableButton : MonoBehaviour, IInteractable
     {
         
     }
+
+    public void OnReleaseFocus()
+    {
+
+    }
 }

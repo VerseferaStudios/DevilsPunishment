@@ -147,7 +147,11 @@ public class InteractBehaviour : MonoBehaviour
             }
             interactElapsedTime += Time.deltaTime;
         } else {
-            isStartedToInteract = false;
+            if (isStartedToInteract)
+            {
+                focusedInteractable.OnReleaseFocus();
+                isStartedToInteract = false;
+            }
             interactElapsedTime = 0;
         }
 
