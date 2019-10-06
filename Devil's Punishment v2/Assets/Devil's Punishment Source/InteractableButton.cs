@@ -36,4 +36,9 @@ public class InteractableButton : MonoBehaviour, IInteractable
     {
 
     }
+
+    public void OnFocus()
+    {
+        
+    }
 }

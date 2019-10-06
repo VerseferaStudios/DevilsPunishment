@@ -7,7 +7,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     //public Item item;
     //public int stock;
-    public float timeToPickUp = 5f;
+    public float timeToPickUp = 20f;
     public bool isVentCover = true;
 
     public GameObject brokenFloorCollidors;
@@ -41,8 +41,8 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        playerController.isInteractLaser = true;
-        GetComponent<MeshCollider>().enabled = false; // Just for now. Get Interactabe Laser into a different gameobject later on
+        //GetComponent<MeshCollider>().enabled = false; // Just for now. Get Interactabe Laser into a different gameobject later on
+        //NO INPUT FROM USER
         //gameObject.SetActive(false);
         //timeToPickUp = float.PositiveInfinity;
         //laserCutterScript.BeginSequences();
@@ -59,5 +59,10 @@ public class InteractableLaser : MonoBehaviour, IInteractable
         playerController.laserSpot = laserSpotTransform.position;
         playerController.laserMonitor = transform.position; //cube.014 Monitor
         playerController.laserCutterScript = laserCutterScript;
+    }
+
+    public void OnFocus()
+    {
+        playerController.isInteractLaser = true;
     }
 }

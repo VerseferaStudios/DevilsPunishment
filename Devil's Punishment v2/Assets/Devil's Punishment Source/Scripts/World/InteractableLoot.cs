@@ -39,4 +39,9 @@ public class InteractableLoot : MonoBehaviour, IInteractable
     {
 
     }
+
+    public void OnFocus()
+    {
+        
+    }
 }
