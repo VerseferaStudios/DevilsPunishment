@@ -20,6 +20,8 @@ public class InteractBehaviour : MonoBehaviour
     private float interactMaxTime;
     private float interactElapsedTime;
 
+    private bool isStartedToInteract = false;
+
     void Start() {
         InteractableUnFocus();
     }
@@ -138,8 +140,14 @@ public class InteractBehaviour : MonoBehaviour
 
         if (Input.GetButton("Interact"))
         {
+            if (!isStartedToInteract)
+            {
+                focusedInteractable.OnFocus();
+                isStartedToInteract = true;
+            }
             interactElapsedTime += Time.deltaTime;
         } else {
+            isStartedToInteract = false;
             interactElapsedTime = 0;
         }
 

@@ -6,6 +6,7 @@ public interface IInteractable {
 
     string Prompt();
     GameObject GetGameObject();
+    void OnFocus();
     void OnInteract();
     float TimeToInteract();
     Item GetGunItem();
