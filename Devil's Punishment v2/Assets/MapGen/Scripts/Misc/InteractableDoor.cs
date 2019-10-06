@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -117,20 +117,5 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     public Item GetGunItem()
     {
         return null;
-    }
-
-    public void SetPlayerController(PlayerController playerController)
-    {
-        
-    }
-
-    public void OnFocus()
-    {
-
-    }
-
-    public void OnReleaseFocus()
-    {
-
     }
 }
