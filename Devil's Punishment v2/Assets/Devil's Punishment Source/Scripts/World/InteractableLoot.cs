@@ -35,4 +35,18 @@ public class InteractableLoot : MonoBehaviour, IInteractable
         return item;
     }
 
+    public void SetPlayerController(PlayerController playerController)
+    {
+
+    }
+
+    public void OnFocus()
+    {
+        
+    }
+
+    public void OnReleaseFocus()
+    {
+        
+    }
 }
