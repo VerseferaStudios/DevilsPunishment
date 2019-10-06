@@ -101,14 +101,34 @@ public class LaserCutter : MonoBehaviour
         canInteract = false;
     }
 
+    public void StopLaser()
+    {
+        interacting = false;
+        fauxBlock.SetActive(true);
+        windDown.Play("WindDown");
+        realBlock.SetActive(false);
+        arch1.SetActive(false);
+        arch2.SetActive(false);
+        arch3.SetActive(false);
+        zap1.SetActive(false);
+        zap2.SetActive(false);
+        zap3.SetActive(false);
+        laser.SetActive(false);
+    }
+
+    public void ResetLaser()
+    {
+        timeToRelease = 4f;
+        StopAllCoroutines();
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (enemyEnter.tag == "Enemy")
         {
             enemyContested = true;
-            timeToRelease = 4f;
-            StopAllCoroutines();
+            ResetLaser();
             interacting = false;
             canInteract = false;
         }
@@ -123,18 +143,8 @@ public class LaserCutter : MonoBehaviour
             if (timeToRelease <= 0)
             {
                 cuffed.GetComponent<CuffController>().isCuffed = false;
-                interacting = false;
                 Debug.Log("Cuffs have been removed");
-                fauxBlock.SetActive(true);
-                windDown.Play("WindDown");
-                realBlock.SetActive(false);
-                arch1.SetActive(false);
-                arch2.SetActive(false);
-                arch3.SetActive(false);
-                zap1.SetActive(false);
-                zap2.SetActive(false);
-                zap3.SetActive(false);
-                laser.SetActive(false);
+                StopLaser();
                 LaserCoolDown();
             }
         }

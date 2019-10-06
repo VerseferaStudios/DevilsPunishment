@@ -128,4 +128,9 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
 
     }
+
+    public void OnReleaseFocus()
+    {
+
+    }
 }
