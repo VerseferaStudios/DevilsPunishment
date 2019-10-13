@@ -32,6 +32,9 @@ public class FlashlightScript : MonoBehaviour
 
     public void ToggleUpgraded()
     {
+        Debug.Log("Toggle Upgraded Flashlight Invoked");
+        Debug.Log("glow.enabled: "+glow.enabled);
+        Debug.Log("beam.enabled: "+beam.enabled);
         if (glow.enabled && !beam.enabled)
         {
             glow.enabled = false;
@@ -46,6 +49,9 @@ public class FlashlightScript : MonoBehaviour
             glow.enabled = true;
             beam.enabled = false;
         }
+        // Enabling/Disabling Auralight doesn't appear to do anything. Setting gameObjects to inactive/active, to regain toggle,effect
+        glowStick.SetActive(glow.enabled);
+        flashLight.SetActive(beam.enabled);
     }
 
     public void Upgraded()
@@ -79,6 +85,9 @@ public class FlashlightScript : MonoBehaviour
                     countno--;
                     Debug.Log("You have uncovered the glowstick.");
                 }
+                // Enabling/Disabling Auralight doesn't appear to do anything. Setting gameObjects to inactive/active, to regain toggle,effect
+                glowStick.SetActive(glow.enabled);
+                flashLight.SetActive(beam.enabled);
             }
         }
     }
