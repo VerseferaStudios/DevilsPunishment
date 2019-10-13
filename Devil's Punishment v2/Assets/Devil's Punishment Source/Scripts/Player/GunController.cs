@@ -95,6 +95,7 @@ public class GunController : MonoBehaviour
         foreach(Gun gun in guns) {
             gun.gameObject.SetActive(false);
         }
+		InitGun();
 	}
 
     void SetFireRate(float f) {

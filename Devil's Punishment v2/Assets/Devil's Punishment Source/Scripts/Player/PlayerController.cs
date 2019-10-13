@@ -69,7 +69,11 @@ public class PlayerController : MonoBehaviour
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         gunController = GunController.instance;
-        Data.instance.playerController = this;
+        if (Data.instance != null){
+            Data.instance.playerController = this;
+        } else {
+            Debug.Log("Unable to set 'Data.instance.playerController' Data instance not found.");
+        }
     }
 
     void Update() {
