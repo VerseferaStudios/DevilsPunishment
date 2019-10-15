@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
 
     private float verticalAngleSubtractive;
 
-    private GunController gunController;
 
     public static PlayerController instance;
 
@@ -61,14 +60,13 @@ public class PlayerController : MonoBehaviour
 
         instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
+        headCamera = GetComponentInChildren<Camera>();
+        controller = GetComponent<CharacterController>();
     }
 
     void Start() {
         Controls = ControlsManager.instance.claimPlayer();
         inputDev = Controls.input;
-        headCamera = GetComponentInChildren<Camera>();
-        controller = GetComponent<CharacterController>();
-        gunController = GunController.instance;
         if (Data.instance != null){
             Data.instance.playerController = this;
         } else {
@@ -249,7 +247,7 @@ public class PlayerController : MonoBehaviour
 
             if(movementInputRaw.y <= 0) { isSprinting = false; }
 
-            float aimMultiplier = Mathf.Lerp(1.0f, lookSensitivityAimingMultiplier, gunController.GetAimingCoefficient());
+            float aimMultiplier = Mathf.Lerp(1.0f, lookSensitivityAimingMultiplier, GunController.instance.GetAimingCoefficient());
 
             if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
             {
@@ -274,7 +272,7 @@ public class PlayerController : MonoBehaviour
         float generalSpeedMultiplier = 1.0f *
             (isCrouching? .5f : 1.0f) *
             (isSprinting? 2f : 1.0f) *
-            (1.0f - .5f * gunController.GetAimingCoefficient());
+            (1.0f - .5f * GunController.instance.GetAimingCoefficient());
 
         float targetSpeed = movementSpeed * generalSpeedMultiplier;
         float targetForwardAnimationSpeed = movementInputRaw.y * (isSprinting ? 2.0f : 1.0f);
