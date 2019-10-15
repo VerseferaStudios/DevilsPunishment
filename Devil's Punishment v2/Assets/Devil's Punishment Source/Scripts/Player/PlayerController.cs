@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
             {
                 horizontalAngle = Quaternion.LookRotation(laserMonitor - transform.position, transform.up).eulerAngles.y;
                 Turning();
+                laserCutterScript.cuffed = GetComponent<Player>();
                 laserCutterScript.BeginSequences();
                 isInteractLaser = false;
             }
