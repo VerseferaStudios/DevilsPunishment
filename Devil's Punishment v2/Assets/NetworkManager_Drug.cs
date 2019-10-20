@@ -1,17 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class NetworkManager_Drug : MonoBehaviour
+public class NetworkManager_Drug : NetworkManager
 {
     // Check to see if we're about to be destroyed.
     private static bool m_ShuttingDown = false;
     private static object m_Lock = new object();
     private static NetworkManager_Drug m_Instance;
-
-
     public List<Network_Player> playerlist = new List<Network_Player>();
 
+    public TMP_InputField IPInputField;
+
+    public void joinIPGame()
+    {
+        base.networkAddress = IPInputField.text;
+        base.networkPort = 7777;
+        Debug.Log(base.networkAddress);
+        base.StartClient();
+    }
+    public void startHosting()
+    {
+      //  base.networkAddress = base.ip
+        base.StartHost();
+    }
     #region Singleton
     /// <summary>
     /// Access singleton instance through this propriety.
