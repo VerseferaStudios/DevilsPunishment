@@ -20,15 +20,18 @@ public  class Network_Disable_Component : NetworkBehaviour
         
         if (!isLocalPlayer)
         {
-            foreach (Behaviour behaviour in objects_to_disable)
-            {
-                behaviour.enabled = false;
-            }
+            Debug.Log("Player is not local!");
+            
 
             foreach (GameObject behaviour in UIThings)
             {
                 behaviour.SetActive(false);
 
+            }
+
+            foreach (Behaviour behaviour in objects_to_disable)
+            {
+                behaviour.enabled = false;
             }
 
             chat.GetComponent<CanvasGroup>().alpha = 0; // Hide chat
@@ -38,7 +41,7 @@ public  class Network_Disable_Component : NetworkBehaviour
         else
         {
             InvView.SetActive(false);
-            Third_Person_Model.SetActive(false);
+          //  Third_Person_Model.SetActive(false);
         }
 
     }
