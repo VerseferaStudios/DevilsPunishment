@@ -63,6 +63,8 @@ public class Data : MonoBehaviour
 
     public PlayerController playerController;
 
+    public bool canStartCorridorTestSpawner = false;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
