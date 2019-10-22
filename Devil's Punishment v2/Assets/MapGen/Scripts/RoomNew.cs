@@ -206,6 +206,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
+
+                Data.instance.canStartCorridorTestSpawner = true;
+
             }
             Debug.LogError(Data.instance.ctr1);
 

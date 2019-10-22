@@ -87,18 +87,19 @@ public class PlayerController : MonoBehaviour
         }
         if (isInteractLaser)
         {
-            Debug.Log("moving player");
+            Debug.Log("moving player");// + Vector2.Distance(laserSpot, transform.position));
             //movementInputRaw = new Vector2(1, 1);
             movementInputRaw = new Vector2(0, 1);//new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z) - new Vector2(0, 0)/*(0, 0) is the position of InteractableLaser Script*/;
             horizontalAngle = Quaternion.LookRotation(laserSpot - transform.position, transform.up).eulerAngles.y;
             //Debug.Log(horizontalAngle);
             Turning();
             Locomotion();
-            if (Vector2.Distance(laserSpot, transform.position) < 0.2f) //Mathf.Approximately(transform.position.x/10, -2/10) && Mathf.Approximately(transform.position.z/10, 0/10))
+            if (Vector2.Distance(laserSpot, transform.position) < 1.18f) //Mathf.Approximately(transform.position.x/10, -2/10) && Mathf.Approximately(transform.position.z/10, 0/10))
             {
                 horizontalAngle = Quaternion.LookRotation(laserMonitor - transform.position, transform.up).eulerAngles.y;
                 Turning();
-                laserCutterScript.cuffed = GetComponent<Player>();
+                //Debug.LogError("already done");
+                laserCutterScript.cuffed = NetworkManager_Drug.instance.findPlayer(GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<Player>();
                 laserCutterScript.BeginSequences();
                 isInteractLaser = false;
             }
