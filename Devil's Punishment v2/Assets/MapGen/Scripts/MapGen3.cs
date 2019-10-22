@@ -163,7 +163,7 @@ public class MapGen3 : MonoBehaviour
                 ++k;
             }
             ++l;
-            MapgenProgress.instance.addProgress(3);
+            //MapgenProgress.instance.addProgress(3);
 
         }
 
@@ -205,15 +205,15 @@ public class MapGen3 : MonoBehaviour
                         break;
                     case 2:
                         roomToSpawn = laserRoom;
-                        yCoord = 0f;
+                        yCoord = 1;
                         break;
                         /*
-                    case 3:
-                        roomToSpawn = roomT;
-                        break;
-                    case 4:
-                        roomToSpawn = room4;
-                        break;*/
+                case 3:
+                    roomToSpawn = roomT;
+                    break;
+                case 4:
+                    roomToSpawn = room4;
+                    break;*/
                 }
             }
             
