@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Network_Player : MonoBehaviour
+public class Network_Player : NetworkBehaviour
 {
     string username;
     GameObject player;
@@ -28,6 +29,12 @@ public class Network_Player : MonoBehaviour
     public string getUsername()
     {
         return username;
+    }
+
+    [Command]
+    public void Cmdbroadcast_Shots(GameObject obj)
+    {
+
     }
 
     ///<summary>

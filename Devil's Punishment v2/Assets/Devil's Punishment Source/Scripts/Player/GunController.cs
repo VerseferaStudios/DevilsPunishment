@@ -10,7 +10,7 @@ public class GunController : MonoBehaviour
     public Transform targetPoint;
 
     public Gun equippedGun;
-
+    public Network_Player networkPlayer;
 
     public ParticleSystem muzzleFlashParticles;
     public ParticleSystem ejectionParticles;
@@ -87,6 +87,7 @@ public class GunController : MonoBehaviour
 
     void Start() {
         playerController = PlayerController.instance;
+        networkPlayer = playerController.gameObject.GetComponent<Network_Player>();
         soundManager = SoundManager.instance;
         inventory = Inventory.instance;
         defaultFOV = Camera.main.fieldOfView;
@@ -368,6 +369,7 @@ public class GunController : MonoBehaviour
                 targetPoint.position = hit.point;
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
+                networkPlayer.Cmdbroadcast_Shots(bp);
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
 				IfEnemyHit(hit);
