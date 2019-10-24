@@ -9,8 +9,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
         ventCover,
         door,
-        elevatorOpen,
-        elevatorClose
+        elevator
     }
 
     public DoorType doorType;
@@ -22,6 +21,11 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     public GameObject brokenFloorCollidors;
 
     private string promptString = "Open vent cover";
+
+    [SerializeField] private bool isElevatorOpen = false;
+
+    public Transform interactableClose;
+    private Vector3 colliderSizeClose = new Vector3(0.5f, 0.5f, 0.5f), interactableOpen, colliderSizeOpen;
 
     //private int l = 0;
 
@@ -35,11 +39,10 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             case DoorType.door:
                 promptString = "Open door";
                 break;
-            case DoorType.elevatorOpen:
+            case DoorType.elevator:
                 promptString = "Open elevator door";
-                break;
-            case DoorType.elevatorClose:
-                promptString = "Close elevator door";
+                interactableOpen = transform.localPosition;
+                colliderSizeOpen = GetComponent<BoxCollider>().size;
                 break;
         }
     }
@@ -78,41 +81,27 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 StartCoroutine(OpenDoor());
                 break;
 
-            case DoorType.elevatorOpen:
-                Debug.Log("Opening elevator");
-                StartCoroutine(OpenElevator());
-                //promptString = "Close elevator door";
+            case DoorType.elevator:
+                if (!isElevatorOpen)
+                {
+                    Debug.Log("Opening elevator");
+                    StartCoroutine(OpenElevator());
+                    promptString = "Close elevator door";
+                    transform.localPosition = interactableClose.localPosition;
+                    GetComponent<BoxCollider>().size = colliderSizeClose;
+                }
+                else
+                {
+                    Debug.Log("Closing elevator");
+                    StartCoroutine(CloseElevator());
+                    promptString = "Open elevator door";
+                    transform.localPosition = interactableOpen;
+                    GetComponent<BoxCollider>().size = colliderSizeOpen;
+                }
+                isElevatorOpen = !isElevatorOpen;
                 break;
 
-            case DoorType.elevatorClose:
-                Debug.Log("Closing elevator");
-                StartCoroutine(CloseElevator());
-                //promptString = "Open elevator door";
-                break;
-
         }
-
-        if (isVentCover)
-        {
-            
-        }
-        else
-        {
-            
-        }
-
-        /*
-        else
-        {
-            Debug.Log("Picked up " + item.name + " x" + stock + ".");
-            gameObject.SetActive(false);
-            Inventory.instance.AddItem(item, stock);
-            if (gameObject.name.Contains("(Clone)"))
-            {
-                Destroy(gameObject);
-            }
-        }
-        */
     }
 
     private IEnumerator OpenVentCover()
@@ -180,6 +169,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 yield return new WaitForSeconds(0.01f);
             }
         }
+        gameObject.GetComponent<BoxCollider>().enabled = true;
         //transform.parent.GetChild(transform.GetSiblingIndex() + 1).GetComponent<BoxCollider>().enabled = true;
     }
 
