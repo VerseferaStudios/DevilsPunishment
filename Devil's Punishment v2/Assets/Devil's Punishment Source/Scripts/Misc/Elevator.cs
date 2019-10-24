@@ -5,17 +5,23 @@ public class Elevator : MonoBehaviour
 {
     [Header("General")]
     public bool canUse = false;
-    private bool startElevator = false;
+    [SerializeField] private bool startElevator = false;
     private bool elevatorDown = true;
 
     [Header("Moving Elevator")]
-    [SerializeField] Transform elevatorStartPos = null;
-    [SerializeField] Transform elevatorEndPos = null;
-    [SerializeField] float moveSpeed = 20f;
+    [SerializeField] Vector3 elevatorStartPos;
+    [SerializeField] Vector3 elevatorEndPos;
+    [SerializeField] float moveSpeed = 5f;
 
     [Header("Text")]
     [SerializeField] GameObject noPowerText = null;
     [SerializeField] float delay = 1f;
+
+    private void Start()
+    {
+        elevatorEndPos = new Vector3(0, 15, 8.94f);
+        elevatorStartPos = new Vector3(0, 0, 8.94f);
+    }
 
     private void Update()
     {
@@ -53,19 +59,19 @@ public class Elevator : MonoBehaviour
     {
         if (elevatorDown)
         {
-            transform.position = Vector3.MoveTowards(transform.position, elevatorEndPos.position, moveSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, elevatorEndPos, moveSpeed * Time.deltaTime);
             ReachedPosition(elevatorEndPos);
         }
         else if (!elevatorDown)
         {
-            transform.position = Vector3.MoveTowards(transform.position, elevatorStartPos.position, moveSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, elevatorStartPos, moveSpeed * Time.deltaTime);
             ReachedPosition(elevatorStartPos);
         }
     }
 
-    private void ReachedPosition(Transform pos)
+    private void ReachedPosition(Vector3 pos)
     {
-        if(transform.position == pos.position)
+        if(transform.localPosition == pos)
         {
             startElevator = false;
             elevatorDown = !elevatorDown;
