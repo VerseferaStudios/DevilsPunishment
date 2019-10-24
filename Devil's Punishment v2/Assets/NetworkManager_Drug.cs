@@ -22,8 +22,19 @@ public class NetworkManager_Drug : NetworkManager
         Debug.Log(base.networkAddress);
        
         base.StartClient();
+      //  base.client.
         setup.clientActive();
+
     }
+
+    void OnClientConnected(NetworkMessage msg)
+    {
+       
+        NetworkServer.SetClientReady(msg.conn);
+
+   
+    }
+
     public void startHosting()
     {
 

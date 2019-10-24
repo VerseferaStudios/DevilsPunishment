@@ -16,6 +16,7 @@ public class Network_Player : NetworkBehaviour
     Health health;
     public GameObject ShotRenderer;
     public Network_Chat chat;
+    public GameObject shot;
 
     public Network_Player(GameObject playerO)
     {
@@ -32,9 +33,10 @@ public class Network_Player : NetworkBehaviour
     }
 
     [Command]
-    public void Cmdbroadcast_Shots(GameObject obj)
+    public void Cmdbroadcast_Shots(GameObject bHole)
     {
-
+        
+        NetworkServer.Spawn(bHole);
     }
 
     ///<summary>

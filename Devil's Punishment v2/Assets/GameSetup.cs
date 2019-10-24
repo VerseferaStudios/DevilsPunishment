@@ -24,7 +24,7 @@ public class GameSetup : MonoBehaviour
     public void generateLevel()
     {
         // Green light for host
-        levelGen01.SetActive(true);
+       // levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
     }
 

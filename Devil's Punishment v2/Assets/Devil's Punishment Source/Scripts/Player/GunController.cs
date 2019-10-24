@@ -93,7 +93,8 @@ public class GunController : MonoBehaviour
         defaultFOV = Camera.main.fieldOfView;
         InitTimeBetweenShots();
         guns = GetComponentsInChildren<Gun>();
-        foreach(Gun gun in guns) {
+
+        foreach (Gun gun in guns) {
             gun.gameObject.SetActive(false);
         }
 		InitGun();
@@ -364,11 +365,12 @@ public class GunController : MonoBehaviour
 
             if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, hittableMask.value))
 			{
-                NetworkManager_Drug.instance.BroadcastShot(ray.origin, hit.point);
+               // NetworkManager_Drug.instance.BroadcastShot(ray.origin, hit.point);
 
                 targetPoint.position = hit.point;
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
+                Debug.Log("SHOOTIN");
                 networkPlayer.Cmdbroadcast_Shots(bp);
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
