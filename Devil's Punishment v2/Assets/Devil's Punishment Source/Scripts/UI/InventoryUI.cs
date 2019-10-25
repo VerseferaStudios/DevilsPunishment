@@ -26,11 +26,11 @@ public class InventoryUI : MonoBehaviour
         instance = this;
         rectTransform = GetComponent<RectTransform>();
         inventorySlots = GetComponentsInChildren<InventorySlotUI>();
+        gunController = GunController.instance;
+        inventory = Inventory.instance;
     }
 
     void Start() {
-        gunController = GunController.instance;
-        inventory = Inventory.instance;
     }
 
     void Update() {
@@ -61,6 +61,8 @@ public class InventoryUI : MonoBehaviour
     }
 
     private void DrawInventory() {
+        Debug.Log("inventory.Count: "+inventory.inventory.Count);
+        Debug.Log("inventorySlots.Length: "+inventorySlots.Length);
         for(int i = 0; i < inventory.inventory.Count; i++) {
             if(inventory.inventory[i] != null && inventory.inventory[i].item != null) {
                 inventorySlots[i].SetItemContained(true);
@@ -68,6 +70,8 @@ public class InventoryUI : MonoBehaviour
                 inventorySlots[i].itemImage.color = inventory.inventory[i].item.color;
                 inventorySlots[i].quantityText.text = QuantityTextGenerator(inventory.inventory[i].stack, inventory.inventory[i].item.maxStackSize);
             } else {
+                Debug.Log("Inventory item null in some way at index: "+i);
+                Debug.Log("Inventory Item: "+inventory.inventory[i]);
                 inventorySlots[i].SetItemContained(false);
             }
 
