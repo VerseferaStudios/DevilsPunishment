@@ -30,6 +30,7 @@ using UnityEngine;
 
 public class ItemGen : MonoBehaviour
 {
+    #region Variables
     //Define All possible loot locations 
     //Define the possibilty for if its a green light to spawn (50% 20%)
     //Define the Weight of rarity. The lower the number the rarer it is.
@@ -139,6 +140,7 @@ public class ItemGen : MonoBehaviour
         //SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
     }
     */
+    #endregion
 
     // 1. Item overlap - 
     // 2. Inside room - Done

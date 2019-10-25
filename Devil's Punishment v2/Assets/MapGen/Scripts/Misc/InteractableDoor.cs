@@ -23,7 +23,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
     private string promptString = "Open vent cover";
 
-    //[SerializeField] private bool isElevatorOpen = false;
+    //[SerializeField] private bool isElevatorOpen = true;
 
     //public Transform interactableClose;
     private Vector3 colliderSizeClose = new Vector3(0.5f, 0.5f, 0.5f);//, interactableOpen, colliderSizeOpen;
