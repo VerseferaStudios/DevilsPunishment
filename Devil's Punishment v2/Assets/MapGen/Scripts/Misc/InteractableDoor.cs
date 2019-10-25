@@ -16,21 +16,25 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
     public float timeToPickUp = .5f;
     public bool isVentCover = true;
-    public Transform doorL, doorR;
+    public Transform doorLGround, doorRGround;
+    public Transform doorLTop, doorRTop;
 
     public GameObject brokenFloorCollidors;
 
     private string promptString = "Open vent cover";
 
-    [SerializeField] private bool isElevatorOpen = false;
+    //[SerializeField] private bool isElevatorOpen = false;
 
-    public Transform interactableClose;
-    private Vector3 colliderSizeClose = new Vector3(0.5f, 0.5f, 0.5f), interactableOpen, colliderSizeOpen;
+    //public Transform interactableClose;
+    private Vector3 colliderSizeClose = new Vector3(0.5f, 0.5f, 0.5f);//, interactableOpen, colliderSizeOpen;
+
+    private Elevator elevatorScript;
 
     //private int l = 0;
 
     private void Start()
     {
+        elevatorScript = transform.parent.GetComponent<Elevator>();
         switch (doorType)
         {
             case DoorType.ventCover:
@@ -40,9 +44,9 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 promptString = "Open door";
                 break;
             case DoorType.elevator:
-                promptString = "Open elevator door";
-                interactableOpen = transform.localPosition;
-                colliderSizeOpen = GetComponent<BoxCollider>().size;
+                promptString = "Close elevator door";
+                //interactableOpen = transform.localPosition;
+                //colliderSizeOpen = GetComponent<BoxCollider>().size;
                 break;
         }
     }
@@ -82,26 +86,32 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 break;
 
             case DoorType.elevator:
+                /*
                 if (!isElevatorOpen)
                 {
-                    Debug.Log("Opening elevator");
-                    StartCoroutine(OpenElevator());
-                    promptString = "Close elevator door";
-                    transform.localPosition = interactableClose.localPosition;
-                    GetComponent<BoxCollider>().size = colliderSizeClose;
+                    CallOpenElevatorFns();
                 }
-                else
+                else*/
                 {
                     Debug.Log("Closing elevator");
                     StartCoroutine(CloseElevator());
-                    promptString = "Open elevator door";
-                    transform.localPosition = interactableOpen;
-                    GetComponent<BoxCollider>().size = colliderSizeOpen;
+                    //promptString = "Open elevator door";
+                    //transform.localPosition = interactableOpen;
+                    //GetComponent<BoxCollider>().size = colliderSizeOpen;
                 }
-                isElevatorOpen = !isElevatorOpen;
+                //isElevatorOpen = !isElevatorOpen;
                 break;
 
         }
+    }
+
+    public void CallOpenElevatorFns()
+    {
+        Debug.Log("Opening elevator");
+        StartCoroutine(OpenElevator());
+        //promptString = "Close elevator door";
+        //transform.localPosition = interactableClose.localPosition;
+        //GetComponent<BoxCollider>().size = colliderSizeClose;
     }
 
     private IEnumerator OpenVentCover()
@@ -117,6 +127,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             t += Time.deltaTime * 0.4f;
             yield return new WaitForSeconds(0.01f);
         }
+        transform.parent.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
     }
@@ -159,7 +170,10 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         float t = 0;
         Vector3 velocity = Vector3.zero;
 
-        if(!Mathf.Approximately(doorR.localPosition.z, 0.13f))
+        Transform doorL = elevatorScript.elevatorDown ? doorLGround : doorLTop;
+        Transform doorR = elevatorScript.elevatorDown ? doorRGround : doorRTop;
+
+        if (!Mathf.Approximately(doorR.localPosition.z, 0.13f))
         {
             while (t < 1f)
             {
@@ -177,7 +191,11 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
         float t = 1;
         Vector3 velocity = Vector3.zero;
-        if(!Mathf.Approximately(doorR.localPosition.z, -2.03f))
+
+        Transform doorL = elevatorScript.elevatorDown ? doorLGround : doorLTop;
+        Transform doorR = elevatorScript.elevatorDown ? doorRGround : doorRTop;
+
+        if (!Mathf.Approximately(doorR.localPosition.z, -2.03f))
         {
             while (t > 0f)
             {
@@ -187,8 +205,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 yield return new WaitForSeconds(0.01f);
             }
         }
-        gameObject.GetComponent<BoxCollider>().enabled = true;
-        Elevator elevatorScript = transform.parent.parent.GetChild(0).GetComponent<Elevator>();
+        //gameObject.GetComponent<BoxCollider>().enabled = true;
         elevatorScript.canUse = true;
         elevatorScript.ActivateElevator();
     }

@@ -6,7 +6,7 @@ public class Elevator : MonoBehaviour
     [Header("General")]
     public bool canUse = false;
     [SerializeField] private bool startElevator = false;
-    private bool elevatorDown = true;
+    public bool elevatorDown = true;
 
     [Header("Moving Elevator")]
     [SerializeField] Vector3 elevatorStartPos;
@@ -16,6 +16,8 @@ public class Elevator : MonoBehaviour
     [Header("Text")]
     [SerializeField] GameObject noPowerText = null;
     [SerializeField] float delay = 1f;
+
+    public InteractableDoor interactableElevator;
 
     private void Start()
     {
@@ -75,6 +77,9 @@ public class Elevator : MonoBehaviour
         {
             startElevator = false;
             elevatorDown = !elevatorDown;
+
+            //call open elevator door
+            interactableElevator.CallOpenElevatorFns();
         }
     }
 }

@@ -15,7 +15,7 @@ public class MapGen2ndFloor : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 10;
+    private int n = 4;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -52,7 +52,7 @@ public class MapGen2ndFloor : MonoBehaviour
         Data2ndFloor.instance.ventX = vents[5];
         Data2ndFloor.instance.xSize = xSize;
         Data2ndFloor.instance.zSize = zSize;
-        NavMeshScript.instance.updateNavMesh();
+        //NavMeshScript.instance.updateNavMesh();
     }
 
     public void CreateHolderForMapGen()
@@ -138,8 +138,8 @@ public class MapGen2ndFloor : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 5) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 5) + 28;
+            arr[0] = 48 * Random.Range(0, 3) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, 3) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
