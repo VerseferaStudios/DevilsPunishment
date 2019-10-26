@@ -18,6 +18,8 @@ public class InteractableElevator : MonoBehaviour, IInteractable
 
     public Elevator elevatorScript;
 
+    public ElevatorInteractable_Disable_Controller elevatorInteractable_Disable_Script;
+
     //private int l = 0;
 
     private void Start()
@@ -42,7 +44,8 @@ public class InteractableElevator : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        gameObject.GetComponent<BoxCollider>().enabled = false;
+        elevatorInteractable_Disable_Script.EnableOrDisableInteractables(false);
+        //gameObject.GetComponent<BoxCollider>().enabled = false;
         /*
         if (!isElevatorOpen)
         {
@@ -86,7 +89,8 @@ public class InteractableElevator : MonoBehaviour, IInteractable
                 yield return new WaitForSeconds(0.01f);
             }
         }
-        gameObject.GetComponent<BoxCollider>().enabled = true;
+        elevatorInteractable_Disable_Script.EnableOrDisableInteractables(true);
+        //gameObject.GetComponent<BoxCollider>().enabled = true;
         //transform.parent.GetChild(transform.GetSiblingIndex() + 1).GetComponent<BoxCollider>().enabled = true;
     }
 
