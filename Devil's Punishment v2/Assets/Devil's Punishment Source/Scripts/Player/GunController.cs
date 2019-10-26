@@ -371,7 +371,7 @@ public class GunController : MonoBehaviour
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
                 Debug.Log("SHOOTIN");
-                networkPlayer.Cmdbroadcast_Shots(bp);
+                networkPlayer.Cmdbroadcast_Shots(ray.origin,hit.point);
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
 				IfEnemyHit(hit);

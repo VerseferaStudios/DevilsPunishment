@@ -33,10 +33,14 @@ public class Network_Player : NetworkBehaviour
     }
 
     [Command]
-    public void Cmdbroadcast_Shots(GameObject bHole)
+    public void Cmdbroadcast_Shots(Vector3 start, Vector3 end)
     {
-        
-        NetworkServer.Spawn(bHole);
+        GameObject shotRandy = Instantiate(ShotRenderer);
+        shotRandy.GetComponent<LineRenderer>().SetPosition(0, start);
+        shotRandy.GetComponent<LineRenderer>().SetPosition(1, end);
+
+
+        NetworkServer.Spawn(shotRandy);
     }
 
     ///<summary>
