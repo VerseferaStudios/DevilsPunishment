@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using static GameSetup;
 
 public class NetworkManager_Drug : NetworkManager
 {
@@ -19,12 +20,27 @@ public class NetworkManager_Drug : NetworkManager
         base.networkAddress = IPInputField.text;
         base.networkPort = 7777;
         Debug.Log(base.networkAddress);
+       
         base.StartClient();
+      //  base.client.
+        setup.clientActive();
+
     }
+
+    void OnClientConnected(NetworkMessage msg)
+    {
+       
+        NetworkServer.SetClientReady(msg.conn);
+
+   
+    }
+
     public void startHosting()
     {
-      //  base.networkAddress = base.ip
+
         base.StartHost();
+        setup.generateLevel(); // Generates level for host
+        
     }
     #region Singleton
     /// <summary>
