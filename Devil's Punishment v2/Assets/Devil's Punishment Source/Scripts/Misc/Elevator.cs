@@ -23,8 +23,8 @@ public class Elevator : MonoBehaviour
 
     private void Start()
     {
-        elevatorEndPos = new Vector3(0, 15, 8.94f);
-        elevatorStartPos = new Vector3(0, 0.06f, 8.94f);
+        elevatorEndPos = new Vector3(0, 15, 0);
+        elevatorStartPos = new Vector3(0, 0, 0);
     }
 
     private void Update()

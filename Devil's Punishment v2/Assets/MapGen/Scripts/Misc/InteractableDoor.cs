@@ -34,7 +34,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        elevatorScript = transform.parent.GetComponent<Elevator>();
+        elevatorScript = transform.parent.parent.GetComponent<Elevator>();
         switch (doorType)
         {
             case DoorType.ventCover:
