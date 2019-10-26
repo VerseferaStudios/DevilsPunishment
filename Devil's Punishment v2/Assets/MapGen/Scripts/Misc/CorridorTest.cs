@@ -15,9 +15,9 @@ public class CorridorTest : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string otherTag = other.transform.parent.tag;
-        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
+        if (!otherTag.Equals("Corridor Test") && (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX")))
         {
-            if (other.GetComponent<CorridorNew>().rooms.Contains(prevRoom.transform.position))
+            //if (other.GetComponent<CorridorNew>().rooms.Contains(prevRoom.transform.position)) DO Later
             {
                 isCollided = true;
             }

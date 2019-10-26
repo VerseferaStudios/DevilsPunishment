@@ -14,7 +14,7 @@ public class MapGen3 : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 4;
+    private int n = 5;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -225,7 +225,7 @@ public class MapGen3 : MonoBehaviour
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6);
+            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6, spawnedRoom.transform);
 
             SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
 

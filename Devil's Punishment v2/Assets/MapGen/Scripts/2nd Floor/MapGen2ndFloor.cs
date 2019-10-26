@@ -20,7 +20,7 @@ public class MapGen2ndFloor : MonoBehaviour
     private ArrayList gameObjectDetails = new ArrayList();
 
     public GameObject[] staticRooms;
-    public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom;
+    public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom, laserRoom;
     
     private float xSize = 48f, zSize = 48f;
 
@@ -93,6 +93,7 @@ public class MapGen2ndFloor : MonoBehaviour
     private IEnumerator StartScriptAfterDelay()
     {
         yield return new WaitForSeconds(5f);
+        Data.instance.canStartCorridorTestSpawner = false;
         Rooms();
     }
 
@@ -184,7 +185,7 @@ public class MapGen2ndFloor : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 3))
+                switch (Random.Range(1, 4))
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -193,10 +194,12 @@ public class MapGen2ndFloor : MonoBehaviour
                     case 1:
                         roomToSpawn = endRoom;
                         yCoord = 0.5f;
-                        break;/*
-                case 2:
-                    roomToSpawn = roomL;
-                    break;
+                        break;
+                    case 2:
+                        roomToSpawn = laserRoom;
+                        yCoord = 1;
+                        break;
+                        /*
                 case 3:
                     roomToSpawn = roomT;
                     break;
@@ -222,9 +225,10 @@ public class MapGen2ndFloor : MonoBehaviour
 
             spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, Data2ndFloor.instance.floor2Height, roomPos.z - 5), new Vector3(roomPos.x + 5, Data2ndFloor.instance.floor2Height, roomPos.z + 5), 6);
+            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, Data2ndFloor.instance.floor2Height, roomPos.z - 5), 
+                new Vector3(roomPos.x + 5, Data2ndFloor.instance.floor2Height, roomPos.z + 5), 6, spawnedRoom.transform);
 
-            SpawnVentCoverInRoom(i, k);
+            SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
 
             CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
@@ -318,19 +322,19 @@ public class MapGen2ndFloor : MonoBehaviour
     }
 
     // ----------------------- Spawn Vent Cover in room -----------------------
-    public void SpawnVentCoverInRoom(int i, int k)
+    public void SpawnVentCoverInRoom(int i, int k, Transform spawnedRoomTransform)
     {
         if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
         {
             if (i == k - 1)
             {
-                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform);
+                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
                 gb.transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
                 StartCoroutine(AddRoomNewVents2ndFloor(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), mapGenHolderTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
         }
     }
