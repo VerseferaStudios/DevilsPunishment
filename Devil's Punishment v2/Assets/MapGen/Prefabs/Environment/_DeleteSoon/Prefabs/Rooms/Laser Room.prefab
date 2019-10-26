@@ -1500,7 +1500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2716760855464087159
 Transform:
   m_ObjectHideFlags: 0
@@ -1708,7 +1708,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3642441568266877057}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4041106118412091359}
@@ -1793,7 +1793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5284502508224282566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 24}
+  m_LocalPosition: {x: 0, y: -0.5, z: 28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3656957097839576257}
@@ -1912,7 +1912,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6519125672838764828}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.115, y: 0.78, z: 20.88}
+  m_LocalPosition: {x: 0.115, y: 0.78, z: 25.88}
   m_LocalScale: {x: 1.4, y: 1.5, z: 1.6}
   m_Children:
   - {fileID: 6713809581339150944}
@@ -2270,8 +2270,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57eec41a7c498b488293fcfcb2b85b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorType: 0
   timeToPickUp: 0.5
   isVentCover: 0
+  doorLGround: {fileID: 0}
+  doorRGround: {fileID: 0}
+  doorLTop: {fileID: 0}
+  doorRTop: {fileID: 0}
   brokenFloorCollidors: {fileID: 7371354410612292186, guid: a848ff24b3beab44ea96ac2156ce55e2,
     type: 3}
 --- !u!54 &7575421910998661149
@@ -3313,7 +3318,7 @@ PrefabInstance:
     - target: {fileID: 2974819030047712266, guid: 98182d566ad909f48a84cd66f59054be,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.88
+      value: 25.88
       objectReference: {fileID: 0}
     - target: {fileID: 2974819030047712266, guid: 98182d566ad909f48a84cd66f59054be,
         type: 3}
@@ -3403,7 +3408,7 @@ PrefabInstance:
     - target: {fileID: 2046254625403798314, guid: 0f2c79c88cdda374192c3ba1dfeb1f15,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.38
+      value: 6.38
       objectReference: {fileID: 0}
     - target: {fileID: 2046254625403798314, guid: 0f2c79c88cdda374192c3ba1dfeb1f15,
         type: 3}

@@ -365,7 +365,7 @@ public class Data2ndFloor : MonoBehaviour
         }
 
 
-        NavMeshScript.instance.updateNavMesh();
+        //NavMeshScript.instance.updateNavMesh();
         MapgenProgress.instance.loadedMap(); // done!
 
 
