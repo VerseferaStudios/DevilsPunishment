@@ -9,32 +9,20 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
         ventCover,
         door,
-        elevator
     }
 
     public DoorType doorType;
 
     public float timeToPickUp = .5f;
-    public bool isVentCover = true;
-    public Transform doorLGround, doorRGround;
-    public Transform doorLTop, doorRTop;
 
     public GameObject brokenFloorCollidors;
 
     private string promptString = "Open vent cover";
 
-    //[SerializeField] private bool isElevatorOpen = true;
-
-    //public Transform interactableClose;
-    private Vector3 colliderSizeClose = new Vector3(0.5f, 0.5f, 0.5f);//, interactableOpen, colliderSizeOpen;
-
-    private Elevator elevatorScript;
-
     //private int l = 0;
 
     private void Start()
     {
-        elevatorScript = transform.parent.parent.GetComponent<Elevator>();
         switch (doorType)
         {
             case DoorType.ventCover:
@@ -42,11 +30,6 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 break;
             case DoorType.door:
                 promptString = "Open door";
-                break;
-            case DoorType.elevator:
-                promptString = "Close elevator door";
-                //interactableOpen = transform.localPosition;
-                //colliderSizeOpen = GetComponent<BoxCollider>().size;
                 break;
         }
     }
@@ -85,33 +68,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 StartCoroutine(OpenDoor());
                 break;
 
-            case DoorType.elevator:
-                /*
-                if (!isElevatorOpen)
-                {
-                    CallOpenElevatorFns();
-                }
-                else*/
-                {
-                    Debug.Log("Closing elevator");
-                    StartCoroutine(CloseElevator());
-                    //promptString = "Open elevator door";
-                    //transform.localPosition = interactableOpen;
-                    //GetComponent<BoxCollider>().size = colliderSizeOpen;
-                }
-                //isElevatorOpen = !isElevatorOpen;
-                break;
-
         }
-    }
-
-    public void CallOpenElevatorFns()
-    {
-        Debug.Log("Opening elevator");
-        StartCoroutine(OpenElevator());
-        //promptString = "Close elevator door";
-        //transform.localPosition = interactableClose.localPosition;
-        //GetComponent<BoxCollider>().size = colliderSizeClose;
     }
 
     private IEnumerator OpenVentCover()
@@ -163,51 +120,6 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             //Debug.Log("t = " + t);
             yield return new WaitForSeconds(0.01f);
         }
-    }
-
-    private IEnumerator OpenElevator()
-    {
-        float t = 0;
-        Vector3 velocity = Vector3.zero;
-
-        Transform doorL = elevatorScript.elevatorDown ? doorLGround : doorLTop;
-        Transform doorR = elevatorScript.elevatorDown ? doorRGround : doorRTop;
-
-        if (!Mathf.Approximately(doorR.localPosition.z, 0.13f))
-        {
-            while (t < 1f)
-            {
-                doorL.localPosition = new Vector3(doorL.localPosition.x, doorL.localPosition.y, Mathf.Lerp(-1.98f, -4.346f, t));
-                doorR.localPosition = new Vector3(doorR.localPosition.x, doorR.localPosition.y, Mathf.Lerp(-2.03f, 0.13f, t));
-                t += Time.deltaTime * 0.4f;
-                yield return new WaitForSeconds(0.01f);
-            }
-        }
-        gameObject.GetComponent<BoxCollider>().enabled = true;
-        //transform.parent.GetChild(transform.GetSiblingIndex() + 1).GetComponent<BoxCollider>().enabled = true;
-    }
-
-    private IEnumerator CloseElevator()
-    {
-        float t = 1;
-        Vector3 velocity = Vector3.zero;
-
-        Transform doorL = elevatorScript.elevatorDown ? doorLGround : doorLTop;
-        Transform doorR = elevatorScript.elevatorDown ? doorRGround : doorRTop;
-
-        if (!Mathf.Approximately(doorR.localPosition.z, -2.03f))
-        {
-            while (t > 0f)
-            {
-                doorL.localPosition = new Vector3(doorL.localPosition.x, doorL.localPosition.y, Mathf.Lerp(-1.98f, -4.346f, t));
-                doorR.localPosition = new Vector3(doorR.localPosition.x, doorR.localPosition.y, Mathf.Lerp(-2.03f, 0.13f, t));
-                t -= Time.deltaTime * 0.4f;
-                yield return new WaitForSeconds(0.01f);
-            }
-        }
-        //gameObject.GetComponent<BoxCollider>().enabled = true;
-        elevatorScript.canUse = true;
-        elevatorScript.ActivateElevator();
     }
 
     public Item GetGunItem()

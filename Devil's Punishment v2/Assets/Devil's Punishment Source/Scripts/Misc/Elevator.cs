@@ -19,7 +19,7 @@ public class Elevator : MonoBehaviour
     [SerializeField] GameObject noPowerText = null;
     [SerializeField] float delay = 1f;
 
-    public InteractableDoor interactableElevator;
+    public InteractableElevator interactableElevator;
 
     private void Start()
     {
