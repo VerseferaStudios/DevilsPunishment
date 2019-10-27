@@ -312,12 +312,14 @@ public class MapGen3 : MonoBehaviour
         {
             if (i == k - 1)
             {
-                GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                //GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
                 StartCoroutine(AddRoomNewVents(gb));
             }
             else
             {
-                Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
             }
         }
     }
