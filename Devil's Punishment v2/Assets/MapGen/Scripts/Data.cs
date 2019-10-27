@@ -1171,8 +1171,8 @@ public class Data : MonoBehaviour
                     }
 
                 }
-                Debug.LogError(ctr1);
-                Debug.LogError(ctr2);
+                //Debug.LogError(ctr1);
+                //Debug.LogError(ctr2);
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);

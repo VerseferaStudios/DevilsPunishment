@@ -208,6 +208,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
                 StartCoroutine(Data2ndFloor.instance.DoConnectedComponents());
                 StartCoroutine(Data2ndFloor.instance.DoCheckPerSecond());
+
+                Data.instance.canStartCorridorTestSpawner = true;
             }
 
         }

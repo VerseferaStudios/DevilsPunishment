@@ -5,24 +5,31 @@ public class Elevator : MonoBehaviour
 {
     [Header("General")]
     public bool canUse = false;
-    private bool startElevator = false;
-    private bool elevatorDown = true;
+    [SerializeField] private bool startElevator = false;
+    public bool elevatorDown = true;
 
     [Header("Moving Elevator")]
-    [SerializeField] Transform elevatorStartPos = null;
-    [SerializeField] Transform elevatorEndPos = null;
-    [SerializeField] float moveSpeed = 20f;
+    [SerializeField] Vector3 elevatorStartPos;
+    [SerializeField] Vector3 elevatorEndPos;
+    [SerializeField] float moveSpeed = 0.5f;
+    [SerializeField] float startTime;
+    [SerializeField] float t = 0;
 
     [Header("Text")]
     [SerializeField] GameObject noPowerText = null;
     [SerializeField] float delay = 1f;
 
+    public InteractableElevator interactableElevator;
+
+    private void Start()
+    {
+        elevatorEndPos = new Vector3(0, 15, 0);
+        elevatorStartPos = new Vector3(0, 0, 0);
+    }
+
     private void Update()
     {
-        if (startElevator)
-        {
-            MoveElevator();
-        }
+
     }
 
     public void OnPowerOn()
@@ -35,6 +42,8 @@ public class Elevator : MonoBehaviour
         if (canUse)
         {
             startElevator = true;
+            startTime = Time.time;
+            StartCoroutine(MoveElevator());
         }
         else
         {
@@ -49,26 +58,41 @@ public class Elevator : MonoBehaviour
         noPowerText.SetActive(false);
     }
 
-    private void MoveElevator()
+    private IEnumerator MoveElevator()
     {
         if (elevatorDown)
         {
-            transform.position = Vector3.MoveTowards(transform.position, elevatorEndPos.position, moveSpeed * Time.deltaTime);
-            ReachedPosition(elevatorEndPos);
+            while(t < 1)
+            {
+                t = (Time.time - startTime) * moveSpeed / 15f;
+                transform.localPosition = Vector3.Lerp(transform.localPosition, elevatorEndPos, t);
+                ReachedPosition(elevatorEndPos);
+                yield return new WaitForSeconds(0.01f);
+            }
+            t = 0;
         }
         else if (!elevatorDown)
         {
-            transform.position = Vector3.MoveTowards(transform.position, elevatorStartPos.position, moveSpeed * Time.deltaTime);
-            ReachedPosition(elevatorStartPos);
+            while(t < 1)
+            {
+                t = (Time.time - startTime) * moveSpeed / 15f;
+                transform.localPosition = Vector3.Lerp(transform.localPosition, elevatorStartPos, t);
+                ReachedPosition(elevatorStartPos);
+                yield return new WaitForSeconds(0.01f);
+            }
+            t = 0;
         }
     }
 
-    private void ReachedPosition(Transform pos)
+    private void ReachedPosition(Vector3 pos)
     {
-        if(transform.position == pos.position)
+        if(transform.localPosition == pos)
         {
             startElevator = false;
             elevatorDown = !elevatorDown;
+            t = 1.1f;
+            //call open elevator door
+            interactableElevator.CallOpenElevatorFns();
         }
     }
 }

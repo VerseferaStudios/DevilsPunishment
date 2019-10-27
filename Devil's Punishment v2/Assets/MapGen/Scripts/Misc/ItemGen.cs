@@ -30,6 +30,7 @@ using UnityEngine;
 
 public class ItemGen : MonoBehaviour
 {
+    #region Variables
     //Define All possible loot locations 
     //Define the possibilty for if its a green light to spawn (50% 20%)
     //Define the Weight of rarity. The lower the number the rarer it is.
@@ -139,13 +140,14 @@ public class ItemGen : MonoBehaviour
         //SpawnItems(new Vector3(0, 0, 0), new Vector3(10, 0, 10), 4);
     }
     */
+    #endregion
 
     // 1. Item overlap - 
     // 2. Inside room - Done
     //Map gen finishes a room
 
     //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
-    public void SpawnItems(Vector3 bottomLeftCorner, Vector3 topRightCorner, int noOfSpawns)
+    public void SpawnItems(Vector3 bottomLeftCorner, Vector3 topRightCorner, int noOfSpawns, Transform roomTransform)
     {
 
         bool isOverlapping = false;
@@ -202,8 +204,8 @@ public class ItemGen : MonoBehaviour
             if(itemToSpawn != null)
             {
                 currentItemPos.y += 2;
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity,
-                    (bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
+                    //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
                 if (bottomLeftCorner.y == 0 + 2)

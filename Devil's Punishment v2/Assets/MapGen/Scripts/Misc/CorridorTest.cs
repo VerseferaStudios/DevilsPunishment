@@ -15,9 +15,12 @@ public class CorridorTest : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string otherTag = other.transform.parent.tag;
-        if (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX"))
+        if (!otherTag.Equals("Corridor Test") && (otherTag.Equals("CorridorI") || otherTag.Equals("CorridorL") || otherTag.Equals("CorridorT") || otherTag.Equals("CorridorX")))
         {
-            isCollided = true;
+            //if (other.GetComponent<CorridorNew>().rooms.Contains(prevRoom.transform.position)) //DO Later
+            {
+                isCollided = true;
+            }
         }
     }
 
@@ -28,8 +31,8 @@ public class CorridorTest : MonoBehaviour
         {
             prevRoom.SetActive(false);
             Debug.Log("Room Removed!");
-            gameObject.SetActive(false);
         }
+        gameObject.SetActive(false);
     }
 
 }

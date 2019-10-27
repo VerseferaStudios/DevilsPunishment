@@ -7,7 +7,7 @@ public class Data2ndFloor : MonoBehaviour
 {
     public GameObject roomsLoaderPrefab;  
     public Transform mapGenHolderTransform;
-    public float floor2Height = 50f;
+    public float floor2Height = 15f;
     public Vector3 liftRoomPos;
 
     public static Data2ndFloor instance = null;
@@ -65,7 +65,7 @@ public class Data2ndFloor : MonoBehaviour
 
     private void Awake()
     {
-
+        floor2Height = 15f;
         if(instance == null)
         {
             instance = this;
@@ -365,7 +365,7 @@ public class Data2ndFloor : MonoBehaviour
         }
 
 
-        NavMeshScript.instance.updateNavMesh();
+        //NavMeshScript.instance.updateNavMesh();
         MapgenProgress.instance.loadedMap(); // done!
 
 

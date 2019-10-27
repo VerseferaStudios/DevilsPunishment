@@ -210,7 +210,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Data.instance.canStartCorridorTestSpawner = true;
 
             }
-            Debug.LogError(Data.instance.ctr1);
+            //Debug.LogError(Data.instance.ctr1);
 
         }
 
@@ -533,7 +533,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 // ----------- Item Gen -----------
                 if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
                 {
-                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
                     Data.instance.ctr1++;
                 }
 
@@ -645,7 +645,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 // ----------- Item Gen -----------
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
                 {
-                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1);
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
                     Data.instance.ctr1++;
                 }
 

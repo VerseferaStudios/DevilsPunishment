@@ -29,7 +29,9 @@ public class CorridorTestSpawner : MonoBehaviour
             {
                 for (int i = 0; i < roomReferencesScript.doors.Length; i++)
                 {
-                    GameObject testCorridorGB = Instantiate(corridorTest, roomReferencesScript.doors[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                    Vector3 spawnPos = roomReferencesScript.doors[i].transform.position;
+                    spawnPos.y = 0.5f + (Mathf.Abs(transform.position.y - Data2ndFloor.instance.floor2Height) < 2 ? Data2ndFloor.instance.floor2Height : 0);
+                    GameObject testCorridorGB = Instantiate(corridorTest, spawnPos, Quaternion.identity, Data.instance.mapGenHolderTransform);
                     testCorridorGB.transform.GetChild(0).GetComponent<CorridorTest>().prevRoom = gameObject;
                 }
                 isLoopDone = true;

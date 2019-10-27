@@ -5,18 +5,38 @@ using UnityEngine;
 public class InteractableDoor : MonoBehaviour, IInteractable
 {
 
-    //public Item item;
-    //public int stock;
+    public enum DoorType
+    {
+        ventCover,
+        door,
+    }
+
+    public DoorType doorType;
+
     public float timeToPickUp = .5f;
-    public bool isVentCover = true;
 
     public GameObject brokenFloorCollidors;
 
+    private string promptString = "Open vent cover";
+
     //private int l = 0;
+
+    private void Start()
+    {
+        switch (doorType)
+        {
+            case DoorType.ventCover:
+                promptString = "Open vent cover";
+                break;
+            case DoorType.door:
+                promptString = "Open door";
+                break;
+        }
+    }
 
     public string Prompt()
     {
-        return "Open vent cover";// + item.name + " (" + stock + ")";
+        return promptString;// + item.name + " (" + stock + ")";
     }
 
     public float TimeToInteract()
@@ -32,35 +52,23 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     public void OnInteract()
     {
         gameObject.GetComponent<BoxCollider>().enabled = false;
-
-        if (isVentCover)
+        switch (doorType)
         {
-            Debug.Log("Opening vent cover");
-            Transform t = transform.parent.parent.parent.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
-            Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
-            t.gameObject.SetActive(false);
-            //timeToPickUp = float.MaxValue;
+            case DoorType.ventCover:
+                Debug.Log("Opening vent cover");
+                Transform t = transform.parent.parent.parent.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
+                Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
+                t.gameObject.SetActive(false);
+                //timeToPickUp = float.MaxValue;
+                StartCoroutine(OpenVentCover());
+                break;
 
-            StartCoroutine(OpenVentCover());
-        }
-        else
-        {
-            Debug.Log("Opening door");
-            StartCoroutine(OpenDoor());
-        }
+            case DoorType.door:
+                Debug.Log("Opening door");
+                StartCoroutine(OpenDoor());
+                break;
 
-        /*
-        else
-        {
-            Debug.Log("Picked up " + item.name + " x" + stock + ".");
-            gameObject.SetActive(false);
-            Inventory.instance.AddItem(item, stock);
-            if (gameObject.name.Contains("(Clone)"))
-            {
-                Destroy(gameObject);
-            }
         }
-        */
     }
 
     private IEnumerator OpenVentCover()
@@ -76,6 +84,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             t += Time.deltaTime * 0.4f;
             yield return new WaitForSeconds(0.01f);
         }
+        transform.parent.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
     }
@@ -112,7 +121,6 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             yield return new WaitForSeconds(0.01f);
         }
     }
-
 
     public Item GetGunItem()
     {
