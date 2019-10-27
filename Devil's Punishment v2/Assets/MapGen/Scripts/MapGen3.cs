@@ -227,7 +227,8 @@ public class MapGen3 : MonoBehaviour
 
             itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6, spawnedRoom.transform);
 
-            SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
+            if(i != 1)
+                SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
 
             CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
@@ -311,12 +312,12 @@ public class MapGen3 : MonoBehaviour
         {
             if (i == k - 1)
             {
-                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
                 StartCoroutine(AddRoomNewVents(gb));
             }
             else
             {
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
             }
         }
     }
