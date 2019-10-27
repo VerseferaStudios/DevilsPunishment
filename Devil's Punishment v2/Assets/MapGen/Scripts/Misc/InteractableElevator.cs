@@ -6,6 +6,7 @@ public class InteractableElevator : MonoBehaviour, IInteractable
 {
 
     public float timeToPickUp = .5f;
+    private float elevatorCoolDownTime = 15f, elevatorInteractTimestamp;
     public Transform doorLGround, doorRGround;
     public Transform doorLTop, doorRTop;
 
@@ -54,6 +55,7 @@ public class InteractableElevator : MonoBehaviour, IInteractable
         else*/
         {
             Debug.Log("Closing elevator");
+            elevatorInteractTimestamp = Time.time;
             StartCoroutine(CloseElevator());
             //promptString = "Open elevator door";
             //transform.localPosition = interactableOpen;
@@ -89,6 +91,7 @@ public class InteractableElevator : MonoBehaviour, IInteractable
                 yield return new WaitForSeconds(0.01f);
             }
         }
+        yield return new WaitForSeconds(elevatorCoolDownTime - (Time.time - elevatorInteractTimestamp));
         elevatorInteractable_Disable_Script.EnableOrDisableInteractables(true);
         //gameObject.GetComponent<BoxCollider>().enabled = true;
         //transform.parent.GetChild(transform.GetSiblingIndex() + 1).GetComponent<BoxCollider>().enabled = true;
