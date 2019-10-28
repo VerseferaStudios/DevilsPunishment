@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Network_Player : MonoBehaviour
+public class Network_Player : NetworkBehaviour
 {
     string username;
     GameObject player;
@@ -15,6 +16,7 @@ public class Network_Player : MonoBehaviour
     Health health;
     public GameObject ShotRenderer;
     public Network_Chat chat;
+    public GameObject shot;
 
     public Network_Player(GameObject playerO)
     {
@@ -28,6 +30,17 @@ public class Network_Player : MonoBehaviour
     public string getUsername()
     {
         return username;
+    }
+
+    [Command]
+    public void Cmdbroadcast_Shots(Vector3 start, Vector3 end)
+    {
+        GameObject shotRandy = Instantiate(ShotRenderer);
+        shotRandy.GetComponent<LineRenderer>().SetPosition(0, start);
+        shotRandy.GetComponent<LineRenderer>().SetPosition(1, end);
+
+
+        NetworkServer.Spawn(shotRandy);
     }
 
     ///<summary>
