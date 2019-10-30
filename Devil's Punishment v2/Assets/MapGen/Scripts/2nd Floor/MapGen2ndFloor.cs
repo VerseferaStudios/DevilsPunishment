@@ -15,7 +15,7 @@ public class MapGen2ndFloor : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 4;
+    private int n = 6;
     public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
@@ -36,9 +36,16 @@ public class MapGen2ndFloor : MonoBehaviour
     public StateData StateData, GoodStates;
     public ReloadGoodStates ReloadGoodStatesData;
 
+    private Vector2 mapCentre;
+    private int mapSizeX = 4, mapSizeZ = 2;
 
     private void Start()
     {
+        float x = - (48 * (mapSizeX/2)) - 28;
+        float z = - (48 * (mapSizeZ/2)) - 28;
+        mapCentre = new Vector2(x, z);
+        Debug.Log(mapCentre);
+
         GUIProgress.SetActive(true);
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
@@ -139,8 +146,8 @@ public class MapGen2ndFloor : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, 3) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, 3) + 28;
+            arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -209,7 +216,7 @@ public class MapGen2ndFloor : MonoBehaviour
                 }
             }
 
-            float yRotation = Random.Range(0, 4) * 90;
+            float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + yCoord, -((float[])allRooms[i])[0]);
             /*
             if (i == 0)
@@ -276,7 +283,36 @@ public class MapGen2ndFloor : MonoBehaviour
         
     }
 
-    
+    private float LookToMapCentre(Vector2 pos)
+    {
+        int xChange, yChange;
+        xChange = (int)(mapCentre.x - pos.x);
+        yChange = (int)(mapCentre.y - pos.y);
+        float yRotation;
+        if (Mathf.Abs(xChange) > Mathf.Abs(yChange))
+        {
+            if (xChange > 0)
+            {
+                yRotation = 90f;
+            }
+            else
+            {
+                yRotation = -90f;
+            }
+        }
+        else
+        {
+            if (yChange > 0)
+            {
+                yRotation = 0;
+            }
+            else
+            {
+                yRotation = 180;
+            }
+        }
+        return yRotation;
+    }
 
     // ------------------------ Add RoomNewVents script after delay ------------------------
     private IEnumerator AddRoomNewVents2ndFloor(GameObject gb)
