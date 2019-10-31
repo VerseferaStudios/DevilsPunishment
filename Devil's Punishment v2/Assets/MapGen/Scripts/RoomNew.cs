@@ -32,10 +32,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public GameObject ventCover;
 
     public ItemGen itemGenScript;
-
-    private Transform roomsHelper;
+    
     private int counter = 0;
-    private bool isConnected = false;
 
     void Start()
     {
@@ -167,8 +165,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 {
                     continue;
                 }
-                x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position);
-                Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position) = " + x);
+                x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
+                //Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
                 if (/*times == 0 && spawnPoints.Count >= 9 && */x)
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
@@ -184,14 +182,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 {
                     //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                     StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
-                                    spawnPoints[k].name, spawnPoints[l].name, 
+                                    spawnPoints[k].name, spawnPoints[l].name,
                                     spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
-                    isConnected = true;
-                }
-
-
-                if (isConnected)
-                {
                     break;
                 }
             }
@@ -239,17 +231,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         Transform t = new GameObject(counter + " = " + k + ", " + l + " 1").transform;
         t.position = kPos;
-        if (isConnected)
-        {
-            t.eulerAngles = new Vector3(0, 90, 0);
-        }
         t = new GameObject(counter + " = " + k + ", " + l + " 2").transform;
         t.position = lPos;
-        if (isConnected)
-        {
-            t.eulerAngles = new Vector3(0, 90, 0);
-        }
-        isConnected = false;
 
         //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
         yield return null;
@@ -259,9 +242,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
         //making all y coordinates of all corridors equal to 0.5f
-        StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
+        //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
         kPos.y = lPos.y = 0.5f;
-        Debug.Log("kPos and lPos = " + kPos + " " + lPos);
+        //Debug.Log("kPos and lPos = " + kPos + " " + lPos);
 
         Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -464,7 +447,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
-        Debug.Log(From + " from and to " + to);
+        //Debug.Log(From + " from and to " + to);
         // ----------- Variable for corridor to spawn at each for loop step -----------                
         GameObject corridorToSpawn = corridors[0];
 

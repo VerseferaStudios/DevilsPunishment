@@ -620,7 +620,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             }
             spawnNowAt.x += increment;
 
-            Debug.Log(From.z + " " + to.z + "!!!!!");
+            //Debug.Log(From.z + " " + to.z + "!!!!!");
             //Spawn I corridors
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize + 1 - 1; i++)
             {

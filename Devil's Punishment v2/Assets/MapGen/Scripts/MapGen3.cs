@@ -42,8 +42,8 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
-        float x = - (48 * (mapSizeX/2)) - 28;
-        float z = - (48 * (mapSizeZ/2)) - 28;
+        float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
+        float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 

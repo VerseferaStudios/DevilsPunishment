@@ -1147,7 +1147,7 @@ public class Data2ndFloor : MonoBehaviour
                     else if (!isNotFirstTimeVents) // why the variable
                     {
 
-                        Debug.Log("QWERTY in at " + collidedVents[i].transform.position);
+                        //Debug.Log("QWERTY in at " + collidedVents[i].transform.position);
                         ////Debug.Log(collidedVents[i].transform.parent.name + " " + collidedVents[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
@@ -1249,18 +1249,19 @@ public class Data2ndFloor : MonoBehaviour
                                 currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(90, 0, 0);
                             }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                            Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+                            //Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
                         {
                             float yRotation = 0;
                             openings1.Sort();
                             bool isThereVentCoverAbove = false;
-                            Debug.Log("========");
+                            /*Debug.Log("========");
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
                             }
+                            */
                             if (openings1[0] == -2)
                             {
                                 isThereVentCoverAbove = true;
@@ -1277,10 +1278,11 @@ public class Data2ndFloor : MonoBehaviour
                                 }
                                 yRotation = ConvertToRotation(openings1);
                             }
+                            /*
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
-                            }
+                            }*/
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
