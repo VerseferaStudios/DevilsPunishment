@@ -93,8 +93,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
         float t = 0;
 
-        Transform door0 = transform.parent.GetChild(1);
-        Transform door1 = transform.parent.GetChild(2);
+        Transform door0 = transform.parent.GetChild(0);
+        Transform door1 = transform.parent.GetChild(1);
 
         Vector3 velocity = Vector3.zero;
 
