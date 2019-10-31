@@ -239,7 +239,7 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
     {
         //making all y coordinates of all corridors equal to 0.5f
         //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
-        kPos.y = lPos.y = 0.5f;
+        kPos.y = lPos.y = 0.5f + Data2ndFloor.instance.floor2Height;
         Debug.Log("kPos and lPos = " + kPos + " " + lPos);
 
         Vector3 targetPos = new Vector3(0, 3, 0);

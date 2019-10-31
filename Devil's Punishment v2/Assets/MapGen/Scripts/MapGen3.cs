@@ -14,7 +14,9 @@ public class MapGen3 : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     [Header("Rooms")]
-    private int n = 7;
+    [Tooltip("Including Elevator")]
+    public int numberOfRooms = 6; //Including Elevator
+    private int n;
     public ArrayList allRooms = new ArrayList();
     //public List<Vector2> allRooms = new List<Vector2>();
 
@@ -42,6 +44,8 @@ public class MapGen3 : MonoBehaviour
 
     private void Start()
     {
+        n = numberOfRooms + 1;
+
         float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
         float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
