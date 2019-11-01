@@ -201,7 +201,22 @@ public class MapGen3 : MonoBehaviour
             if(i - 1 < staticRooms.Length)
             {
                 roomToSpawn = staticRooms[i - 1];
-                yCoord = 0f;
+                if (staticRooms[i - 1].name.Equals("Start Room"))
+                {
+                    yCoord = 0.064f;
+                }
+                else if (staticRooms[i - 1].name.Equals("End Room"))
+                {
+                    yCoord = 0.5f;
+                }
+                else if (staticRooms[i - 1].name.Equals("Laser Room"))
+                {
+                    yCoord = 1f;
+                }
+                else
+                {
+                    yCoord = 0f;
+                }
             }
             else
             {

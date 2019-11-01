@@ -59,7 +59,6 @@ public class Data : MonoBehaviour
     private bool isFirstPassDone = false;
 
     public int ctr1 = 0;
-    public int ctr2 = 0;
 
     public PlayerController playerController;
 
