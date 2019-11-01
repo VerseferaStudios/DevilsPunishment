@@ -414,7 +414,7 @@ public class Data2ndFloor : MonoBehaviour
                 
                 {
                     Debug.Log("innnnnnnnnnnnnn");
-                    CheckForCollisionVents();
+                    //CheckForCollisionVents();
                     count++;
                     yield return new WaitUntil(() => isFinishedCheckCollisionsVents = true);
                     isFinishedCheckCollisionsVents = false;
@@ -1131,7 +1131,7 @@ public class Data2ndFloor : MonoBehaviour
                                 door1Pos.z = Mathf.Round(door1Pos.z);
 
                                 //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                StartCoroutine(roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true));
+                                roomNew2ndFloorScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
                                 break;
                             }
                             else
@@ -1159,6 +1159,9 @@ public class Data2ndFloor : MonoBehaviour
                         
                     }
 
+                }
+                //Debug.LogError(ctr1);
+                //Debug.LogError(ctr2);
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
