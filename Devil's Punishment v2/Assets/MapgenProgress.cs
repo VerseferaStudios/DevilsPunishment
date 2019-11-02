@@ -36,7 +36,7 @@ public class MapgenProgress : MonoBehaviour
         float val = 255 - percentage * (255 / 100);
       //  Color a = new Color(val, 0, val, val);
       //  panel.CrossFadeColor(a, 1f, false, true);
-        panel.gameObject.GetComponent<CanvasGroup>().alpha = 1-percentage * .01f;
+     //   panel.gameObject.GetComponent<CanvasGroup>().alpha = 1-percentage * .01f;
 
     }
 
@@ -47,7 +47,7 @@ public class MapgenProgress : MonoBehaviour
         float val = 255 - percentage * (255 / 100);
        // Color a = new Color(val, 0, val, val);
       //  panel.CrossFadeColor(a, 1f, false, true);
-        panel.gameObject.GetComponent<CanvasGroup>().alpha = 1 - percentage * .01f;
+      //  panel.gameObject.GetComponent<CanvasGroup>().alpha = 1 - percentage * .01f;
     }
 
 

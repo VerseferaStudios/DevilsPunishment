@@ -7,7 +7,8 @@ public class Network_Player : NetworkBehaviour
 {
     string username;
     GameObject player;
-    
+
+
     PlayerController playerController;
     Transform playerTransform;
     Camera cam;
@@ -17,6 +18,8 @@ public class Network_Player : NetworkBehaviour
     public GameObject ShotRenderer;
     public Network_Chat chat;
     public GameObject shot;
+
+
 
     public Network_Player(GameObject playerO)
     {
@@ -32,12 +35,13 @@ public class Network_Player : NetworkBehaviour
         return username;
     }
 
+    public GameObject bp; // bulletpoint
     [Command]
-    public void Cmdbroadcast_Shots(Vector3 start, Vector3 end)
+    public void Cmdbroadcast_Shots(Vector3 start, Quaternion rot)
     {
-        GameObject shotRandy = Instantiate(ShotRenderer);
-        shotRandy.GetComponent<LineRenderer>().SetPosition(0, start);
-        shotRandy.GetComponent<LineRenderer>().SetPosition(1, end);
+        GameObject shotRandy = Instantiate(bp);
+        shotRandy.transform.position = start;
+        shotRandy.transform.rotation = rot;
 
 
         NetworkServer.Spawn(shotRandy);
