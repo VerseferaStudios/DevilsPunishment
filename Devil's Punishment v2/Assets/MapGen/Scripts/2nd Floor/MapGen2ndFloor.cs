@@ -31,7 +31,7 @@ public class MapGen2ndFloor : MonoBehaviour
     //For Vents
     [Header("Vents")]
     public GameObject[] vents;
-    public float ventCoverProbabilty = 0.050f;
+    public float ventCoverProbabilty = 1;//0.250f;
     public GameObject ventCover;
 
     [Header("ScriptableObjects")]
@@ -188,7 +188,7 @@ public class MapGen2ndFloor : MonoBehaviour
         for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1f; // Beware, its for gen room
+            float yCoord = 1.5f; // Beware, its for gen room
             if(i < staticRooms.Length)
             {
                 roomToSpawn = staticRooms[i];
@@ -240,7 +240,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
             itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
-            SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
+            SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
             CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
@@ -363,21 +363,21 @@ public class MapGen2ndFloor : MonoBehaviour
     }
 
     // ----------------------- Spawn Vent Cover in room -----------------------
-    public void SpawnVentCoverInRoom(int i, int k, Transform spawnedRoomTransform)
+    public void SpawnVentCoverInRoom(int i, int k, Transform ventParentTransform)
     {
         if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
         {
             if (i == k - 1)
             {
                 //GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                GameObject gb = Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
+                GameObject gb = Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
                 gb.transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
                 StartCoroutine(AddRoomNewVents2ndFloor(gb));
             }
             else
             {
                 //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
-                Instantiate(ventCover, new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + 0f, -((float[])allRooms[i])[0]), Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
+                Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
         }
     }
