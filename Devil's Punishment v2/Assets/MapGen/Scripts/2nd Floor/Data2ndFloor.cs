@@ -66,7 +66,7 @@ public class Data2ndFloor : MonoBehaviour
 
     private void Awake()
     {
-        floor2Height = 15f;
+        floor2Height = 15f * 1.6f;
         if(instance == null)
         {
             instance = this;
