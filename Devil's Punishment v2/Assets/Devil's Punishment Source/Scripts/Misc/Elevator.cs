@@ -11,7 +11,7 @@ public class Elevator : MonoBehaviour
     [Header("Moving Elevator")]
     [SerializeField] Vector3 elevatorStartPos;
     [SerializeField] Vector3 elevatorEndPos;
-    float moveSpeed = 0.5f;///2f;
+    [SerializeField] float moveSpeed = 0.5f;
     [SerializeField] float startTime;
     [SerializeField] float t = 0;
 
@@ -20,8 +20,6 @@ public class Elevator : MonoBehaviour
     [SerializeField] float delay = 1f;
 
     public InteractableElevator interactableElevator;
-
-    public Transform player, prevParent;
 
     private void Start()
     {
@@ -62,13 +60,6 @@ public class Elevator : MonoBehaviour
 
     private IEnumerator MoveElevator()
     {
-        Vector3 lerpVal;
-        if(player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-        prevParent = player.parent;
-        player.parent = transform;
         if (elevatorDown)
         {
             while(t < 1)
@@ -99,7 +90,6 @@ public class Elevator : MonoBehaviour
         {
             startElevator = false;
             elevatorDown = !elevatorDown;
-            player.parent = prevParent;
             t = 1.1f;
             //call open elevator door
             interactableElevator.CallOpenElevatorFns();

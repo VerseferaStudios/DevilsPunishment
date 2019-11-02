@@ -56,13 +56,9 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
-                Transform t = transform.parent.parent.parent;
-                if (t.tag.StartsWith("Corr"))
-                {
-                    t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
-                    Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
-                    t.gameObject.SetActive(false);
-                }
+                Transform t = transform.parent.parent.parent.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
+                Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
+                t.gameObject.SetActive(false);
                 //timeToPickUp = float.MaxValue;
                 StartCoroutine(OpenVentCover());
                 break;
@@ -97,8 +93,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     {
         float t = 0;
 
-        Transform door0 = transform.parent.GetChild(0);
-        Transform door1 = transform.parent.GetChild(1);
+        Transform door0 = transform.parent.GetChild(1);
+        Transform door1 = transform.parent.GetChild(2);
 
         Vector3 velocity = Vector3.zero;
 

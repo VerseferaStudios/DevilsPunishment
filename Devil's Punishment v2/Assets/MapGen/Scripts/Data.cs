@@ -59,6 +59,7 @@ public class Data : MonoBehaviour
     private bool isFirstPassDone = false;
 
     public int ctr1 = 0;
+    public int ctr2 = 0;
 
     public PlayerController playerController;
 
@@ -1141,7 +1142,7 @@ public class Data : MonoBehaviour
                                 door1Pos.z = Mathf.Round(door1Pos.z);
 
                                 //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                StartCoroutine(roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true));
+                                roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
                                 break;
                             }
                             else

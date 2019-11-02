@@ -32,8 +32,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public GameObject ventCover;
 
     public ItemGen itemGenScript;
-    
-    private int counter = 0;
 
     void Start()
     {
@@ -145,7 +143,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         // ------------------- Connect two doors of different rooms with suitable corridor shapes -------------------
         int times = 0;
-        bool x;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
@@ -160,14 +157,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
+
                 if (k == l)
                 {
                     continue;
                 }
-                x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
-                //Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
-                if (/*times == 0 && spawnPoints.Count >= 9 && */x)
+
+                if (/*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position))
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
                     spawnPoints.RemoveAt(l);
@@ -175,15 +171,17 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     break;
                 }
 
-                //x = !CheckIfSameOrAdjacentRoom(k, l);
-                //Debug.Log("Counter = " + counter + " ; !CheckIfSameOrAdjacentRoom(k, l) = " + x); 
-                // ------------------------ if k and i are not in the same room ------------------------
-                //if (x)
+                if (k == l)
                 {
-                    //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
-                    StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
-                                    spawnPoints[k].name, spawnPoints[l].name,
-                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
+                    continue;
+                }
+
+                // ------------------------ if k and i are not in the same room ------------------------
+                if (!checkIfSameOrAdjacentRoom(k, l))
+                {
+                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
+                                    spawnPoints[k].name, spawnPoints[l].name, 
+                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);
                     break;
                 }
             }
@@ -200,7 +198,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             */
 
             //Should only happen once!!!
-            if (k == spawnPoints.Count - 1)
+            if(k == spawnPoints.Count - 1)
             {
 
                 //MakeInitHallways();
@@ -220,31 +218,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
-    public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
+    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
-        counter++;
-        //if(roomsHelper != null)
-        {
-            //Destroy(roomsHelper.gameObject);
-        }
-        //roomsHelper = new GameObject("RoomsHelper " + counter).transform;
-
-        Transform t = new GameObject(counter + " = " + k + ", " + l + " 1").transform;
-        t.position = kPos;
-        t = new GameObject(counter + " = " + k + ", " + l + " 2").transform;
-        t.position = lPos;
-
-        //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
-        yield return null;
-    }
-
-    public IEnumerator ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
-    {
-        //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
         //making all y coordinates of all corridors equal to 0.5f
-        //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
         kPos.y = lPos.y = 0.5f;
-        //Debug.Log("kPos and lPos = " + kPos + " " + lPos);
+
 
         Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -265,7 +243,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
 
         // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
-        /*
         else if (
             // -------------- if x doors AND z differnce == xSize --------------
             (kPos.x == lPos.x && Mathf.Abs(kPos.z - lPos.z) == Data.instance.xSize)
@@ -277,7 +254,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //targetPos = spawnPoints[i].transform.position;
             //Debug.Log("Spawn4--");
         }
-        */
 
         // --------------------- Connects x and x doors ---------------------
         else if (kName.EndsWith("x") && lName.EndsWith("x"))
@@ -439,7 +415,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             k--;
         }
-        yield return null;
+        
     }
 
     // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
@@ -447,7 +423,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
-        //Debug.Log(From + " from and to " + to);
         // ----------- Variable for corridor to spawn at each for loop step -----------                
         GameObject corridorToSpawn = corridors[0];
 
@@ -686,7 +661,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     }
 
     // ---------------------- Checks if spawnPoints k and i belong to the same room or adjacent rooms ----------------------
-    private bool CheckIfSameOrAdjacentRoom(int k, int i)
+    private bool checkIfSameOrAdjacentRoom(int k, int i)
     {
         bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false;
 
@@ -702,8 +677,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
 
         // ------------- Check between x door and z door (in L shape) ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize / 2 
-            && spawnPoints[k].transform.parent.position == spawnPoints[i].transform.parent.position)
+        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize / 2)
         {
             return true;
         }

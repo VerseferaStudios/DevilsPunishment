@@ -28,12 +28,10 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
     public ArrayList allRooms = new ArrayList();
     public Transform mapGenHolderTransform;
-    public float ventCoverProbabilty = 0.390f;
+    public float ventCoverProbabilty = 0.090f;
     public GameObject ventCover;
 
     public ItemGen itemGenScript;
-    
-    private int counter = 0;
 
     void Start()
     {
@@ -76,8 +74,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             if (isFound)
             {
                 GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.transform.position);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
                 if (spawnPoints[i].name.EndsWith("x"))
                 {
                     currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -86,8 +84,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
                 //Data2ndFloor.instance.corridorCount++;
 
                 // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-                visitedRooms.Add(spawnPoints[i].transform.parent.position);
-                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.position);
+                visitedRooms.Add(spawnPoints[i].transform.parent.transform.position);
+                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.transform.position);
 
                 //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 
@@ -145,7 +143,6 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
         // ------------------- Connect two doors of different rooms with suitable corridor shapes -------------------
         int times = 0;
-        bool x;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
@@ -160,14 +157,13 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
+
                 if (k == l)
                 {
                     continue;
                 }
-                x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
-                Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
-                if (/*times == 0 && spawnPoints.Count >= 9 && */x)
+
+                if (/*times == 0 && spawnPoints.Count >= 9 && */Data2ndFloor.instance.CheckIfVisited(spawnPoints[l].transform.parent.transform.position))
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
                     spawnPoints.RemoveAt(l);
@@ -175,8 +171,13 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
                     break;
                 }
 
+                if (k == l)
+                {
+                    continue;
+                }
+
                 // ------------------------ if k and i are not in the same room ------------------------
-                //if (!checkIfSameOrAdjacentRoom(k, l))
+                if (!checkIfSameOrAdjacentRoom(k, l))
                 {
                     ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                     spawnPoints[k].name, spawnPoints[l].name, 
@@ -217,30 +218,11 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
         //Debug.Log(Data2ndFloor.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
-public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
-    {
-        counter++;
-        //if(roomsHelper != null)
-        {
-            //Destroy(roomsHelper.gameObject);
-        }
-        //roomsHelper = new GameObject("RoomsHelper " + counter).transform;
-
-        Transform t = new GameObject(counter + " = " + k + ", " + l + " 1").transform;
-        t.position = kPos;
-        t = new GameObject(counter + " = " + k + ", " + l + " 2").transform;
-        t.position = lPos;
-
-        //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
-        yield return null;
-    }
-
     public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //making all y coordinates of all corridors equal to 0.5f
-        //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
         kPos.y = lPos.y = 0.5f + Data2ndFloor.instance.floor2Height;
-        Debug.Log("kPos and lPos = " + kPos + " " + lPos);
+
 
         Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -261,7 +243,6 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
         }
 
         // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
-        /*
         else if (
             // -------------- if x doors AND z differnce == xSize --------------
             (kPos.x == lPos.x && Mathf.Abs(kPos.z - lPos.z) == Data2ndFloor.instance.xSize)
@@ -273,7 +254,6 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
             //targetPos = spawnPoints[i].transform.position;
             //Debug.Log("Spawn4--");
         }
-        */
 
         // --------------------- Connects x and x doors ---------------------
         else if (kName.EndsWith("x") && lName.EndsWith("x"))
@@ -443,7 +423,6 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
-        Debug.Log(From + " from and to " + to);
         // ----------- Variable for corridor to spawn at each for loop step -----------                
         GameObject corridorToSpawn = corridors[0];
 

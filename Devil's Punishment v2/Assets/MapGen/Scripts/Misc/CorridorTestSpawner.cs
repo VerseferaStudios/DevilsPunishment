@@ -23,7 +23,6 @@ public class CorridorTestSpawner : MonoBehaviour
 
     private IEnumerator SpawnCorridorTest()
     {
-        yield return new WaitForSeconds(2f);
         while (!isLoopDone)
         {
             if (Data.instance.canStartCorridorTestSpawner)

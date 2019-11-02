@@ -33,7 +33,6 @@ public class Data2ndFloor : MonoBehaviour
     public List<ConnectedComponent> connectedRoomsThroughCollision = new List<ConnectedComponent>();
 
     public List<List<Vector3>> connectedRooms = new List<List<Vector3>>();
-    public List<List<Vector3>> connectedRoomsVents = new List<List<Vector3>>();
 
     public Vector3 spawnPointsFirstPos;
 
@@ -66,7 +65,7 @@ public class Data2ndFloor : MonoBehaviour
 
     private void Awake()
     {
-        floor2Height = 15f * 1.6f;
+        floor2Height = 15f;
         if(instance == null)
         {
             instance = this;
@@ -173,7 +172,7 @@ public class Data2ndFloor : MonoBehaviour
     }
 
     //Check if it works-------------------------
-    public List<int> ConvertToOpenings(string tag, float yRotation, bool isNegativeScale)
+    public List<int> ConvertToOpenings(string tag, float yRotation)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("CorridorI"))
@@ -214,70 +213,10 @@ public class Data2ndFloor : MonoBehaviour
             }
             openings.AddRange(oneToFour);
         }
-
-        //Adding scale -1 case
-        if (isNegativeScale)
-        {
-            if ((int)(yRotation / 90) == 0 || (int)(yRotation / 90) == 2)
-            {
-                int onesToAdd = 0, threesToAdd = 0;
-                for (int i = 0; i < openings.Count; i++)
-                {
-                    if (openings[i] == 1)
-                    {
-                        openings.RemoveAt(i);
-                        threesToAdd++;
-                        //openings.Add(3);
-                    }
-                    else if (openings[i] == 3)
-                    {
-                        openings.RemoveAt(i);
-                        onesToAdd++;
-                        //openings.Add(1);
-                    }
-                }
-                for (int i = 0; i < onesToAdd; i++)
-                {
-                    openings.Add(1);
-                }
-                for (int i = 0; i < threesToAdd; i++)
-                {
-                    openings.Add(3);
-                }
-            }
-            else if ((int)(yRotation / 90) == 1 || (int)(yRotation / 90) == 3)
-            {
-                int zerosToAdd = 0, twosToAdd = 0;
-                for (int i = 0; i < openings.Count; i++)
-                {
-                    if (openings[i] == 0)
-                    {
-                        openings.RemoveAt(i);
-                        twosToAdd++;
-                        //openings.Add(2);
-                    }
-                    else if (openings[i] == 2)
-                    {
-                        openings.RemoveAt(i);
-                        zerosToAdd++;
-                        //openings.Add(0);
-                    }
-                }
-                for (int i = 0; i < zerosToAdd; i++)
-                {
-                    openings.Add(0);
-                }
-                for (int i = 0; i < twosToAdd; i++)
-                {
-                    openings.Add(2);
-                }
-            }
-        }
-
         return openings;
     }
 
-    public List<int> ConvertToOpeningsVents(string tag, float yRotation, float holderZRotation, float holderXRotation)
+    public List<int> ConvertToOpenings(string tag, float yRotation, float holderZRotation, float holderXRotation)
     {
         List<int> openings = new List<int>();
         if (tag.Equals("VentI"))
@@ -414,7 +353,7 @@ public class Data2ndFloor : MonoBehaviour
                 
                 {
                     Debug.Log("innnnnnnnnnnnnn");
-                    //CheckForCollisionVents();
+                    CheckForCollisionVents();
                     count++;
                     yield return new WaitUntil(() => isFinishedCheckCollisionsVents = true);
                     isFinishedCheckCollisionsVents = false;
@@ -846,10 +785,8 @@ public class Data2ndFloor : MonoBehaviour
                         ////Debug.Log(collidedCorridors[i].transform.parent.name + " " + collidedCorridors[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedCorridors[j].transform.parent.name + " " + collidedCorridors[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
-                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y,
-                                                        (collidedCorridors[i].transform.parent.localScale.x == -1) ? true : false);
-                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y,
-                                                        (collidedCorridors[j].transform.parent.localScale.x == -1) ? true : false);
+                        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y);
+                        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
                         /*
@@ -1113,55 +1050,24 @@ public class Data2ndFloor : MonoBehaviour
                     }
                     if (connectedRooms[i].Count != 0 && connectedRooms[i + 1].Count != 0)
                     {
-                        int j = 0, k = 0;
-                        while(j < connectedRooms[i].Count && j < connectedRooms[i + 1].Count 
-                            && k < connectedRooms[i].Count && k < connectedRooms[i + 1].Count)
-                        {
-                            Transform door0 = FindDoor(connectedRooms[i][j]);
-                            //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
-                            Transform door1 = FindDoor(connectedRooms[i + 1][k]);
-                            if (door0 != null && door1 != null)
-                            {
-                                Vector3 door0Pos = door0.position;
-                                door0Pos.x = Mathf.Round(door0Pos.x);
-                                door0Pos.z = Mathf.Round(door0Pos.z);
+                        Transform door0 = FindDoor(connectedRooms[i][0]);
+                        //Debug.Log("roomPos = " + connectedRooms[i + 1][0] + " i + 1 = " + i);
+                        Transform door1 = FindDoor(connectedRooms[i + 1][0]);
 
-                                Vector3 door1Pos = door1.position;
-                                door1Pos.x = Mathf.Round(door1Pos.x);
-                                door1Pos.z = Mathf.Round(door1Pos.z);
+                        Vector3 door0Pos = door0.position;
+                        door0Pos.x = Mathf.Round(door0Pos.x);
+                        door0Pos.z = Mathf.Round(door0Pos.z);
 
-                                //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                roomNew2ndFloorScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
-                                break;
-                            }
-                            else
-                            {
-                                if(door0 == null)
-                                {
-                                    j++;
-                                }
-                                else
-                                {
-                                    k++;
-                                }
-                                /*
-                                Debug.LogError("null" + ((door0 == null) ? " door0" : " door1"));
-                                Debug.LogError(connectedRooms[i][j]);
-                                Debug.LogError(connectedRooms[i + 1][k]);
-                                Debug.LogError(roomsArray.Length);
-                                for (int l = 0; l < roomsArray.Length; l++)
-                                {
-                                    Debug.LogError(roomsArray[l].transform.position);
-                                }
-                                */
-                            }
-                        }
-                        
+                        Vector3 door1Pos = door1.position;
+                        door1Pos.x = Mathf.Round(door1Pos.x);
+                        door1Pos.z = Mathf.Round(door1Pos.z);
+
+                        //Debug.Log(door0.parent.position + " " + door1.parent.position);
+                        roomNew2ndFloorScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true);
                     }
 
                 }
-                //Debug.LogError(ctr1);
-                //Debug.LogError(ctr2);
+
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);
@@ -1173,15 +1079,13 @@ public class Data2ndFloor : MonoBehaviour
         for (int i = 0; i < roomsArray.Length; i++)
         {
             //Debug.Log(roomsArray[i].transform.position);
-            if(roomsArray[i].transform.position.x == roomPos.x 
-                && roomsArray[i].transform.position.z == roomPos.z)
+            if(roomsArray[i].transform.position == roomPos)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name + " childCount = " + roomsArray[i].transform.childCount + " " + roomsArray[i].transform.position);
+                //Debug.Log("found = " + roomsArray[i].name);
                 return roomsArray[i].transform.GetChild(1);
             }
         }
-        Debug.Log("Didnt find");
         return null;
     }
 
@@ -1243,15 +1147,15 @@ public class Data2ndFloor : MonoBehaviour
                     else if (!isNotFirstTimeVents) // why the variable
                     {
 
-                        //Debug.Log("QWERTY in at " + collidedVents[i].transform.position);
+                        Debug.Log("QWERTY in at " + collidedVents[i].transform.position);
                         ////Debug.Log(collidedVents[i].transform.parent.name + " " + collidedVents[i].transform.rotation.eulerAngles);
                         ////Debug.Log(collidedVents[j].transform.parent.name + " " + collidedVents[j].transform.rotation.eulerAngles);
                         List<int> openings1 = new List<int>(), openings2 = new List<int>();
 
-                        openings1 = ConvertToOpeningsVents(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
+                        openings1 = ConvertToOpenings(collidedVents[i].transform.parent.tag, collidedVents[i].transform.rotation.eulerAngles.y, 
                             collidedVents[i].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[i].transform.parent.GetChild(0).localEulerAngles.x);
 
-                        openings2 = ConvertToOpeningsVents(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
+                        openings2 = ConvertToOpenings(collidedVents[j].transform.parent.tag, collidedVents[j].transform.rotation.eulerAngles.y, 
                             collidedVents[j].transform.parent.GetChild(0).localEulerAngles.z, collidedVents[j].transform.parent.GetChild(0).localEulerAngles.x);
                         ////Debug.Log(openings1[0] + " " + openings1[1]);
                         ////Debug.Log(openings2[0] + " " + openings2[1]);
@@ -1345,19 +1249,18 @@ public class Data2ndFloor : MonoBehaviour
                                 currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(90, 0, 0);
                             }
                             currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                            //Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+                            Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
                         }
                         else if (openings1.Count == 4)
                         {
                             float yRotation = 0;
                             openings1.Sort();
                             bool isThereVentCoverAbove = false;
-                            /*Debug.Log("========");
+                            Debug.Log("========");
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
                             }
-                            */
                             if (openings1[0] == -2)
                             {
                                 isThereVentCoverAbove = true;
@@ -1374,11 +1277,10 @@ public class Data2ndFloor : MonoBehaviour
                                 }
                                 yRotation = ConvertToRotation(openings1);
                             }
-                            /*
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
-                            }*/
+                            }
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
