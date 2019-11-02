@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8265298613614494513}
   - component: {fileID: 8639320964306450081}
-  - component: {fileID: 175708271872026739}
   m_Layer: 0
   m_Name: Generator Room
   m_TagString: Room
@@ -80,20 +79,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doors:
   - {fileID: 658213147140257846}
---- !u!114 &175708271872026739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8265298613614494518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1825e7ab0472484182ce0afd523a937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  corridorTest: {fileID: 6951522301788497580, guid: f681252a0d642a943be90333352c8c2a,
-    type: 3}
 --- !u!1 &8284564032619216753
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +273,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585259695512479303, guid: 204d2956c97af6d48aa01c6c90666b9d,
+        type: 3}
+      propertyPath: shadowMapRenderTexture
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9084830129552636803, guid: 204d2956c97af6d48aa01c6c90666b9d,
+        type: 3}
+      propertyPath: shadowMapRenderTexture
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318455566737625402, guid: 204d2956c97af6d48aa01c6c90666b9d,
+        type: 3}
+      propertyPath: shadowMapRenderTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8463433995536656682, guid: 204d2956c97af6d48aa01c6c90666b9d,
         type: 3}

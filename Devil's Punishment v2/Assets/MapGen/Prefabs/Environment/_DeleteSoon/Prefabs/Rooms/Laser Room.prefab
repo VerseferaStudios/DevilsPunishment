@@ -1650,7 +1650,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3656957097839576257}
   - component: {fileID: 4004028762823143761}
-  - component: {fileID: 1623216900769183021}
   m_Layer: 0
   m_Name: Laser Room
   m_TagString: Room
@@ -1691,20 +1690,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doors:
   - {fileID: 4032430954961273032}
---- !u!114 &1623216900769183021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3656957097839576262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1825e7ab0472484182ce0afd523a937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  corridorTest: {fileID: 6951522301788497580, guid: f681252a0d642a943be90333352c8c2a,
-    type: 3}
 --- !u!1 &6201850740994768231
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,11 +2118,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorType: 0
   timeToPickUp: 0.5
-  isVentCover: 0
-  doorLGround: {fileID: 0}
-  doorRGround: {fileID: 0}
-  doorLTop: {fileID: 0}
-  doorRTop: {fileID: 0}
   brokenFloorCollidors: {fileID: 7371354410612292186, guid: a848ff24b3beab44ea96ac2156ce55e2,
     type: 3}
 --- !u!54 &7575421910998661149
