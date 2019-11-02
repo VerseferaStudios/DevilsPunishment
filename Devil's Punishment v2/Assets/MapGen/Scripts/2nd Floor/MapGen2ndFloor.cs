@@ -236,8 +236,9 @@ public class MapGen2ndFloor : MonoBehaviour
 
             spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, Data2ndFloor.instance.floor2Height, roomPos.z - 5), 
-                new Vector3(roomPos.x + 5, Data2ndFloor.instance.floor2Height, roomPos.z + 5), 6, spawnedRoom.transform);
+            RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+
+            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
             SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
 

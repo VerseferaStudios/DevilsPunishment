@@ -252,7 +252,9 @@ public class MapGen3 : MonoBehaviour
             }
             GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            itemGenScript.SpawnItems(new Vector3(roomPos.x - 5, 0, roomPos.z - 5), new Vector3(roomPos.x + 5, 0, roomPos.z + 5), 6, spawnedRoom.transform);
+            RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+
+            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
             if(i != 1)
                 SpawnVentCoverInRoom(i, k, spawnedRoom.transform);
