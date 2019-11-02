@@ -63,7 +63,7 @@ public class CuffController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
+        if (other.CompareTag("Player") && playerController != null)// && Input.GetKeyDown(KeyCode.E))
         {
             playerController.SetIsClimbing(false);
         }
