@@ -32,7 +32,7 @@ public class MapGen3 : MonoBehaviour
     //For Vents
     [Header("Vents")]
     public GameObject[] vents;
-    public float ventCoverProbabilty = 1;//0.250f;
+    private float ventCoverProbabilty = 0;//1;
     public GameObject ventCover;
 
     [Header("ScriptableObjects")]
@@ -212,6 +212,10 @@ public class MapGen3 : MonoBehaviour
                 else if (staticRooms[i - 1].name.Equals("Laser Room"))
                 {
                     yCoord = 1f;
+                }
+                else if (staticRooms[i - 1].name.Equals("Elevator Room"))
+                {
+                    yCoord = 0.2f;
                 }
                 else
                 {

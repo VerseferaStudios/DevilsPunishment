@@ -31,7 +31,7 @@ public class MapGen2ndFloor : MonoBehaviour
     //For Vents
     [Header("Vents")]
     public GameObject[] vents;
-    public float ventCoverProbabilty = 1;//0.250f;
+    private float ventCoverProbabilty = 0;//1;
     public GameObject ventCover;
 
     [Header("ScriptableObjects")]
@@ -45,8 +45,8 @@ public class MapGen2ndFloor : MonoBehaviour
     {
         n = numberOfRooms - 1;
 
-        float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = -(48 * ((float)(mapSizeZ - 1) / 2)) - 28;
+        float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
+        float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 
@@ -189,10 +189,29 @@ public class MapGen2ndFloor : MonoBehaviour
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1.5f; // Beware, its for gen room
-            if(i < staticRooms.Length)
+            if(i - 1 < staticRooms.Length)
             {
-                roomToSpawn = staticRooms[i];
-                yCoord = 0f;
+                roomToSpawn = staticRooms[i - 1];
+                if (staticRooms[i - 1].name.Equals("Start Room"))
+                {
+                    yCoord = 0.064f;
+                }
+                else if (staticRooms[i - 1].name.Equals("End Room"))
+                {
+                    yCoord = 0.5f;
+                }
+                else if (staticRooms[i - 1].name.Equals("Laser Room"))
+                {
+                    yCoord = 1f;
+                }
+                else if (staticRooms[i - 1].name.Equals("Elevator Room"))
+                {
+                    yCoord = 0.2f;
+                }
+                else
+                {
+                    yCoord = 0f;
+                }
             }
             else
             {
