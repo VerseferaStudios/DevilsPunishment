@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
                 horizontalAngle = Quaternion.LookRotation(laserMonitor - transform.position, transform.up).eulerAngles.y;
                 Turning();
                 //Debug.LogError("already done");
-                laserCutterScript.cuffed = NetworkManager_Drug.instance.findPlayer(GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<Player>();
+                laserCutterScript.cuffed = Player.instance;//NetworkManager_Drug.instance.findPlayer(GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<Player>();
                 laserCutterScript.BeginSequences();
                 isInteractLaser = false;
             }
