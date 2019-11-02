@@ -19,7 +19,7 @@ public class MapGen3 : MonoBehaviour
     private ArrayList gameObjectDetails = new ArrayList();
 
     public GameObject[] staticRooms;
-    public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom;
+    public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom, laserRoom;
     
     private float xSize = 48f, zSize = 48f;
 
@@ -163,7 +163,7 @@ public class MapGen3 : MonoBehaviour
                 ++k;
             }
             ++l;
-            MapgenProgress.instance.addProgress(3);
+            //MapgenProgress.instance.addProgress(3);
 
         }
 
@@ -193,7 +193,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 3))
+                switch (Random.Range(1, 4))
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -202,10 +202,12 @@ public class MapGen3 : MonoBehaviour
                     case 1:
                         roomToSpawn = endRoom;
                         yCoord = 0.5f;
-                        break;/*
-                case 2:
-                    roomToSpawn = roomL;
-                    break;
+                        break;
+                    case 2:
+                        roomToSpawn = laserRoom;
+                        yCoord = 1;
+                        break;
+                        /*
                 case 3:
                     roomToSpawn = roomT;
                     break;
