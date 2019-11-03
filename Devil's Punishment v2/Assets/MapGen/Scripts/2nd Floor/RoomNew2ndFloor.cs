@@ -35,6 +35,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
     
     private int counter = 0;
 
+    private bool isDoneSpawnHalf = false, isDoneConnectTwoRooms = false;
+
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
@@ -144,6 +146,14 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
         //instead of sorting you can put a var max in the inner loop (l) and find the least distance one and use that !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // ------------------- Connect two doors of different rooms with suitable corridor shapes -------------------
+        StartCoroutine(CallConnectRooms());
+
+        //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
+        //Debug.Log(Data2ndFloor.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
+
+    private IEnumerator CallConnectRooms()
+    {
         int times = 0;
         bool x;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
@@ -160,13 +170,13 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
+                //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                 if (k == l)
                 {
                     continue;
                 }
                 x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
-                Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
+                //Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
                 if (/*times == 0 && spawnPoints.Count >= 9 && */x)
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
@@ -178,9 +188,11 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
                 // ------------------------ if k and i are not in the same room ------------------------
                 //if (!checkIfSameOrAdjacentRoom(k, l))
                 {
-                    ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
-                                    spawnPoints[k].name, spawnPoints[l].name, 
-                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false);
+                    isDoneConnectTwoRooms = false;
+                    StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
+                                    spawnPoints[k].name, spawnPoints[l].name,
+                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
+                    yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     break;
                 }
             }
@@ -197,7 +209,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             */
 
             //Should only happen once!!!
-            if(k == spawnPoints.Count - 1)
+            if (k == spawnPoints.Count - 1)
             {
 
                 //MakeInitHallways();
@@ -212,12 +224,10 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             }
 
         }
-
-        //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
-        //Debug.Log(Data2ndFloor.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        yield return null;
     }
 
-public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
+    public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
     {
         counter++;
         //if(roomsHelper != null)
@@ -235,12 +245,12 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
         yield return null;
     }
 
-    public void ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
+    public IEnumerator ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //making all y coordinates of all corridors equal to 0.5f
         //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
         kPos.y = lPos.y = 0.5f + Data2ndFloor.instance.floor2Height;
-        Debug.Log("kPos and lPos = " + kPos + " " + lPos);
+        //Debug.Log("kPos and lPos = " + kPos + " " + lPos);
 
         Vector3 targetPos = new Vector3(0, 3, 0);
 
@@ -286,7 +296,9 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
                 to.z += Data2ndFloor.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 // ------------------- Calls the actual spawning function -------------------
-                spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
+                isDoneSpawnHalf = false;
+                StartCoroutine(spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos));
+                yield return new WaitUntil(() => isDoneSpawnHalf);
                 isExtraTurn = true;
                 From = to;
                 targetPos = new Vector3(lPos.x, 0.5f + Data2ndFloor.instance.floor2Height, From.z);
@@ -315,7 +327,9 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
                 to.x += Data2ndFloor.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 // ------------------- Calls the actual spawning function -------------------
-                spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos);
+                isDoneSpawnHalf = false;
+                StartCoroutine(spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos));
+                yield return new WaitUntil(() => isDoneSpawnHalf);
                 isExtraTurn = true;
                 From = to;
                 targetPos = new Vector3(From.x, 0.5f + Data2ndFloor.instance.floor2Height, lPos.z);
@@ -335,13 +349,17 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
 
 
         // ------------------- Calls the actual spawning function -------------------
-        spawnHalf(From, targetPos, !isExtraTurn, kName, lName, kParentPos, lParentPos);
+        isDoneSpawnHalf = false;
+        StartCoroutine(spawnHalf(From, targetPos, !isExtraTurn, kName, lName, kParentPos, lParentPos));
+        yield return new WaitUntil(() => isDoneSpawnHalf);
 
         isExtraTurn = false;
 
         if (targetPos != lPos)
         {
-            spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos);
+            isDoneSpawnHalf = false;
+            StartCoroutine(spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos));
+            yield return new WaitUntil(() => isDoneSpawnHalf);
         }
 
         //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
@@ -435,11 +453,12 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
             }
             k--;
         }
-        
+        isDoneConnectTwoRooms = true;
+        yield return null;
     }
 
     // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
-    private void spawnHalf(Vector3 From, Vector3 to, bool isFirst, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
+    private IEnumerator spawnHalf(Vector3 From, Vector3 to, bool isFirst, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
@@ -527,6 +546,7 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
             for (; i < Mathf.Abs(From.z - to.z) / Data2ndFloor.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
+                yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
@@ -548,7 +568,14 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
 
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+                    Data.instance.ctr1++;
                 }
 
                 spawnNowAt.z += increment;
@@ -638,6 +665,7 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
             for (; i < Mathf.Abs(From.x - to.x) / Data2ndFloor.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
+                yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
@@ -653,13 +681,22 @@ public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 l
 
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).tag = "Vent Cover 2nd Floor";
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+                    Data.instance.ctr1++;
                 }
 
                 spawnNowAt.x += increment;
 
             }
         }
+        isDoneSpawnHalf = true;
+        yield return null;
     }
 
     private int ChooseLCorridor(float yRotation)
