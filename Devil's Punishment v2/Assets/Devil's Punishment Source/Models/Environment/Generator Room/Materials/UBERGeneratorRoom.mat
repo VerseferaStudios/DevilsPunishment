@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: UBERGeneratorRoom
   m_Shader: {fileID: 4800000, guid: fd1b0c2328cad6942aa89eb15af421f0, type: 3}
-  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _TRANSLUCENCY _WETNESS_FULL
+  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _WETNESS_FULL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -118,7 +118,7 @@ Material:
     m_Floats:
     - _BendNormalsFreq: 4
     - _BendNormalsStrength: 0.05
-    - _BumpScale: 0.27
+    - _BumpScale: 1
     - _BumpScale2: 1
     - _CurvatureCustomU: 0
     - _CurvatureCustomV: 0
@@ -158,13 +158,13 @@ Material:
     - _GlitterShown: 1
     - _GlitterTiling: 1
     - _GlossMapScale: 1
-    - _GlossMax: 1
-    - _GlossMin: 0
+    - _GlossMax: 0.07
+    - _GlossMin: 0.37
     - _Glossiness: 0.28
     - _Glossiness2: 1
     - _GlossyReflections: 1
     - _MainShown: 1
-    - _Metallic: 0
+    - _Metallic: 1
     - _Metallic2: 1
     - _MinPulseBrightness: 0
     - _Mode: 0
@@ -239,7 +239,7 @@ Material:
     - _TessDepth: 0.05
     - _TessEdgeLengthLimit: 5
     - _TessOffset: 0.1
-    - _Translucency: 1
+    - _Translucency: 0
     - _TranslucencyConstant: 0.1
     - _TranslucencyDeferredLightIndex: 1
     - _TranslucencyExponent: 30
@@ -260,7 +260,7 @@ Material:
     - _WetnessConst: 1
     - _WetnessConstFromGlobal: 0
     - _WetnessDarkening: 3.99
-    - _WetnessEmissiveness: 2.5
+    - _WetnessEmissiveness: 1.1
     - _WetnessEmissivenessWrap: 0
     - _WetnessFlowGlobalTime: 1
     - _WetnessLevel: 0.215
@@ -275,7 +275,7 @@ Material:
     - maxDist: 10
     - minDist: 1
     m_Colors:
-    - _Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+    - _Color: {r: 0.25, g: 0.25, b: 0.25, a: 1}
     - _Color2: {r: 1, g: 1, b: 1, a: 1}
     - _CurvatureMultOffset: {r: 0, g: 0, b: 0, a: 0}
     - _CutoffEdgeGlow: {r: 0, g: 0, b: 0, a: 0.02}
