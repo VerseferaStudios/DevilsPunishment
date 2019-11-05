@@ -24,10 +24,10 @@ public class FlashlightScript : MonoBehaviour
 
     public void Start()
     {
-        glowStick.SetActive(true);
-        glow.enabled = true;
-        flashLight.SetActive(false);
-        beam.enabled = false;
+      //  glowStick.SetActive(true);
+      //  glow.enabled = true;
+      //  flashLight.SetActive(false);
+     //   beam.enabled = false;
     }
 
     public void ToggleUpgraded()

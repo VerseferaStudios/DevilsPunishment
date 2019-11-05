@@ -22,7 +22,7 @@ public class NetworkManager_Drug : NetworkManager
         Debug.Log(base.networkAddress);
        
         base.StartClient();
-      //  base.client.
+      
         setup.clientActive();
 
     }
@@ -35,12 +35,24 @@ public class NetworkManager_Drug : NetworkManager
    
     }
 
+    public IEnumerator killPlayer()
+    {
+        yield return new WaitForSeconds(25f);
+        
+    }
+
     public void startHosting()
     {
 
         base.StartHost();
-        setup.generateLevel(); // Generates level for host
-        
+       setup.generateLevel(); // Generates level for host
+      //  base.playerPrefab.gameObject.SetActive(true);
+        //  IEnumerator c = killPlayer();
+        //   StartCoroutine(c);
+
+
+        //Disable in 30 seconds
+
     }
     #region Singleton
     /// <summary>
@@ -83,6 +95,13 @@ public class NetworkManager_Drug : NetworkManager
     }
 
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            startHosting();
+        }
+    }
 
 
     private void OnApplicationQuit()

@@ -90,7 +90,7 @@ public class GunController : MonoBehaviour
         networkPlayer = playerController.gameObject.GetComponent<Network_Player>();
         soundManager = SoundManager.instance;
         inventory = Inventory.instance;
-        defaultFOV = Camera.main.fieldOfView;
+        
         InitTimeBetweenShots();
         guns = GetComponentsInChildren<Gun>();
 
@@ -98,7 +98,8 @@ public class GunController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
 		InitGun();
-	}
+        defaultFOV = 90f;
+    }
 
     void SetFireRate(float f) {
         fireRate = f;
@@ -506,7 +507,7 @@ public class GunController : MonoBehaviour
 		}
 		// Camera update:
 		
-        Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
+       // Camera.main.fieldOfView = Mathf.Lerp(defaultFOV, defaultFOV-FOVKick, aiming);
 	}
 
     void Sway() {
