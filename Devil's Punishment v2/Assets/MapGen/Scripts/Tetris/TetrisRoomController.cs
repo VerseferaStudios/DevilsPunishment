@@ -8,6 +8,7 @@ public class TetrisRoomController : MonoBehaviour
     private int roomBoundsIndex;
 
     private Bounds bounds;
+    private Mesh mesh;
 
     public Transform topRight, topLeft, bottomRight, bottomLeft;
 
@@ -85,8 +86,20 @@ public class TetrisRoomController : MonoBehaviour
                     break;
                 }
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(2f);
             ++j;
+
+            Vector3[] normals = new Vector3[3];
+            normals[0] = Vector3.right;
+            normals[1] = Vector3.up;
+            normals[2] = Vector3.forward;
+            mesh = new Mesh
+            {
+                bounds = bounds
+            };
+            mesh.normals = normals;
+            //mesh.ver
+            mesh.RecalculateBounds();
             if (j > 1000) break;
         }
     }
@@ -140,7 +153,8 @@ public class TetrisRoomController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawCube(bounds.center, bounds.size);
+        Gizmos.DrawMesh(mesh);
+        //Gizmos.DrawCube(bounds.center, bounds.size);
         /*
         Gizmos.DrawLine(topLeft.position, topRight.position);
         Gizmos.DrawLine(topRight.position, bottomRight.position);
