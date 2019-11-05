@@ -258,6 +258,7 @@ public class MapGen3 : MonoBehaviour
             }
 
             yield return new WaitUntil(() => Data.instance.isFixedTetrisRoom);
+            yield return new WaitForSeconds(2);
             Data.instance.isFixedTetrisRoom = false;
             //gameObjectDetails.Add(roomScript);
 
