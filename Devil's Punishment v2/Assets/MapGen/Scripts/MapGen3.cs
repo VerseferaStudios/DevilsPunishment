@@ -42,8 +42,16 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    private Vector3 roomPos;
+    public BoxCollider[] tetrisBoundary;
+
     private void Start()
     {
+        Data.instance.roomBounds.Add(tetrisBoundary[0].bounds);
+        Data.instance.roomBounds.Add(tetrisBoundary[1].bounds);
+
+        roomPos = new Vector3((mapSizeX - 1) * -48 - 28, 0, (mapSizeZ) * -48 - 28);
+
         n = numberOfRooms + 1;
 
         float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
@@ -59,8 +67,10 @@ public class MapGen3 : MonoBehaviour
 
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
-        Rooms();
+        //StateData.states.Add(Random.state);
+
+        StartCoroutine(Rooms());
+
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
@@ -102,13 +112,13 @@ public class MapGen3 : MonoBehaviour
 
         CreateHolderForMapGen();
 
-        Rooms();
+        StartCoroutine(Rooms());
         
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Rooms()
+    public IEnumerator Rooms()
     {
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
@@ -127,46 +137,10 @@ public class MapGen3 : MonoBehaviour
         while (k < n && l < 1000)
         {
             float[] arr = new float[2];
-
-            // ------------------- BOUNDS or SIZE of the grid -------------------
-
-
-
-            // 400 - 20 = 380 (MAX)
-            // 0 + 20 = 20 (MIN)
-            //Increments of 40
-
-            //arr[0] = 40 * Random.Range(0, 9) + 20;  //9 coz -> 9 * 40 + 20 = 380
-            //arr[1] = 40 * Random.Range(0, 9) + 20;
-
-
-            // 480 - 20 = 460 (MAX)
-            // 0 + 28 = 28 (MIN)
-            //Increments of 40
-
+            
             arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
             arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
-
-
-            //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
-            //arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
-
-
-            /*
-            if(k == 0)
-            {
-                arr[1] = 50;
-                arr[0] = 80;
-            }
-            else
-            {
-                arr[1] = 50;
-                arr[0] = 10;
-            }
-            */
-            // ------------------- Integer positions in GRID / positions according to sizes of rooms in GRID fashion -------------------
-            //arr[0] = Mathf.Round(((((int)arr[0])/zSize) * zSize) / zSize) * zSize;
-            //arr[1] = Mathf.Round(((((int)arr[1])/xSize) * xSize) / zSize) * zSize;
+            
 
             // ------------------- Checks for collisions between rooms  -------------------
             if (NoCollisions(arr))
@@ -248,8 +222,9 @@ public class MapGen3 : MonoBehaviour
                 }
             }
 
-            float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
-            Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
+            float yRotation = Random.Range(0, 4) * 90;//LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));
+            //Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
+            roomPos.y = yCoord;
             if (i == 1)
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;
@@ -263,7 +238,7 @@ public class MapGen3 : MonoBehaviour
             if(i != 1)
                 SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
-            CallOffsetAndDoorFns(spawnedRoom, yRotation);
+            //CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
@@ -282,6 +257,8 @@ public class MapGen3 : MonoBehaviour
 
             }
 
+            yield return new WaitUntil(() => Data.instance.isFixedTetrisRoom);
+            Data.instance.isFixedTetrisRoom = false;
             //gameObjectDetails.Add(roomScript);
 
         }

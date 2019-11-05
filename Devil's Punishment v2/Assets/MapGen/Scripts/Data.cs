@@ -64,6 +64,10 @@ public class Data : MonoBehaviour
 
     public bool canStartCorridorTestSpawner = false;
 
+    public List<Bounds> roomBounds;
+
+    public bool isFixedTetrisRoom = false;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
