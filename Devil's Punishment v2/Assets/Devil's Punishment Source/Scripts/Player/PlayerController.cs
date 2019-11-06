@@ -214,7 +214,7 @@ public class PlayerController : MonoBehaviour
                 inputAngle = 0f;
             }
 
-            Debug.Log(inputAngle);
+            //Debug.Log(inputAngle);
 
             #endregion
 

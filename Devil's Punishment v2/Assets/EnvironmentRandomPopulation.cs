@@ -18,9 +18,9 @@ public class EnvironmentRandomPopulation : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        set1[Random.Range(0, set1.Length)].SetActive(true);
-        set2[Random.Range(0, set2.Length)].SetActive(true);
-        set3[Random.Range(0, set3.Length)].SetActive(true);
-        set4[Random.Range(0, set4.Length)].SetActive(true);
+        //set1[Random.Range(0, set1.Length)].SetActive(true);
+        //set2[Random.Range(0, set2.Length)].SetActive(true);
+        //set3[Random.Range(0, set3.Length)].SetActive(true);
+        //set4[Random.Range(0, set4.Length)].SetActive(true);
     }
 }
