@@ -15,7 +15,7 @@ public class MapGen3 : MonoBehaviour
 
     [Header("Rooms")]
     [Tooltip("Including Elevator")]
-    public int numberOfRooms = 6; //Including Elevator
+    public int numberOfRooms = 1; //Including Elevator
     private int n;
     public ArrayList allRooms = new ArrayList();
     //public List<Vector2> allRooms = new List<Vector2>();
@@ -40,12 +40,24 @@ public class MapGen3 : MonoBehaviour
     public ReloadGoodStates ReloadGoodStatesData;
 
     private Vector2 mapCentre;
-    private int mapSizeX = 4, mapSizeZ = 2;
+    private int mapSizeX = 2, mapSizeZ = 2;
 
     private void Start()
     {
+        /*
+        if(NetworkManager_Drug.instance.playerlist.IndexOf(Player.instance.GetComponent<Network_Player>()) == 0)
+        {
+            //Host Player
+            NetworkManager_Drug.instance.RandSeed = Random.seed;
+        }
+        else
+        {
+            //Client player
+            Random.InitState(NetworkManager_Drug.instance.RandSeed);
+        }
+        */
         n = numberOfRooms + 1;
-
+        
         float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
         float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
@@ -58,8 +70,9 @@ public class MapGen3 : MonoBehaviour
         
 
         CreateHolderForMapGen();
+        //Random.InitState(0);
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
+        //StateData.states.Add(Random.state);
         Rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];

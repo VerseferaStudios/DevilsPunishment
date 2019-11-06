@@ -124,6 +124,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapGenLoad
       objectReference: {fileID: 0}
+    - target: {fileID: 2292832246003496648, guid: d1d6e6e171f6c164e94a5c4583f9ad2c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2292832246003496649, guid: d1d6e6e171f6c164e94a5c4583f9ad2c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -593,10 +598,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 110
   field of view: 61
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 44.7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -620,7 +625,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353477414}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -220, y: 390, z: -220}
+  m_LocalPosition: {x: -56.9, y: 50, z: -41.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -888,7 +893,6 @@ MonoBehaviour:
   - {fileID: 2711133060991232383, guid: a7358d2a45511b34ba9b3d4a327a35ab, type: 3}
   - {fileID: 342825950719613298, guid: 739e385e28ab8e94cb8262a2802ae471, type: 3}
   vents: []
-  ventCoverProbabilty: 0.05
   ventCover: {fileID: 100000, guid: 5d32429074f54134787a0a21ccf8fb9f, type: 3}
   StateData: {fileID: 0}
   GoodStates: {fileID: 0}
@@ -1078,6 +1082,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RestartScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 598195031979478441, guid: 39895c4bedd4c46409ca3d5d0948f567,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 598195031979478440, guid: 39895c4bedd4c46409ca3d5d0948f567,
         type: 3}
@@ -1337,6 +1346,11 @@ PrefabInstance:
       propertyPath: GUIProgress
       value: 
       objectReference: {fileID: 228431975}
+    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72b04878a4c5edd46a7c8b0eb184feb0, type: 3}
 --- !u!1001 &9004979133491826906

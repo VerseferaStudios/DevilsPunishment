@@ -15,6 +15,8 @@ public class NetworkManager_Drug : NetworkManager
 
     public TMP_InputField IPInputField;
 
+    public int RandSeed { get; set; }
+
     public void joinIPGame()
     {
         base.networkAddress = IPInputField.text;
