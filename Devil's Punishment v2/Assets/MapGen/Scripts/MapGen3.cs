@@ -51,7 +51,7 @@ public class MapGen3 : MonoBehaviour
     {
         yield return new WaitUntil(() => NetworkManager_Drug.instance.playerlist.Count > 0);
 
-        int y = NetworkManager_Drug.instance.playerlist.IndexOf(Player.instance.GetComponent<Network_Player>());
+        int y = NetworkManager_Drug.instance.playerlist.IndexOf(Player.instance.GetComponent<Network_Player>()); //if y == 0 then it is server // bad code lol!
         Debug.Log("Network player list index = " + y);
         if (y == 0)
         {
@@ -63,7 +63,7 @@ public class MapGen3 : MonoBehaviour
             //Client player
             Random.InitState(NetworkManager_Drug.instance.RandSeed);
         }
-
+        Debug.Log("Seed value at start of map gen = " + Random.seed);
         n = numberOfRooms + 1;
 
         float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
@@ -269,6 +269,7 @@ public class MapGen3 : MonoBehaviour
 
             float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
+            Debug.Log("Room pos " + i + " = " + roomPos);
             if (i == 1)
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;

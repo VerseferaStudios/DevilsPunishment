@@ -15,6 +15,7 @@ public class NetworkManager_Drug : NetworkManager
 
     public TMP_InputField IPInputField;
 
+    //[SyncVar]
     public int RandSeed { get; set; }
 
     public void joinIPGame()
