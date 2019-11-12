@@ -70,6 +70,7 @@ public class OptionsMenuController : MonoBehaviour
     {
         //play audio click.
         controlPanel.SetActive(false);
+        statusCanvas.SetActive(true);
     }
 
     public void Controls()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class Player : MonoBehaviour
     CuffController cuffController;
     Inventory inventory;
     InGameMenuUI gameMenu;
+
+    public GameObject gameScreen;
+    public GameObject pauseScreen;
 
     private bool inventoryOpen = true;
     private bool gameMenuOpen = true;
@@ -53,6 +57,13 @@ public class Player : MonoBehaviour
 
         controller.inputEnabled = !gameMenuOpen;
         gunController.inputEnabled = !gameMenuOpen;
+        Debug.Log("Got past here");
+    }
+
+    public void ChangeCanvas()
+    {
+        gameScreen.SetActive(true);
+        pauseScreen.SetActive(false);
     }
 
     void ToggleInventory() {
@@ -70,12 +81,14 @@ public class Player : MonoBehaviour
 
     public void ToggleOptionsMenu()
     {
-
+        gameScreen.SetActive(true);
+        pauseScreen.SetActive(false);
+        Debug.Log("Pressed the button to open Options");
     }
 
     public void ExitGame()
     {
-
+        SceneManager.LoadScene("MainMenu");
     }
 
 }

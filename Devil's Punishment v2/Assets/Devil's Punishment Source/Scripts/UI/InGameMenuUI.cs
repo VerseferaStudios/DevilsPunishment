@@ -7,6 +7,7 @@ public class InGameMenuUI : MonoBehaviour
 {
     public static InGameMenuUI instance;
     public GameObject optionsPanel;
+    Player viewPorts;
     
     void Awake() 
     {
@@ -15,7 +16,8 @@ public class InGameMenuUI : MonoBehaviour
 
     public void Btn_Continue()
     {
-        Player.instance.ToggleGameMenu();
+        viewPorts.ChangeCanvas();
+        //Player.instance.ToggleGameMenu();
     }
 
     public void Btn_Options()
