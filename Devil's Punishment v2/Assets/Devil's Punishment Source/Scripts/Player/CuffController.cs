@@ -63,8 +63,11 @@ public class CuffController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && playerController != null)// && Input.GetKeyDown(KeyCode.E))
+        if (playerController != null && playerController.GetIsClimbing() && other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
         {
+            Debug.Log("EXITED LADDER");
+            playerController.transform.position += playerController.transform.forward * 1;
+            //playerController.transform.position += new Vector3(playerController.movementInputRaw.x, 0, playerController.movementInputRaw.y);
             playerController.SetIsClimbing(false);
         }
     }

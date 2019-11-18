@@ -550,7 +550,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                yield return new WaitForSeconds(0.25f);
+                //yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
@@ -669,7 +669,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                yield return new WaitForSeconds(0.25f);
+                //yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid

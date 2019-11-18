@@ -342,6 +342,11 @@ public class PlayerController : MonoBehaviour
         this.isClimbing = isClimbing;
     }
 
+    public bool GetIsClimbing()
+    {
+        return isClimbing;
+    }
+
     void Turning() {
 
         Vector3 targetEulerAngles = new Vector3(0f, horizontalAngle, 0f);
