@@ -11,18 +11,36 @@ public class Network_Transmitter : NetworkBehaviour
 
     public Network_Player player;
     public NetworkManager_Drug networkManager;
+    public MapGen3 mapGen;
     public static Network_Transmitter transmitter;
 
     [SyncVar]
-    public int mapSeed = 23;
+    private int mapSeed = 23;
+
+
+    bool genOnce = false;
+    
+    public void startOnlineGeneration()
+    {   
+        if (isServer && !genOnce)
+        {
+            
+            mapSeed = Random.Range(0, 1000);
+            player.SendChatMessage(mapSeed.ToString()+  " We generated");
+            genOnce = true;
+        }
+        else
+        {
+            mapGen.startMapGeneration(mapSeed);
+            player.SendChatMessage(mapSeed.ToString()+ " We fetched from server");
+        }
+
+    }
 
     void Awake()
     {
         transmitter = this;
-        if(isServer)
-        {
-            mapSeed = Random.Range(0, 1000);
-        }
+
     }
 
     public int getSeed()
@@ -43,7 +61,7 @@ public class Network_Transmitter : NetworkBehaviour
         }
         else
         {
-            CmdinformHost("Player " + " has joined the lobby!");
+            CmdsendMessage("Player " + " has joined the lobby!","client ");
             
         }
     }
@@ -75,7 +93,7 @@ public class Network_Transmitter : NetworkBehaviour
     [Command]
     private void CmdinformHost(string msg)
     {
-    //    player.SendChatMessage(msg); // host is a lone wanderer
+       player.SendChatMessage(msg); // host is a lone wanderer
         RpcsendEvent(msg); // Nice that they told me ! Better tell the clients too now
     }
 

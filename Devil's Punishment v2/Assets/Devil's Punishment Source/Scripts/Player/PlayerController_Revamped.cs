@@ -77,6 +77,10 @@ public class PlayerController_Revamped : MonoBehaviour
         } else {
             Debug.Log("Unable to set 'Data.instance.playerController' Data instance not found.");
         }
+
+        Network_Transmitter.transmitter.startOnlineGeneration();
+        transform.position = new Vector3(-30, 10, -30);
+        
     }
 
     Vector3 startVel;
@@ -302,15 +306,10 @@ public class PlayerController_Revamped : MonoBehaviour
 
         #endregion
 
-        if (true)
-        {
 
             chcon.Move(velocity * Time.deltaTime);
 
 
-        }
-        else
-        { }
 
     }
 

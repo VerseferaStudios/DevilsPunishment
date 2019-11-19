@@ -42,12 +42,14 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
-    private void Start()
+    public void startMapGeneration(int seed)
     {
         n = numberOfRooms + 1;
 
-        float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
+
+
+        float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
+        float z = -(48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 
@@ -55,11 +57,11 @@ public class MapGen3 : MonoBehaviour
         arr[0] = 28;
         arr[1] = 28;
         allRooms.Add(arr);
-        
+
 
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
-        Random.InitState(Network_Transmitter.transmitter.getSeed());
+        Random.InitState(seed);
         StateData.states.Add(Random.state);
         Rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
@@ -70,10 +72,9 @@ public class MapGen3 : MonoBehaviour
         Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
-
-       
-        
     }
+
+
 
     public void CreateHolderForMapGen()
     {

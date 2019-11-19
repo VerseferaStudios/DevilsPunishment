@@ -28,7 +28,7 @@ public class GameSetup : MonoBehaviour
         // Green light for host
         levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
-        Network_Transmitter.transmitter.startClient(ply);
+       Network_Transmitter.transmitter.startClient(ply);
 
     }
 
