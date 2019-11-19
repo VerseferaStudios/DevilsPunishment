@@ -260,7 +260,7 @@ public class PlayerController_Revamped : MonoBehaviour
                     break;
             }
 
-            Debug.Log(lookPos);
+       //     Debug.Log(lookPos);
             velocity = -transform.right * speed + Vector3.up * velocityY;
         }
         else if (inputAngle == 270f)
