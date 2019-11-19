@@ -13,18 +13,75 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114246746403871806}
-  - {fileID: 114381589412890558}
+  - {fileID: 114012186910544500}
+  - {fileID: 114104859230659460}
   EditorEvents:
-  - {fileID: 114715959950593816}
-  - {fileID: 114544274139994810}
+  - {fileID: 114651723581747226}
+  - {fileID: 114090995689150924}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114381589412890558}
+  - {fileID: 114104859230659460}
   StringsBanks:
-  - {fileID: 114246746403871806}
-  stringsBankWriteTime: 637089930064313085
+  - {fileID: 114012186910544500}
+  stringsBankWriteTime: 637097665801399073
   cacheVersion: 3
+--- !u!114 &114012186910544500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637097665801399073
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 1
+--- !u!114 &114015204075095702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
+--- !u!114 &114023386782004640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop
+  lastModified: 637096824170174464
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 0
 --- !u!114 &114027108315003772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,6 +105,70 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2847
+--- !u!114 &114053825658953900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637096824170174464
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 1
+--- !u!114 &114090995689150924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player_Foot
+  m_EditorClassIdentifier: 
+  Path: event:/Player_Foot
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114104859230659460}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114147907654484754}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 507
+--- !u!114 &114104859230659460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637097665801379121
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 1
 --- !u!114 &114131906614836954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +190,29 @@ MonoBehaviour:
   - Name: Desktop
     Value: 5805600
   Exists: 1
+--- !u!114 &114132143769814676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114319703706483644}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666
 --- !u!114 &114140931612830552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +236,40 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 624
+--- !u!114 &114147907654484754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
+--- !u!114 &114170639581793396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 0
 --- !u!114 &114197998325532216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,11 +330,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
   SubDir: 
-  lastModified: 637089930064313085
+  lastModified: 637096824170174464
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 802
+    Value: 854
   Exists: 1
 --- !u!114 &114247793366469622
 MonoBehaviour:
@@ -181,6 +359,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114253788349193606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
 --- !u!114 &114265960727556236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +422,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114314500265829232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player_Foot
+  m_EditorClassIdentifier: 
+  Path: event:/Player_Foot
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114319703706483644}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114820168266954606}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 507
 --- !u!114 &114318773832318128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +469,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114319703706483644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637096824170074660
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 1
 --- !u!114 &114331308990594126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +604,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114365672921073786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114595375259566002}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666
 --- !u!114 &114370237009119694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,6 +650,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114370641612006372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player_Foot
+  m_EditorClassIdentifier: 
+  Path: event:/Player_Foot
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114595375259566002}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114623026242777960}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 507
 --- !u!114 &114381589412890558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,11 +688,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
   SubDir: 
-  lastModified: 637089930064293137
+  lastModified: 637096824170074660
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 1293792
+    Value: 1299680
   Exists: 1
 --- !u!114 &114393810404755314
 MonoBehaviour:
@@ -523,6 +809,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4312
+--- !u!114 &114463670264928252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637096824170074660
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 1
 --- !u!114 &114544274139994810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,6 +852,90 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 62666
+--- !u!114 &114595375259566002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637096824170074660
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 1
+--- !u!114 &114623026242777960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
+--- !u!114 &114651723581747226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114104859230659460}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666
+--- !u!114 &114681960968052608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player_Foot
+  m_EditorClassIdentifier: 
+  Path: event:/Player_Foot
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114463670264928252}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114015204075095702}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 507
 --- !u!114 &114684622192554250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,6 +1005,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114707758638937852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637096824170174464
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 1
 --- !u!114 &114715474344801214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,7 +1067,8 @@ MonoBehaviour:
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
-  Parameters: []
+  Parameters:
+  - {fileID: 114253788349193606}
   MinDistance: 0
   MaxDistance: 0
   Length: 507
@@ -684,6 +1095,43 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114820168266954606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
+--- !u!114 &114860645725248426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637096824170074660
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 0
 --- !u!114 &114886067954032732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,6 +1201,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4101
+--- !u!114 &114934584159478048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637096824170174464
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 1
 --- !u!114 &114941156492735458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,3 +1334,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 64078
+--- !u!114 &114984912907345704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114463670264928252}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666

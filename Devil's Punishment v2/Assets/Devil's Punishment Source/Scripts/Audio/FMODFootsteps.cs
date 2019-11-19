@@ -8,7 +8,9 @@ public class FMODFootsteps : MonoBehaviour
     [FMODUnity.EventRef]
     public string inputsound;
     bool playerismoving;
+    bool playerisrunning;
     public float walkingspeed;
+    public float runningspeed;
 
 
 
@@ -27,7 +29,14 @@ public class FMODFootsteps : MonoBehaviour
             print("Not Moving");
         }
 
-}
+        if (Input.GetButton("Sprint"))
+        {
+            playerismoving = false;
+            playerisrunning = true;
+            print("Running");
+        }
+
+    }
 
 
 void CallFootsteps()
@@ -37,6 +46,7 @@ void CallFootsteps()
         //Debug.Log ("Player is moving");
         FMODUnity.RuntimeManager.PlayOneShot(inputsound);
     }
+
 }
 
 
@@ -44,11 +54,13 @@ void CallFootsteps()
 void Start()
 {
     InvokeRepeating("CallFootsteps", 0, walkingspeed);
+  //  InvokeRepeating("CallFootsteps", 0, runningspeed);
 }
 
 
 void OnDisable()
 {
     playerismoving = false;
+    playerisrunning = false;
 }
 }
