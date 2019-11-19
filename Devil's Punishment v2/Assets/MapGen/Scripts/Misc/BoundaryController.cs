@@ -6,6 +6,6 @@ public class BoundaryController : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.SetActive(false);
+     //   other.gameObject.SetActive(false);
     }
 }

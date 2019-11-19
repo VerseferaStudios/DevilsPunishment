@@ -16,6 +16,7 @@ public class NetworkManager_Drug : NetworkManager
 
 
     public TMP_InputField IPInputField;
+    public Network_Transmitter transmitter;
 
     public void joinIPGame()
     {
@@ -24,8 +25,7 @@ public class NetworkManager_Drug : NetworkManager
         Debug.Log(base.networkAddress);
        
         base.StartClient();
-      //  base.client.
-        setup.clientActive();
+
 
     }
 
@@ -42,9 +42,18 @@ public class NetworkManager_Drug : NetworkManager
     {
 
         base.StartHost();
-        setup.generateLevel(); // Generates level for host
+         // Generates level for host
         
     }
+
+
+
+
+
+
+
+
+
     #region Singleton
     /// <summary>
     /// Access singleton instance through this propriety.

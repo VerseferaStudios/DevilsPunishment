@@ -16,7 +16,7 @@ public class GunController : MonoBehaviour
     public ParticleSystem ejectionParticles;
     public GameObject hitParticles;
     public Light muzzleFlashLight;
-    PlayerController playerController;
+    PlayerController_Revamped playerController;
 
     public Transform muzzle;
     public Transform ejector;
@@ -86,7 +86,7 @@ public class GunController : MonoBehaviour
     }
 
     void Start() {
-        playerController = PlayerController.instance;
+        playerController = PlayerController_Revamped.instance;
         networkPlayer = playerController.gameObject.GetComponent<Network_Player>();
         soundManager = SoundManager.instance;
         inventory = Inventory.instance;

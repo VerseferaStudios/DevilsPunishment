@@ -17,8 +17,8 @@ public class sendMessage_GUI : MonoBehaviour
 
     public void sendMessage(BaseEventData e)
     {
-        
-        Network_Transmitter.transmitter.CmdsendMessage(tmp.text, SystemInfo.deviceName);
+        HOST.h.CmdSendMessages();
+        Network_Transmitter.transmitter.sendNetworkMessage(tmp.text, SystemInfo.deviceName);
         tmp.text = "";
 
     }

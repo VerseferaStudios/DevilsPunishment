@@ -13,23 +13,42 @@ public class Network_Transmitter : NetworkBehaviour
     public NetworkManager_Drug networkManager;
     public static Network_Transmitter transmitter;
 
+    [SyncVar]
+    public int mapSeed = 23;
+
     void Awake()
     {
         transmitter = this;
-    }
-
-    public void startClient()
-    {
         if(isServer)
         {
+            mapSeed = Random.Range(0, 1000);
+        }
+    }
 
+    public int getSeed()
+    {
+        return mapSeed;
+    }
+
+    
+
+
+    public void startClient(Network_Player ply)
+    {
+        player = ply;
+        Debug.Log("STARTING CLIENT");
+        if(isServer)
+        {
+            player.SendChatMessage("Host started hosting!"); // it's us haha
         }
         else
         {
-            RpcsendEvent("Player " + " has joined the lobby!");
+            CmdinformHost("Player " + " has joined the lobby!");
             
         }
     }
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +70,35 @@ public class Network_Transmitter : NetworkBehaviour
         }
 
         return usernames;
+    }
+
+    [Command]
+    private void CmdinformHost(string msg)
+    {
+    //    player.SendChatMessage(msg); // host is a lone wanderer
+        RpcsendEvent(msg); // Nice that they told me ! Better tell the clients too now
+    }
+
+    public void sendNetworkMessage(string text, string username)
+    {
+        string msg = username + " : " + text;
+        if (isServer)
+        {
+            print("Server sends!");
+            //Send it to ourselves.. since we're no client .. sad life
+            player.SendChatMessage(msg);
+            //Since we're the server let's tell the others what we have to say!
+            RpcsendEvent(msg);
+            
+        }
+        else
+        {
+            //We're a client!
+            // Go tell the host waht we have to say!
+            CmdinformHost(msg);
+            
+
+        }
     }
 
     public int getPlayerCount()
@@ -86,11 +134,8 @@ public class Network_Transmitter : NetworkBehaviour
     [ClientRpc]
     public void RpcsendEvent(string text)
     {
-        foreach (Network_Player player in playerlist)
-
-        {
-            player.SendChatMessage(text);
-        }
+        player.SendChatMessage(text);
+        
     }
 
     public void BroadcastShot(Vector3 start, Vector3 end)
@@ -109,11 +154,9 @@ public class Network_Transmitter : NetworkBehaviour
     [Command]
     public void CmdsendMessage(string text, string username)
     {
-        foreach (Network_Player player in playerlist)
-
-        {
-            player.RpcSendChatMessage(username, text);
-        }
+        
+       player.RpcSendChatMessage(username, text);
+        
     }
 
 

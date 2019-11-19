@@ -23,6 +23,17 @@ public class Network_Player : NetworkBehaviour
     {
         Network_Transmitter.transmitter.player = this;
         Network_Transmitter.transmitter.registerPlayer(this);
+
+        if(isServer)
+        {
+            GameSetup.setup.generateLevel(this);
+        }
+        else
+        {
+            Network_Transmitter.transmitter.startClient(this); // say hi we spawned°
+        }
+       
+        
     }
 
 
@@ -35,6 +46,8 @@ public class Network_Player : NetworkBehaviour
         playerTransform = playerO.transform;
 
         fetchPlayer(); // Go on to fetch single assets that might (or might not) exist on the player
+
+        
     }
 
     public string getUsername()
@@ -103,7 +116,7 @@ public class Network_Player : NetworkBehaviour
         return health;
     }
 
-    [Client]
+
     public void SendChatMessage(string text)
     {
         chat.addMessage(text);

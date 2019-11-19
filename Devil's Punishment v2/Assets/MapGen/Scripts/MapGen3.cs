@@ -59,6 +59,7 @@ public class MapGen3 : MonoBehaviour
 
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
+        Random.InitState(Network_Transmitter.transmitter.getSeed());
         StateData.states.Add(Random.state);
         Rooms();
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;

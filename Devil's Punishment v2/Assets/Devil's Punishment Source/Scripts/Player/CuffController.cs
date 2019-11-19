@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class CuffController : MonoBehaviour
 {
     public static CuffController instance;
@@ -21,7 +22,7 @@ public class CuffController : MonoBehaviour
     private bool risLocked; //Assault Rifle
     private bool sisLocked; //Shotgun
 
-    private PlayerController playerController;
+    private PlayerController_Revamped playerController;
 
     void Awake()
     {
@@ -54,7 +55,7 @@ public class CuffController : MonoBehaviour
         Debug.Log("Trigger for ladder & tag = " + other.tag);
         if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
-            playerController = other.GetComponent<PlayerController>();
+            playerController = other.GetComponent<PlayerController_Revamped>();
             Debug.Log("Climbing Ladder");
             playerController.SetIsClimbing(true);
             playerController.VerticalLocomotion();
