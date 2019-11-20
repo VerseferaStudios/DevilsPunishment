@@ -26,6 +26,7 @@ public class CuffController : MonoBehaviour
 
     void Awake()
     {
+        playerController = GetComponent<PlayerController_Revamped>();
         Cuff();
     }
 
@@ -74,7 +75,7 @@ public class CuffController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            playerController.SetIsClimbing(false);
+           // playerController.SetIsClimbing(false);
         }
     }
 

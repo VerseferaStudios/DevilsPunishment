@@ -26,8 +26,9 @@ public class Network_Transmitter : NetworkBehaviour
         {
             
             mapSeed = Random.Range(0, 1000);
-            player.SendChatMessage(mapSeed.ToString()+  " We generated");
+            player.SendChatMessage(mapSeed.ToString()+  " We generated");          
             genOnce = true;
+            mapGen.startMapGeneration(mapSeed);
         }
         else
         {

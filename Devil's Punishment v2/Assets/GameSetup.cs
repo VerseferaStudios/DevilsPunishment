@@ -26,7 +26,7 @@ public class GameSetup : MonoBehaviour
     public void generateLevel(Network_Player ply)
     {
         // Green light for host
-        levelGen01.SetActive(true);
+      //  levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
        Network_Transmitter.transmitter.startClient(ply);
 
@@ -34,8 +34,5 @@ public class GameSetup : MonoBehaviour
 
     #endregion
 
-
-
-    // Start is called before the first frame update
 
 }
