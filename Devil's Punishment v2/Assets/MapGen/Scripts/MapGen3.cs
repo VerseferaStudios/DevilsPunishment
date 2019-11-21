@@ -42,6 +42,13 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    private IEnumerator WaitForaWhile()
+    {
+        yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
+        Random.InitState(100);
+        Rooms();
+    }
+
     private void Start()
     {
         n = numberOfRooms + 1;
@@ -56,11 +63,15 @@ public class MapGen3 : MonoBehaviour
         arr[1] = 28;
         allRooms.Add(arr);
         
-
+        
         CreateHolderForMapGen();
+        //Random.InitState(100);
+        //Rooms();
+
+        StartCoroutine(WaitForaWhile());
+
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
-        Rooms();
+        //StateData.states.Add(Random.state);
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];

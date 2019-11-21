@@ -53,7 +53,7 @@ public class MapGen2ndFloor : MonoBehaviour
         GUIProgress.SetActive(true);
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
+        //StateData.states.Add(Random.state);
         StartCoroutine(StartScriptAfterDelay());
         Data2ndFloor.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data2ndFloor.instance.corridorT1 = corridors[3];
