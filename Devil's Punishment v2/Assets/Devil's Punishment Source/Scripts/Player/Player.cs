@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static PlayerController_Revamped;
 public class Player : MonoBehaviour
 {
-    PlayerController controller;
+    PlayerController_Revamped controller;
     GunController gunController;
     CuffController cuffController;
     Inventory inventory;
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     }
 
     void Start() {
-        controller = GetComponent<PlayerController>();
+        controller = GetComponent<PlayerController_Revamped>();
         cuffController = CuffController.instance;
         gunController = GunController.instance;
         inventory = Inventory.instance;

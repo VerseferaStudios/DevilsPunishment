@@ -17,8 +17,7 @@ public class sendMessage_GUI : MonoBehaviour
 
     public void sendMessage(BaseEventData e)
     {
-        
-        NetworkManager_Drug.instance.sendMessage(tmp.text, SystemInfo.deviceName);
+        Network_Transmitter.transmitter.sendNetworkMessage(tmp.text, SystemInfo.deviceName);
         tmp.text = "";
 
     }

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class CuffController : MonoBehaviour
 {
     public static CuffController instance;
@@ -21,10 +22,11 @@ public class CuffController : MonoBehaviour
     private bool risLocked; //Assault Rifle
     private bool sisLocked; //Shotgun
 
-    private PlayerController playerController;
+    private PlayerController_Revamped playerController;
 
     void Awake()
     {
+        playerController = GetComponent<PlayerController_Revamped>();
         Cuff();
     }
 
@@ -54,7 +56,7 @@ public class CuffController : MonoBehaviour
         Debug.Log("Trigger for ladder & tag = " + other.tag);
         if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
-            playerController = other.GetComponent<PlayerController>();
+            playerController = other.GetComponent<PlayerController_Revamped>();
             Debug.Log("Climbing Ladder");
             playerController.SetIsClimbing(true);
             playerController.VerticalLocomotion();
@@ -63,8 +65,11 @@ public class CuffController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && playerController != null)// && Input.GetKeyDown(KeyCode.E))
+        if (playerController != null && playerController.GetIsClimbing() && other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
         {
+            Debug.Log("EXITED LADDER");
+            playerController.transform.position += playerController.transform.forward * 1;
+            //playerController.transform.position += new Vector3(playerController.movementInputRaw.x, 0, playerController.movementInputRaw.y);
             playerController.SetIsClimbing(false);
         }
     }
@@ -73,7 +78,7 @@ public class CuffController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            playerController.SetIsClimbing(false);
+           // playerController.SetIsClimbing(false);
         }
     }
 

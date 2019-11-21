@@ -15,12 +15,12 @@ public class GunControllerDisplayUI : MonoBehaviour
 
     Image[] crosshairs;
     GunController gunController;
-    PlayerController playerController;
+    PlayerController_Revamped playerController;
 	Inventory inventory;
 
     void Start() {
         gunController = GunController.instance;
-        playerController = PlayerController.instance;
+        playerController = PlayerController_Revamped.instance;
         crosshairs = crosshairsParent.gameObject.GetComponentsInChildren<Image>();
     }
 

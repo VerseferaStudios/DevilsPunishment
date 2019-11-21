@@ -42,12 +42,21 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
-    private void Start()
+    private IEnumerator WaitForaWhile()
+    {
+        yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
+        Random.InitState(100);
+        Rooms();
+    }
+
+    public void startMapGeneration(int seed)
     {
         n = numberOfRooms + 1;
 
-        float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
+
+
+        float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
+        float z = -(48 * ((float)(mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 
@@ -55,12 +64,18 @@ public class MapGen3 : MonoBehaviour
         arr[0] = 28;
         arr[1] = 28;
         allRooms.Add(arr);
-        
-
         CreateHolderForMapGen();
+        //Random.InitState(100);
+        //Rooms();
+
+        //StartCoroutine(WaitForaWhile());
+
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
+
+        Random.InitState(seed);
+        //StateData.states.Add(Random.state);
         Rooms();
+
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
         Data.instance.corridorT2 = corridors[4];
@@ -69,14 +84,14 @@ public class MapGen3 : MonoBehaviour
         Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
-
-       
-        
     }
+
+
 
     public void CreateHolderForMapGen()
     {
         mapGenHolder = new GameObject("1st Floor");
+        mapGenHolder.layer = 18;
         mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
