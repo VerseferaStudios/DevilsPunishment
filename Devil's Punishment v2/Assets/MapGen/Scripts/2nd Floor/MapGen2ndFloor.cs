@@ -69,6 +69,7 @@ public class MapGen2ndFloor : MonoBehaviour
     public void CreateHolderForMapGen()
     {
         mapGenHolder = new GameObject("2nd Floor");
+        mapGenHolder.layer = 18;
         mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data2ndFloor.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
