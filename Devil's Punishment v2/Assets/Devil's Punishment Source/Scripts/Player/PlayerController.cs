@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
                 inputAngle = 0f;
             }
 
-            Debug.Log(inputAngle);
+            //Debug.Log(inputAngle);
 
             #endregion
 
@@ -363,6 +363,11 @@ public class PlayerController : MonoBehaviour
         this.isClimbing = isClimbing;
     }
 
+    public bool GetIsClimbing()
+    {
+        return isClimbing;
+    }
+
     void Turning() {
 
         Vector3 targetEulerAngles = new Vector3(0f, horizontalAngle, 0f);
@@ -394,6 +399,7 @@ public class PlayerController : MonoBehaviour
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
+        characterAnimator.SetFloat("isCuffed_Normalized", GetComponent<CuffController>().isCuffed == true ? 1f : 0f);
 
         if (Inventory.instance.equippedGun != null){
             switch (Inventory.instance.equippedGun.weaponClassification)

@@ -334,6 +334,16 @@ public class PlayerController_Revamped : MonoBehaviour
         }
     }
 
+    public void SetIsClimbing(bool isClimbing)
+    {
+        this.isClimbing = isClimbing;
+    }
+
+    public bool GetIsClimbing()
+    {
+        return isClimbing;
+    }
+
     public void AddToViewVector(float x, float y) {
         horizontalAngle += x;
         verticalAngle += y;
@@ -528,13 +538,6 @@ public class PlayerController_Revamped : MonoBehaviour
         } else {
             movementInputRaw = Vector2.zero;
         }
-    }
-
-  
-
-    public void SetIsClimbing(bool isClimbing)
-    {
-        this.isClimbing = isClimbing;
     }
 
     void Turning() {

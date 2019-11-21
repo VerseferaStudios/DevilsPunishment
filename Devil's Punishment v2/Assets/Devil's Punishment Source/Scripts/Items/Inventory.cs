@@ -71,7 +71,37 @@ public class Inventory : MonoBehaviour
 
     private void Start()
 	{
+        //StartCoroutine(DebugInvi());
 	}
+
+    private IEnumerator DebugInvi()
+    {
+        int ctr = 0;
+        while (ctr < 20)
+        {
+            ctr++;
+            yield return new WaitForSeconds(5);
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if(inventory[i] != null)
+                {
+                    if(inventory[i].item != null)
+                    {
+                        Debug.Log("item = " + inventory[i].item.name + " " + inventory[i].item.description + " " + inventory[i].item.maxStackSize);
+                        Debug.Log("stack = " + inventory[i].stack);
+                    }
+                    else
+                    {
+                        Debug.Log("Invi [" + i + "] item =  null");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Invi [" + i + "] (slot) =  null");
+                }
+            }
+        }
+    }
 
     public Item GetItemFromIndex(int index) {
         if(index == inventory.Count) {
@@ -139,6 +169,7 @@ public class Inventory : MonoBehaviour
         return false;
     }
     public void AddItem(Item item, int stack=1) {
+        Debug.Log("Add ITEM!!!!!!!!!!!!!!!!!!!!!!");
         if (ItemIsSpecial_HandleSeparately(item,stack)){
             return;
         }
@@ -148,13 +179,17 @@ public class Inventory : MonoBehaviour
         // First, to make sure that the invenory REALLY hasSpace() for the item, we have to account for the fact that the only empty space might be a RESERVED "generator slot"
         int genPartCount = 0;
         // Loop over the last three inventory slots, reserved for gen parts, and count how many there are
-        for(int i=inventory.Count-4;i<inventory.Count;i++){
-            if(inventory[i]!=null && inventory[i].item!=null && inventory[i].item is GeneratorPart){
+        for (int i = inventory.Count - 4; i < inventory.Count; i++)
+        {
+            if (inventory[i] != null && inventory[i].item != null && inventory[i].item is GeneratorPart)
+            {
                 genPartCount++;
             }
         }
+
         // account for existence of gen parts, and see if there's still room in the inventory.
         Debug.Log("Size is: "+size);
+        Debug.Log("INVI Size is: "+inventory.Count);
         Debug.Log("GenPartCount is: "+genPartCount);
         bool hasSpace = size + (3-genPartCount) < inventory.Count;
         // If it turns out you didn't have space, after all, drop the item back into the world, and stop here.
@@ -163,23 +198,48 @@ public class Inventory : MonoBehaviour
             return;
         }
         // Otherwise you're free to add the item to the inventory.
+        bool isBreakOuter = false;
         for(int k = 0; k < stack; k++) {
 
             for(int i = 0; i < PseudoCount(); i++) {
 
                 if(inventory[i] != null && inventory[i].item != null) {
 
-                    if(item.Equals(inventory[i].item) && inventory[i].stack < inventory[i].item.maxStackSize) {
-                        inventory[i].stack ++;
-                        break;
+                    if(item.Equals(inventory[i].item))
+                    {
+                        if(inventory[i].stack < inventory[i].item.maxStackSize)
+                        {
+                            inventory[i].stack++;
+                            Debug.Log("STACK++ !!!!!!!!!!!!!!!!!!!!!");
+                            break;
+                        }
+                        else
+                        {
+                            /*
+                            Debug.Log("q34e2wr2qw2rwq2r23r1r21!!!!!!!!!!!!!!!!!!!!!!");
+                            if (isFirst)
+                            {
+                                inventory[i] = new InventorySlot(item, 1);
+                            }
+                            else
+                            {
+                                inventory[i] = 
+                            }
+                            */
+                        }
                     }
 
 
                 } else {
                     inventory[i] = new InventorySlot(item, stack);
+                    isBreakOuter = true;
                     break;
                 }
 
+            }
+            if (isBreakOuter)
+            {
+                break;
             }
         }
         OrganizeInventory();
@@ -220,7 +280,8 @@ public class Inventory : MonoBehaviour
 				//Debug.Log("Dropping gun gameObject into scene, but first, lets make sure we keep our unspent ammo.");
 				if(gunController.equippedGun != null && gunController.equippedGun.gunItem != null && gunController.equippedGun.gunItem != null){
                     // Keep unused ammo...
-					AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
+                    Debug.Log("Keep unused ammo!!!!!!!!!!!!!!!");
+                    AddItem(gunController.equippedGun.gunItem.ammunitionType, gunController.GetClip());
                 }
 				equippedGun = null;
 				gunController.InitGun();
@@ -300,6 +361,7 @@ public class Inventory : MonoBehaviour
                 CullNulls();
             }
         }
+        Sort();
     }
 
     public void DropItem(int index, int amount = 1, bool consume = false) {
@@ -329,7 +391,8 @@ public class Inventory : MonoBehaviour
 				return;
 			}
 		}
-	}
+        Sort();
+    }
 
     public void UseItem(int index) {
 
@@ -412,12 +475,14 @@ public class Inventory : MonoBehaviour
                 // Re-add it to inventory, so it goes where it's supposed to.
                 InventorySlot toPlace = inventory[i];
                 inventory[i] = new InventorySlot();
+                Debug.Log("ReAdd SPEACIAL ITEM!!!!!!!");
                 AddItem(toPlace.item,toPlace.stack);
             }
         }
+        Debug.Log("Compounding InVI !");
 
         // Then combine like items, that aren't special items...
-        for(int i = 0; i < PseudoCount(); i++) {
+        for (int i = 0; i < PseudoCount(); i++) {
 
             if(inventory[i].item != null) {
 
