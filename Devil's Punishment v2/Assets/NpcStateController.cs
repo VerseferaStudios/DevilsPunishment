@@ -47,21 +47,21 @@ public class NpcStateController : MonoBehaviour
         GameObject nameTag = Instantiate(name_GUI, transform);
         if(transform.name == "night terror")
         {
-            nameTag.GetComponent<TextMeshPro>().fontSize = .25f;
+            nameTag.GetComponent<TextMeshProUGUI>().fontSize = .25f;
         }
-        nameTag.GetComponent<TextMeshPro>().text = npc_info.Name;
+        nameTag.GetComponent<TextMeshProUGUI>().text = npc_info.Name;
         nameTag.transform.position = transform.position + new Vector3(0, 2, 0);
         //   nameTag.transform.LookAt(PlayerManager.instance.Player.transform.position);
-        nameTag.GetComponent<TextMeshPro>().color = Color.green;
+        nameTag.GetComponent<TextMeshProUGUI>().color = Color.green;
 
         //  nameTag.GetComponent<TextMeshPro>().color =
         if (npc_info.faction == Faction.NightCrawlers)
         {
-            nameTag.GetComponent<TextMeshPro>().color = Color.blue;
+            nameTag.GetComponent<TextMeshProUGUI>().color = Color.blue;
         }
         else if (npc_info.faction == Faction.Horde)
         {
-            nameTag.GetComponent<TextMeshPro>().color = Color.red;
+            nameTag.GetComponent<TextMeshProUGUI>().color = Color.red;
         }
 
 

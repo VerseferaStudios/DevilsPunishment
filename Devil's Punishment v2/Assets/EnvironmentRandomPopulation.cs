@@ -1,5 +1,5 @@
 ﻿//Author: David Bird
-    //Date: Monday 10/21/19
+    //Date: Monday 10/21/19d
 
 
 
@@ -19,7 +19,7 @@ public class EnvironmentRandomPopulation : MonoBehaviour
     void Awake()
     {
         set1[Random.Range(0, set1.Length)].SetActive(true);
-        set2[Random.Range(0, set2.Length)].SetActive(true);
+        set2[Random.Range(0, set2.Length)].SetActive(true); // Where are you dear ref
         set3[Random.Range(0, set3.Length)].SetActive(true);
         set4[Random.Range(0, set4.Length)].SetActive(true);
     }

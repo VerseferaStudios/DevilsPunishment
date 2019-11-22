@@ -37,6 +37,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     private bool isDoneSpawnHalf = false, isDoneConnectTwoRooms = false;
 
+    public void initSeed(int seed)
+    {
+        UnityEngine.Random.InitState(seed);
+    }
     void Start()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();

@@ -45,13 +45,23 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator WaitForaWhile()
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
-        Random.InitState(100);
+        Random.InitState(mapseed);  // changed this to our given mapseed
         Rooms();
     }
+
+    public int mapseed;
+
+    public void syncronizeSeeds(int seed)
+    {
+        GetComponent<MapGen2ndFloor>().setSeed(seed) ;
+    }
+
 
     public void startMapGeneration(int seed)
     {
         n = numberOfRooms + 1;
+
+
 
 
 
@@ -71,8 +81,9 @@ public class MapGen3 : MonoBehaviour
         //StartCoroutine(WaitForaWhile());
 
         //Random.state = GoodStates.states[0];
-
+        syncronizeSeeds(seed);
         Random.InitState(seed);
+
         //StateData.states.Add(Random.state);
         Rooms();
 

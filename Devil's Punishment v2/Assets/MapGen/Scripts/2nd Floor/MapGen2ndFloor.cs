@@ -41,6 +41,11 @@ public class MapGen2ndFloor : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    public void setSeed(int seed)
+    {
+        Random.InitState(seed);
+    }
+
     private void Start()
     {
         n = numberOfRooms - 1;
