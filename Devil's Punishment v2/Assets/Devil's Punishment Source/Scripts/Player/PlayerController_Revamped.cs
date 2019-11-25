@@ -106,10 +106,27 @@ public class PlayerController_Revamped : MonoBehaviour
     {
         if (chcon.isGrounded)
         {
-            float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
-            velocityY = jumpVelocity;
+            
+            if(velocityY < -20)
+            {
+                velocityY = 0;
+                    return;
+            }
+            else
+            {
+                float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
+                velocityY = jumpVelocity;
+            }
+            
             //Debug.Log("JUMP");
         }
+        if (velocityY < -20)
+        {
+            velocityY = 0;
+            return;
+        }
+
+
     }
 
     public bool jumping;
@@ -204,7 +221,15 @@ public class PlayerController_Revamped : MonoBehaviour
             jump();
             jumping = true;
         }
-         velocityY += Time.deltaTime * gravity;
+        
+        //Jump ?
+ 
+        
+        if(velocityY > -20)
+        {
+            velocityY += Time.deltaTime * gravity;
+        }
+
         Vector3 velocity = transform.forward * speed + Vector3.up * velocityY;
 
 
