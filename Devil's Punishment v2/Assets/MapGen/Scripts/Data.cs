@@ -60,7 +60,7 @@ public class Data : MonoBehaviour
 
     public int ctr1 = 0;
 
-    public PlayerController playerController;
+    public PlayerController_Revamped playerController;
 
     public bool canStartCorridorTestSpawner = false;
 

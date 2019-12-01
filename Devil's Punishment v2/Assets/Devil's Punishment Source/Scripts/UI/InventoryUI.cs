@@ -63,6 +63,13 @@ public class InventoryUI : MonoBehaviour
     private void DrawInventory() {
         for(int i = 0; i < inventory.inventory.Count; i++) {
             if(inventory.inventory[i] != null && inventory.inventory[i].item != null) {
+                /*
+                Debug.Log("i = " + i + " " + inventory.inventory.Count);
+                foreach (var item in inventorySlots)
+                {
+                    Debug.Log(item.gameObject.name);
+                }
+                */
                 inventorySlots[i].SetItemContained(true);
                 inventorySlots[i].itemImage.sprite = inventory.inventory[i].item.itemIcon;
                 inventorySlots[i].itemImage.color = inventory.inventory[i].item.color;

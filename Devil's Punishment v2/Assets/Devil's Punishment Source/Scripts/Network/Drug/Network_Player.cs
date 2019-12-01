@@ -19,15 +19,35 @@ public class Network_Player : NetworkBehaviour
     public Network_Chat chat;
     public GameObject shot;
 
+    void Start()
+    {
+        Network_Transmitter.transmitter.player = this;
+        Network_Transmitter.transmitter.registerPlayer(this);
+
+        if(isServer)
+        {
+            GameSetup.setup.generateLevel(this);
+        }
+        else
+        {
+            Network_Transmitter.transmitter.startClient(this); // say hi we spawned°
+        }
+       
+        
+    }
+
 
 
     public Network_Player(GameObject playerO)
     {
+
         username = SystemInfo.deviceName; // Using the computer name for now as username
         player = playerO;
         playerTransform = playerO.transform;
 
         fetchPlayer(); // Go on to fetch single assets that might (or might not) exist on the player
+
+        
     }
 
     public string getUsername()
@@ -96,6 +116,7 @@ public class Network_Player : NetworkBehaviour
         return health;
     }
 
+
     public void SendChatMessage(string text)
     {
         chat.addMessage(text);
@@ -107,7 +128,9 @@ public class Network_Player : NetworkBehaviour
         ShotRenderer.GetComponent<RegisterShot>().registerShot(start, end);
     }
 
-    public void SendChatMessage(string username, string text)
+
+    [ClientRpc]
+    public void RpcSendChatMessage(string username, string text)
     {
         chat.addMessage(text, username);
     }
@@ -133,7 +156,7 @@ public class Network_Player : NetworkBehaviour
     {
 
         // tell Network Manager we're awake
-        NetworkManager_Drug.instance.registerPlayer(this);
+        Network_Transmitter.transmitter.registerPlayer(this);
 
         // Display current players in chat
         chat.ActivateChat();

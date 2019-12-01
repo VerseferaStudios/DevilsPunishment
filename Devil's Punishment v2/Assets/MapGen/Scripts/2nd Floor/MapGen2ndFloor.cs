@@ -41,6 +41,11 @@ public class MapGen2ndFloor : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    public void setSeed(int seed)
+    {
+        Random.InitState(seed);
+    }
+
     private void Start()
     {
         n = numberOfRooms - 1;
@@ -53,7 +58,7 @@ public class MapGen2ndFloor : MonoBehaviour
         GUIProgress.SetActive(true);
         CreateHolderForMapGen();
         //Random.state = GoodStates.states[0];
-        StateData.states.Add(Random.state);
+        //StateData.states.Add(Random.state);
         StartCoroutine(StartScriptAfterDelay());
         Data2ndFloor.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data2ndFloor.instance.corridorT1 = corridors[3];
@@ -69,6 +74,7 @@ public class MapGen2ndFloor : MonoBehaviour
     public void CreateHolderForMapGen()
     {
         mapGenHolder = new GameObject("2nd Floor");
+        mapGenHolder.layer = 18;
         mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
         Data2ndFloor.instance.mapGenHolderTransform = mapGenHolderTransform;
     }

@@ -14,24 +14,25 @@ public class GameSetup : MonoBehaviour
     {
         setup = this;
     }
-    public void clientActive()
+    public void clientActive(Network_Player ply)
     {
         // Cyan light for client
         levelNetworkLED.color = Color.cyan;
+        Network_Transmitter.transmitter.startClient(ply);
+        
     }
 
     #region Singleton
-    public void generateLevel()
+    public void generateLevel(Network_Player ply)
     {
         // Green light for host
-        levelGen01.SetActive(true);
+      //  levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
+       Network_Transmitter.transmitter.startClient(ply);
+
     }
 
     #endregion
 
-
-
-    // Start is called before the first frame update
 
 }
