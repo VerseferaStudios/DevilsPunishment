@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
 
     void Awake() {
         instance = this;
+        ChangeCanvas();
     }
 
     void Start() {
