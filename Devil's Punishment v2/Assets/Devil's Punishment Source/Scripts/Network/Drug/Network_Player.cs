@@ -117,7 +117,8 @@ public class Network_Player : NetworkBehaviour
     }
 
 
-    public void SendChatMessage(string text)
+    [ClientRpc]
+    public void RpcSendChatMessage( string text)
     {
         chat.addMessage(text);
        
@@ -130,7 +131,7 @@ public class Network_Player : NetworkBehaviour
 
 
     [ClientRpc]
-    public void RpcSendChatMessage(string username, string text)
+    public void RpcSendChatUserMessage(string username, string text)
     {
         chat.addMessage(text, username);
     }

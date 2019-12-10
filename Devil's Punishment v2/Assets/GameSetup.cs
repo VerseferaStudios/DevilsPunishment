@@ -20,6 +20,7 @@ public class GameSetup : MonoBehaviour
         levelNetworkLED.color = Color.cyan;
         Network_Transmitter.transmitter.startClient(ply);
         
+
     }
 
     #region Singleton
@@ -29,6 +30,7 @@ public class GameSetup : MonoBehaviour
       //  levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
        Network_Transmitter.transmitter.startClient(ply);
+       
 
     }
 
