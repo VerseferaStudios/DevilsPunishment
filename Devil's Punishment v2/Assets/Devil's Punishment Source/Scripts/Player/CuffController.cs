@@ -39,7 +39,7 @@ public class CuffController : MonoBehaviour
         risLocked = true;
         sisLocked = true;
         //Add a on screen or audio cue for failure.
-        Debug.Log("Cuffed, find a way to get your cuffs off!");
+        //Debug.Log("Cuffed, find a way to get your cuffs off!");
     }
 
     public void Uncuff()
@@ -53,7 +53,7 @@ public class CuffController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger for ladder & tag = " + other.tag);
+        //Debug.Log("Trigger for ladder & tag = " + other.tag);
         if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
             playerController = other.GetComponent<PlayerController_Revamped>();
