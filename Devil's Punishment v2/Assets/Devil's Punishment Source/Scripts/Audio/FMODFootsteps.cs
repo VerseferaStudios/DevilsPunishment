@@ -6,61 +6,117 @@ public class FMODFootsteps : MonoBehaviour
 {
 
     [FMODUnity.EventRef]
-    public string inputsound;
-    bool playerismoving;
+    public string walkingsound;
+    [FMODUnity.EventRef]
+    public string runningsound;
+    [FMODUnity.EventRef]
+    public string crouchingsound;
+    bool playeriswalking;
     bool playerisrunning;
+    bool playeriscrouching;
     public float walkingspeed;
     public float runningspeed;
-
-
+    public float crouchingspeed;
+    bool canmove;
 
     void Update()
 {
-    if (Input.GetAxis("Vertical") >= 0.01f || Input.GetAxis("Horizontal") >= 0.01f || Input.GetAxis("Vertical") <= -0.01f || Input.GetAxis("Horizontal") <= -0.01f)
-    {
-        //Debug.Log ("Player is moving");
-        playerismoving = true;
-            print("Moving");
-    }
-    else if (Input.GetAxis("Vertical") == 0 || Input.GetAxis("Horizontal") == 0)
-    {
-        //Debug.Log ("Player is not moving");
-        playerismoving = false;
-            print("Not Moving");
-        }
+        
+            if (Input.GetAxis("Vertical") >= 0.001f || Input.GetAxis("Horizontal") >= 0.001f || Input.GetAxis("Vertical") <= -0.001f || Input.GetAxis("Horizontal") <= -0.001f)
+            {
+                //Debug.Log ("Player is moving");
+                playeriswalking = true;
+                canmove = true;
+                print("Moving");
+            }
 
+
+            else if (Input.GetAxis("Vertical") == 0 || Input.GetAxis("Horizontal") == 0)
+            {
+                //Debug.Log ("Player is not moving");
+                playeriswalking = false;
+                playerisrunning = false;
+                playeriscrouching = false;
+                canmove = false;
+                print("Not Moving");
+            }
+
+        
         if (Input.GetButton("Sprint"))
         {
-            playerismoving = false;
-            playerisrunning = true;
-            print("Running");
+            if (canmove == true)
+            {
+                playeriswalking = false;
+                playerisrunning = true;
+                playeriscrouching = false;
+                print("Running");
+            }
+        }
+
+
+        if (Input.GetButton("Crouch"))
+        {
+            if (canmove == true)
+            {
+                playeriswalking = false;
+                playerisrunning = false;
+                playeriscrouching = true;
+                print("Crouching");
+            }
         }
 
     }
 
 
-void CallFootsteps()
+    void CallFootstepsWalking()
 {
-    if (playerismoving == true)
+    if (playeriswalking == true)
     {
-        //Debug.Log ("Player is moving");
-        FMODUnity.RuntimeManager.PlayOneShot(inputsound);
+        playerisrunning = false;
+        playeriscrouching = false;
+        Debug.Log ("Player is walking");
+        FMODUnity.RuntimeManager.PlayOneShot(walkingsound);
     }
 
 }
 
+    void CallFootstepsRunning()
+    {
+        if (playerisrunning == true)
+        {
+            playeriswalking = false;
+            playeriscrouching = false;
+            Debug.Log ("Player is Running");
+            FMODUnity.RuntimeManager.PlayOneShot(runningsound);
+        }
+    }
+
+    void CallFootstepsCrouching()
+    {
+        if (playeriscrouching == true)
+        {
+            playeriswalking = false;
+            playerisrunning = false;
+            Debug.Log("Player is crouching");
+            FMODUnity.RuntimeManager.PlayOneShot(crouchingsound);
+        }
+    }
 
 
-void Start()
+
+    void Start()
 {
-    InvokeRepeating("CallFootsteps", 0, walkingspeed);
-  //  InvokeRepeating("CallFootsteps", 0, runningspeed);
-}
+    InvokeRepeating("CallFootstepsWalking", 0, walkingspeed);
+    InvokeRepeating("CallFootstepsRunning", 0, runningspeed);
+    InvokeRepeating("CallFootstepsCrouching", 0, runningspeed);
+
+    }
 
 
 void OnDisable()
 {
-    playerismoving = false;
+    playeriswalking = false;
     playerisrunning = false;
+    playeriscrouching = false;
 }
 }

@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114012186910544500}
-  - {fileID: 114104859230659460}
+  - {fileID: 114865251326962072}
+  - {fileID: 114985274518391860}
   EditorEvents:
-  - {fileID: 114651723581747226}
-  - {fileID: 114090995689150924}
+  - {fileID: 114119603844818558}
+  - {fileID: 114739282103389254}
+  - {fileID: 114285411030400978}
+  - {fileID: 114361401712257300}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114104859230659460}
+  - {fileID: 114985274518391860}
   StringsBanks:
-  - {fileID: 114012186910544500}
-  stringsBankWriteTime: 637097665801399073
+  - {fileID: 114865251326962072}
+  stringsBankWriteTime: 637115924896326442
   cacheVersion: 3
 --- !u!114 &114012186910544500
 MonoBehaviour:
@@ -39,12 +41,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
   SubDir: 
-  lastModified: 637097665801399073
+  lastModified: 637107953439489122
   LoadResult: 0
   FileSizes:
   - Name: Desktop
     Value: 854
-  Exists: 1
+  Exists: 0
 --- !u!114 &114015204075095702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +64,23 @@ MonoBehaviour:
   Max: 2
   Default: 0
   Exists: 1
+--- !u!114 &114019272529990322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 0
 --- !u!114 &114023386782004640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,6 +124,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2847
+--- !u!114 &114049310178957536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114053825658953900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,12 +176,12 @@ MonoBehaviour:
   Path: event:/Player_Foot
   guid: 3a6306217e0a4d4da74bd1851317d0ab
   Banks:
-  - {fileID: 114104859230659460}
+  - {fileID: 114814657898459836}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114147907654484754}
+  - {fileID: 114537359072895488}
   MinDistance: 0
   MaxDistance: 0
   Length: 507
@@ -163,12 +199,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\Andrew\Projects\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
   SubDir: 
-  lastModified: 637097665801379121
+  lastModified: 637107953439489122
   LoadResult: 0
   FileSizes:
   - Name: Desktop
     Value: 1299680
-  Exists: 1
+  Exists: 0
+--- !u!114 &114119603844818558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/World/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/World/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114985274518391860}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666
 --- !u!114 &114131906614836954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +272,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 62666
+--- !u!114 &114133154880351724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &114140931612830552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +452,29 @@ MonoBehaviour:
   Max: 2
   Default: 0
   Exists: 1
+--- !u!114 &114261586356482628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Foot
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Foot
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks: []
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114719483480372732}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 910
 --- !u!114 &114265960727556236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,6 +498,30 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 120058
+--- !u!114 &114285411030400978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Walk
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Walk
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114985274518391860}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114986132787239732}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 910
 --- !u!114 &114300291912209066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +704,47 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114361401712257300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Run
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Run
+  guid: ff923401d5a0cb40a1b49eec59391f5e
+  Banks:
+  - {fileID: 114985274518391860}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114839051514718544}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 222
+--- !u!114 &114364284688786730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &114364298545382172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,6 +838,40 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 507
+--- !u!114 &114370725216749572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114374328105360590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114381589412890558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +892,23 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1299680
   Exists: 1
+--- !u!114 &114385185405207008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114393810404755314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,6 +932,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114409374001536142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114428539421331282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,6 +972,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114431342990635366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &114443471065593718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,6 +1078,74 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1299680
   Exists: 1
+--- !u!114 &114512718798808130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114528012576434868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114532355829619918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114537359072895488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
 --- !u!114 &114544274139994810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,7 +1221,7 @@ MonoBehaviour:
   Path: event:/Amb_UndergroundFacility
   guid: 3200171994f3a24da4a55ea6bebf8f2c
   Banks:
-  - {fileID: 114104859230659460}
+  - {fileID: 114814657898459836}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -912,6 +1229,57 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 62666
+--- !u!114 &114668271181556200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 0
+--- !u!114 &114676489186860540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114681705074736662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114681960968052608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,6 +1327,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1500
+--- !u!114 &114690082544180846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114699590520112796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,6 +1457,46 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 507
+--- !u!114 &114719483480372732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
+--- !u!114 &114739282103389254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Crouch
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Crouch
+  guid: d5601dc39e3980459044a783d28d009d
+  Banks:
+  - {fileID: 114985274518391860}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1152
 --- !u!114 &114749957933460504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,6 +1520,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114751059689289284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114780445636306796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114814657898459836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637113989508960039
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1299680
+  Exists: 1
 --- !u!114 &114820168266954606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1110,6 +1589,57 @@ MonoBehaviour:
   Name: Walk - Run
   Min: 0
   Max: 2
+  Default: 0
+  Exists: 1
+--- !u!114 &114829144258114818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114838066673178610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 0
+--- !u!114 &114839051514718544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
   Default: 0
   Exists: 1
 --- !u!114 &114860645725248426
@@ -1132,6 +1662,26 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1299680
   Exists: 0
+--- !u!114 &114865251326962072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637115924896326442
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 950
+  Exists: 1
 --- !u!114 &114886067954032732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,6 +1705,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114910281907267896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 0
+--- !u!114 &114916830609676530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
+--- !u!114 &114920459971786534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637113989508970024
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 854
+  Exists: 1
 --- !u!114 &114933228157117464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,6 +1848,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114944395745595694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Foot/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
 --- !u!114 &114949520461417230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1311,6 +1932,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114975169304725466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 0
 --- !u!114 &114983889620238986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,3 +1995,40 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 62666
+--- !u!114 &114985274518391860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:\Andrew\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637115924896286852
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1445472
+  Exists: 1
+--- !u!114 &114986132787239732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
