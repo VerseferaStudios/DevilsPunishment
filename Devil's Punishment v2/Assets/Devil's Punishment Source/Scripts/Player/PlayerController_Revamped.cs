@@ -225,7 +225,7 @@ public class PlayerController_Revamped : MonoBehaviour
         //Jump ?
  
         
-        if(velocityY > -20)
+        if(velocityY > -5)
         {
             velocityY += Time.deltaTime * gravity;
         }
