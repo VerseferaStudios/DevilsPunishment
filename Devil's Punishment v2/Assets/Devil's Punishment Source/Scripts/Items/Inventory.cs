@@ -232,6 +232,7 @@ public class Inventory : MonoBehaviour
 
                 } else {
                     inventory[i] = new InventorySlot(item, stack);
+                    Debug.LogError("Item "+item.name + " added to stack " + stack + " in Slot " + i);
                     isBreakOuter = true;
                     break;
                 }

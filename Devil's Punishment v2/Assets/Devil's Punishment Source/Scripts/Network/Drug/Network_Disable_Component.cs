@@ -41,7 +41,7 @@ public  class Network_Disable_Component : NetworkBehaviour
         }
         else
         {
-            InvView.SetActive(false);
+            InvView.SetActive(true);
           //  Third_Person_Model.SetActive(false);
         }
 
