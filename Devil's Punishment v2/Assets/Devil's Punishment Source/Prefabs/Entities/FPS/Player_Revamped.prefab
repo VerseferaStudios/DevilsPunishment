@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 28421592}
   - component: {fileID: 28421591}
   - component: {fileID: 8410159754957809380}
+  - component: {fileID: 6325146215877696225}
   m_Layer: 10
   m_Name: Camera
   m_TagString: MainCamera
@@ -382,6 +383,33 @@ MonoBehaviour:
   pitchForward: 85
   pitchBack: 200
   Problemkind: {x: 0, y: 0, z: 0}
+--- !u!114 &6325146215877696225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28421589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c623a05fc5442fcba27a128ec2559a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags: IOC
+  layerMsk:
+    serializedVersion: 2
+    m_Bits: 262144
+  occludeeLayer: 19
+  samples: 179
+  raysFov: 90.1
+  preCullCheck: 1
+  viewDistance: 1077
+  hideDelay: 175
+  realtimeShadows: 0
+  lod1Distance: 0
+  lod2Distance: 0
+  lightProbes: 0
+  probeRadius: 0
 --- !u!1 &33862724
 GameObject:
   m_ObjectHideFlags: 0
@@ -41797,8 +41825,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -51193,7 +51221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2071543431969346907
 Transform:
   m_ObjectHideFlags: 0
