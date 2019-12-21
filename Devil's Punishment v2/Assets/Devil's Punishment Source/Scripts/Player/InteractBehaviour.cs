@@ -127,6 +127,8 @@ public class InteractBehaviour : MonoBehaviour
 
         Vector3 iconPosition = focusedInteractable.GetGameObject().transform.position/* + Vector3.up * .3f*/;
         Vector2 screenPoint = Camera.main.WorldToViewportPoint(iconPosition);
+        screenPoint.x = (float)System.Math.Round((decimal)screenPoint.x, 1);
+        screenPoint.y = (float)System.Math.Round((decimal)screenPoint.y, 1);
 
         interactableImage.rectTransform.anchorMin = screenPoint;
         interactableImage.rectTransform.anchorMax = screenPoint;
