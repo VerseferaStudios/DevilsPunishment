@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class GameSetup : MonoBehaviour
 {
 
     public GameObject levelGen01;
     public Light levelNetworkLED;
+    public PostProcessVolume postFXVolume;
+    public ColorGrading postFXColorGrading;
 
     public static GameSetup setup;
 
     public void Awake()
     {
         setup = this;
+    }
+    private void Start()
+    {
+        postFXVolume.profile.TryGetSettings(out postFXColorGrading);
     }
     public void clientActive(Network_Player ply)
     {

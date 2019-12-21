@@ -60,9 +60,9 @@ public class Data : MonoBehaviour
 
     public int ctr1 = 0;
 
-    //public PlayerController_Revamped playerController;
+    public PlayerController_Revamped playerController;
 
-    //public bool canStartCorridorTestSpawner = false;
+    public bool canStartCorridorTestSpawner = false;
 
     //public bool isPipeAtLeft = true;
 

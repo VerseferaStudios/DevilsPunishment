@@ -60,6 +60,8 @@ public class Data2ndFloor : MonoBehaviour
 
     private bool isFirstPassDone = false;
 
+    public bool isStartData2ndFloor = false;
+
    // public GameObject Loader;
 
     //public bool isPipeAtLeft = true;
@@ -438,6 +440,7 @@ public class Data2ndFloor : MonoBehaviour
 
     public IEnumerator DoCheckPerSecond()
     {
+        yield return new WaitUntil(() => isStartData2ndFloor);
         //for putting corridors so that connected components does correctly
         for (int i = 0; i < 3; i++)
         {
@@ -1048,15 +1051,17 @@ public class Data2ndFloor : MonoBehaviour
 
     public IEnumerator DoConnectedComponents()
     {
+        yield return new WaitUntil(() => isStartData2ndFloor);
         yield return new WaitUntil(() => isFirstPassDone == true);
         isFirstPassDone = false;
         yield return new WaitForSeconds(2f);
+        Debug.Log("STARTING COnnected COmponents");
         while (isOnce)
         {
             if (Time.time - startTime >= 3f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
             {
                 isOnce = false;
-                //Debug.Log("B444444444444444444444444444444444444444");
+                Debug.Log("B444444444444444444444444444444444444444");
                 if (connectedRoomsThroughCollision.Count != 0)
                 {
 
@@ -1066,7 +1071,7 @@ public class Data2ndFloor : MonoBehaviour
                     isFinishedAddAndRemoveConnectedRooms = false;
                     ctr++;
                 }
-                //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
 
                 roomsArray = GameObject.FindGameObjectsWithTag("Room 2nd Floor");
