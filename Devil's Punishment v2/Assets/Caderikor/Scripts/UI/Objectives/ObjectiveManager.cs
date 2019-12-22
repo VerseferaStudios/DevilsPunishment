@@ -7,22 +7,21 @@ public class ObjectiveManager : MonoBehaviour
 {
     public List<ObjectiveMaker> objectives = new List<ObjectiveMaker>();
     public List<GameObject> missionObjectList = new List<GameObject>();
-    public GameObject missionUIPrefab;
-    public Transform missionBoxListBox;
+    public GameObject missionUIPrefab, buttonInventory, buttonOnbjectives, missionBoxList, missionDescription;
+    private Text[] textListFromObjectives;
 
-    public GameObject ObjectiveGameObject;
-    public GameObject missionGameObject;
-
-    public bool inMission = false;
+    public bool inObjectives, inMission;
     private int missionIndex = 0;
 
     private void Awake()
     {
-        missionGameObject.SetActive(false);
+        missionBoxList.SetActive(false);
+        buttonInventory.SetActive(false);
+        missionDescription.SetActive(false);
 
         for (int i = 0; i < objectives.Count; i++)
         {
-                GameObject missionPrefab = Instantiate(missionUIPrefab, missionBoxListBox);
+                GameObject missionPrefab = Instantiate(missionUIPrefab, missionBoxList.transform);
                 missionPrefab.GetComponent<Text>().text = objectives[i].missionName;
                 missionObjectList.Add(missionPrefab);
                 missionObjectList[i].GetComponent<MissionBox>().mission = Instantiate(objectives[i]);
@@ -36,17 +35,20 @@ public class ObjectiveManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (inObjectives)
         {
-            MoveUp();
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            MoveDown();
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            ChooseMission();
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                MoveUp();
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                MoveDown();
+            }
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                ChooseMission();
+            }
         }
     }
 
@@ -63,7 +65,7 @@ public class ObjectiveManager : MonoBehaviour
 
     public void UpdateList(ObjectiveMaker _Mission)
     {
-        GameObject missionPrefab = Instantiate(missionUIPrefab, missionBoxListBox);
+        GameObject missionPrefab = Instantiate(missionUIPrefab, missionBoxList.transform);
         missionObjectList.Add(missionUIPrefab);
         missionPrefab.GetComponent<Text>().text = _Mission.name;
     }
@@ -110,10 +112,14 @@ public class ObjectiveManager : MonoBehaviour
 
         if (inMission)
         {
-            ObjectiveGameObject.SetActive(false);
-            missionGameObject.SetActive(true);
+            missionDescription.SetActive(true);
 
-            var componentsInMission = missionGameObject.GetComponentsInChildren<Text>();
+            for (int i = 0; i < missionObjectList.Count; i++)
+            {
+                missionObjectList[i].SetActive(false);
+            }
+
+            var componentsInMission = missionBoxList.GetComponentsInChildren<Text>();
             foreach (Text obj in componentsInMission)
             {
                 if (obj.name == "Mission name Text") { obj.text = missionObjectList[missionIndex].GetComponent<MissionBox>().mission.missionName; }
@@ -122,9 +128,22 @@ public class ObjectiveManager : MonoBehaviour
         }
         else 
         {
-            ObjectiveGameObject.SetActive(true);
-            missionGameObject.SetActive(false);
+            missionBoxList.SetActive(true);
+            missionDescription.SetActive(false);
+
+            for (int i = 0; i < missionObjectList.Count; i++)
+            {
+                missionObjectList[i].SetActive(true);
+            }
         }
+    }
+
+    public void OpenAndCloseObjectives()
+    {
+        inObjectives = !inObjectives;
+        missionBoxList.SetActive(inObjectives);
+        buttonInventory.SetActive(inObjectives);
+        buttonOnbjectives.SetActive(!inObjectives);
     }
 
 }
