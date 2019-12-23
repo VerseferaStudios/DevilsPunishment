@@ -119,7 +119,7 @@ public class ObjectiveManager : MonoBehaviour
                 missionObjectList[i].SetActive(false);
             }
 
-            var componentsInMission = missionBoxList.GetComponentsInChildren<Text>();
+            var componentsInMission = missionBoxList.transform.parent.Find("Mission Debrief").GetComponentsInChildren<Text>();
             foreach (Text obj in componentsInMission)
             {
                 if (obj.name == "Mission name Text") { obj.text = missionObjectList[missionIndex].GetComponent<MissionBox>().mission.missionName; }
