@@ -81,7 +81,9 @@ public class MapGen3 : MonoBehaviour
         //StartCoroutine(WaitForaWhile());
 
         //Random.state = GoodStates.states[0];
-        syncronizeSeeds(seed);
+        //syncronizeSeeds(seed);
+
+        syncronizeSeeds(Random.Range(1, 1000));
         Random.InitState(Random.Range(1, 1000));
 
         //StateData.states.Add(Random.state);

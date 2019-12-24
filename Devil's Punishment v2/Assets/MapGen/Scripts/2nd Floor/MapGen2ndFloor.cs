@@ -43,7 +43,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
     public void setSeed(int seed)
     {
-        Random.InitState(seed);
+        //Random.InitState(seed);
     }
 
     public void Start2ndFloor()

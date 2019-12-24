@@ -405,11 +405,12 @@ public class Data2ndFloor : MonoBehaviour
         float startTime1 = Time.time;
         while (true)
         {
+            /*
             if (Time.time - startTime1 >= 10f)
             {
                 break;
             }
-
+            */
             Debug.Log(collidedVents.Count + " " + count + "#################################");
             MapgenProgress.instance.addProgress(1);
 
@@ -420,7 +421,7 @@ public class Data2ndFloor : MonoBehaviour
                 
                 {
                     Debug.Log("innnnnnnnnnnnnn");
-                    //CheckForCollisionVents();
+                    CheckForCollisionVents();
                     count++;
                     yield return new WaitUntil(() => isFinishedCheckCollisionsVents = true);
                     isFinishedCheckCollisionsVents = false;
@@ -441,6 +442,7 @@ public class Data2ndFloor : MonoBehaviour
     public IEnumerator DoCheckPerSecond()
     {
         yield return new WaitUntil(() => isStartData2ndFloor);
+        Debug.Log("Checking corridor collisons");
         //for putting corridors so that connected components does correctly
         for (int i = 0; i < 3; i++)
         {
@@ -455,14 +457,15 @@ public class Data2ndFloor : MonoBehaviour
         float startTime1 = Time.time;
         while (true)
         {
+            /*
             if(Time.time - startTime1 >= 10f)
             {
                 break;
             }
-
+            */
             // TODO: Disabled for console clear 10/02/19
            // Debug.Log(collidedCorridors.Count + " " + count + "#################################");
-            if (count < 6 /*&& collidedCorridors.Count != 0*/)
+            if (count < 600 /*&& collidedCorridors.Count != 0*/)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
