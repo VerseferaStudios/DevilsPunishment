@@ -38,6 +38,7 @@ public class Data2ndFloor : MonoBehaviour
     public Vector3 spawnPointsFirstPos;
 
     public int count = 0;
+    public int countVents = 0;
 
     public GameObject roomIndicator;
 
@@ -411,10 +412,10 @@ public class Data2ndFloor : MonoBehaviour
                 break;
             }
             */
-            Debug.Log(collidedVents.Count + " " + count + "#################################");
+            Debug.Log(collidedVents.Count + " " + countVents + "#################################");
             MapgenProgress.instance.addProgress(1);
 
-            if (count < 6 /*&& collidedCorridors.Count != 0*/)
+            if (countVents < 6 /*&& collidedCorridors.Count != 0*/)
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
@@ -422,10 +423,14 @@ public class Data2ndFloor : MonoBehaviour
                 {
                     Debug.Log("innnnnnnnnnnnnn");
                     CheckForCollisionVents();
-                    count++;
+                    countVents++;
                     yield return new WaitUntil(() => isFinishedCheckCollisionsVents = true);
                     isFinishedCheckCollisionsVents = false;
                 }
+            }
+            else
+            {
+                break;
             }
 
             MapgenProgress.instance.addProgress(1);
@@ -465,9 +470,9 @@ public class Data2ndFloor : MonoBehaviour
             */
             // TODO: Disabled for console clear 10/02/19
            // Debug.Log(collidedCorridors.Count + " " + count + "#################################");
-            if (count < 600 /*&& collidedCorridors.Count != 0*/)
+            if (count < 6 /*&& collidedCorridors.Count != 0*/)
             {
-                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
+                Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4 " + count);
 
                 MapgenProgress.instance.addProgress(4);
 
@@ -488,6 +493,10 @@ public class Data2ndFloor : MonoBehaviour
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
                     isFinishedCheckCollisions = false;
                 }
+            }
+            else
+            {
+                break;
             }
             yield return new WaitForSeconds(1f);
         }

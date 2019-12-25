@@ -425,6 +425,7 @@ public class Data : MonoBehaviour
             }
             else
             {
+                break;
                 //RemoveStrayVentCovers();
             }
             yield return new WaitForSeconds(1f);
@@ -490,6 +491,10 @@ public class Data : MonoBehaviour
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
                     isFinishedCheckCollisions = false;
                 }
+            }
+            else
+            {
+                break;
             }
             yield return new WaitForSeconds(1f);
         }
