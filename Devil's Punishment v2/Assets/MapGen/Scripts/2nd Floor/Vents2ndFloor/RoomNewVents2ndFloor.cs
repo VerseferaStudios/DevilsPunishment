@@ -83,7 +83,7 @@ public class RoomNewVents2ndFloor : MonoBehaviour
 
                 //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 
-                Data2ndFloor.instance.connectedRooms.Add(visitedRooms);
+                Data2ndFloor.instance.connectedRoomsVents.Add(visitedRooms);
 
                 ////Debug.Log(spawnPoints[i].transform.position + "______________________________________________________");
                 spawnPoints.RemoveAt(i);
@@ -114,10 +114,10 @@ public class RoomNewVents2ndFloor : MonoBehaviour
 
         //put all adjacnt rooms in same component
         /*
-        for (int i = 0; i < Data2ndFloor.instance.connectedRooms.Count; i++)
+        for (int i = 0; i < Data2ndFloor.instance.connectedRoomsVents.Count; i++)
         {
-            if (Mathf.Abs(Data2ndFloor.instance.connectedRooms[i][0].x - Data2ndFloor.instance.connectedRooms[i][1].x) == Data2ndFloor.instance.xSize 
-                || Mathf.Abs(Data2ndFloor.instance.connectedRooms[i][0].z - Data2ndFloor.instance.connectedRooms[i][1].z) == Data2ndFloor.instance.zSize)
+            if (Mathf.Abs(Data2ndFloor.instance.connectedRoomsVents[i][0].x - Data2ndFloor.instance.connectedRoomsVents[i][1].x) == Data2ndFloor.instance.xSize 
+                || Mathf.Abs(Data2ndFloor.instance.connectedRoomsVents[i][0].z - Data2ndFloor.instance.connectedRoomsVents[i][1].z) == Data2ndFloor.instance.zSize)
             {
                     
             }
@@ -375,7 +375,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
         //CheckDuplicatesAndConnect(lParentPos, spawnPoints[k].transform.parent.transform.position);
 
-        Data2ndFloor.instance.connectedRooms.Add(visitedRooms);
+        Data2ndFloor.instance.connectedRoomsVents.Add(visitedRooms);
 
         /*
         //Debug.Log("VISITED ROOMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -384,7 +384,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             //Debug.Log(item);
         }
         //Debug.Log("CONNECTED ROOMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        foreach (var item in Data2ndFloor.instance.connectedRooms)
+        foreach (var item in Data2ndFloor.instance.connectedRoomsVents)
         {
             foreach (var item1 in item)
             {
@@ -681,11 +681,11 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
     private void CheckDuplicatesAndConnect(List<Vector3> rooms)
     {
-        for (int i = 0; i < Data2ndFloor.instance.connectedRooms.Count; i++)
+        for (int i = 0; i < Data2ndFloor.instance.connectedRoomsVents.Count; i++)
         {
-            for (int j = 0; j < Data2ndFloor.instance.connectedRooms[i].Count; j++)
+            for (int j = 0; j < Data2ndFloor.instance.connectedRoomsVents[i].Count; j++)
             {
-                if (rooms[0] == Data2ndFloor.instance.connectedRooms[i][j])
+                if (rooms[0] == Data2ndFloor.instance.connectedRoomsVents[i][j])
                 {
                     Data2ndFloor.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(rooms[0] / 2 + rooms[1] / 2, rooms));
                 }
@@ -701,18 +701,18 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
             for (int j = 0; j < Data2ndFloor.instance.connectedRoomsThroughCollision[i].rooms.Count; j++)
             {
                 collidedConnectedRoomToSearch = Data2ndFloor.instance.connectedRoomsThroughCollision[i].rooms[j];
-                for (int k = 0; k < Data2ndFloor.instance.connectedRooms.Count; k++)
+                for (int k = 0; k < Data2ndFloor.instance.connectedRoomsVents.Count; k++)
                 {
-                    for (int q = 0; q < Data2ndFloor.instance.connectedRooms[k].Count; q++)
+                    for (int q = 0; q < Data2ndFloor.instance.connectedRoomsVents[k].Count; q++)
                     {
                         // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
                         // -------------- and comparing it with every element of connectedRooms -------------- 
                         // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
                         // -------------- and removing the same ones from connectedRooms --------------
-                        if (collidedConnectedRoomToSearch == Data2ndFloor.instance.connectedRooms[k][q])
+                        if (collidedConnectedRoomToSearch == Data2ndFloor.instance.connectedRoomsVents[k][q])
                         {
-                            Data2ndFloor.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data2ndFloor.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data2ndFloor.instance.connectedRooms[k]));
-                            Data2ndFloor.instance.connectedRooms.RemoveAt(k);
+                            Data2ndFloor.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data2ndFloor.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data2ndFloor.instance.connectedRoomsVents[k]));
+                            Data2ndFloor.instance.connectedRoomsVents.RemoveAt(k);
                             k--;
                             break;
                         }

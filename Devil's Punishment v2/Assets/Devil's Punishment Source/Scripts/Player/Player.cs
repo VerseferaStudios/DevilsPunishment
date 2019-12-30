@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 using static PlayerController_Revamped;
 public class Player : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class Player : MonoBehaviour
 
     public static Player instance;
 
+    public ColorGrading postFXColorGrading;
+    public Text brightnessPercent;
+
     void Awake() {
         instance = this;
     }
@@ -28,6 +33,7 @@ public class Player : MonoBehaviour
         ToggleInventory();
         ToggleGameMenu();
 		if (inventory.equippedGun != null) { gunController.InitGun(); }
+        postFXColorGrading = GameSetup.setup.postFXColorGrading;
 	}
 
     void Update() {
@@ -76,6 +82,12 @@ public class Player : MonoBehaviour
     public void ExitGame()
     {
 
+    }
+
+    public void BrightnessSlider(Slider slider)
+    {
+        postFXColorGrading.postExposure.value = slider.value;
+        brightnessPercent.text = Mathf.Round(slider.value * 10000)/100 + "%";
     }
 
 }

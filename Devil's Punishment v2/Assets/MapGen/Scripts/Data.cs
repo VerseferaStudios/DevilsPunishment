@@ -425,6 +425,7 @@ public class Data : MonoBehaviour
             }
             else
             {
+                break;
                 //RemoveStrayVentCovers();
             }
             yield return new WaitForSeconds(1f);
@@ -490,6 +491,10 @@ public class Data : MonoBehaviour
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
                     isFinishedCheckCollisions = false;
                 }
+            }
+            else
+            {
+                break;
             }
             yield return new WaitForSeconds(1f);
         }
@@ -848,7 +853,7 @@ public class Data : MonoBehaviour
                     && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                 {
 
-                    bool isErroneousTCorr = false;
+                    //bool isErroneousTCorr = false;
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
@@ -921,7 +926,7 @@ public class Data : MonoBehaviour
                             
                             if (yRotation == 0)
                             {
-                                isErroneousTCorr = true;
+                                //isErroneousTCorr = true;
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
                                 //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
                             }

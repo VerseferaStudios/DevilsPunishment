@@ -77,7 +77,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
+                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                currentCorridor.layer = 18;
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
                 if (spawnPoints[i].name.EndsWith("x"))
@@ -221,6 +222,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
                 StartCoroutine(Data2ndFloor.instance.DoCheckPerSecond());
 
                 Data.instance.canStartCorridorTestSpawner = true;
+                Data2ndFloor.instance.isStartData2ndFloor = true;
             }
 
         }
@@ -546,7 +548,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.z - to.z) / Data2ndFloor.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 1 = " + i);
-                yield return new WaitForSeconds(0.25f);
+                //yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
@@ -665,7 +667,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
             for (; i < Mathf.Abs(From.x - to.x) / Data2ndFloor.instance.corridorSize + 1 - 1; i++)
             {
                 ////Debug.Log("Loop 2 = " + i);
-                yield return new WaitForSeconds(0.25f);
+                //yield return new WaitForSeconds(0.25f);
                 GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data2ndFloor.instance.mapGenHolderTransform);
                 /*
                 //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
@@ -721,7 +723,8 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
         }
 
         // ------------- Check between x door and z door (in L shape) ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data2ndFloor.instance.xSize / 2)
+        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize / 2 
+            && spawnPoints[k].transform.parent.position == spawnPoints[i].transform.parent.position)
         {
             return true;
         }
