@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
 
     public void BrightnessSlider(Slider slider)
     {
+        //postFXColorGrading.postExposure.
         postFXColorGrading.postExposure.value = slider.value;
         brightnessPercent.text = Mathf.Round(slider.value * 10000)/100 + "%";
     }
