@@ -570,7 +570,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity/* Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0)*/, currentCorridor.transform);
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
                 }
 
                 // ----------- Item Gen -----------
@@ -683,7 +683,7 @@ public class RoomNew2ndFloor : MonoBehaviour, IComparer<GameObject>
 
                 if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
                 {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.identity/* Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0)*/, currentCorridor.transform);
+                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
                 }
 
                 // ----------- Item Gen -----------
