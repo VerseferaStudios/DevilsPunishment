@@ -92,11 +92,12 @@ public class PlayerController : MonoBehaviour
         {
             print("Stopped");
         }
-
+/*
         if(slowdown)
         {
             GetComponent<CharacterController>().Move(-GetComponent<CharacterController>().velocity);
         }
+        */
         GatherInput();
         if (Input.GetKeyUp(KeyCode.E))
         {

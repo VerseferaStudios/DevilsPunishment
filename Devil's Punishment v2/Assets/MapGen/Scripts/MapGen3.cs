@@ -53,7 +53,10 @@ public class MapGen3 : MonoBehaviour
 
     public void syncronizeSeeds(int seed)
     {
-        GetComponent<MapGen2ndFloor>().setSeed(seed) ;
+        if(GetComponent<MapGen2ndFloor>() != null)// .TryGetComponent(typeof(HingeJoint), out Component component))//(out MapGen2ndFloor mapGen2ndFloor))
+        {
+            GetComponent<MapGen2ndFloor>().setSeed(seed);
+        }
     }
 
 
