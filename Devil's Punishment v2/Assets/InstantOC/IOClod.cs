@@ -372,6 +372,8 @@ public class IOClod : IOCcomp {
 			{
 				for(i=0;i<rs0.Length;i++)
 				{
+                    if (rs0[i].name.Equals("RenderPlane"))
+                        continue;
 					rs0[i].enabled = true;
 				}
 			}
@@ -390,6 +392,8 @@ public class IOClod : IOCcomp {
 		case 1:
 			for(i=0;i<rs1.Length;i++)
 			{
+                if (rs1[i].name.Equals("RenderPlane"))
+                    continue;
 				rs1[i].enabled = true;
 			}
 			for(i=0;i<rs0.Length;i++)
@@ -411,6 +415,8 @@ public class IOClod : IOCcomp {
 		case 2:
 			for(i=0;i<rs2.Length;i++)
 			{
+                if (rs2[i].name.Equals("RenderPlane"))
+                    continue;
 				rs2[i].enabled = true;
 			}
 			for(i=0;i<rs0.Length;i++)
@@ -438,6 +444,8 @@ public class IOClod : IOCcomp {
 			{
 				for(i=0;i<rs.Length;i++)
 				{
+                    if (rs[i].name.Equals("RenderPlane"))
+                        continue;
 					rs[i].enabled = true;
 				}
 			}
