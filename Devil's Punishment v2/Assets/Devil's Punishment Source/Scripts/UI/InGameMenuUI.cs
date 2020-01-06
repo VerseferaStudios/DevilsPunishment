@@ -7,7 +7,9 @@ public class InGameMenuUI : MonoBehaviour
 {
     public static InGameMenuUI instance;
     public GameObject optionsPanel;
-    
+
+    public Image backgroundPanel;
+    public Color backGroundPanelColor;
     void Awake() 
     {
         instance = this;
