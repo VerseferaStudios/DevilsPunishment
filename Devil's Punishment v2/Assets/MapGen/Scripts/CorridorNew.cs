@@ -46,7 +46,15 @@ public class CorridorNew : MonoBehaviour
             }
 
             //isNeedL = true;
-            Data.instance.collidedCorridors.Add(gameObject);
+
+            if (transform.parent.parent.name.StartsWith("1"))
+            {
+                Data.instance.collidedCorridors.Add(gameObject);
+            }
+            else
+            {
+                Data2ndFloor.instance.collidedCorridors.Add(gameObject);
+            }
             ////Debug.Log(Data.instance.collisionCount + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             //startTime = Time.time;
             //Destroy(gameObject); //transform.parent.gameObject

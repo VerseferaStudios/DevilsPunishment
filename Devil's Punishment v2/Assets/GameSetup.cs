@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class GameSetup : MonoBehaviour
 {
 
     public GameObject levelGen01;
     public Light levelNetworkLED;
+    public PostProcessVolume postFXVolume;
+    public ColorGrading postFXColorGrading;
 
     public static GameSetup setup;
 
@@ -14,12 +17,17 @@ public class GameSetup : MonoBehaviour
     {
         setup = this;
     }
+    private void Start()
+    {
+        postFXVolume.profile.TryGetSettings(out postFXColorGrading);
+    }
     public void clientActive(Network_Player ply)
     {
         // Cyan light for client
         levelNetworkLED.color = Color.cyan;
         Network_Transmitter.transmitter.startClient(ply);
         
+
     }
 
     #region Singleton
@@ -29,6 +37,7 @@ public class GameSetup : MonoBehaviour
       //  levelGen01.SetActive(true);
         levelNetworkLED.color = Color.green;
        Network_Transmitter.transmitter.startClient(ply);
+       
 
     }
 

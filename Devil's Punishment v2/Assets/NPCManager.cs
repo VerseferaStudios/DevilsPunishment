@@ -9,9 +9,36 @@ public class NPCManager : MonoBehaviour
     public static NPCManager instance;
     public List<FactionRelations> Faction_Relations = new List<FactionRelations>();
 
+    public GameObject waypointHolder;
+    public List<GameObject> MapWaypoints;
+
+    public List<Vector3> MapWaypointsPosition;
+
+    public void addMapWaypoint(Vector3 point)
+    {
+        GameObject n = new GameObject("Point " + MapWaypoints.Count + point);
+        n.transform.position = point;
+        n.transform.parent = waypointHolder.transform;
+        MapWaypoints.Add(n);
+        MapWaypointsPosition.Add(point);
+    }
+
+    public void OnMapGenerationDone()
+    {
+        //Assign the randomly generated waypoints to the parasites
+        foreach (NPC_Stats s in NPClist)
+        {
+            //  s.npc.allWaypoints.AddRange(MapWaypointsPosition);
+            //Overwriting
+            s.npc.allWaypoints = MapWaypointsPosition;
+        }
+    }
+
+
+
     void Awake()
     {
-        //war of Brothers
+        
         Faction_Relations.Add(new FactionRelations(Faction.Horde, Faction.NightCrawlers, Relation.Enemy));
 
         if (instance != null)

@@ -227,12 +227,14 @@ public class Data : MonoBehaviour
                     if (openings[i] == 1)
                     {
                         openings.RemoveAt(i);
+                        i--;
                         threesToAdd++;
                         //openings.Add(3);
                     }
                     else if (openings[i] == 3)
                     {
                         openings.RemoveAt(i);
+                        i--;
                         onesToAdd++;
                         //openings.Add(1);
                     }
@@ -254,12 +256,14 @@ public class Data : MonoBehaviour
                     if (openings[i] == 0)
                     {
                         openings.RemoveAt(i);
+                        i--;
                         twosToAdd++;
                         //openings.Add(2);
                     }
                     else if (openings[i] == 2)
                     {
                         openings.RemoveAt(i);
+                        i--;
                         zerosToAdd++;
                         //openings.Add(0);
                     }
@@ -421,6 +425,7 @@ public class Data : MonoBehaviour
             }
             else
             {
+                break;
                 //RemoveStrayVentCovers();
             }
             yield return new WaitForSeconds(1f);
@@ -486,6 +491,10 @@ public class Data : MonoBehaviour
                     yield return new WaitUntil(() => isFinishedCheckCollisions = true);
                     isFinishedCheckCollisions = false;
                 }
+            }
+            else
+            {
+                break;
             }
             yield return new WaitForSeconds(1f);
         }
@@ -648,15 +657,17 @@ public class Data : MonoBehaviour
 
         //Display temp, the list being kept back to revisit after execution of this whole function
         int z = 1;
+        /*
         foreach (var item in temp)
         {
             //Debug.Log("Tempppp No. " + z + "item.Count = " + item.rooms.Count);
             foreach (var item1 in item.rooms)
             {
-                //Debug.Log(item1);
+                Debug.Log(item1);
             }
             z++;
         }
+        */
 
 
 
@@ -757,29 +768,33 @@ public class Data : MonoBehaviour
     private void displayConnectedRoomsThroughCollision()
     {
         int z = 1;
+        /*
         foreach (var item in connectedRoomsThroughCollision)
         {
             //Debug.Log("ConnectedRoomsThroughCollision No. " + z + "item.Count = " + item.rooms.Count);
             foreach (var item1 in item.rooms)
             {
-                //Debug.Log(item1);
+                Debug.Log(item1);
             }
             z++;
         }
+        */
     }
 
     private void displayConnectedRooms()
     {
         int z = 1;
+        /*
         foreach (var item in connectedRooms)
         {
             //Debug.Log("ConnectedRooms No. " + z);
             foreach (var item1 in item)
             {
-                //Debug.Log(item1);
+                Debug.Log(item1);
             }
             z++;
         }
+        */
     }
 
     private void ResolveAdjacentRooms()
@@ -838,7 +853,7 @@ public class Data : MonoBehaviour
                     && Mathf.Abs(collidedCorridors[i].transform.position.z - collidedCorridors[j].transform.position.z) <= 0.6f)
                 {
 
-                    bool isErroneousTCorr = false;
+                    //bool isErroneousTCorr = false;
                     //Make condition perfect er
 
                     if (collidedCorridors[i].transform.parent.name.Equals(collidedCorridors[j].transform.parent.name)
@@ -911,7 +926,7 @@ public class Data : MonoBehaviour
                             
                             if (yRotation == 0)
                             {
-                                isErroneousTCorr = true;
+                                //isErroneousTCorr = true;
                                 currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
                                 //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
                             }
@@ -947,6 +962,19 @@ public class Data : MonoBehaviour
                             isError = true;
                             Debug.Log("Count = " + openings1.Count);
                             Debug.Log("Position = " + collidedCorridors[i].transform.position);
+                            Debug.Log("Name i = " + collidedCorridors[i].transform.parent.name);
+                            Debug.Log("Name j = " + collidedCorridors[j].transform.parent.name);
+
+                            foreach (var item in openings1)
+                            {
+                                Debug.Log(item);
+                            }
+                            Debug.Log("openings2");
+                            foreach (var item in openings2)
+                            {
+                                Debug.Log(item);
+                            }
+
                             //Debug.Log("rotation = " + collidedCorridors[j].transform.rotation.eulerAngles.y);
                             //Debug.Log("parent name " + collidedCorridors[j].transform.parent.name);
                         }
@@ -1311,20 +1339,24 @@ public class Data : MonoBehaviour
                             openings1.Sort();
                             bool isThereVentCoverAbove = false;
                             Debug.Log("========");
+                            /*
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
                             }
+                            */
                             if (openings1[0] == -2)
                             {
                                 isThereVentCoverAbove = true;
                                 openings1.RemoveAt(0);
                                 openings1.Add((openings1[1] + 1) % 4);
                             }
+                            /*
                             foreach (var item in openings1)
                             {
                                 Debug.Log(item);
                             }
+                            */
                             float yRotation = ConvertToRotation(openings1);
                             Vector3 spawnAtPos = collidedVents[j].transform.parent.transform.position;
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);

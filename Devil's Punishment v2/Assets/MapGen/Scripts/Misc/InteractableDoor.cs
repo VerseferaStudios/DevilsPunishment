@@ -19,6 +19,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
     private string promptString = "Open vent cover";
 
+    public MeshRenderer meshRenderer_renderPlane;
+
     //private int l = 0;
 
     private void Start()
@@ -64,6 +66,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                     t.gameObject.SetActive(false);
                 }
                 //timeToPickUp = float.MaxValue;
+                meshRenderer_renderPlane.enabled = true;
                 StartCoroutine(OpenVentCover());
                 break;
 

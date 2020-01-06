@@ -53,7 +53,10 @@ public class MapGen3 : MonoBehaviour
 
     public void syncronizeSeeds(int seed)
     {
-        GetComponent<MapGen2ndFloor>().setSeed(seed) ;
+        if(GetComponent<MapGen2ndFloor>() != null)// .TryGetComponent(typeof(HingeJoint), out Component component))//(out MapGen2ndFloor mapGen2ndFloor))
+        {
+            GetComponent<MapGen2ndFloor>().setSeed(seed);
+        }
     }
 
 
@@ -81,8 +84,10 @@ public class MapGen3 : MonoBehaviour
         //StartCoroutine(WaitForaWhile());
 
         //Random.state = GoodStates.states[0];
-        syncronizeSeeds(seed);
-        Random.InitState(seed);
+        //syncronizeSeeds(seed);
+
+        syncronizeSeeds(Random.Range(1, 1000));
+        Random.InitState(Random.Range(1, 1000));
 
         //StateData.states.Add(Random.state);
         Rooms();
@@ -510,7 +515,11 @@ public class MapGen3 : MonoBehaviour
         Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
         for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
         {
+            
+            
             corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
+            //Called on every gen ? OK Let's use those as waypoints haha
+            NPCManager.instance.addMapWaypoint(corridorsOfRoomParent.GetChild(i).GetChild(0).position);
         }
     }
 

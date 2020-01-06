@@ -47,7 +47,8 @@ public class InventoryUI : MonoBehaviour
     }
 
     public void Hide() {
-        rectTransform.anchoredPosition = new Vector3(-3000,0,0);
+        Debug.Log("Who calls us ?!");
+       // rectTransform.anchoredPosition = new Vector3(-3000,0,0);
     }
 
     private string QuantityTextGenerator(int stack, int maxStackSize) {

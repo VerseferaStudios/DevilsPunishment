@@ -44,9 +44,10 @@ public class MapGen2ndFloor : MonoBehaviour
     public void setSeed(int seed)
     {
         Random.InitState(seed);
+        StartGen();
     }
 
-    private void Start()
+    private void StartGen()
     {
         n = numberOfRooms - 1;
 

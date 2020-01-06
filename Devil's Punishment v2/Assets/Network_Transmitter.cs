@@ -13,6 +13,7 @@ public class Network_Transmitter : NetworkBehaviour
     public NetworkManager_Drug networkManager;
     public MapGen3 mapGen;
     public static Network_Transmitter transmitter;
+    public GameState gS;
 
     [SyncVar]
     private int mapSeed = 23;
@@ -26,15 +27,20 @@ public class Network_Transmitter : NetworkBehaviour
         {
             
             mapSeed = Random.Range(0, 1000);
-            player.SendChatMessage(mapSeed.ToString()+  " We generated");          
+            player.RpcSendChatMessage(mapSeed.ToString()+  " We generated");          
             genOnce = true;
             mapGen.startMapGeneration(mapSeed);
+            gS.StartGame();    
+
         }
         else
         {
             mapGen.startMapGeneration(mapSeed);
-            player.SendChatMessage(mapSeed.ToString()+ " We fetched from server");
+            player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
+            gS.StartGame();
         }
+
+        
 
     }
 
@@ -58,7 +64,7 @@ public class Network_Transmitter : NetworkBehaviour
         Debug.Log("STARTING CLIENT");
         if(isServer)
         {
-            player.SendChatMessage("Host started hosting!"); // it's us haha
+            player.RpcSendChatMessage("Host started hosting!"); // it's us haha
         }
         else
         {
@@ -94,27 +100,30 @@ public class Network_Transmitter : NetworkBehaviour
     [Command]
     private void CmdinformHost(string msg)
     {
-       player.SendChatMessage(msg); // host is a lone wanderer
+      // player.RpcSendChatMessage(msg); // host is a lone wanderer
         RpcsendEvent(msg); // Nice that they told me ! Better tell the clients too now
     }
 
+    
     public void sendNetworkMessage(string text, string username)
     {
         string msg = username + " : " + text;
         if (isServer)
         {
             print("Server sends!");
-            //Send it to ourselves.. since we're no client .. sad life
-            player.SendChatMessage(msg);
+
+          
             //Since we're the server let's tell the others what we have to say!
             RpcsendEvent(msg);
             
         }
         else
         {
+            print("Client sends!");
             //We're a client!
             // Go tell the host waht we have to say!
-            CmdinformHost(msg);
+
+            CmdinformHost(text);
             
 
         }
@@ -153,7 +162,7 @@ public class Network_Transmitter : NetworkBehaviour
     [ClientRpc]
     public void RpcsendEvent(string text)
     {
-        player.SendChatMessage(text);
+        player.RpcSendChatMessage(text);
         
     }
 
@@ -174,7 +183,7 @@ public class Network_Transmitter : NetworkBehaviour
     public void CmdsendMessage(string text, string username)
     {
         
-       player.RpcSendChatMessage(username, text);
+       player.RpcSendChatUserMessage(username, text);
         
     }
 

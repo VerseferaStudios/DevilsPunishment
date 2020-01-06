@@ -16,7 +16,10 @@ public class NpcStateController : MonoBehaviour
     private Animator animo;
 
     public List<GameObject> WaypointList;
+
+    //Can be set by NPCManager
     public List<Vector3> allWaypoints;
+
     public bool patroling = true;
 
     public int currentWaypoint = 0;
@@ -24,12 +27,15 @@ public class NpcStateController : MonoBehaviour
 
     bool configured = false;
 
+    
+
 
     public GameObject name_GUI;
 
 
     public Transform target;
     public float alertRange = 25f;
+
 
     // Start is called before the first frame update
     void Start()

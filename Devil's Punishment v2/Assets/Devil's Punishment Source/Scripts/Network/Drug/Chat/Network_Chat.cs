@@ -29,6 +29,8 @@ public class Network_Chat : MonoBehaviour
         }
     }
 
+
+
     public void addMessage(string text, string username)
     {
         GameObject newMsg = Instantiate(message, transform);
