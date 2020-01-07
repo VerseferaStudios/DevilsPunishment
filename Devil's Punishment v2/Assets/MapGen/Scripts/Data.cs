@@ -428,8 +428,11 @@ public class Data : MonoBehaviour
                 break;
                 //RemoveStrayVentCovers();
             }
+
+            MapgenProgress.instance.addProgress(1);
             yield return new WaitForSeconds(1f);
         }
+	MapgenProgress.instance.loadedMap(); // done!
     }
 
     public void NumberOfVentCoversInScene()
@@ -475,6 +478,8 @@ public class Data : MonoBehaviour
             {
                 Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
 
+                MapgenProgress.instance.addProgress(4);
+
                 if (count == -1) // Change to 0 to execute AddAndRemoveAdjacentRooms()
                 {
                     AddAndRemoveAdjacentRooms();
@@ -485,6 +490,7 @@ public class Data : MonoBehaviour
                 }
                 else
                 {
+                    MapgenProgress.instance.addProgress(1);
                     Debug.Log("innnnnnnnnnnnnn");
                     CheckForCollision();
                     count++;
@@ -498,6 +504,7 @@ public class Data : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
         }
+        MapgenProgress.instance.addProgress(3);
     }
 
     private void AddAndRemoveAdjacentRooms()   // Dead Code xD
@@ -556,6 +563,7 @@ public class Data : MonoBehaviour
                                     //no break keep looking
                                     //break;
                                 }
+                                MapgenProgress.instance.addProgress(1);
                             }
                         }
                     }
@@ -923,7 +931,7 @@ public class Data : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
-                            
+                            MapgenProgress.instance.addProgress(1);
                             if (yRotation == 0)
                             {
                                 //isErroneousTCorr = true;
@@ -955,6 +963,7 @@ public class Data : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             Instantiate(corridorX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            MapgenProgress.instance.addProgress(2);
                         }
                         else
                         {
@@ -1362,6 +1371,7 @@ public class Data : MonoBehaviour
                             spawnAtPos.x = Mathf.Round(spawnAtPos.x);
                             spawnAtPos.z = Mathf.Round(spawnAtPos.z);
                             GameObject currCorridor = Instantiate(ventT, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+                            MapgenProgress.instance.addProgress(2);
                             /*
                             if (yRotation == 0)
                             {
@@ -1434,7 +1444,7 @@ public class Data : MonoBehaviour
                             //Debug.Log("rotation = " + collidedVents[j].transform.rotation.eulerAngles.y);
                             //Debug.Log("parent name " + collidedVents[j].transform.parent.name);
                         }
-
+                        MapgenProgress.instance.addProgress(2);
                         /*
                         //If I and I collides with different rotations
                         if (collidedVents[i].transform.rotation != collidedVents[j].transform.rotation)

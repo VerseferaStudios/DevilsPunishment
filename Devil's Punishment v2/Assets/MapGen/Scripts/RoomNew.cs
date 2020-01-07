@@ -223,7 +223,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //MakeInitHallways();
 
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
-                StartCoroutine(Data.instance.DoConnectedComponents());
+                MapgenProgress.instance.addProgress(2);
+                
+		StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
 
                 Data.instance.canStartCorridorTestSpawner = true;

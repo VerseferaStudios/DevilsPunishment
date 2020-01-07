@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &7943312630439863619
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175001406662441199}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 125, y: 1.6, z: 125}
+  m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &329861916700886284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175001406662441199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cef07c0a4edc24280fab06095a280b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ventCam: {fileID: 0}
+  ventCamMat: {fileID: 2100000, guid: a63416c5cbcf86241bd08ab839921214, type: 2}
+  ventCoverHolder: {fileID: 7766872509446140013}
 --- !u!65 &3289742544458796318
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -396,6 +424,12 @@ PrefabInstance:
       objectReference: {fileID: 7766872509446140013}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 750a9d7fee142a4428d9e00a430145ea, type: 3}
+--- !u!1 &1175001406662441199 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5104198589351940076, guid: 750a9d7fee142a4428d9e00a430145ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 6240775356579428099}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1175001406662441198 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5104198589351940077, guid: 750a9d7fee142a4428d9e00a430145ea,

@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     public ColorGrading postFXColorGrading;
     public Text brightnessPercent;
 
+    //public GameObject playerCameraGb;
+
     void Awake() {
         instance = this;
     }

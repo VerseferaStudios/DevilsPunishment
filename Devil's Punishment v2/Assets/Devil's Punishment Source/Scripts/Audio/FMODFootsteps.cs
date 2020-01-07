@@ -27,7 +27,7 @@ public class FMODFootsteps : MonoBehaviour
                 //Debug.Log ("Player is moving");
                 playeriswalking = true;
                 canmove = true;
-                print("Moving");
+                //print("Moving");
             }
 
 
@@ -38,7 +38,7 @@ public class FMODFootsteps : MonoBehaviour
                 playerisrunning = false;
                 playeriscrouching = false;
                 canmove = false;
-                print("Not Moving");
+                //print("Not Moving");
             }
 
         
@@ -49,7 +49,7 @@ public class FMODFootsteps : MonoBehaviour
                 playeriswalking = false;
                 playerisrunning = true;
                 playeriscrouching = false;
-                print("Running");
+                //print("Running");
             }
         }
 
@@ -61,7 +61,7 @@ public class FMODFootsteps : MonoBehaviour
                 playeriswalking = false;
                 playerisrunning = false;
                 playeriscrouching = true;
-                print("Crouching");
+                //print("Crouching");
             }
         }
 
@@ -74,7 +74,7 @@ public class FMODFootsteps : MonoBehaviour
     {
         playerisrunning = false;
         playeriscrouching = false;
-        Debug.Log ("Player is walking");
+        //Debug.Log ("Player is walking");
         FMODUnity.RuntimeManager.PlayOneShot(walkingsound);
     }
 
@@ -86,7 +86,7 @@ public class FMODFootsteps : MonoBehaviour
         {
             playeriswalking = false;
             playeriscrouching = false;
-            Debug.Log ("Player is Running");
+            //Debug.Log ("Player is Running");
             FMODUnity.RuntimeManager.PlayOneShot(runningsound);
         }
     }
@@ -97,7 +97,7 @@ public class FMODFootsteps : MonoBehaviour
         {
             playeriswalking = false;
             playerisrunning = false;
-            Debug.Log("Player is crouching");
+            //Debug.Log("Player is crouching");
             FMODUnity.RuntimeManager.PlayOneShot(crouchingsound);
         }
     }
