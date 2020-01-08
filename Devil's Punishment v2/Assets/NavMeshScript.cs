@@ -9,7 +9,7 @@ public class NavMeshScript : MonoBehaviour
     public static NavMeshScript instance;
     public NavMeshSurface surface;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         surface = transform.GetComponent<NavMeshSurface>();
         if (instance != null)

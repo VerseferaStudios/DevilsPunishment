@@ -29,6 +29,7 @@ public class Network_Transmitter : NetworkBehaviour
             mapSeed = Random.Range(0, 1000);
             player.RpcSendChatMessage(mapSeed.ToString()+  " We generated");          
             genOnce = true;
+            
             mapGen.startMapGeneration(mapSeed);
             gS.StartGame();    
 
@@ -112,9 +113,10 @@ public class Network_Transmitter : NetworkBehaviour
         {
             print("Server sends!");
 
-          
+
             //Since we're the server let's tell the others what we have to say!
-            RpcsendEvent(msg);
+            player.chat.addMessage(msg);
+            player.RpcSendChatMessage(msg);
             
         }
         else
@@ -123,7 +125,8 @@ public class Network_Transmitter : NetworkBehaviour
             //We're a client!
             // Go tell the host waht we have to say!
 
-            CmdinformHost(text);
+            CmdinformHost(msg);
+            
             
 
         }

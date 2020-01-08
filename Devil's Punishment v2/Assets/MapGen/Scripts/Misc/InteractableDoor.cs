@@ -11,6 +11,15 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         door,
     }
 
+    public enum RoomType
+    {
+        StartRoom,
+        LaserRoom,
+        EndRoom
+    }
+
+    public RoomType roomType;
+
     public DoorType doorType;
 
     public float timeToPickUp = .5f;
@@ -71,6 +80,12 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 break;
 
             case DoorType.door:
+
+                if(roomType == RoomType.StartRoom)
+                {
+                    GameState.gameState.setMechanics(GameState.MatchMechanics.EspaceGenRoom);
+                }
+
                 Debug.Log("Opening door");
                 StartCoroutine(OpenDoor());
                 break;
