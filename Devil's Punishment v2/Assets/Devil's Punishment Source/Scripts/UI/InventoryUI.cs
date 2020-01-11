@@ -18,7 +18,7 @@ public class InventoryUI : MonoBehaviour
     private InventorySlotUI[] inventorySlots;
 
     private RectTransform rectTransform;
-
+    [SerializeField] private GameObject tooltipPanel;
     Inventory inventory;
     GunController gunController;
 
@@ -26,6 +26,9 @@ public class InventoryUI : MonoBehaviour
         instance = this;
         rectTransform = GetComponent<RectTransform>();
         inventorySlots = GetComponentsInChildren<InventorySlotUI>();
+        tooltipPanel.SetActive(false);
+        itemNameText.text = "";
+        itemDescriptionText.text = "";
     }
 
     void Start() {
@@ -94,22 +97,28 @@ public class InventoryUI : MonoBehaviour
 
     public void ClearSelection() {
         selectedItemIndex = -1;
+        tooltipPanel.SetActive(false);
         itemNameText.text = "";
-        itemDescriptionText.text = "--";
+        itemDescriptionText.text = "";
     }
 
     private void UpdateTooltip() {
         Item item = inventory.GetItemFromIndex(selectedItemIndex);
 
         if(item != null) {
-
+            tooltipPanel.SetActive(true);
             itemNameText.text = item.name;
             itemDescriptionText.text = item.description;
             return;
         }
+        else
+        {
+            tooltipPanel.SetActive(false);
+            itemNameText.text = "";
+            itemDescriptionText.text = "";
+        }
 
-        itemNameText.text = "";
-        itemDescriptionText.text = "--";
+        
     }
 
 
