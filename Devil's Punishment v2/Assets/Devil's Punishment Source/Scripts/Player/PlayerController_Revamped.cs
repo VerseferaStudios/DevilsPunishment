@@ -26,6 +26,9 @@ public class PlayerController_Revamped : MonoBehaviour
     PlayerControls.InputDevice inputDev;
     public float inputAngle;
 
+    //Hylian 01/10/2020
+    private Inventory inventory;
+
     [HideInInspector]
     public bool inputEnabled = true;
 
@@ -36,6 +39,8 @@ public class PlayerController_Revamped : MonoBehaviour
     private Animator characterAnimator;
     private CharacterController controller;
     private Camera headCamera;
+
+    
 
     private Vector2 movementInputRaw;
     private float speed;
@@ -66,6 +71,8 @@ public class PlayerController_Revamped : MonoBehaviour
         characterAnimator = playerModel.GetComponent<Animator>();
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
+        inventory = GetComponentInChildren<Inventory>();
+
     }
 
     void Start() {
@@ -87,10 +94,12 @@ public class PlayerController_Revamped : MonoBehaviour
     int stoppingPoint = 0;
     void Update() {
 
-
-        Movement();
-        Animation();
-        CameraUpdate();
+        if (!inventory.gameObject.activeInHierarchy)
+        {
+            Movement();
+            Animation();
+            CameraUpdate();
+        }
     }
 
     public float RunSpeed = 2f;
