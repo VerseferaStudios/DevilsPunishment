@@ -53,8 +53,19 @@ public class Player : MonoBehaviour
 
     public void ToggleGameMenu()
     {
+       
         gameMenuOpen = !gameMenuOpen;
         gameMenu.gameObject.SetActive(gameMenuOpen);
+
+        // ingame menu UI
+        if(gameMenuOpen)
+        {
+            gameMenu.backgroundPanel.color = gameMenu.backGroundPanelColor;
+        }
+        else
+        {
+            gameMenu.backgroundPanel.color = Color.clear;
+        }
 
         Cursor.visible = gameMenuOpen;
         Cursor.lockState = (gameMenuOpen ? CursorLockMode.None : CursorLockMode.Locked);
@@ -93,4 +104,5 @@ public class Player : MonoBehaviour
         brightnessPercent.text = Mathf.Round(slider.value * 10000)/100 + "%";
     }
 
+    public bool MenuOpen { get { return gameMenuOpen; } }
 }
