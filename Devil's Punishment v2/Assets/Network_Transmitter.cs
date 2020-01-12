@@ -123,11 +123,12 @@ public class Network_Transmitter : NetworkBehaviour
             //We're a client!
             // Go tell the host waht we have to say!
 
-            CmdinformHost(text);
+            CmdsendMessage(text, username);
             
 
         }
     }
+
 
     public int getPlayerCount()
     {
