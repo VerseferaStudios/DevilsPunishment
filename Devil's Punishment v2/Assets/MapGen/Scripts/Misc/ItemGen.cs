@@ -60,9 +60,11 @@ public class ItemGen : MonoBehaviour
     [Space]
     [Header("Lootables")]
     //Setting the items
-    public GameObject gen1; //------------
-    public GameObject gen2; // 100% spawn rate
-    public GameObject gen3; //------------
+    public GameObject[] genParts;
+
+    private int ctr = 2;
+    private float totalProbability = 1.55f; // have to check calculatoions
+
     [Space]
     public GameObject med; //10% Spawnrate
     public GameObject pills; //5% spawnrate
@@ -228,7 +230,7 @@ public class ItemGen : MonoBehaviour
     //Take the chances into account and spawn the right item
     private GameObject SpawnCorrectItemHelper()
     {
-        float rand = Random.Range(0f, 1.25f);
+        float rand = Random.Range(0f, totalProbability);
         if(rand < .10f)
         {
             return med;
@@ -257,9 +259,18 @@ public class ItemGen : MonoBehaviour
         {
             return shotgun;
         }
-        else
+        else if (rand <= 1.25f)
         {
             return rifle;
+        }
+        else if(ctr >= 0)
+        {
+            return genParts[ctr];
+            ctr--;
+            if(ctr < 0)
+            {
+                totalProbability = 1.25f;
+            }
         }
     }
 
