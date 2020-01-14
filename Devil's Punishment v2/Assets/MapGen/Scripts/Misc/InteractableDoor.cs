@@ -73,6 +73,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 break;
 
             case DoorType.door:
+                //Set Match Mechanic completed
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
                 StartCoroutine(OpenDoor());

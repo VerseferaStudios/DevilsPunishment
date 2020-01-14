@@ -12,6 +12,8 @@ public class NPCManager : MonoBehaviour
     public GameObject waypointHolder;
     public List<GameObject> MapWaypoints;
 
+    
+
     public List<Vector3> MapWaypointsPosition;
 
     public void addMapWaypoint(Vector3 point)
@@ -23,6 +25,15 @@ public class NPCManager : MonoBehaviour
         MapWaypointsPosition.Add(point);
     }
 
+    public bool spawnGenParts = true;
+    public List<GameObject> genParts = new List<GameObject>();
+
+    //TODO: Use refs instead of hardcode
+    public GameObject genPartAPrefab;
+    public GameObject genPartBPrefab;
+    public GameObject genPartCPrefab;
+
+
     public void OnMapGenerationDone()
     {
         //Assign the randomly generated waypoints to the parasites
@@ -32,6 +43,18 @@ public class NPCManager : MonoBehaviour
             //Overwriting
             s.npc.allWaypoints = MapWaypointsPosition;
         }
+
+        // Let's pick some locations and spawn map gen parts
+        // TODO: Change location of map gen spawning..
+        GameObject genA = Instantiate(genPartAPrefab,MapWaypointsPosition[Random.Range(0,MapWaypointsPosition.Count-1)]+Vector3.up, Quaternion.identity);
+        GameObject genB = Instantiate(genPartBPrefab, MapWaypointsPosition[Random.Range(0, MapWaypointsPosition.Count-1)]+Vector3.up, Quaternion.identity);
+        GameObject genC = Instantiate(genPartCPrefab, MapWaypointsPosition[Random.Range(0, MapWaypointsPosition.Count-1)]+ Vector3.up, Quaternion.identity);
+
+        genParts.Add(genA);
+        genParts.Add(genB);
+        genParts.Add(genC);
+
+
     }
 
 

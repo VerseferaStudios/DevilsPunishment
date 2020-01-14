@@ -25395,12 +25395,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory:
-  - item: {fileID: 11400000, guid: 91d9f64a47c471a478c82db40f69d057, type: 2}
-    stack: 1
-  - item: {fileID: 11400000, guid: 94aa8f7df8e9ff046a8a925c243c39fd, type: 2}
-    stack: 1
-  - item: {fileID: 11400000, guid: 905d7945e52320a479781de89053ed9f, type: 2}
-    stack: 1
+  - item: {fileID: 0}
+    stack: 0
+  - item: {fileID: 0}
+    stack: 0
+  - item: {fileID: 0}
+    stack: 0
   - item: {fileID: 0}
     stack: 0
   - item: {fileID: 11400000, guid: 2c5f3d2c0173d0f4aa8feebfebecc438, type: 2}
@@ -41059,8 +41059,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -51803,6 +51803,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2090704049}
     m_Modifications:
+    - target: {fileID: 8990758627394148854, guid: b4f3ea091da1d2740a775eafba5a40ba,
+        type: 3}
+      propertyPath: m_Name
+      value: GameMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 8990758627394148852, guid: b4f3ea091da1d2740a775eafba5a40ba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -51927,11 +51932,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Colors.m_DisabledColor.a
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990758627394148854, guid: b4f3ea091da1d2740a775eafba5a40ba,
-        type: 3}
-      propertyPath: m_Name
-      value: GameMenu
       objectReference: {fileID: 0}
     - target: {fileID: 8990758627797949557, guid: b4f3ea091da1d2740a775eafba5a40ba,
         type: 3}
