@@ -1,4 +1,4 @@
-﻿//What this script is SUPPOSED to do is the following...
+﻿ //What this script is SUPPOSED to do is the following...
 //-Map Generator spawns in 1 of each of the static rooms (forced) and a "x" amount of the non-static rooms and of them non-static rooms there could be none of a certain type of room or it could be nothing BUT that room type (ie Dormatory, Hospital etc.)
 //-As the map generator room spawns in a room it tells this script that it spawned in what ever that room was 
 //-There are only certain rooms that have loot spawn locations, and of them rooms they have a range of 1-8 spawn spots depending on the room.
@@ -228,7 +228,7 @@ public class ItemGen : MonoBehaviour
     //Take the chances into account and spawn the right item
     private GameObject SpawnCorrectItemHelper()
     {
-        float rand = Random.Range(0f, 1.55f);
+        float rand = Random.Range(0f, 1.25f);
         if(rand < .10f)
         {
             return med;
@@ -257,13 +257,9 @@ public class ItemGen : MonoBehaviour
         {
             return shotgun;
         }
-        else if (rand < 1.25f)
-        {
-            return rifle;
-        }
         else
         {
-            return flashlight;
+            return rifle;
         }
     }
 

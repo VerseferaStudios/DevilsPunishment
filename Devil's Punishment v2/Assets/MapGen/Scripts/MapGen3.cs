@@ -313,6 +313,8 @@ public class MapGen3 : MonoBehaviour
 
             }
 
+            MapgenProgress.instance.addProgress(1);
+
             //gameObjectDetails.Add(roomScript);
 
         }

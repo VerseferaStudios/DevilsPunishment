@@ -11,6 +11,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         door,
     }
 
+    public GameState.gameStateType triggerState;
+
     public DoorType doorType;
 
     public float timeToPickUp = .5f;
@@ -71,6 +73,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 break;
 
             case DoorType.door:
+                //Set Match Mechanic completed
+                GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
                 StartCoroutine(OpenDoor());
                 break;

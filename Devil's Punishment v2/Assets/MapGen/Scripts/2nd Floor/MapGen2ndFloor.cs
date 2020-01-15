@@ -287,7 +287,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
             }
 
-            //MapgenProgress.instance.addProgress(1);
+            MapgenProgress.instance.addProgress(1);
 
             //gameObjectDetails.Add(roomScript);
 

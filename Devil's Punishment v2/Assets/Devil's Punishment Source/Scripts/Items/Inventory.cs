@@ -151,12 +151,15 @@ public class Inventory : MonoBehaviour
             switch(item.name){
                 case "Generator Part A":
                     genPartIndex = 10;
+                    GameState.gameState.addState(GameState.gameStateType.GenPartA);
                     break;
                 case "Generator Part B":
                     genPartIndex = 11;
+                    GameState.gameState.addState(GameState.gameStateType.GenPartB);
                     break;
                 case "Generator Part C":
                     genPartIndex = 12;
+                    GameState.gameState.addState(GameState.gameStateType.GenPartC);
                     break;
                 default:
                     break;
@@ -169,7 +172,6 @@ public class Inventory : MonoBehaviour
         return false;
     }
     public void AddItem(Item item, int stack=1) {
-        Debug.Log("Add ITEM!!!!!!!!!!!!!!!!!!!!!!");
         if (ItemIsSpecial_HandleSeparately(item,stack)){
             return;
         }

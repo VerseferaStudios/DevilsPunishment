@@ -312,6 +312,7 @@ public class PlayerController : MonoBehaviour
 
             if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
             {
+                // if(inventory != active)
                 horizontalAngle += Input.GetAxisRaw("Mouse X") * Time.deltaTime * lookSensitivity * lookSensitivityHorizontal * aimMultiplier;
                 verticalAngle += (invertY ? 1.0f : -1.0f) * Input.GetAxisRaw("Mouse Y") * Time.deltaTime * lookSensitivity * lookSensitivityVertical * aimMultiplier;
             }
