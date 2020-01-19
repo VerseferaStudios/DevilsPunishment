@@ -22,7 +22,10 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 
     public void OnInteract() {
         Debug.Log("Picked up " + item.name + " x" + stock + ".");
-		gameObject.SetActive(false);
+
+
+
+        gameObject.SetActive(false);
 		Inventory.instance.AddItem(item, stock);
 		if (gameObject.name.Contains("(Clone)"))
 		{

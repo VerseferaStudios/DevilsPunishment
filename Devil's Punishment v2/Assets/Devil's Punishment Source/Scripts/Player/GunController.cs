@@ -359,11 +359,11 @@ public class GunController : MonoBehaviour
             //Say hey we're shooting to server
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset*2);
 			RaycastHit hit;
-
+                
 
             
 
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, hittableMask.value))
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, hittableMask.value, QueryTriggerInteraction.Ignore))
 			{
                // NetworkManager_Drug.instance.BroadcastShot(ray.origin, hit.point);
 
@@ -374,7 +374,7 @@ public class GunController : MonoBehaviour
                 networkPlayer.Cmdbroadcast_Shots(hit.point, Quaternion.LookRotation(hit.normal));
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
-				IfEnemyHit(hit);
+				//IfEnemyHit(hit);
 
 			}
 			else

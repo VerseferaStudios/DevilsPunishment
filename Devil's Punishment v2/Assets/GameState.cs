@@ -9,14 +9,17 @@ public class GameState : NetworkBehaviour
 
     public List<gameStateType> game_state;
 
-
+    public string computerName;
 
     public enum gameStateType
     {
         none,
-        FleeGrenRoom,
+        FleeGenRoom,
         CutCuffs,
-        EndRoom
+        EndRoom,
+        GenPartA,
+        GenPartB,
+        GenPartC
     }
 
     [SyncVar]
@@ -24,6 +27,7 @@ public class GameState : NetworkBehaviour
     // Start is called before the first frame update
     public void StartGame()
     {
+        computerName = SystemInfo.deviceName;
         gameState = this;
         
         if(isServer)
@@ -38,34 +42,75 @@ public class GameState : NetworkBehaviour
         
     }
 
+    //TODO: Improve performance and readability..
     public void addState(gameStateType gST)
     {
+
         if (!game_state.Contains(gST) && gST != gameStateType.none)
         {
             game_state.Add(gST);
+            string username = SystemInfo.deviceName;
+
+
             switch (gST)
             {
-                case gameStateType.FleeGrenRoom:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Fled gen room!", "SYSTEM");
+                case gameStateType.FleeGenRoom:
+                    Network_Transmitter.transmitter.sendNetworkMessage("Fled gen room!", username);
                     break;
                 case gameStateType.CutCuffs:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Cut cuffs", "SYSTEM");
+                    Network_Transmitter.transmitter.sendNetworkMessage("Cut cuffs", username);
                     break;
                 case gameStateType.EndRoom:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Fled end room", "SYSTEM");
+                    Network_Transmitter.transmitter.sendNetworkMessage("Reached end room, got gen parts?", username);
+                    break;
+                case gameStateType.GenPartA:
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part A found!", username);
+                    break;
+                case gameStateType.GenPartB:
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part B found!", username);
+                    break;
+                case gameStateType.GenPartC:
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part C found!", username);
                     break;
                 default:
                     break;
             }
+
+            if (gotGenParts())
+            {
+                Network_Transmitter.transmitter.sendNetworkMessage("Got all gen parts!", username);
+            }
+
         }
 
-        if(game_state.Count == 3)
+        if (game_state.Count == 3)
+            if (gotGenParts() && gST == gameStateType.FleeGenRoom)
+            {
+                Network_Transmitter.transmitter.sendNetworkMessage("Won game!", "SYSTEM");
+                Network_Transmitter.transmitter.sendNetworkMessage("Got all gen parts and reached end room! Good work", "SYSTEM");
+            }
+
+
+
+
+
+    }
+
+
+
+
+    public bool gotGenParts()
+    {
+        if (game_state.Contains(gameStateType.GenPartA) &&
+        game_state.Contains(gameStateType.GenPartB) &&
+        game_state.Contains(gameStateType.GenPartC))
         {
-            Network_Transmitter.transmitter.sendNetworkMessage("Won game!","SYSTEM");
+            return true;
         }
-
-        
-        
+        else
+        {
+            return false;
+        }
     }
 
     // Update is called once per frame

@@ -23,6 +23,23 @@ public class NPCManager : MonoBehaviour
         MapWaypointsPosition.Add(point);
     }
 
+    //Add multiple
+    public void addMapWaypoint(List<Vector3> points)
+    {
+        foreach (Vector3 point in points)
+        {
+            GameObject n = new GameObject("Point " + MapWaypoints.Count + point);
+            n.transform.position = point;
+            n.transform.parent = waypointHolder.transform;
+            MapWaypoints.Add(n);
+            MapWaypointsPosition.Add(point);
+
+
+            //Just incase..
+            OnMapGenerationDone();
+        }
+    }
+
     public void OnMapGenerationDone()
     {
         //Assign the randomly generated waypoints to the parasites

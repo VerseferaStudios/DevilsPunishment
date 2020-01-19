@@ -520,8 +520,6 @@ public class MapGen3 : MonoBehaviour
             
             
             corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
-            //Called on every gen ? OK Let's use those as waypoints haha
-            NPCManager.instance.addMapWaypoint(corridorsOfRoomParent.GetChild(i).GetChild(0).position);
         }
     }
 

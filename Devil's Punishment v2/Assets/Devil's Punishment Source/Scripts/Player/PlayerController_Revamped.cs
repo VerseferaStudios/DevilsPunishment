@@ -74,7 +74,7 @@ public class PlayerController_Revamped : MonoBehaviour
         inventory = GetComponentInChildren<Inventory>();
 
     }
-
+        
     void Start() {
         chcon = GetComponent<CharacterController>();
         Controls = ControlsManager.instance.claimPlayer();
@@ -96,9 +96,22 @@ public class PlayerController_Revamped : MonoBehaviour
 
         if (!inventory.gameObject.activeInHierarchy)
         {
-            Movement();
+            if (isClimbing)
+            {
+                VerticalLocomotion();
+            }
+            else
+            {
+                Movement();
+            }
             Animation();
             CameraUpdate();
+         //T   GatherInput();
+        }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCrouch();
         }
     }
 
@@ -108,7 +121,8 @@ public class PlayerController_Revamped : MonoBehaviour
     public float gravity = 1f;
     public Transform LookDirectionObject;
 
-    public float jumpHeight = 3f;
+    //Jumpheight was 3f
+    public float jumpHeight = 10f;
     CharacterController chcon;
 
     void jump()
@@ -341,7 +355,7 @@ public class PlayerController_Revamped : MonoBehaviour
         #endregion
 
 
-            chcon.Move(velocity * Time.deltaTime);
+       chcon.Move(velocity * Time.deltaTime);
 
 
 
@@ -357,13 +371,13 @@ public class PlayerController_Revamped : MonoBehaviour
     {
         if (!isClimbing)
         {
-            //Debug.Log("not is Climbing");
-            controller.Move(Vector3.down * Time.deltaTime * 9.81f);
+            Debug.Log("not is Climbing");
+            chcon.Move(Vector3.down * Time.deltaTime * 9.81f);
         }
         else
         {
-            //Debug.Log("yes is Climbing");
-            controller.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
+            Debug.Log("yes is Climbing");
+            chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
             climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;
         }
     }
@@ -396,8 +410,36 @@ public class PlayerController_Revamped : MonoBehaviour
     public bool IsMoving() {return isMoving;}
 
     public void ToggleCrouch() {
-        isCrouching = !isCrouching;
-        CrouchControllerColliderHeight();
+
+
+        // Vents are currently on Default..
+        // TODO: Adjust crouch check for every layer ?
+
+        Ray ray = new Ray(transform.position, Vector3.up);
+
+        RaycastHit Hit;
+
+        if (Physics.Raycast(ray, out Hit))
+        {
+            // We hit something above
+            float distanceUp = Vector3.Distance(transform.position, Hit.point);
+            Debug.Log(distanceUp + " dist");
+        }
+
+        
+        if (isCrouching && !Physics.Raycast(transform.position, Vector3.up, .75f))
+        {
+            isCrouching = false;
+            CrouchControllerColliderHeight();
+                
+        }   
+        else 
+        {
+            isCrouching = true;
+            CrouchControllerColliderHeight();
+            
+        }
+        
     }
 
     public bool slowdown = false;
@@ -508,15 +550,15 @@ public class PlayerController_Revamped : MonoBehaviour
 
             switch(sprintTH) {
                 case ToggleHold.TOGGLE:
-                    if(Input.GetButtonDown("Crouch")){
+                    if(Input.GetButtonDown("C")){
                         ToggleCrouch();
-
+                        Debug.Log("Crouching !");
                         NPCManager.instance.alertClosestNPCs(25f, transform);
                     }
                     break;
                 default:
                 case ToggleHold.HOLD:
-                    isCrouching = Input.GetButton("Crouch");
+                    isCrouching = Input.GetButton("C");
                 break;
             }
 
@@ -641,18 +683,19 @@ public class PlayerController_Revamped : MonoBehaviour
 
     void CameraUpdate() {
 
-        Vector3 targetCameraPosition = new Vector3(0, isCrouching? 1.0f : 1.5f, .25f);
+        Vector3 targetCameraPosition = new Vector3(0, isCrouching? 1f : 1.5f, .25f);
         headCamera.transform.localPosition = Vector3.Lerp(headCamera.transform.localPosition, targetCameraPosition, Time.deltaTime * 7.0f);
 
     }
+    Vector3 controllerCenter;
 
     void CrouchControllerColliderHeight() {
         if(isCrouching) {
-            controller.center = Vector3.up * .625f;
-            controller.height = 1f;
+           // controller.center = Vector3.up * .625f;
+            controller.height = .6f;
         } else {
-            controller.center = Vector3.up * .875f;
-            controller.height = 1.75f;
+          //  controller.center = controllerCenter;
+            controller.height = 1.8f;
         }
     }
 

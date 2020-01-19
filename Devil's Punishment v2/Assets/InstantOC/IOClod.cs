@@ -444,9 +444,12 @@ public class IOClod : IOCcomp {
 			{
 				for(i=0;i<rs.Length;i++)
 				{
-                    if (rs[i].name.Equals("RenderPlane"))
-                        continue;
-					rs[i].enabled = true;
+                        if (rs[i] != null)
+                        {
+                            if (rs[i].name.Equals("RenderPlane"))
+                                continue;
+                            rs[i].enabled = true;
+                        }
 				}
 			}
 			break;

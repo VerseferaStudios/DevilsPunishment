@@ -17,9 +17,16 @@ public class GameSetup : MonoBehaviour
     {
         setup = this;
     }
+
+    public bool vSync = false;
     private void Start()
     {
         postFXVolume.profile.TryGetSettings(out postFXColorGrading);
+
+        if (!vSync)
+        {
+            Application.targetFrameRate = 300;
+        }
     }
     public void clientActive(Network_Player ply)
     {

@@ -12,6 +12,7 @@ public class NetworkManager_Drug : NetworkManager
     private static object m_Lock = new object();
     private static NetworkManager_Drug m_Instance;
 
+    public GameObject startCamera;
 
 
 
@@ -42,6 +43,11 @@ public class NetworkManager_Drug : NetworkManager
     {
 
         base.StartHost();
+
+        if(startCamera != null)
+        {
+            startCamera.SetActive(false);
+        }
          // Generates level for host
         
     }
