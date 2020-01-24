@@ -99,14 +99,46 @@ public class PlayerController_Revamped : MonoBehaviour
         if (!inventory.gameObject.activeInHierarchy)
         {
             GatherInputNew();
-            if (isClimbing)
+            if (Input.GetKeyUp(KeyCode.E))
             {
-                VerticalLocomotion();
+                isInteractLaser = false; // do in other script if needed
+            }
+            if (isInteractLaser)
+            {
+                Debug.Log("moving player");// + Vector2.Distance(laserSpot, transform.position));
+                                           //movementInputRaw = new Vector2(1, 1);
+                input = new Vector2(0, 1);//new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z) - new Vector2(0, 0)/*(0, 0) is the position of InteractableLaser Script*/;
+                Camera.main.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x, Quaternion.LookRotation(laserSpot - transform.position, transform.up).eulerAngles.y, Camera.main.transform.eulerAngles.z);
+                //inputDirection = laserSpot - transform.position;
+                //Debug.Log(horizontalAngle);
+
+                Movement();
+
+                if (Vector2.Distance(laserSpot, transform.position) < 1.18f) //Mathf.Approximately(transform.position.x/10, -2/10) && Mathf.Approximately(transform.position.z/10, 0/10))
+                {
+                    Camera.main.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x, Quaternion.LookRotation(laserMonitor - transform.position, transform.up).eulerAngles.y, Camera.main.transform.eulerAngles.z);
+                    //inputDirection = laserMonitor - transform.position;
+
+                    Movement();
+
+                    //Debug.LogError("already done");
+                    laserCutterScript.cuffed = Player.instance;//NetworkManager_Drug.instance.findPlayer(GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<Player>();
+                    laserCutterScript.BeginSequences();
+                    isInteractLaser = false;
+                }
             }
             else
             {
-                Movement();
+                if (isClimbing)
+                {
+                    VerticalLocomotion();
+                }
+                else
+                {
+                    Movement();
+                }
             }
+
             Animation();
             CameraUpdate();
          //T   GatherInput();

@@ -13,7 +13,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
     public GameObject brokenFloorCollidors;
 
     //private int l = 0;
-    private PlayerController playerController;
+    private PlayerController_Revamped playerController;
 
     private LaserCutter laserCutterScript;
 
@@ -54,7 +54,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
         return null;
     }
 
-    public void SetPlayerController(PlayerController playerController) //use int and network playerlist?
+    public void SetPlayerController(PlayerController_Revamped playerController) //use int and network playerlist?
     {
         this.playerController = playerController;
         playerController.laserSpot = laserSpotTransform.position;

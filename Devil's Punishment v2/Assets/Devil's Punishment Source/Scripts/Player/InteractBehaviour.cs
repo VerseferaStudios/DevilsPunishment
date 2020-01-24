@@ -107,7 +107,7 @@ public class InteractBehaviour : MonoBehaviour
         interactableInVicinity = true;
         interactablePrompt.text = focusedInteractable.Prompt();
         interactMaxTime = focusedInteractable.TimeToInteract();
-        focusedInteractable.SetPlayerController(transform.parent.GetComponent<PlayerController>());//NetworkManager_Drug.instance.findPlayer(transform.parent.GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<PlayerController>());
+        focusedInteractable.SetPlayerController(transform.parent.GetComponent<PlayerController_Revamped>());//NetworkManager_Drug.instance.findPlayer(transform.parent.GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<PlayerController>());
     }
 
 	Inventory inventory;

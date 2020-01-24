@@ -32,7 +32,7 @@ public class InteractableButton : MonoBehaviour, IInteractable
         return null;
     }
 
-    public void SetPlayerController(PlayerController playerController)
+    public void SetPlayerController(PlayerController_Revamped playerController)
     {
 
     }

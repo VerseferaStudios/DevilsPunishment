@@ -11,6 +11,6 @@ public interface IInteractable {
     void OnInteract();
     float TimeToInteract();
     Item GetGunItem();
-    void SetPlayerController(PlayerController playerController);
+    void SetPlayerController(PlayerController_Revamped playerController);
 
 }
