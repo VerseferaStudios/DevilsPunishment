@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerController_Revamped : MonoBehaviour
 {
-
+    public int x = 100;
     [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
@@ -98,7 +98,7 @@ public class PlayerController_Revamped : MonoBehaviour
         {
             if (isClimbing)
             {
-                VerticalLocomotion();
+                //VerticalLocomotion();
             }
             else
             {
@@ -169,6 +169,8 @@ public class PlayerController_Revamped : MonoBehaviour
         {
             input = new Vector2(Input.GetAxis("JAxisX"), Input.GetAxis("JAxisY"));
         }
+
+        movementInputRaw = input;
 
         //forward
         if (input.x > 0 && input.y > 0)
@@ -376,8 +378,8 @@ public class PlayerController_Revamped : MonoBehaviour
         }
         else
         {
-            Debug.Log("yes is Climbing");
-            chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
+            Debug.Log("yes is Climbing" + movementInputRaw.y);
+            chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y * x);
             climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;
         }
     }
