@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerController_Revamped : MonoBehaviour
 {
-    public int x = 100;
     [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
@@ -92,13 +91,17 @@ public class PlayerController_Revamped : MonoBehaviour
 
     Vector3 startVel;
     int stoppingPoint = 0;
+
+    Vector2 input;
+
     void Update() {
 
         if (!inventory.gameObject.activeInHierarchy)
         {
+            GatherInputNew();
             if (isClimbing)
             {
-                //VerticalLocomotion();
+                VerticalLocomotion();
             }
             else
             {
@@ -154,13 +157,12 @@ public class PlayerController_Revamped : MonoBehaviour
 
     public bool jumping;
 
-    void Movement()
+    Vector2 GatherInputNew()
     {
         #region Basic Movement
 
 
         #region Input Direction Angle
-        Vector2 input;
         if (inputDev == PlayerControls.InputDevice.Keyboard) // Keyboard
         {
             input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -234,7 +236,11 @@ public class PlayerController_Revamped : MonoBehaviour
 
 
         //Debug.Log(string.Format("{0} X : {1} Y ; {2}", input.x, input.y, angle));
+        return input;
+    }
 
+    void Movement()
+    {
         Vector2 inputDirection = input.normalized;
         bool running = Input.GetKey(Controls.Run);
         float speed = ((running) ? RunSpeed : WalkSpeed) * inputDirection.magnitude;
@@ -246,9 +252,9 @@ public class PlayerController_Revamped : MonoBehaviour
             jump();
             jumping = true;
         }
-        
+
         //Jump ?
- 
+        
         
         if(velocityY > -5)
         {
@@ -378,8 +384,8 @@ public class PlayerController_Revamped : MonoBehaviour
         }
         else
         {
-            Debug.Log("yes is Climbing" + movementInputRaw.y);
-            chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y * x);
+            Debug.Log("yes is Climbing");
+            chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
             climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;
         }
     }
