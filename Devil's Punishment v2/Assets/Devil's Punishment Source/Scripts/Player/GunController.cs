@@ -122,9 +122,9 @@ public class GunController : MonoBehaviour
 			//standardPosition = gunAnimator.transform.localPosition;
 
 			EvaluateInput();
-        }
-		Animation();
-    }
+			Animation();
+		}
+	}
 
     public int GetClip() {
         return clip;

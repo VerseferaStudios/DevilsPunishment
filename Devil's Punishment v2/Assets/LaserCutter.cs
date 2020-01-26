@@ -142,7 +142,7 @@ public class LaserCutter : MonoBehaviour
             timeToRelease -= Time.deltaTime;
             if (timeToRelease <= 0)
             {
-                cuffed.GetComponent<CuffController>().isCuffed = false;
+                cuffed.GetComponent<CuffController>().Uncuff();
                 Debug.Log("Cuffs have been removed");
                 StopLaser();
                 LaserCoolDown();

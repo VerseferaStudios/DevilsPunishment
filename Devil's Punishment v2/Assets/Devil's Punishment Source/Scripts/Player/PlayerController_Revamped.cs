@@ -36,6 +36,8 @@ public class PlayerController_Revamped : MonoBehaviour
 
     public GameObject playerModel;
     private Animator characterAnimator;
+    public Animator CharacterAnimator { get => characterAnimator; set => characterAnimator = value; }
+
     private CharacterController controller;
     private Camera headCamera;
 

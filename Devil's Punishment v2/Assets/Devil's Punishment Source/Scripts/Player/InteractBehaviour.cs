@@ -114,7 +114,7 @@ public class InteractBehaviour : MonoBehaviour
 	private bool canPickUp()
 	{
 		CuffController cc = gameObject.transform.parent.gameObject.GetComponent<CuffController>();
-		if (focusedInteractable.GetGunItem() is GunItem) return true || !cc.isCuffed;
+		if (focusedInteractable.GetGunItem() is GunItem) return true && !cc.isCuffed;
 		inventory = gameObject.transform.parent.transform.Find("Inventory").GetComponent<Inventory>();
 		if (inventory == null)
 		{

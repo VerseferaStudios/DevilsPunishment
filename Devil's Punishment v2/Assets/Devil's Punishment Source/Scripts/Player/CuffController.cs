@@ -46,6 +46,7 @@ public class CuffController : MonoBehaviour
         pisLocked = true;
         risLocked = true;
         sisLocked = true;
+        playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 1.0f);
         //Add a on screen or audio cue for failure.
         //Debug.Log("Cuffed, find a way to get your cuffs off!");
     }
@@ -56,7 +57,8 @@ public class CuffController : MonoBehaviour
         pisLocked = false;
         risLocked = false;
         sisLocked = false;
-        Debug.Log("You have picked up a gun.");
+        playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 0.0f);
+        //Debug.Log("You have picked up a gun.");
     }
 
     public void OnTriggerEnter(Collider other)
