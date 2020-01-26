@@ -24,8 +24,16 @@ public class CuffController : MonoBehaviour
 
     private PlayerController_Revamped playerController;
 
-    void Start()
+    private void Start()
     {
+        //StartCoroutine(StartAfterDelay());
+        playerController = GetComponent<PlayerController_Revamped>();
+        Cuff();
+    }
+
+    private IEnumerator StartAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
         playerController = GetComponent<PlayerController_Revamped>();
         Cuff();
     }
@@ -54,9 +62,9 @@ public class CuffController : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Trigger for ladder & tag = " + other.tag);
-        if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
+        if (other.CompareTag("Ladder") && Input.GetKey(KeyCode.E))
         {
-            playerController = other.GetComponent<PlayerController_Revamped>();
+            //playerController = other.GetComponent<PlayerController_Revamped>();
             Debug.Log("Climbing Ladder");
             playerController.SetIsClimbing(true);
             playerController.VerticalLocomotion();
@@ -65,7 +73,7 @@ public class CuffController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (playerController != null && playerController.GetIsClimbing() && other.CompareTag("Player"))// && Input.GetKeyDown(KeyCode.E))
+        if (playerController != null && playerController.GetIsClimbing() && other.CompareTag("Ladder"))// && Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("EXITED LADDER");
             playerController.transform.position += playerController.transform.forward * 1;
