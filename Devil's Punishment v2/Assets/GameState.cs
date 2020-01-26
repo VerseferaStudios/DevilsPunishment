@@ -11,6 +11,16 @@ public class GameState : NetworkBehaviour
 
     public string computerName;
 
+    //References to Start Rooms StartRoom script
+    public Transform spawnPosition;
+
+    public void setSpawnPos(Transform pos)
+    {
+        spawnPosition = pos;
+        Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
+    }
+
+
     public enum gameStateType
     {
         none,
@@ -39,7 +49,10 @@ public class GameState : NetworkBehaviour
         {
             Network_Transmitter.transmitter.player.RpcSendChatMessage(state);
         }
-        
+
+
+
+
     }
 
     //TODO: Improve performance and readability..

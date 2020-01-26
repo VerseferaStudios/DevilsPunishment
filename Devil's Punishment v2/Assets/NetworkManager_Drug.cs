@@ -19,6 +19,7 @@ public class NetworkManager_Drug : NetworkManager
     public TMP_InputField IPInputField;
     public Network_Transmitter transmitter;
 
+    //Referenced by JoinGame Button
     public void joinIPGame()
     {
         base.networkAddress = IPInputField.text;
@@ -30,6 +31,7 @@ public class NetworkManager_Drug : NetworkManager
 
     }
 
+    
     void OnClientConnected(NetworkMessage msg)
     {
        
@@ -39,6 +41,7 @@ public class NetworkManager_Drug : NetworkManager
    
     }
 
+    //Referenced by HostGame Button
     public void startHosting()
     {
 

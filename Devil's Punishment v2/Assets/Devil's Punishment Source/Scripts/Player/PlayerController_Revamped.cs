@@ -158,8 +158,8 @@ public class PlayerController_Revamped : MonoBehaviour
     public float gravity = 1f;
     public Transform LookDirectionObject;
 
-    //Jumpheight was 3f
-    public float jumpHeight = 10f;
+    //Moonjump was 10f
+    public float jumpHeight = 3f;
     CharacterController chcon;
 
     void jump()
@@ -373,7 +373,7 @@ public class PlayerController_Revamped : MonoBehaviour
                     break;
             }
 
-            Debug.Log(lookPos);
+       //     Debug.Log(lookPos);
             velocity = transform.right.normalized * speed + Vector3.up * velocityY;
 
         }
@@ -573,7 +573,7 @@ public class PlayerController_Revamped : MonoBehaviour
                 inputAngle = 0f;
             }
 
-            Debug.Log(inputAngle);
+          //  Debug.Log(inputAngle);
 
             #endregion
 
@@ -594,7 +594,7 @@ public class PlayerController_Revamped : MonoBehaviour
                 case ToggleHold.TOGGLE:
                     if(Input.GetButtonDown("C")){
                         ToggleCrouch();
-                        Debug.Log("Crouching !");
+                        //Debug.Log("Crouching !");
                         NPCManager.instance.alertClosestNPCs(25f, transform);
                     }
                     break;

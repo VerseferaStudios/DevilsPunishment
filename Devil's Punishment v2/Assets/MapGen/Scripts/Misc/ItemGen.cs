@@ -244,25 +244,17 @@ public class ItemGen : MonoBehaviour
     //TODO: Run when last room is generated only..
     public void spawnGenParts()
     {
-        List<Vector3> itemPositions = new List<Vector3>();
-        itemPositions.AddRange(itemPositions);
-        itemPositions.AddRange(itemPositions2ndFloor);
-        genPart1 = Instantiate(gen1, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up* .5f, Quaternion.identity);
-        genPart2 = Instantiate(gen2, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up* .5f, Quaternion.identity);
-        genPart3 = Instantiate(gen3, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up* .5f, Quaternion.identity);
-        //Spawn some more since some fall out of map
-        //TODO: fix wrong spawn positions
-        genPart1 = Instantiate(gen1, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
-        genPart2 = Instantiate(gen2, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
-        genPart3 = Instantiate(gen3, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
+        
+        List<Vector3> spawnPositions = new List<Vector3>();
+        spawnPositions.AddRange(itemPositions);
+        spawnPositions.AddRange(itemPositions2ndFloor);
+        genPart1 = Instantiate(gen1, spawnPositions[Random.Range(0, spawnPositions.Count)] + Vector3.up* .5f, Quaternion.identity);
+        genPart2 = Instantiate(gen2, spawnPositions[Random.Range(0, spawnPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
+        genPart3 = Instantiate(gen3, spawnPositions[Random.Range(0, spawnPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
 
-        //And some more..
-        genPart1 = Instantiate(gen1, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
-        genPart2 = Instantiate(gen2, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
-        genPart3 = Instantiate(gen3, itemPositions[Random.Range(0, itemPositions.Count)] + Vector3.up * .5f, Quaternion.identity);
 
         //Populate NPCManager spawns with given locations
-        NPCManager.instance.addMapWaypoint(itemPositions);
+        NPCManager.instance.addMapWaypoint(spawnPositions);
 
 
 
