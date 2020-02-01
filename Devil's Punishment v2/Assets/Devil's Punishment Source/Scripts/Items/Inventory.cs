@@ -120,6 +120,8 @@ public class Inventory : MonoBehaviour
     // So use this "PseudoCount()" function everywhere you would normally be using inventory.Count; Except when inventory.Count is referring to the "gun slot"; I apologize for this being so confusing...
     private int PseudoCount(){ return inventory.Count - 3; }
 
+
+
     private bool ItemIsSpecial_HandleSeparately(Item item, int stack=1){
 
 
@@ -151,15 +153,15 @@ public class Inventory : MonoBehaviour
             switch(item.name){
                 case "Generator Part A":
                     genPartIndex = 10;
-                    GameState.gameState.addState(GameState.gameStateType.GenPartA);
+                   
                     break;
                 case "Generator Part B":
                     genPartIndex = 11;
-                    GameState.gameState.addState(GameState.gameStateType.GenPartB);
+                    
                     break;
                 case "Generator Part C":
                     genPartIndex = 12;
-                    GameState.gameState.addState(GameState.gameStateType.GenPartC);
+                    
                     break;
                 default:
                     break;
