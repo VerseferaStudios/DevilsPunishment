@@ -147,7 +147,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
     }
 
-    //Code from Unity Scripting API
+    //Base Code from Unity Scripting API
     private void CombineMeshes()
     {
         Rect[] rects;

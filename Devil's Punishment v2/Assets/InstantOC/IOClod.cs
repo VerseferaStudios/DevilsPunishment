@@ -43,7 +43,8 @@ public class IOClod : IOCcomp {
 	private Vector3 p;
 	
 	void Awake () {
-		Init();
+		//Init();
+		this.enabled = false;
 	}
 	
 	public override void Init () {

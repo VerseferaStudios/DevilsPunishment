@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Data : MonoBehaviour
 {
+    public MapGenCombineMesh mapGenCombineMeshScript;
+
     public GameObject roomsLoaderPrefab;
     public Transform mapGenHolderTransform;
 

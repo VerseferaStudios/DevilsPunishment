@@ -42,6 +42,8 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    public MapGenCombineMesh mapGenCombineMeshScript;
+
     private IEnumerator WaitForaWhile()
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
@@ -100,6 +102,7 @@ public class MapGen3 : MonoBehaviour
         Data.instance.ventX = vents[5];
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
+        Data.instance.mapGenCombineMeshScript = mapGenCombineMeshScript;
     }
 
 

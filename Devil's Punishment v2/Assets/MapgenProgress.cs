@@ -57,8 +57,9 @@ public class MapgenProgress : MonoBehaviour
         //Player.instance.playerCameraGb.SetActive(true);
         // NOW WE can build the Navmesh haha
 
-        NavMeshScript.instance.updateNavMesh();
-        NPCManager.instance.OnMapGenerationDone();
+        //NavMeshScript.instance.updateNavMesh();
+        //NPCManager.instance.OnMapGenerationDone();
+        //Data.instance.mapGenCombineMeshScript.CombineMeshesCorridors();
     }
 
 

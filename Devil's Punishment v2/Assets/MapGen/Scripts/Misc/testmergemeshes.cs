@@ -39,8 +39,8 @@ public class testmergemeshes : MonoBehaviour
 
         // Pack the individual textures into the smallest possible space,
         // while leaving a two pixel gap between their edges.
-        Texture2D atlas = new Texture2D(8192, 8192);
-        rects = atlas.PackTextures(atlasTextures, 2, 8192);
+        Texture2D atlas = new Texture2D(1024, 1024);
+        rects = atlas.PackTextures(atlasTextures, 2, 1024);
 
 
         renderer.material.mainTexture = atlas;
