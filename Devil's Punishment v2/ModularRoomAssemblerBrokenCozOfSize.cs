@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Rectangular / Cuboidal room for now
-public class ModularRoomAssembler : MonoBehaviour
+public class ModularRoomAssemblerBrokenCozOfSize : MonoBehaviour
 {
 
     public Transform door_corridor_Transform;
@@ -48,7 +48,7 @@ public class ModularRoomAssembler : MonoBehaviour
         {
             ChooseSize(i);
             Vector3 pos;
-            if(i == 0)
+            if (i == 0)
             {
                 pos = Vector3.zero;
             }
@@ -63,7 +63,7 @@ public class ModularRoomAssembler : MonoBehaviour
             PlaceFloor_Ceiling(i);
             PlaceWall(i);
 
-            CombineMeshes(i);
+            //CombineMeshes(i);
         }
 
 
@@ -72,7 +72,7 @@ public class ModularRoomAssembler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void ChooseSize(int partNo)
@@ -120,7 +120,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private void DecideRoomOriginOrCorner_CreateHolders(int partNo, Vector3 startFloorPos)
     {
-        if(partNo == 0)
+        if (partNo == 0)
         {
             startFloorPos = new Vector3(door_corridor_Pos.x + Random.Range(-size_x[partNo], 0) * 4, door_corridor_Pos.y, door_corridor_Pos.z - 4);
         }
@@ -139,15 +139,15 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private void PlaceFloor_Ceiling(int partNo)
     {
-        for (int i = 0; i <= size_x[partNo]; i++)
+        for (int i = 0; i < size_x[partNo]; i++)
         {
-            for (int j = 0; j <= size_z[partNo]; j++)
+            for (int j = 0; j < size_z[partNo]; j++)
             {
                 //Floor
                 Transform t = Instantiate(floor).transform;
                 t.parent = floor_holder;
                 t.localPosition = new Vector3(i * 4, 0, -j * 4);
-                if(j == 2 && i == 2)
+                if (j == 2 && i == 2)
                 {
                     t = Instantiate(grill).transform;
                     t.parent = floor_holder;
@@ -165,13 +165,13 @@ public class ModularRoomAssembler : MonoBehaviour
     private void PlaceWall(int partNo)
     {
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
-        for (int i = 0; i <= size_x[partNo]; i++)
+        for (int i = 0; i < size_x[partNo]; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 GameObject toSpawn = side_wall;
                 Vector3 pos = new Vector3(i * 4, 2 + j * 4, 4 / 2);
-                if(pos == door_room_Pos)
+                if (pos == door_room_Pos)
                 {
                     toSpawn = wall_with_door;
                 }
@@ -181,7 +181,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
 
                 toSpawn = side_wall;
-                pos = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
+                pos = new Vector3(i * 4, 2 + j * 4, -4 / 2 - (size_z[partNo] - 1) * 4);
                 if (pos == door_room_Pos)
                 {
                     toSpawn = wall_with_door;
@@ -193,19 +193,19 @@ public class ModularRoomAssembler : MonoBehaviour
             }
         }
 
-        startWallPos += new Vector3(-4 * size_x[partNo], 0, -4 * size_z[partNo]);
-        for (int i = 0; i <= size_z[partNo]; i++)
+        startWallPos += new Vector3(-4 * (size_x[partNo] - 1), 0, -4 * (size_z[partNo] - 1));
+        for (int i = 0; i < size_z[partNo]; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 Transform t = Instantiate(side_wall).transform;
                 t.parent = walls_holder2;
-                t.localPosition = new Vector3(4 / 2, 2 + j * 4, -i * 4);
+                t.localPosition = new Vector3(4 / 2 - 4, 2 + j * 4, -i * 4);
                 //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
 
                 t = Instantiate(side_wall).transform;
                 t.parent = walls_holder2;
-                t.localPosition = new Vector3(- size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
+                t.localPosition = new Vector3(-(size_x[partNo] - 2) * 4 - 4 / 2, 2 + j * 4, -i * 4);
                 //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
             }
         }
@@ -266,13 +266,13 @@ public class ModularRoomAssembler : MonoBehaviour
             }
             meshFilters[j].mesh.uv = uvb;
         }
-        
+
         //matNew.mainTexture = packedTexture;
         meshRenderer.sharedMaterial = matNew;
         meshRenderer.sharedMaterial.mainTextureOffset = new Vector2(rects[2].x, rects[2].y);
         meshRenderer.sharedMaterial.mainTextureScale = new Vector2(rects[2].width, rects[2].height);
         Debug.Log(rects.Length);
-        
+
         matNew.mainTexture = packedTexture;
         meshFilter.gameObject.GetComponent<MeshRenderer>().sharedMaterial = matNew;
     }
