@@ -1062,7 +1062,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8687177794943754391}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c70e4b3ef5bf374bba42e0a7bbfc24d, type: 3}
@@ -1175,7 +1175,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826855291}
-  - component: {fileID: 1826855292}
   m_Layer: 0
   m_Name: RoomsLoader
   m_TagString: Rooms(MapGen)
@@ -1195,49 +1194,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1826855292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826855290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomsLoaderPrefab: {fileID: 0}
-  mapGenHolder: {fileID: 0}
-  mapGenHolderTransform: {fileID: 0}
-  numberOfRooms: 6
-  staticRooms: []
-  mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
-    type: 3}
-  liftRoom: {fileID: 0}
-  generatorRoom: {fileID: 8265298613614494518, guid: cdc841e9f42bc134fa7ddd7991067b2a,
-    type: 3}
-  startRoom: {fileID: 3240125094354349590, guid: 281cc49b5c8cc2e4c8c3377a6c092f9e,
-    type: 3}
-  endRoom: {fileID: 2101184536220247379, guid: a7e08de48a506d946a2370583be3fee7, type: 3}
-  laserRoom: {fileID: 0}
-  corridors:
-  - {fileID: 1689905942396559049, guid: b319ee51a26d01f4b84db550c082765d, type: 3}
-  - {fileID: 752999832418112432, guid: 7f5599ee78d1fc144be99cdcabaac535, type: 3}
-  - {fileID: 9009555346699652449, guid: 33d5ceec055909e4ca6ee7542a640e5a, type: 3}
-  - {fileID: 6740393777263448920, guid: 501d4d26bb7b4de49aec5ec23a35f973, type: 3}
-  - {fileID: 6740393777263448920, guid: 501d4d26bb7b4de49aec5ec23a35f973, type: 3}
-  - {fileID: 7475365134836359222, guid: 534b1a807c562f54794b31538f43e8a1, type: 3}
-  - {fileID: 2711133060991232383, guid: a7358d2a45511b34ba9b3d4a327a35ab, type: 3}
-  - {fileID: 342825950719613298, guid: 739e385e28ab8e94cb8262a2802ae471, type: 3}
-  vents: []
-  ventCover: {fileID: 100000, guid: 5d32429074f54134787a0a21ccf8fb9f, type: 3}
-  StateData: {fileID: 0}
-  GoodStates: {fileID: 0}
-  ReloadGoodStatesData: {fileID: 0}
-  mapseed: 0
 --- !u!1 &2132176494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1665,7 +1623,7 @@ PrefabInstance:
     - target: {fileID: 7846860429511563593, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7846860429511563593, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
@@ -1700,12 +1658,61 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8687177794943754391}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8687177794943754391 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7846860429511563592, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8687177794943754389}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8687177794943754392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687177794943754391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomsLoaderPrefab: {fileID: 0}
+  mapGenHolderTransform: {fileID: 0}
+  xSize: 0
+  zSize: 0
+  corridorSize: 4
+  collidedCorridors: []
+  collidedVents: []
+  startTime: 0
+  nearDoorL: []
+  corridorT1: {fileID: 0}
+  corridorT2: {fileID: 0}
+  corridorX: {fileID: 0}
+  ventT: {fileID: 0}
+  ventX: {fileID: 0}
+  spawnPointsFirstPos: {x: 0, y: 0, z: 0}
+  count: 0
+  roomIndicator: {fileID: 0}
+  ctr: 0
+  isOnce: 1
+  isDonePrevFnCall: 1
+  prevCount: 0
+  counter: 0
+  counter1: 0
+  isFinishedCheckCollisions: 0
+  isFinishedCheckCollisionsVents: 0
+  isFinishedAddAndRemoveConnectedRooms: 0
+  isConnectedComponentsCheckDone: 0
+  roomNewScript: {fileID: 0}
+  ctr1: 0
+  playerController: {fileID: 0}
+  canStartCorridorTestSpawner: 0
 --- !u!1001 &9004979133491826906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1713,6 +1720,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4477330347361950277, guid: 98182d566ad909f48a84cd66f59054be,
+        type: 3}
+      propertyPath: m_Name
+      value: RoomDoor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4477330347361950277, guid: 98182d566ad909f48a84cd66f59054be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2974819030047712266, guid: 98182d566ad909f48a84cd66f59054be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1766,16 +1783,6 @@ PrefabInstance:
     - target: {fileID: 2974819030047712266, guid: 98182d566ad909f48a84cd66f59054be,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4477330347361950277, guid: 98182d566ad909f48a84cd66f59054be,
-        type: 3}
-      propertyPath: m_Name
-      value: RoomDoor
-      objectReference: {fileID: 0}
-    - target: {fileID: 4477330347361950277, guid: 98182d566ad909f48a84cd66f59054be,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 720009724292412117, guid: 98182d566ad909f48a84cd66f59054be,

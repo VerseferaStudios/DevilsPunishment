@@ -28,15 +28,21 @@ public class ModularRoomAssembler : MonoBehaviour
     public GameObject grill;
     [SerializeField]
     private List<int> size_x, size_z;
-    private int noOfParts = 3;
+    private int noOfParts = 2;
 
     // Start is called before the first frame update
     void Start()
+    {
+        StartScript();
+    }
+
+    public void StartScript()
     {
         Debug.Log(Random.Range(1, 1));
         door_corridor_Pos = door_corridor_Transform.position;
 
         roomHolderTransform = new GameObject("Modular Room 1").transform;
+        roomHolderTransform.tag = "Modular Room stuff";
 
         size_x = new List<int>();
         size_z = new List<int>();
@@ -74,13 +80,53 @@ public class ModularRoomAssembler : MonoBehaviour
         
     }
 
+    private int SumOfList(char list)
+    {
+        int sum = 0;
+        if (list == 'z')
+        {
+            for (int i = 0; i < size_z.Count; i++)
+            {
+                sum += size_z[i];
+            }
+            return sum;
+        }
+        else if (list == 'x')
+        {
+            for (int i = 0; i < size_x.Count; i++)
+            {
+                sum += size_x[i];
+            }
+            return sum;
+        }
+        Debug.LogError("Wrong List identifier as parameter '" + list + "'");
+        return -1;
+    }
+
     private void ChooseSize(int partNo)
     {
-        size_x.Add(Random.Range(20 / 4 / 2, 40 / 4 / 2)); //Change to 36 units max size if needed
-        size_z.Add(Random.Range(20 / 4 / 2, 40 / 4 / 2));
+        int sum_x = SumOfList('x');
+        int sum_z = SumOfList('z');
+        if(40 - sum_x < 8 / 4)
+        {
+            Debug.LogError("Ouch! Room part size less than 2");
+            this.enabled = false;
+        }
+        if (40 - sum_z < 8 / 4)
+        {
+            Debug.LogError("Ouch! Room part size less than 2");
+            this.enabled = false;
+        }
+        size_x.Add(Random.Range(8 / 4, 40 / 4)); //Change to 36 units max size if needed
+        size_z.Add(Random.Range(8 / 4, 40 / 4));
         Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
         size_x[partNo]--;
         size_z[partNo]--;
+        if(size_x[partNo] < 0 || size_z[partNo] < 0)
+        {
+            Debug.LogError("Ouch! Negative room part size");
+            this.enabled = false;
+        }
     }
 
     private int NSWEPartChoose(int partNo)
@@ -93,6 +139,11 @@ public class ModularRoomAssembler : MonoBehaviour
         if(size1 + size2 > 4)
         {
             int res = Random.Range(-(size1 - 2), size2 - 2);
+            if(res >= size1 || res >= size2)
+            {
+                res = size1 - 1;
+                Debug.Log("PHEW");
+            }
             Debug.Log("res = " + res);
             return res;
         }
@@ -105,6 +156,11 @@ public class ModularRoomAssembler : MonoBehaviour
         if (size1 + size2 > 4)
         {
             int res = Random.Range(-(size1 - 2), size2 - 2);
+            if (res >= size1 || res >= size2)
+            {
+                res = size1 - 1;
+                Debug.Log("PHEW");
+            }
             Debug.Log("res = " + res);
             return res;
         }
@@ -149,7 +205,9 @@ public class ModularRoomAssembler : MonoBehaviour
         {
             startFloorPos = new Vector3(door_corridor_Pos.x + Random.Range(-size_x[partNo], 0) * 4, door_corridor_Pos.y, door_corridor_Pos.z - 4);
         }
-        new GameObject("startFloorPos").transform.position = startFloorPos;
+        GameObject sfp = new GameObject("startFloorPos");
+        sfp.transform.position = startFloorPos;
+        sfp.tag = "Modular Room stuff";
         partHolderTransforms.Add(new GameObject("Modular Room Part " + partNo).transform);
         partHolderTransforms[partNo].position = startFloorPos;
         partHolderTransforms[partNo].parent = roomHolderTransform;
@@ -268,6 +326,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
         roomHolderTransform.gameObject.SetActive(false);
         GameObject room = new GameObject("Combined Room");
+        room.tag = "Modular Room stuff";
         MeshFilter meshFilter = room.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = room.AddComponent<MeshRenderer>();
         //meshRenderer.sharedMaterial = mat;
