@@ -28,13 +28,12 @@ public class ModularRoomAssembler : MonoBehaviour
     public GameObject grill;
     [SerializeField]
     private List<int> size_x, size_z;
-    [SerializeField]
-    private int noOfParts = 2;
+    private int noOfParts = 3;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log(Random.Range(1, 1));
         door_corridor_Pos = door_corridor_Transform.position;
 
         roomHolderTransform = new GameObject("Modular Room 1").transform;
@@ -77,14 +76,40 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private void ChooseSize(int partNo)
     {
-        size_x.Add(Random.Range(20 / 4 / noOfParts, 40 / 4 / noOfParts)); //Change to 36 units max size if needed
-        size_z.Add(Random.Range(20 / 4 / noOfParts, 40 / 4 / noOfParts));
+        size_x.Add(Random.Range(20 / 4 / 2, 40 / 4 / 2)); //Change to 36 units max size if needed
+        size_z.Add(Random.Range(20 / 4 / 2, 40 / 4 / 2));
         Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
+        size_x[partNo]--;
+        size_z[partNo]--;
     }
 
     private int NSWEPartChoose(int partNo)
     {
-        return Random.Range(0, 4);
+        return Random.Range(1, 4); //0, 4 if coveering corridor door is solved
+    }
+
+    private int ZRandomPartTranslationHelper(int size1, int size2)
+    {
+        if(size1 + size2 > 4)
+        {
+            int res = Random.Range(-(size1 - 2), size2 - 2);
+            Debug.Log("res = " + res);
+            return res;
+        }
+        Debug.Log(" :( in Z");
+        return 0;
+    }
+
+    private int XRandomPartTranslationHelper(int size1, int size2)
+    {
+        if (size1 + size2 > 4)
+        {
+            int res = Random.Range(-(size1 - 2), size2 - 2);
+            Debug.Log("res = " + res);
+            return res;
+        }
+        Debug.Log(" :( in X");
+        return 0;
     }
 
     private Vector3 TranslatePartToChosenDirection(int partNo)
@@ -95,24 +120,24 @@ public class ModularRoomAssembler : MonoBehaviour
         switch (x)
         {
             case 0:
-                partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x + 4 * Random.Range(-(size_x[partNo] - 2), size_x[0] - 2),
+                partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x + 4 * XRandomPartTranslationHelper(size_x[partNo], size_x[0]),
                                                                 partHolderTransforms[0].position.y,
                                                                 partHolderTransforms[0].position.z + 4 * (size_z[partNo] + 1));
                 break;
             case 1:
                 partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x + 4 * (size_x[0] + 1),
                                                                 partHolderTransforms[0].position.y,
-                                                                partHolderTransforms[0].position.z + 4 * Random.Range(-(size_z[partNo] - 2), size_z[0] - 2));
+                                                                partHolderTransforms[0].position.z + 4 * ZRandomPartTranslationHelper(size_z[partNo], size_z[0]));
                 break;
             case 2:
-                partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x + 4 * Random.Range(-(size_x[partNo] - 2), size_x[0] - 2),
+                partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x + 4 * XRandomPartTranslationHelper(size_x[partNo], size_x[0]),
                                                                 partHolderTransforms[0].position.y,
                                                                 partHolderTransforms[0].position.z - 4 * (size_z[0] + 1));
                 break;
             case 3:
                 partHolderPartNoPos = new Vector3(partHolderTransforms[0].position.x - 4 * (size_x[partNo] + 1),
                                                                 partHolderTransforms[0].position.y,
-                                                                partHolderTransforms[0].position.z + 4 * Random.Range(-(size_z[partNo] - 2), size_z[0] - 2));
+                                                                partHolderTransforms[0].position.z + 4 * ZRandomPartTranslationHelper(size_z[partNo], size_z[0]));
                 break;
         }
         return partHolderPartNoPos;
