@@ -59,10 +59,10 @@ public class MapGenCombineMesh : MonoBehaviour
         meshFilter.mesh.CombineMeshes(combine);
 
 
-        Texture2D packedTexture = new Texture2D(2048, 2048);
+        Texture2D packedTexture = new Texture2D(1024, 1024);
         // Pack the individual textures into the smallest possible space,
         // while leaving a two pixel gap between their edges.
-        rects = packedTexture.PackTextures(atlasTextures, 0, 2048);
+        rects = packedTexture.PackTextures(atlasTextures, 0, 1024);
 
         Vector2[] uva, uvb;
         for (int j = 0; j < meshFilters.Length; j++)
