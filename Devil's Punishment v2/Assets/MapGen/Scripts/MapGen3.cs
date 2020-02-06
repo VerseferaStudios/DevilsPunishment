@@ -427,6 +427,7 @@ public class MapGen3 : MonoBehaviour
         GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
         for (int i = 0; i < doors.Length; i++)
         {
+            Debug.Log("doorRot ; yRotInt = " + ((int)yRotation / 90) % 4);
             spawnedRoom.GetComponent<RoomReferences>().doors[i].name = FindDoorName(((int)yRotation / 90) % 4, spawnedRoom.GetComponent<RoomReferences>().doors[i].name);
         }
     }
@@ -439,9 +440,18 @@ public class MapGen3 : MonoBehaviour
         }
         else
         {
-            int idx = Data.instance.doorRotationHelper.IndexOf(oldName[4] + oldName[5] + "");
+            //yRotInt = Mathf.Abs(yRotInt);
+            //Debug.Log("doorRot ; oldName 4 and 5 idx = " + (oldName[4] + "" + oldName[5]));
+            int idx = Data.instance.doorRotationHelper.IndexOf((oldName[4] + "" + oldName[5]).ToString());
+            Debug.Log("doorRot ; idx b4 = " + idx);
             idx += yRotInt;
+            Debug.Log("doorRot ; idx b/w = " + idx);
             idx %= 4;
+            if(idx < 0)
+            {
+                idx += 4;
+            }
+            Debug.Log("doorRot ; idx after = " + idx);
             return "Door" + Data.instance.doorRotationHelper[idx];
         }
     }

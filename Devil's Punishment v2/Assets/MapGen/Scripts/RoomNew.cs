@@ -37,6 +37,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     private bool isDoneSpawnHalf = false, isDoneConnectTwoRooms = false;
 
+    public bool fail_room_connect;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
@@ -180,8 +182,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 {
                     continue;
                 }
+                // why x
                 x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
                 //Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
+                //why
                 if (/*times == 0 && spawnPoints.Count >= 9 && */x)
                 {
                     ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
@@ -197,9 +201,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 {
                     //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                     isDoneConnectTwoRooms = false;
+                    fail_room_connect = false;
                     StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                     spawnPoints[k].name, spawnPoints[l].name,
                                     spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
+                    if (fail_room_connect)
+                    {
+                        continue;
+                    }
                     yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     break;
                 }
@@ -225,7 +234,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 MapgenProgress.instance.addProgress(2);
                 
-		StartCoroutine(Data.instance.DoConnectedComponents());
+		        StartCoroutine(Data.instance.DoConnectedComponents());
                 StartCoroutine(Data.instance.DoCheckPerSecond());
 
                 Data.instance.canStartCorridorTestSpawner = true;
@@ -267,23 +276,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         Vector3 From = kPos;
 
-        // ------------------- Connects x and z doors with L shape with no hindrance -------------------
-        if (kName.EndsWith("x") && lName.EndsWith("z"))
-        {
-            targetPos = new Vector3(From.x, 0.5f, lPos.z);
-            //Debug.Log("Spawn2");
-        }
 
-        // ------------------- Connects z and x doors with L shape with no hindrance -------------------
-        else if (kName.EndsWith("z") && lName.EndsWith("x"))
-        {
-            targetPos = new Vector3(lPos.x, 0.5f, From.z);
-            //Debug.Log("Spawn3");
-        }
 
         // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
         /*
-        else if (
+        if (
             // -------------- if x doors AND z differnce == xSize --------------
             (kPos.x == lPos.x && Mathf.Abs(kPos.z - lPos.z) == Data.instance.xSize)
             ||
@@ -295,6 +292,25 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log("Spawn4--");
         }
         */
+        if(kParentPos == lParentPos)
+        {
+            Debug.Log("CONNECT 2 Rooms = " + lPos + " and " + kPos);
+            fail_room_connect = true;
+            yield return null;
+        }
+        // ------------------- Connects x and z doors with L shape with no hindrance -------------------
+        else if (kName.EndsWith("x") && lName.EndsWith("z"))
+        {
+            targetPos = new Vector3(From.x, 0.5f, lPos.z);
+            //Debug.Log("Spawn2");
+        }
+
+        // ------------------- Connects z and x doors with L shape with no hindrance -------------------
+        else if (kName.EndsWith("z") && lName.EndsWith("x"))
+        {
+            targetPos = new Vector3(lPos.x, 0.5f, From.z);
+            //Debug.Log("Spawn3");
+        }
 
         // --------------------- Connects x and x doors ---------------------
         else if (kName.EndsWith("x") && lName.EndsWith("x"))
@@ -474,7 +490,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
-        //Debug.Log(From + " from and to " + to);
+        Debug.Log("SPAWN HALF = " + From + " from and to " + to);
         // ----------- Variable for corridor to spawn at each for loop step -----------                
         GameObject corridorToSpawn = corridors[0];
 
