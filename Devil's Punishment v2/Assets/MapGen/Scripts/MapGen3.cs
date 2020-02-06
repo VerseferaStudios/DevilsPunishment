@@ -422,12 +422,27 @@ public class MapGen3 : MonoBehaviour
     }
 
     // -------------------- Change door names --------------------
-    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
+    public void ChangeDoorNames(GameObject spawnedRoom, float yRotation)
     {
         GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
         for (int i = 0; i < doors.Length; i++)
         {
-            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
+            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = FindDoorName(((int)yRotation / 90) % 4, spawnedRoom.GetComponent<RoomReferences>().doors[i].name);
+        }
+    }
+
+    private string FindDoorName(int yRotInt, string oldName)
+    {
+        if(yRotInt == 0)
+        {
+            return oldName;
+        }
+        else
+        {
+            int idx = Data.instance.doorRotationHelper.IndexOf(oldName[4] + oldName[5] + "");
+            idx += yRotInt;
+            idx %= 4;
+            return "Door" + Data.instance.doorRotationHelper[idx];
         }
     }
 
@@ -436,7 +451,8 @@ public class MapGen3 : MonoBehaviour
     {
         if (yRotation == 90)
         {
-            ChangeDoorNames(spawnedRoom, "Door+x");
+            ChangeDoorNames(spawnedRoom, yRotation);
+            //ChangeDoorNames(spawnedRoom, "Door+x");
             GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
             //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
@@ -456,7 +472,8 @@ public class MapGen3 : MonoBehaviour
             float reqYRotationForCorridor = 0;
             if (yRotation == 180)
             {
-                ChangeDoorNames(spawnedRoom, "Door-z");
+                ChangeDoorNames(spawnedRoom, yRotation);
+                //ChangeDoorNames(spawnedRoom, "Door-z");
                 GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
                 reqYRotationForCorridor = 0;
 
@@ -469,7 +486,8 @@ public class MapGen3 : MonoBehaviour
             }
             else if (yRotation == 270 || yRotation == -90)
             {
-                ChangeDoorNames(spawnedRoom, "Door-x");
+                ChangeDoorNames(spawnedRoom, yRotation);
+                //ChangeDoorNames(spawnedRoom, "Door-x");
                 GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room

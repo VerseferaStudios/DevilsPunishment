@@ -64,6 +64,8 @@ public class Data : MonoBehaviour
 
     public bool canStartCorridorTestSpawner = false;
 
+    public List<string> doorRotationHelper = new List<string>();
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -87,6 +89,12 @@ public class Data : MonoBehaviour
         nearDoorL.Add("+z");
         nearDoorL.Add("+x");
         prevCount = connectedRoomsThroughCollision.Count;
+
+        doorRotationHelper.Add("+z");
+        doorRotationHelper.Add("+x");
+        doorRotationHelper.Add("-z");
+        doorRotationHelper.Add("-x");
+
         //StartCoroutine(DoCheckPerSecond());
         //StartCoroutine(DoConnectedComponents());
     }
