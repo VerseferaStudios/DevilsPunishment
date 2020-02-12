@@ -43,6 +43,7 @@ public class LaserCutter : MonoBehaviour
 
     public void BeginSequences()
     {
+        PlayerController_Revamped.instance.killUpdate = true;
         StartCoroutine("WindUp");
     }
 
@@ -118,6 +119,7 @@ public class LaserCutter : MonoBehaviour
 
     public void ResetLaser()
     {
+        PlayerController_Revamped.instance.killUpdate = false;
         timeToRelease = 4f;
         StopAllCoroutines();
     }
