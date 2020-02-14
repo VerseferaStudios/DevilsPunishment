@@ -39,6 +39,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public bool fail_room_connect;
 
+    Color sample_room_col;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
@@ -163,17 +165,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         int times = 0;
         bool x;
+        sample_room_col = spawnPoints[0].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
-            // ------------------- Remove door/spawnPoint if its of the same room -------------------
-            if (/*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[k].transform.parent.transform.position))
-            {
-                ////Debug.Log("Removed a door of ____ " + spawnPoints[k].transform.parent.transform.position);
-                spawnPoints.RemoveAt(k);
-                k--;
-                continue;
-            }
+            //// ------------------- Remove door/spawnPoint if its of the same room -------------------
+            //if (/*times == 0 && spawnPoints.Count >= 9 && */Data.instance.CheckIfVisited(spawnPoints[k].transform.parent.transform.position))
+            //{
+            //    ////Debug.Log("Removed a door of ____ " + spawnPoints[k].transform.parent.transform.position);
+            //    spawnPoints.RemoveAt(k);
+            //    k--;
+            //    continue;
+            //}
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
@@ -182,17 +185,17 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 {
                     continue;
                 }
-                // why x
-                x = Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position);
-                //Debug.Log("Counter = " + counter + " ; Data.instance.CheckIfVisited(spawnPoints[l].transform.parent.position) = " + x);
-                //why
-                if (/*times == 0 && spawnPoints.Count >= 9 && */x)
-                {
-                    ////Debug.Log("Removed a door of ____ " + spawnPoints[i].transform.parent.transform.position);
-                    spawnPoints.RemoveAt(l);
-                    k--;
-                    break;
-                }
+                //// why x
+                //x = data.instance.checkifvisited(spawnpoints[l].transform.parent.position);
+                ////debug.log("counter = " + counter + " ; data.instance.checkifvisited(spawnpoints[l].transform.parent.position) = " + x);
+                ////why
+                //if (/*times == 0 && spawnpoints.count >= 9 && */x)
+                //{
+                //    ////debug.log("removed a door of ____ " + spawnpoints[i].transform.parent.transform.position);
+                //    spawnpoints.removeat(l);
+                //    k--;
+                //    break;
+                //}
 
                 //x = !CheckIfSameOrAdjacentRoom(k, l);
                 //Debug.Log("Counter = " + counter + " ; !CheckIfSameOrAdjacentRoom(k, l) = " + x); 
@@ -202,14 +205,28 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                     isDoneConnectTwoRooms = false;
                     fail_room_connect = false;
+
+                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+
+                    Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
+                                    spawnPoints[k].name + " " + spawnPoints[l].name + " " +
+                                    spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
                     StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                     spawnPoints[k].name, spawnPoints[l].name,
                                     spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
+
+                    //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
+                    yield return new WaitForSeconds(2);
+
+                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    
+                    yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     if (fail_room_connect)
                     {
                         continue;
                     }
-                    yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     break;
                 }
             }
@@ -276,7 +293,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         Vector3 From = kPos;
 
-
+        Debug.Log("CONNECT 2 Rooms = " + From + " from and to " + lPos + "Door names ; kName = " + kName + " ; lName = " + lName);
 
         // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
         /*
@@ -292,24 +309,25 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log("Spawn4--");
         }
         */
-        if(kParentPos == lParentPos)
+        if (kParentPos == lParentPos)
         {
-            Debug.Log("CONNECT 2 Rooms = " + lPos + " and " + kPos);
+            Debug.Log("Error CONNECT 2 Rooms = " + lPos + " and " + kPos);
             fail_room_connect = true;
+            isDoneConnectTwoRooms = true;
             yield return null;
         }
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
         else if (kName.EndsWith("x") && lName.EndsWith("z"))
         {
             targetPos = new Vector3(From.x, 0.5f, lPos.z);
-            //Debug.Log("Spawn2");
+            Debug.Log("Spawn2");
         }
 
         // ------------------- Connects z and x doors with L shape with no hindrance -------------------
         else if (kName.EndsWith("z") && lName.EndsWith("x"))
         {
             targetPos = new Vector3(lPos.x, 0.5f, From.z);
-            //Debug.Log("Spawn3");
+            Debug.Log("Spawn3");
         }
 
         // --------------------- Connects x and x doors ---------------------
@@ -329,7 +347,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 isExtraTurn = true;
                 From = to;
                 targetPos = new Vector3(lPos.x, 0.5f, From.z);
-                //Debug.Log("Spawn5");
+                Debug.Log("Spawn5a");
                 /*
                 //Debug.Log("From = " + From);
                 //Debug.Log(targetPos);
@@ -339,6 +357,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //-------------- Connects x and x doors with I shape since there's no hindrance --------------
             else
             {
+                Debug.Log("Spawn5b");
                 targetPos = lPos;
             }
         }
@@ -360,7 +379,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 isExtraTurn = true;
                 From = to;
                 targetPos = new Vector3(From.x, 0.5f, lPos.z);
-                //Debug.Log("Spawn6");
+                Debug.Log("Spawn6a");
                 /*
                 //Debug.Log("From = " + From);
                 //Debug.Log(targetPos);
@@ -370,10 +389,17 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //-------------- Connects z and z doors with I shape since there's no hindrance --------------
             else
             {
+                Debug.Log("Spawn6b");
                 targetPos = lPos;
             }
         }
 
+        if(targetPos == new Vector3(0, 3, 0))
+        {
+            fail_room_connect = true;
+            isDoneConnectTwoRooms = true;
+            yield return null;
+        }
 
         // ------------------- Calls the actual spawning function -------------------
         isDoneSpawnHalf = false;

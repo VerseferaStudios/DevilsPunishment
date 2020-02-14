@@ -29,6 +29,8 @@ public class ModularRoomAssembler : MonoBehaviour
     [SerializeField]
     private List<int> size_x, size_z;
     private int noOfParts = 2;
+    private List<Vector3> pos;
+    private List<Vector3> startFloorPosList;
 
     // Start is called before the first frame update
     void Start()
@@ -49,19 +51,21 @@ public class ModularRoomAssembler : MonoBehaviour
 
         partHolderTransforms = new List<Transform>();
 
+        pos = new List<Vector3>();
+        startFloorPosList = new List<Vector3>();
+
         for (int i = 0; i < noOfParts; i++)
         {
             ChooseSize(i);
-            Vector3 pos;
             if(i == 0)
             {
-                pos = Vector3.zero;
+                pos.Add(Vector3.zero);
             }
             else
             {
-                pos = TranslatePartToChosenDirection(i);
+                pos.Add(TranslatePartToChosenDirection(i));
             }
-            DecideRoomOriginOrCorner_CreateHolders(i, pos);
+            DecideRoomOriginOrCorner_CreateHolders(i, pos[i]);
 
             door_room_Pos = door_corridor_Pos + new Vector3(0, 2, -2) - roomHolderTransform.position;
 
@@ -205,6 +209,7 @@ public class ModularRoomAssembler : MonoBehaviour
         {
             startFloorPos = new Vector3(door_corridor_Pos.x + Random.Range(-size_x[partNo], 0) * 4, door_corridor_Pos.y, door_corridor_Pos.z - 4);
         }
+        startFloorPosList.Add(startFloorPos);
         GameObject sfp = new GameObject("startFloorPos");
         sfp.transform.position = startFloorPos;
         sfp.tag = "Modular Room stuff";
@@ -245,23 +250,69 @@ public class ModularRoomAssembler : MonoBehaviour
         }
     }
 
+    private bool CheckWallOverlap(int partNo, Vector3 pos_to_check, char x_or_z)
+    {
+        float startFloorPos0;
+        float size0;
+        float startFloorPosPartNo;
+        float sizePartNo;
+        float posToCheck;
+        if(x_or_z == 'Z')
+        {
+            startFloorPos0 = startFloorPosList[0].z;
+            size0 = size_z[0] * 4;
+            startFloorPosPartNo = startFloorPosList[partNo].z;
+            sizePartNo = size_z[partNo] * 4;
+            posToCheck = pos_to_check.z + pos[partNo].z;
+        }
+        else
+        {
+            startFloorPos0 = startFloorPosList[0].x;
+            size0 = size_x[0] * 4;
+            startFloorPosPartNo = startFloorPosList[partNo].x;
+            sizePartNo = size_x[partNo] * 4;
+            posToCheck = pos_to_check.x + pos[partNo].x;
+        }
+
+        if (startFloorPos0 <= posToCheck && posToCheck <= startFloorPos0 + size0 &&
+            startFloorPosPartNo <= posToCheck && posToCheck <= startFloorPosPartNo + sizePartNo)
+        {
+            return true;
+        }
+        return false;
+
+        //if(startfloorposlist[0].z >= startfloorposlist[partno].z)
+        //{
+        //    return startfloorposlist[0].z - startfloorposlist[partno].z >= size_z[0];
+        //}
+        //else
+        //{
+        //    return startfloorposlist[0].z - startfloorposlist[partno].z >= size_z[0];
+        //}
+    }
+
     private void PlaceWall(int partNo)
     {
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
+        Transform t;
+        Vector3 pos;
         for (int i = 0; i <= size_x[partNo]; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 GameObject toSpawn = side_wall;
-                Vector3 pos = new Vector3(i * 4, 2 + j * 4, 4 / 2);
-                if(pos == door_room_Pos)
+                pos = new Vector3(i * 4, 2 + j * 4, 4 / 2);
+                if (pos == door_room_Pos)
                 {
                     toSpawn = wall_with_door;
                 }
-                Transform t = Instantiate(toSpawn).transform;
-                t.parent = walls_holder;
-                t.localPosition = pos;
-                t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                if (!CheckWallOverlap(partNo, pos, 'X'))
+                {
+                    t = Instantiate(toSpawn).transform;
+                    t.parent = walls_holder;
+                    t.localPosition = pos;
+                    t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
 
                 toSpawn = side_wall;
                 pos = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
@@ -269,10 +320,13 @@ public class ModularRoomAssembler : MonoBehaviour
                 {
                     toSpawn = wall_with_door;
                 }
-                t = Instantiate(toSpawn).transform;
-                t.parent = walls_holder;
-                t.localPosition = pos;
-                t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                if (!CheckWallOverlap(partNo, pos, 'X'))
+                {
+                    t = Instantiate(toSpawn).transform;
+                    t.parent = walls_holder;
+                    t.localPosition = pos;
+                    t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
             }
         }
 
@@ -281,15 +335,23 @@ public class ModularRoomAssembler : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                Transform t = Instantiate(side_wall).transform;
-                t.parent = walls_holder2;
-                t.localPosition = new Vector3(4 / 2, 2 + j * 4, -i * 4);
-                //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                pos = new Vector3(4 / 2, 2 + j * 4, -i * 4);
+                if (!CheckWallOverlap(partNo, pos, 'Z'))
+                {
+                    t = Instantiate(side_wall).transform;
+                    t.parent = walls_holder2;
+                    t.localPosition = pos;
+                    //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
 
-                t = Instantiate(side_wall).transform;
-                t.parent = walls_holder2;
-                t.localPosition = new Vector3(- size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
-                //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                pos = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
+                if (!CheckWallOverlap(partNo, pos, 'Z'))
+                {
+                    t = Instantiate(side_wall).transform;
+                    t.parent = walls_holder2;
+                    t.localPosition = pos;
+                    //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
             }
         }
     }
