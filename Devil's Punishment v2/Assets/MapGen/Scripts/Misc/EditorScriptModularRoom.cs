@@ -21,6 +21,7 @@ public class EditorScriptModularRoom : Editor
 
         if(GUILayout.Button("Clean Scene"))
         {
+            modularRoomAssembler.roomHolderTransform.gameObject.SetActive(true);
             GameObject[] gbs = GameObject.FindGameObjectsWithTag("Modular Room stuff");
             foreach (GameObject gb in gbs)
             {
