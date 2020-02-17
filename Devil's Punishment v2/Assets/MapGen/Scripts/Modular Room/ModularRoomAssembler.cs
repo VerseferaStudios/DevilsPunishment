@@ -178,7 +178,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private int NSWEPartChoose(int partNo)
     {
-        int x = 1;// Random.Range(1, 4);
+        int x = Random.Range(1, 4);
         Debug.Log("Choosing NSWE = " + x);
         nswe_helper.Add(x);
         return x; //0, 4 if coveering corridor door is solved
