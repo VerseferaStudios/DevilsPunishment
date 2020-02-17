@@ -90,12 +90,27 @@ public class ModularRoomAssembler : MonoBehaviour
         {
             PlaceFloor_Ceiling(i);
             PlaceWall(i);
-
-            //CombineMeshes(i);
         }
-
+/*
+        for (int i = 0; i < noOfParts; i++)
+            CombineMeshes(i);
+            */
+        StartCoroutine(CombineAfterDelay());
         //PlaceRemainingWalls();
 
+    }
+
+    private IEnumerator CombineAfterDelay()
+    {
+        yield return new WaitForSeconds(4);
+        GameObject[] gbs = GameObject.FindGameObjectsWithTag("Modular Room Collision Detector");
+        for (int i = 0; i < gbs.Length; i++)
+        {
+            Destroy(gbs[i]);
+        }
+        yield return new WaitForSeconds(4);
+        for (int i = 0; i < noOfParts; i++)
+            CombineMeshes(i);
     }
 
     private void Swap_NSWE()
@@ -448,7 +463,6 @@ public class ModularRoomAssembler : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void PlaceRemainingWalls()
@@ -515,10 +529,13 @@ public class ModularRoomAssembler : MonoBehaviour
             {
                 //Debug.Log(meshFilters[i].gameObject.GetComponent<MeshRenderer>());//.sharedMaterial.mainTexture.isReadable);
                 //Debug.Log("meshFilters[i].gameObject.GetComponent<MeshRenderer>().sharedMaterial.mainTexture");
-                atlasTextures[i] = (Texture2D)meshFilters[i].gameObject.GetComponent<MeshRenderer>().sharedMaterial.mainTexture;
+                //if (meshFilters[i].gameObject.GetComponent<MeshRenderer>())
+                    atlasTextures[i] = (Texture2D)meshFilters[i].gameObject.GetComponent<MeshRenderer>().sharedMaterial.mainTexture;
+                //else
+                  //  Debug.Log(meshFilters[i].gameObject.name);
             }
             //meshFilters[i].gameObject.GetComponent<Renderer>().material = matNew;
-
+            Debug.Log("i = " + i + " && meshFilters[i].gameObject.name = " + meshFilters[i].gameObject.name);
             combine[i].mesh = meshFilters[i].sharedMesh;
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             //Debug.Log("meshfilters = " + meshFilters[i].gameObject.name);
@@ -533,7 +550,7 @@ public class ModularRoomAssembler : MonoBehaviour
         MeshRenderer meshRenderer = room.AddComponent<MeshRenderer>();
         //meshRenderer.sharedMaterial = mat;
         meshFilter.mesh = new Mesh();
-        meshFilter.mesh.CombineMeshes(combine);
+        meshFilter.mesh.CombineMeshes(combine, true, true);
 
 
         Texture2D packedTexture = new Texture2D(2048, 2048);

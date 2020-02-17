@@ -20,7 +20,7 @@ public class ModularRoomCollisionHelper : MonoBehaviour
     {
         if (other.transform.parent.CompareTag("Modular Room Wall") && other.transform.parent.position == transform.parent.position)
         {
-            other.transform.parent.gameObject.SetActive(false);
+            Destroy(other.transform.parent.gameObject);
         }
     }
 
