@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Loader : MonoBehaviour
 {
-    public GameObject data, data2ndFloor;//, roomsLoaderPrefab;
+    public GameObject data, data2ndFloor, modularRoomManager;//, roomsLoaderPrefab;
     //public Button reloadMapGenBtn;
 
     private void Awake()
@@ -20,6 +20,11 @@ public class Loader : MonoBehaviour
         if(Data2ndFloor.instance == null)
         {
             Instantiate(data2ndFloor);
+        }
+
+        if(ModularRoomManager.instance == null)
+        {
+            Instantiate(modularRoomManager);
         }
 
       //  NavMeshScript.instance.updateNavMesh();

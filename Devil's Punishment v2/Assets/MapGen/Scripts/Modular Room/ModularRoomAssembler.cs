@@ -18,6 +18,7 @@ public class ModularRoomAssembler : MonoBehaviour
     private List<Transform> walls_holder2;
     private List<Transform> floor_holder;
     private List<Transform> ceiling_holder;
+    private Transform extra_walls_holder;
 
     private int height = 2;
 
@@ -61,6 +62,7 @@ public class ModularRoomAssembler : MonoBehaviour
         startFloorPosList = new List<Vector3>();
 
         nswe_helper = new List<int>();
+        nswe_helper.Add(-1); //Since main room part doesnt have nswe //To keep PartNo intact
 
         for (int i = 0; i < noOfParts; i++)
         {
@@ -92,6 +94,7 @@ public class ModularRoomAssembler : MonoBehaviour
             //CombineMeshes(i);
         }
 
+        //PlaceRemainingWalls();
 
     }
 
@@ -175,7 +178,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private int NSWEPartChoose(int partNo)
     {
-        int x = Random.Range(1, 4);
+        int x = 1;// Random.Range(1, 4);
         Debug.Log("Choosing NSWE = " + x);
         nswe_helper.Add(x);
         return x; //0, 4 if coveering corridor door is solved
@@ -366,7 +369,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
         //if (!nswe_helper.Contains(0))
-        if (!nswe_helper.Contains(0))
+        //if (!nswe_helper.Contains(0))
         {
             for (int i = 0; i <= size_x[partNo]; i++)
             {
@@ -389,7 +392,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
         //if (!nswe_helper.Contains(2))
-        if (!nswe_helper.Contains(2))
+        //if (!nswe_helper.Contains(2))
         {
             for (int i = 0; i <= size_x[partNo]; i++)
             {
@@ -412,7 +415,7 @@ public class ModularRoomAssembler : MonoBehaviour
         startWallPos += new Vector3(-4 * size_x[partNo], 0, -4 * size_z[partNo]);
         //if (!CheckWallOverlap(partNo, pos, 'Z'))
         //if (!nswe_helper.Contains(1))
-        if (!nswe_helper.Contains(1))
+        //if (!nswe_helper.Contains(1))
         {
             for (int i = 0; i <= size_z[partNo]; i++)
             {
@@ -430,7 +433,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
         //if (!CheckWallOverlap(partNo, pos, 'Z'))
         //if (!nswe_helper.Contains(3))
-        if (!nswe_helper.Contains(3))
+        //if (!nswe_helper.Contains(3))
         {
             for (int i = 0; i <= size_z[partNo]; i++)
             {
@@ -442,6 +445,52 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.parent = walls_holder2[partNo];
                     t.localPosition = pos;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
+            }
+        }
+
+    }
+
+    private void PlaceRemainingWalls()
+    {
+        Swap_NSWE();
+        extra_walls_holder = new GameObject("Extra Walls Holder").transform;
+        extra_walls_holder.parent = roomHolderTransform;
+        Debug.Log(nswe_helper.Contains(1));
+        if (nswe_helper.Contains(1))
+        {
+            int idx = nswe_helper.IndexOf(1);
+            float pos1 = startFloorPosList[idx].z;
+            Debug.Log(pos1);
+            float posx = startFloorPosList[0].z;
+            float pos2 = startFloorPosList[0].z + size_z[0];
+            float pos3 = startFloorPosList[idx].z + size_z[idx];
+            float posMax = Mathf.Max(pos2, pos3);
+            float posMin = Mathf.Min(pos2, pos3);
+            Debug.Log(pos2);
+            int diff = (int)(pos1 - pos2);
+            int sign = (diff >= 0) ? 1 : -1;
+            float posToSpawn = pos1;
+            Transform t;
+            Vector3 pos;
+            Debug.Log(sign * posToSpawn > sign * posMax);
+            bool once = true;
+            while(sign * posToSpawn > sign * posMax)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    pos = new Vector3( startFloorPosList[0].x + size_x[0], 2 + j * 4, posToSpawn);
+                    Debug.Log(pos);
+                    t = Instantiate(side_wall).transform;
+                    t.parent = extra_walls_holder;
+                    t.localPosition = pos;
+                    //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+                }
+                posToSpawn -= sign * 4;
+                if(once && !(sign * posToSpawn > sign * posx))
+                {
+                    posToSpawn = posMin;
+                    once = false;
                 }
             }
         }
