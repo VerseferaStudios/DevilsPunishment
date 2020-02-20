@@ -41,6 +41,7 @@ public class GunController : MonoBehaviour
     bool fire = false;
     bool reloading = false;
     bool triggerReload = false;
+    [SerializeField]
     bool running = false;
     bool moving = false;
     bool crouching = false;

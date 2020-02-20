@@ -49,6 +49,7 @@ public class PlayerController_Revamped : MonoBehaviour
     private float rightAnimationSpeed;
     private float climbSpeed;
     private bool isCrouching;
+    [SerializeField]
     private bool isSprinting;
     private bool isMoving;
 
@@ -276,8 +277,8 @@ public class PlayerController_Revamped : MonoBehaviour
     void Movement()
     {
         Vector2 inputDirection = input.normalized;
-        bool running = Input.GetKey(Controls.Run);
-        float speed = ((running) ? RunSpeed : WalkSpeed) * inputDirection.magnitude;
+        isSprinting = Input.GetKey(KeyCode.LeftShift);// Controls.Run);
+        float speed = ((isSprinting) ? RunSpeed : WalkSpeed) * inputDirection.magnitude;
         float targetRotation;
 
         jumping = false;
@@ -305,7 +306,7 @@ public class PlayerController_Revamped : MonoBehaviour
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSMoothVelocity, turnSmoothing);
             velocity = -transform.forward * speed + Vector3.up * velocityY;
 
-            switch (running)
+            switch (isSprinting)
             {
                 case true:
                   //  _animator.SetInteger("RunIntensity", -2);
@@ -321,7 +322,7 @@ public class PlayerController_Revamped : MonoBehaviour
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSMoothVelocity, turnSmoothing);
             velocity = transform.forward * speed + Vector3.up * velocityY;
-            switch (running)
+            switch (isSprinting)
             {
                 case true:
                   //  _animator.SetInteger("RunIntensity", 2);
@@ -340,7 +341,7 @@ public class PlayerController_Revamped : MonoBehaviour
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = rotation;
-            switch (running)
+            switch (isSprinting)
             {
                 case true:
                  //   _animator.SetInteger("RunIntensity", 4);
@@ -363,7 +364,7 @@ public class PlayerController_Revamped : MonoBehaviour
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
-            switch (running)
+            switch (isSprinting)
             {
                 case true:
             //        _animator.SetInteger("RunIntensity", 6);
@@ -612,6 +613,7 @@ public class PlayerController_Revamped : MonoBehaviour
                     {
                         if (Input.GetButtonDown("Sprint"))
                         {
+                        Debug.Log("TOGGLE");
                             ToggleSprinting();
                         }
                     }
@@ -619,6 +621,7 @@ public class PlayerController_Revamped : MonoBehaviour
                     {
                         if (Input.GetKeyDown(Controls.Run))
                         {
+                        Debug.Log("TOGGLE");
                             ToggleSprinting();
                         }
                     }
@@ -627,10 +630,12 @@ public class PlayerController_Revamped : MonoBehaviour
                 case ToggleHold.HOLD:
                     if (inputDev == PlayerControls.InputDevice.Keyboard)
                     {
+                        Debug.Log("NOT TOGGLE BUT HOLD");
                         isSprinting = Input.GetButton("Sprint");
                     }
                     else if (inputDev == PlayerControls.InputDevice.XBox360)
                     {
+                        Debug.Log("NOT TOGGLE BUT HOLD");
                         isSprinting = Input.GetKey(Controls.Run);
                     }
                     
