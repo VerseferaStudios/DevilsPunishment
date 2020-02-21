@@ -21,6 +21,9 @@ public class GunController : MonoBehaviour
     public Transform muzzle;
     public Transform ejector;
 
+	public Mesh shotgunBulletCaseMesh;
+	public Material shotgunBulletCaseMat;
+
     [Range(1f, 20f)]
     public float fireRate = 10f;
     public float FOVKick = 15f;
@@ -495,13 +498,18 @@ public class GunController : MonoBehaviour
 			if (weaponIsShotgun())
 			{
 
+				ParticleSystemRenderer particleSystemRenderer = ejectionParticles.gameObject.GetComponent<ParticleSystemRenderer>();
+				particleSystemRenderer.mesh = shotgunBulletCaseMesh;
+				particleSystemRenderer.material = shotgunBulletCaseMat;
+
+
 				Renderer rend = GameObject.Find("Ejector/CartridgeEjectEffect").GetComponent<Renderer>();
 				rend.material.shader = Shader.Find("_Color");
-				rend.material.SetColor("_Color", new Color(0.863f, 0.078f, 0.235f));
+				rend.material.SetColor("_Color", Color.white); // new Color(0.863f, 0.078f, 0.235f));
 
 				//Find the Specular shader and change its Color to red
 				rend.material.shader = Shader.Find("Specular");
-				rend.material.SetColor("_SpecColor", new Color(0.863f, 0.078f, 0.235f));
+				rend.material.SetColor("_SpecColor", Color.black); // new Color(0.863f, 0.078f, 0.235f));
 			}
 
 		}

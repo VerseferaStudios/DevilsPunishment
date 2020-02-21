@@ -22239,7 +22239,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7b5b7dd99ffe0e24dba55dce784f8539, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -22278,7 +22278,7 @@ ParticleSystemRenderer:
   m_ApplyActiveColorSpace: 0
   m_AllowRoll: 1
   m_VertexStreams: 0001030405
-  m_Mesh: {fileID: 4300002, guid: a344075162910514498b04a0af108617, type: 3}
+  m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -41059,8 +41059,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -49407,6 +49407,10 @@ MonoBehaviour:
   muzzleFlashLight: {fileID: 1972675744}
   muzzle: {fileID: 167479075}
   ejector: {fileID: 1136700306}
+  shotgunBulletCaseMesh: {fileID: 4300002, guid: a344075162910514498b04a0af108617,
+    type: 3}
+  shotgunBulletCaseMat: {fileID: 2100000, guid: 7b5b7dd99ffe0e24dba55dce784f8539,
+    type: 2}
   fireRate: 8
   FOVKick: 15
   recoilAmount: 32
