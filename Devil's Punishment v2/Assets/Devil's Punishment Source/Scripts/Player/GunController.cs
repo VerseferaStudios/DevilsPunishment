@@ -495,7 +495,7 @@ public class GunController : MonoBehaviour
 			//Get color from gun's ITEM description?
 			//Color color = equippedGun.gunItem.color;
 			//Only set color for shotgun
-			if (weaponIsShotgun())
+			if (weaponIsShotgun() || weaponIsAssaultRifle())
 			{
 
 				ParticleSystemRenderer particleSystemRenderer = ejectionParticles.gameObject.GetComponent<ParticleSystemRenderer>();
@@ -548,6 +548,11 @@ public class GunController : MonoBehaviour
 	private bool weaponIsShotgun()
 	{
 		return equippedGun.gunItem.weaponClassification == GunItem.WeaponClassification.SHOTGUN;
+	}
+
+	private bool weaponIsAssaultRifle()
+	{
+		return equippedGun.gunItem.weaponClassification == GunItem.WeaponClassification.ASSAULTRIFLE;
 	}
 
 	public void UpdateClipStock(){
