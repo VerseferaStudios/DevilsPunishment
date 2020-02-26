@@ -69,7 +69,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public void OnReleaseFocus()
     {
-        PlayerController_Revamped.instance.killUpdate = false;
+
         laserCutterScript.ResetLaser();
         laserCutterScript.StopLaser();
     }

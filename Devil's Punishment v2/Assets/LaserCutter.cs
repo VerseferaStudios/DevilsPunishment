@@ -145,6 +145,7 @@ public class LaserCutter : MonoBehaviour
             if (timeToRelease <= 0)
             {
                 cuffed.GetComponent<CuffController>().Uncuff();
+                PlayerController_Revamped.instance.killUpdate = false;
                 Debug.Log("Cuffs have been removed");
                 StopLaser();
                 LaserCoolDown();
