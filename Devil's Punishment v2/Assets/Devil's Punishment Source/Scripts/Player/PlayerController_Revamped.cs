@@ -97,7 +97,16 @@ public class PlayerController_Revamped : MonoBehaviour
 
     Vector2 input;
 
+    //During cut scenes or movements like laserScript
+    public bool killUpdate;
+    
+
     void Update() {
+
+        if(killUpdate)
+        {
+            return;
+        }
 
         if (!inventory.gameObject.activeInHierarchy)
         {
@@ -110,12 +119,19 @@ public class PlayerController_Revamped : MonoBehaviour
             {
                 Debug.Log("moving player");// + Vector2.Distance(laserSpot, transform.position));
                                            //movementInputRaw = new Vector2(1, 1);
-                input = new Vector2(0, 1);//new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z) - new Vector2(0, 0)/*(0, 0) is the position of InteractableLaser Script*/;
+              //  input = new Vector2(0, 1);//new Vector2(-2, 0) - new Vector2(transform.position.x, transform.position.z) - new Vector2(0, 0)/*(0, 0) is the position of InteractableLaser Script*/;
+
                 Camera.main.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x, Quaternion.LookRotation(laserSpot - transform.position, transform.up).eulerAngles.y, Camera.main.transform.eulerAngles.z);
+
                 //inputDirection = laserSpot - transform.position;
                 //Debug.Log(horizontalAngle);
 
-                Movement();
+                //  Movement();
+                
+
+
+
+
 
                 if (Vector2.Distance(laserSpot, transform.position) < 1.18f) //Mathf.Approximately(transform.position.x/10, -2/10) && Mathf.Approximately(transform.position.z/10, 0/10))
                 {
@@ -128,6 +144,9 @@ public class PlayerController_Revamped : MonoBehaviour
                     laserCutterScript.cuffed = Player.instance;//NetworkManager_Drug.instance.findPlayer(GetComponent<Network_Player>().getUsername()).gameObject.GetComponent<Player>();
                     laserCutterScript.BeginSequences();
                     isInteractLaser = false;
+                    transform.position = laserSpot;
+
+
                 }
             }
             else

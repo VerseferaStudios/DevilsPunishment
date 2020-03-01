@@ -12,6 +12,7 @@ public class MouseLook : MonoBehaviour
     public Transform AimSightPos;
     public Transform AimTransform;
     public GameObject ShootFrom;
+    public GameObject myInventory;
 
     public bool AimDownSight = false;
     public bool ThirdPerson = true;
@@ -50,7 +51,7 @@ public class MouseLook : MonoBehaviour
     public Vector3 Problemkind;
     void LateUpdate()
     {
-        if (!Inventory.instance.gameObject.activeInHierarchy)
+        if (!myInventory.activeInHierarchy)
         {
             Vector3 targetRotation = Vector3.zero;
             if (inputDev == PlayerControls.InputDevice.Keyboard)

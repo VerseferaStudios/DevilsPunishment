@@ -69,6 +69,7 @@ public class InteractableLaser : MonoBehaviour, IInteractable
 
     public void OnReleaseFocus()
     {
+
         laserCutterScript.ResetLaser();
         laserCutterScript.StopLaser();
     }

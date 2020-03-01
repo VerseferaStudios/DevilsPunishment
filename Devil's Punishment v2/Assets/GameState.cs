@@ -17,7 +17,8 @@ public class GameState : NetworkBehaviour
     public void setSpawnPos(Transform pos)
     {
         spawnPosition = pos;
-        Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
+        //Teleport player to start Room
+       // Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
     }
 
 
@@ -74,16 +75,16 @@ public class GameState : NetworkBehaviour
                     Network_Transmitter.transmitter.sendNetworkMessage("Cut cuffs", username);
                     break;
                 case gameStateType.EndRoom:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Reached end room, got gen parts?", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Reached end room, activated generator?", username);
                     break;
                 case gameStateType.GenPartA:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part A found!", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part A inserted!", username);
                     break;
                 case gameStateType.GenPartB:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part B found!", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part B inserted!", username);
                     break;
                 case gameStateType.GenPartC:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part C found!", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Gen Part C inserted!", username);
                     break;
                 default:
                     break;
@@ -100,7 +101,7 @@ public class GameState : NetworkBehaviour
             if (gotGenParts() && gST == gameStateType.FleeGenRoom)
             {
                 Network_Transmitter.transmitter.sendNetworkMessage("Won game!", "SYSTEM");
-                Network_Transmitter.transmitter.sendNetworkMessage("Got all gen parts and reached end room! Good work", "SYSTEM");
+                Network_Transmitter.transmitter.sendNetworkMessage("Activated generator and reached end room!", "SYSTEM");
             }
 
 
