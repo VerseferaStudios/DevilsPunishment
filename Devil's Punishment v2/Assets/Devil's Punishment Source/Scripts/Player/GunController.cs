@@ -498,7 +498,9 @@ public class GunController : MonoBehaviour
 			if (weaponIsShotgun() || weaponIsAssaultRifle())
 			{
 
-				ParticleSystemRenderer particleSystemRenderer = ejectionParticles.gameObject.GetComponent<ParticleSystemRenderer>();
+                ejector.gameObject.SetActive(true);
+
+                ParticleSystemRenderer particleSystemRenderer = ejectionParticles.gameObject.GetComponent<ParticleSystemRenderer>();
 				particleSystemRenderer.mesh = shotgunBulletCaseMesh;
 				particleSystemRenderer.material = shotgunBulletCaseMat;
 
@@ -510,7 +512,24 @@ public class GunController : MonoBehaviour
 				//Find the Specular shader and change its Color to red
 				rend.material.shader = Shader.Find("Specular");
 				rend.material.SetColor("_SpecColor", Color.black); // new Color(0.863f, 0.078f, 0.235f));
+
+                if (weaponIsAssaultRifle())
+                {
+                    ejectionParticles.startSize = 1;
+                    ejectionParticles.startSpeed = 0.5f;
+                }
+                else if (weaponIsShotgun())
+                {
+                    ejectionParticles.startSize = 1.3f;
+                    ejectionParticles.startSpeed = 0.6f;
+                }
+
 			}
+
+            if (weaponIsHandGun())
+            {
+                ejector.gameObject.SetActive(false);
+            }
 
 		}
 		// Camera update:
@@ -555,7 +574,12 @@ public class GunController : MonoBehaviour
 		return equippedGun.gunItem.weaponClassification == GunItem.WeaponClassification.ASSAULTRIFLE;
 	}
 
-	public void UpdateClipStock(){
+    private bool weaponIsHandGun()
+    {
+        return equippedGun.gunItem.weaponClassification == GunItem.WeaponClassification.HANDGUN;
+    }
+
+    public void UpdateClipStock(){
         clipStock = inventory.GetEquippedGunAmmo();
 	}
 
