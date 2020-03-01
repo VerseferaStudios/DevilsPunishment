@@ -9,6 +9,7 @@ public class ModularRoomAssembler : MonoBehaviour
     public Transform door_corridor_Transform;
     public Vector3 door_corridor_Pos;
     public Vector3 door_room_Pos;
+    public GameObject[] doors;
     public Material mat;
     //public Texture2D packedTexture;
 
@@ -35,6 +36,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private List<int> nswe_helper;
 
+    private bool[] door_done;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +47,9 @@ public class ModularRoomAssembler : MonoBehaviour
     public void StartScript()
     {
         Debug.Log(Random.Range(1, 1));
+        door_corridor_Transform = doors[0].transform;
         door_corridor_Pos = door_corridor_Transform.position;
+        door_done[0] = true;
 
         roomHolderTransform = new GameObject("Modular Room 1").transform;
         roomHolderTransform.tag = "Modular Room stuff";
@@ -395,6 +400,11 @@ public class ModularRoomAssembler : MonoBehaviour
                     if (pos == door_room_Pos)
                     {
                         toSpawn = wall_with_door;
+                    }
+                    else if (!door_done[partNo] && Random.Range(0f, 1f) < .1f)
+                    {
+                        doors[partNo] = new GameObject("Door+x");
+                        doors[partNo].transform.position = Vector3.zero;
                     }
                     t = Instantiate(toSpawn).transform;
                     t.parent = walls_holder[partNo];

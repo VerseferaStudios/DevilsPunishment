@@ -269,6 +269,9 @@ public class MapGen3 : MonoBehaviour
                         roomToSpawn = laserRoom;
                         yCoord = 1;
                         break;
+                    case 3:
+                        roomToSpawn = null;
+                        break;
                         /*
                 case 3:
                     roomToSpawn = roomT;
@@ -285,8 +288,20 @@ public class MapGen3 : MonoBehaviour
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;
             }
-            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
+            GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+            if(roomToSpawn == null)
+            {
+                Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
+                Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 40); //Not Sure!!!;
+                Data.instance.modularRoomAssembler.StartScript();
+                spawnedRoom = Data.instance.modularRoomAssembler.roomHolderTransform.gameObject;
+                spawnedRoom.AddComponent<RoomReferences>().doors = Data.instance.modularRoomAssembler.doors;
+            }
+            else
+            {
+                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+            }
             RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
 
             itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);

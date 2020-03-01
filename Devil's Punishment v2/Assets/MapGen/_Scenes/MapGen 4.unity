@@ -1056,13 +1056,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 1841075158073676714, guid: 49b4b1d208cb32845b13db9d7fe330c3, type: 3}
   data2ndFloor: {fileID: 0}
+  modularRoomManager: {fileID: 0}
 --- !u!114 &1451284029 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c70e4b3ef5bf374bba42e0a7bbfc24d, type: 3}
@@ -1658,61 +1659,12 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8687177794943754391 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7846860429511563592, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-    type: 3}
-  m_PrefabInstance: {fileID: 8687177794943754389}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8687177794943754392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomsLoaderPrefab: {fileID: 0}
-  mapGenHolderTransform: {fileID: 0}
-  xSize: 0
-  zSize: 0
-  corridorSize: 4
-  collidedCorridors: []
-  collidedVents: []
-  startTime: 0
-  nearDoorL: []
-  corridorT1: {fileID: 0}
-  corridorT2: {fileID: 0}
-  corridorX: {fileID: 0}
-  ventT: {fileID: 0}
-  ventX: {fileID: 0}
-  spawnPointsFirstPos: {x: 0, y: 0, z: 0}
-  count: 0
-  roomIndicator: {fileID: 0}
-  ctr: 0
-  isOnce: 1
-  isDonePrevFnCall: 1
-  prevCount: 0
-  counter: 0
-  counter1: 0
-  isFinishedCheckCollisions: 0
-  isFinishedCheckCollisionsVents: 0
-  isFinishedAddAndRemoveConnectedRooms: 0
-  isConnectedComponentsCheckDone: 0
-  roomNewScript: {fileID: 0}
-  ctr1: 0
-  playerController: {fileID: 0}
-  canStartCorridorTestSpawner: 0
 --- !u!1001 &9004979133491826906
 PrefabInstance:
   m_ObjectHideFlags: 0

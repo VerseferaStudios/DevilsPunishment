@@ -66,6 +66,8 @@ public class Data : MonoBehaviour
 
     public List<string> doorRotationHelper = new List<string>();
 
+    public ModularRoomAssembler modularRoomAssembler;
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -83,6 +85,9 @@ public class Data : MonoBehaviour
 
     private void Start()
     {
+
+        modularRoomAssembler = GetComponent<ModularRoomAssembler>();
+
         startTime = Time.time;
         nearDoorL.Add("-z");
         nearDoorL.Add("-x");
