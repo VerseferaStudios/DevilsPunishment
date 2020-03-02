@@ -41,14 +41,16 @@ public class ModularRoomAssembler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartScript();
+        //StartScript();
     }
 
     public void StartScript()
     {
+        doors = new GameObject[noOfParts];
         Debug.Log(Random.Range(1, 1));
-        door_corridor_Transform = doors[0].transform;
+        doors[0] = door_corridor_Transform.gameObject;
         door_corridor_Pos = door_corridor_Transform.position;
+        door_done = new bool[noOfParts];
         door_done[0] = true;
 
         roomHolderTransform = new GameObject("Modular Room 1").transform;
@@ -102,6 +104,7 @@ public class ModularRoomAssembler : MonoBehaviour
             */
         StartCoroutine(CombineAfterDelay());
         //PlaceRemainingWalls();
+        Debug.Log(Random.Range(1, 1));
 
     }
 
@@ -384,7 +387,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
         Transform t;
-        Vector3 pos;
+        Vector3 posCurr;
         GameObject toSpawn;
 
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
@@ -396,19 +399,20 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     toSpawn = side_wall;
-                    pos = new Vector3(i * 4, 2 + j * 4, 4 / 2);
-                    if (pos == door_room_Pos)
+                    posCurr = new Vector3(i * 4, 2 + j * 4, 4 / 2);
+                    if (posCurr == door_room_Pos)
                     {
                         toSpawn = wall_with_door;
                     }
                     else if (!door_done[partNo] && Random.Range(0f, 1f) < .1f)
                     {
-                        doors[partNo] = new GameObject("Door+x");
-                        doors[partNo].transform.position = Vector3.zero;
+                        doors[partNo] = new GameObject("Door+z");
+                        doors[partNo].transform.position = walls_holder[partNo].position + posCurr + new Vector3(0, 0, 2);
+                        door_done[partNo] = true;
                     }
                     t = Instantiate(toSpawn).transform;
                     t.parent = walls_holder[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
             }
@@ -424,14 +428,20 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     toSpawn = side_wall;
-                    pos = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
-                    if (pos == door_room_Pos)
+                    posCurr = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
+                    if (posCurr == door_room_Pos)
                     {
                         toSpawn = wall_with_door;
                     }
+                    else if (!door_done[partNo] && Random.Range(0f, 1f) < .1f)
+                    {
+                        doors[partNo] = new GameObject("Door-z");
+                        doors[partNo].transform.position = walls_holder[partNo].position + posCurr + new Vector3(0, 0, -2);
+                        door_done[partNo] = true;
+                    }
                     t = Instantiate(toSpawn).transform;
                     t.parent = walls_holder[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
             }
@@ -446,11 +456,16 @@ public class ModularRoomAssembler : MonoBehaviour
             {
                 for (int j = 0; j < height; j++)
                 {
-                    pos = new Vector3(4 / 2, 2 + j * 4, -i * 4);
-
+                    posCurr = new Vector3(4 / 2, 2 + j * 4, -i * 4);
+                    if (!door_done[partNo] && Random.Range(0f, 1f) < .1f)
+                    {
+                        doors[partNo] = new GameObject("Door+x");
+                        doors[partNo].transform.position = walls_holder2[partNo].position + posCurr + new Vector3(2, 0, 0);
+                        door_done[partNo] = true;
+                    }
                     t = Instantiate(side_wall).transform;
                     t.parent = walls_holder2[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
             }
@@ -464,11 +479,16 @@ public class ModularRoomAssembler : MonoBehaviour
             {
                 for (int j = 0; j < height; j++)
                 {
-                    pos = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
-
+                    posCurr = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
+                    if (!door_done[partNo] && Random.Range(0f, 1f) < .1f)
+                    {
+                        doors[partNo] = new GameObject("Door-x");
+                        doors[partNo].transform.position = walls_holder2[partNo].position + posCurr + new Vector3(-2, 0, 0); ;
+                        door_done[partNo] = true;
+                    }
                     t = Instantiate(side_wall).transform;
                     t.parent = walls_holder2[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
             }

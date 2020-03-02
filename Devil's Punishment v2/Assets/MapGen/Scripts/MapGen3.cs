@@ -86,7 +86,7 @@ public class MapGen3 : MonoBehaviour
         //Random.state = GoodStates.states[0];
         //syncronizeSeeds(seed);
 
-        syncronizeSeeds(Random.Range(1, 1000));
+        //syncronizeSeeds(Random.Range(1, 1000));
         Random.InitState(Random.Range(1, 1000));
 
         //StateData.states.Add(Random.state);
@@ -290,7 +290,8 @@ public class MapGen3 : MonoBehaviour
             }
 
             GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-            if(roomToSpawn == null)
+            roomToSpawn = null;
+            if (roomToSpawn == null)
             {
                 Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
                 Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 40); //Not Sure!!!;
@@ -302,9 +303,10 @@ public class MapGen3 : MonoBehaviour
             {
                 spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
             }
+
             RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
 
-            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+            //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
             if(i != 1)
                 SpawnVentCoverInRoom(i, k, roomReferences.ventParent);

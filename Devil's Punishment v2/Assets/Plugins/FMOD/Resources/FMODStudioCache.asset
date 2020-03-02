@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 114144321781358218}
-  - {fileID: 114477200864601024}
+  - {fileID: 114722409295847002}
+  - {fileID: 114958944829006336}
   EditorEvents:
-  - {fileID: 114207467080409248}
-  - {fileID: 114538814668457068}
-  - {fileID: 114779338038393424}
-  - {fileID: 114355113233203444}
+  - {fileID: 114079412546603940}
+  - {fileID: 114395273162835222}
+  - {fileID: 114136530187323908}
+  - {fileID: 114357670107488806}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 114477200864601024}
+  - {fileID: 114958944829006336}
   StringsBanks:
-  - {fileID: 114144321781358218}
+  - {fileID: 114722409295847002}
   stringsBankWriteTime: 637144983057261899
   cacheVersion: 3
 --- !u!114 &114007899514997404
@@ -240,6 +240,29 @@ MonoBehaviour:
   - Name: Desktop
     Value: 854
   Exists: 1
+--- !u!114 &114079412546603940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/World/Amb_UndergroundFacility
+  m_EditorClassIdentifier: 
+  Path: event:/World/Amb_UndergroundFacility
+  guid: 3200171994f3a24da4a55ea6bebf8f2c
+  Banks:
+  - {fileID: 114958944829006336}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 62666
 --- !u!114 &114081157167399788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,6 +454,29 @@ MonoBehaviour:
   Max: 3
   Default: 0
   Exists: 1
+--- !u!114 &114136530187323908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Crouch
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Crouch
+  guid: d5601dc39e3980459044a783d28d009d
+  Banks:
+  - {fileID: 114958944829006336}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1152
 --- !u!114 &114140931612830552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,6 +1076,30 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 222
+--- !u!114 &114357670107488806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Run
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Run
+  guid: ff923401d5a0cb40a1b49eec59391f5e
+  Banks:
+  - {fileID: 114958944829006336}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114453451405940032}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 222
 --- !u!114 &114358350292953630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,6 +1351,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114395273162835222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Walk
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Walk
+  guid: 3a6306217e0a4d4da74bd1851317d0ab
+  Banks:
+  - {fileID: 114958944829006336}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 114765182040174794}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 910
 --- !u!114 &114409374001536142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1378,6 +1472,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &114453451405940032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Run/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &114456002014614204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2015,6 +2126,27 @@ MonoBehaviour:
   Max: 3
   Default: 0
   Exists: 1
+--- !u!114 &114722409295847002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: C:\Users\Joel\Documents\Unity Projects\Horror Game\DevilsPunishment\Devil's
+    Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
+  SubDir: 
+  lastModified: 637144983057261899
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 950
+  Exists: 1
 --- !u!114 &114731372328951788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2122,6 +2254,23 @@ MonoBehaviour:
   Max: 3
   Default: 0
   Exists: 0
+--- !u!114 &114765182040174794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Walk/Walk - Run
+  m_EditorClassIdentifier: 
+  Name: Walk - Run
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &114772541971337236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2690,6 +2839,27 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 2830
+  Exists: 1
+--- !u!114 &114958944829006336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: C:\Users\Joel\Documents\Unity Projects\Horror Game\DevilsPunishment\Devil's
+    Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
+  SubDir: 
+  lastModified: 637144983057192097
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 1445664
   Exists: 1
 --- !u!114 &114974426054927218
 MonoBehaviour:
