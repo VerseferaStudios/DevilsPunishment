@@ -45,7 +45,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         UnityEngine.Random.InitState(seed);
     }
+
     void Start()
+    {
+        //StartScript();
+    }
+
+    public void StartScript()
     {
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
@@ -165,7 +171,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         int times = 0;
         bool x;
-        sample_room_col = spawnPoints[0].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color;
+        //sample_room_col = spawnPoints[0].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color;
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
@@ -180,6 +186,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
+                Debug.Log("K = " + k + " && L = " + l);
+
                 //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                 if (k == l)
                 {
@@ -206,21 +214,39 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     isDoneConnectTwoRooms = false;
                     fail_room_connect = false;
 
-                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
-                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+                    //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+                    //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
 
+                    Debug.Log("spawn Points");
+                    for (int i = 0; i < spawnPoints.Count; i++)
+                    {
+                        Debug.Log(spawnPoints[i].transform.position);
+                        Debug.Log(spawnPoints[i].name);
+                    }
+                    Debug.Log("K = " + k + " && L = " + l);
+                    Vector3 kParentPos = spawnPoints[k].transform.parent.position;
+                    Vector3 lParentPos = spawnPoints[l].transform.parent.position;
+                    if (spawnPoints[k].transform.parent.name.StartsWith("Modular"))
+                    {
+                        kParentPos = spawnPoints[k].transform.parent.parent.position;
+                    }
+                    if (spawnPoints[l].transform.parent.name.StartsWith("Modular"))
+                    {
+                        lParentPos = spawnPoints[l].transform.parent.parent.position;
+                    }
+                    if (lParentPos == kParentPos) continue;
                     Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
                                     spawnPoints[k].name + " " + spawnPoints[l].name + " " +
                                     spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
                     StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                     spawnPoints[k].name, spawnPoints[l].name,
-                                    spawnPoints[k].transform.parent.position, spawnPoints[l].transform.parent.position, false));
+                                    kParentPos, lParentPos, false));
 
                     //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
                     yield return new WaitForSeconds(2);
 
-                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
-                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     
                     yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     if (fail_room_connect)
