@@ -463,16 +463,16 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.40568477
-        functionName: Foot
-        data: event:/Player_Foot
+      - time: 0.35279804
+        functionName: PlayWalkEvent
+        data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8992249
-        functionName: Foot
-        data: event:/Player_Foot
+      - time: 0.82844245
+        functionName: PlayWalkEvent
+        data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -896,7 +896,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.36603773
+        functionName: PlayWalkEvent
+        data: event:/Player/Player_Walk
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.87169814
+        functionName: PlayWalkEvent
+        data: event:/Player/Player_Walk
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

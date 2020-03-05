@@ -40,6 +40,10 @@ public class InventoryUI : MonoBehaviour
     public void SetSelectedItemIndex(int i) {
         selectedItemIndex = i;
         UpdateTooltip();
+        //FMOD AUDIO EVENT - UI Hover Sound
+        FMOD.Studio.EventInstance UiStart = FMODUnity.RuntimeManager.CreateInstance("event:/UI/Inventory/UI_Hover");
+        UiStart.start();
+        UiStart.release();
     }
 
     public void Show() {
