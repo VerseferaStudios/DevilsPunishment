@@ -18,7 +18,7 @@ public class GameState : NetworkBehaviour
     {
         spawnPosition = pos;
         //Teleport player to start Room
-       // Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
+        Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
     }
 
 

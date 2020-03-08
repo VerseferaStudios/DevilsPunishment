@@ -179,7 +179,7 @@ public class PlayerController_Revamped : MonoBehaviour
     public Transform LookDirectionObject;
 
     //Moonjump was 10f
-    public float jumpHeight = 3f;
+    public float jumpHeight = 1f;
     CharacterController chcon;
 
     void jump()
