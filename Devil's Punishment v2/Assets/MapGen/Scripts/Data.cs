@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Data : MonoBehaviour
 {
+    public int n;
+    public int mapSizeX = 4, mapSizeZ = 2;
     public GameObject roomsLoaderPrefab;
     public Transform mapGenHolderTransform;
 
@@ -54,8 +56,6 @@ public class Data : MonoBehaviour
     
     public RoomNew roomNewScript;
 
-    private GameObject[] roomsArray;
-
     private bool isFirstPassDone = false;
 
     public int ctr1 = 0;
@@ -67,6 +67,8 @@ public class Data : MonoBehaviour
     public List<string> doorRotationHelper = new List<string>();
 
     public ModularRoomAssembler modularRoomAssembler;
+
+    public List<GameObject> roomsFloor1;
 
     //public bool isPipeAtLeft = true;
 
@@ -85,7 +87,7 @@ public class Data : MonoBehaviour
 
     private void Start()
     {
-
+        roomsFloor1 = new List<GameObject>();
         modularRoomAssembler = GetComponent<ModularRoomAssembler>();
 
         startTime = Time.time;
@@ -1106,7 +1108,9 @@ public class Data : MonoBehaviour
                 //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
 
+                GameObject[] roomsArray;
                 roomsArray = GameObject.FindGameObjectsWithTag("Room");
+                roomsFloor1 = roomsArray.ToList<GameObject>();
 
 
 
@@ -1208,10 +1212,10 @@ public class Data : MonoBehaviour
                                 Debug.LogError("null" + ((door0 == null) ? " door0" : " door1"));
                                 Debug.LogError(connectedRooms[i][j]);
                                 Debug.LogError(connectedRooms[i + 1][k]);
-                                Debug.LogError(roomsArray.Length);
-                                for (int l = 0; l < roomsArray.Length; l++)
+                                Debug.LogError(roomsFloor1.Count);
+                                for (int l = 0; l < roomsFloor1.Count; l++)
                                 {
-                                    Debug.LogError(roomsArray[l].transform.position);
+                                    Debug.LogError(roomsFloor1[l].transform.position);
                                 }
                                 */
                             }
@@ -1230,15 +1234,15 @@ public class Data : MonoBehaviour
 
     private Transform FindDoor(Vector3 roomPos)
     {
-        for (int i = 0; i < roomsArray.Length; i++)
+        for (int i = 0; i < roomsFloor1.Count; i++)
         {
-            //Debug.Log(roomsArray[i].transform.position);
-            if(roomsArray[i].transform.position.x == roomPos.x 
-                && roomsArray[i].transform.position.z == roomPos.z)
+            //Debug.Log(roomsFloor1[i].transform.position);
+            if(roomsFloor1[i].transform.position.x == roomPos.x 
+                && roomsFloor1[i].transform.position.z == roomPos.z)
             {
                 //Found the room
-                Debug.Log("found = " + roomsArray[i].name + " childCount = " + roomsArray[i].transform.childCount + " " + roomsArray[i].transform.position);
-                return roomsArray[i].transform.GetChild(1);
+                Debug.Log("found = " + roomsFloor1[i].name + " childCount = " + roomsFloor1[i].transform.childCount + " " + roomsFloor1[i].transform.position);
+                return roomsFloor1[i].transform.GetChild(1);
             }
         }
         Debug.Log("Didnt find");

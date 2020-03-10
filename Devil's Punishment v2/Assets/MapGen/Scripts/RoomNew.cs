@@ -41,6 +41,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     Color sample_room_col;
 
+    public List<List<bool>> occupiedCells;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
@@ -51,8 +53,56 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //StartScript();
     }
 
+    private void PopulateOccupiedCells()
+    {
+        float max = Mathf.Max(Data.instance.zSize, Data.instance.xSize);
+        Debug.Log(max);
+        Debug.Log(Data.instance.zSize);
+        Debug.Log(Data.instance.xSize);
+        Debug.Log(Data.instance.mapSizeX * Data.instance.zSize / 4);
+        Debug.Log(Data.instance.mapSizeZ * Data.instance.zSize / 4);
+
+        occupiedCells = new List<List<bool>>();
+        List<bool> occupiedCellsRow = new List<bool>();
+        for (int i = 0; i < Data.instance.mapSizeZ * max / 4; i++)
+        {
+            occupiedCellsRow.Add(true);
+        }
+        for (int i = 0; i < Data.instance.mapSizeX * max / 4; i++)
+        {
+            occupiedCells.Add(occupiedCellsRow);
+        }
+        for (int i = 10; i < 40; i++)
+        {
+            for (int j = 10; j < 20; j++)
+            {
+                occupiedCells[i][j] = false;
+            }
+        }
+
+        Debug.Log(occupiedCells.Count);
+        Debug.Log(occupiedCells[0].Count);
+        for (int i = 0; i < occupiedCells.Count; i++)
+        {
+            for (int j = 0; j < occupiedCells[i].Count; j++)
+            {
+                Debug.Log("occupiedCells[" + i + "][" + j + "] = " + occupiedCells[i][j]);
+            }
+        }
+
+        RoomReferences roomReferences;
+        for (int i = 0; i < Data.instance.roomsFloor1.Count; i++)
+        {
+            roomReferences = Data.instance.roomsFloor1[i].GetComponent<RoomReferences>();
+            //do topright and bottom left after seeing rotation and localPos etc and 4 units squares/ cells OcupIeDDCElls
+        }
+
+
+    }
+
     public void StartScript()
     {
+        PopulateOccupiedCells();
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
@@ -307,7 +357,188 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         yield return null;
     }
 
+    private int[] GetIdx(Vector3 pos)
+    {
+        int x = (int)pos.x / -4;
+        int z = (int)pos.z / -4;
+
+        return new int[]{ x, z};
+    }
+
+    private Vector3 GetPos(int[] idx)
+    {
+        return new Vector3(idx[0] * -4, 0, idx[1] * -4);
+    }
+
     public IEnumerator ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
+    {
+
+        Vector3 currentSpawnPos = kPos;
+        Vector3 newSpawnPos = kPos;
+        Vector3 prevSpawnPos = kPos;
+        int[] kIdx = GetIdx(kPos);
+        int[] lIdx = GetIdx(lPos);
+        int prevMove = -1;
+        int thisMove = -1;
+        List<bool> freeSpaces = new List<bool>();
+        for (int i = 0; i < 4; i++)
+        {
+            freeSpaces.Add(false);
+        }
+
+        float initDistance = Mathf.Abs(lPos.x - currentSpawnPos.x) + Mathf.Abs(lPos.z - currentSpawnPos.z);
+        float newDistance = initDistance;
+        List<float> manhattanDist = new List<float>();
+
+        Debug.Log(kPos);
+        Debug.Log(lPos);
+
+        bool reachedDestination = false;
+        while (!reachedDestination)
+        {
+            /*
+            Debug.Log("kIdx[0] = " + kIdx[0]);
+            Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
+            Debug.Log(kName);
+            Debug.Log(kParentPos);
+            Debug.Log(kPos);
+            Debug.Log(occupiedCells.Count);
+            */
+            if (kIdx[1] + 1 < occupiedCells[kIdx[0]].Count && occupiedCells[kIdx[0]][kIdx[1] + 1])  //0 or North // mirror image so add z
+            {
+                freeSpaces[0] = true;
+            }
+            else
+            {
+                freeSpaces[0] = false;
+            }
+            if (kIdx[0] + 1 < occupiedCells.Count && occupiedCells[kIdx[0] + 1][kIdx[1]])           //1 or East // mirror image so add x
+            {
+                freeSpaces[1] = true;
+            }
+            else
+            {
+                freeSpaces[1] = false;
+            }
+            if (kIdx[1] - 1 < occupiedCells[kIdx[0]].Count && occupiedCells[kIdx[0]][kIdx[1] - 1])  //2 or South // mirror image so minus z
+            {
+                freeSpaces[2] = true;
+            }
+            else
+            {
+                freeSpaces[2] = false;
+            }
+            if (kIdx[0] - 1 < occupiedCells.Count && occupiedCells[kIdx[0] - 1][kIdx[1]])           //1 or West // mirror image so minus x
+            {
+                freeSpaces[3] = true;
+            }
+            else
+            {
+                freeSpaces[3] = false;
+            }
+
+            int ctr = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                //newDistance = initDistance;
+                if (freeSpaces[i])
+                {
+                    ctr++;
+                }
+                DistanceHelper(i, out newSpawnPos, newSpawnPos);
+                newDistance = Mathf.Abs(lPos.x - newSpawnPos.x) + Mathf.Abs(lPos.z - newSpawnPos.z);
+                manhattanDist.Add(newDistance);
+            }
+            /*
+            if(ctr > 1)
+            {
+                //choose prevMove if possible (after swapping 0 to 2 and 1 to 3 
+            }
+            else
+            {
+                thisMove = freeSpaces.IndexOf(true);
+                prevMove = thisMove;
+            }
+            */
+            initDistance = Mathf.Min(manhattanDist.ToArray());//check equal too in prev looopppp
+            for (int i = 0; i < manhattanDist.Count; i++)
+            {
+                //Debug.Log(" => " + manhattanDist[i]);
+            }
+            //Debug.Log("min is " + initDistance);
+            thisMove = manhattanDist.IndexOf(initDistance);
+            Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
+            DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
+            newSpawnPos = prevSpawnPos;
+
+            prevMove = thisMove;
+
+            if(thisMove == 0)
+            {
+                currentSpawnPos.z += 4;
+            }
+            else if (thisMove == 1)
+            {
+                currentSpawnPos.x += 4;
+            }
+            else if (thisMove == 2)
+            {
+                currentSpawnPos.z += -4;
+            }
+            else if (thisMove == 3)
+            {
+                currentSpawnPos.x += -4;
+            }
+
+            //currentSpawnPos
+            Instantiate(corridors[0], currentSpawnPos, Quaternion.identity);
+
+            freeSpaces.Clear();
+            manhattanDist.Clear();
+            for (int i = 0; i < 4; i++)
+            {
+                freeSpaces.Add(false);
+            }
+
+            reachedDestination = (currentSpawnPos.x == lPos.x) && (currentSpawnPos.z == lPos.z);
+
+            yield return new WaitForSeconds(0.1f);
+            if (reachedDestination)
+            {
+                break;
+            }
+            //Use recursion?
+        }
+        isDoneConnectTwoRooms = true;
+        yield return null;
+    }
+
+    private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
+    {
+        newSpawnPos = newSpawnPosOriginal;
+        if (i == 0)
+        {
+            Debug.Log("0");
+            newSpawnPos.z += 4;
+        }
+        else if (i == 1)
+        {
+            Debug.Log("1");
+            newSpawnPos.x += 4;
+        }
+        else if (i == 2)
+        {
+            Debug.Log("2");
+            newSpawnPos.z += -4;
+        }
+        else if (i == 3)
+        {
+            Debug.Log("3");
+            newSpawnPos.x += -4;
+        }
+    }
+
+    public IEnumerator ConnectTwoRoomsOld(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
         //making all y coordinates of all corridors equal to 0.5f

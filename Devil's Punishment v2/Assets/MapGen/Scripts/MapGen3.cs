@@ -40,7 +40,6 @@ public class MapGen3 : MonoBehaviour
     public ReloadGoodStates ReloadGoodStatesData;
 
     private Vector2 mapCentre;
-    private int mapSizeX = 4, mapSizeZ = 2;
 
     public RoomNew roomNewScript;
 
@@ -70,8 +69,8 @@ public class MapGen3 : MonoBehaviour
 
 
 
-        float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = -(48 * ((float)(mapSizeZ - 1) / 2)) - 28;
+        float x = -(48 * ((float)(Data.instance.mapSizeX - 1) / 2)) - 28;
+        float z = -(48 * ((float)(Data.instance.mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 
@@ -192,8 +191,8 @@ public class MapGen3 : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
+            arr[0] = 48 * Random.Range(0, Data.instance.mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, Data.instance.mapSizeX) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -272,7 +271,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4))
+                switch (Random.Range(1, 3)) //no modular room spawned for now!!!
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -309,7 +308,7 @@ public class MapGen3 : MonoBehaviour
             GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
             RoomReferences roomReferences;
 
-            roomToSpawn = null;
+            //roomToSpawn = null;
             if (roomToSpawn == null)
             {
                 Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
@@ -326,6 +325,8 @@ public class MapGen3 : MonoBehaviour
                 roomReferences = spawnedRoom.GetComponent<RoomReferences>();
                 CallOffsetAndDoorFns(spawnedRoom, yRotation);
             }
+
+            Data.instance.roomsFloor1.Add(spawnedRoom);
 
             //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
@@ -346,6 +347,11 @@ public class MapGen3 : MonoBehaviour
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
                 */
+
+                Data.instance.allRooms = allRooms;
+                Data.instance.xSize = xSize;
+                Data.instance.zSize = zSize;
+
                 roomNewScript.StartScript();
                 //ConnectToMapGen(roomNewScript);
 
@@ -370,10 +376,6 @@ public class MapGen3 : MonoBehaviour
         }
         //Debug.Log("_________________DONE___________________");
         */
-
-        Data.instance.allRooms = allRooms;
-        Data.instance.xSize = xSize;
-        Data.instance.zSize = zSize;
 
     }
 
