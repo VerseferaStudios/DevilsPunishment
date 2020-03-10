@@ -42,11 +42,12 @@ public class CuffController : MonoBehaviour
     //Can that item get picked up?
     public void Cuff()
     {
-        isCuffed = true;
-        pisLocked = true;
-        risLocked = true;
-        sisLocked = true;
-        playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 1.0f);
+        //isCuffed = true;
+        //pisLocked = true;
+        //risLocked = true;
+        //sisLocked = true;
+        //playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 1.0f);
+        
         //Add a on screen or audio cue for failure.
         //Debug.Log("Cuffed, find a way to get your cuffs off!");
     }

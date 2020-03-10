@@ -87,7 +87,6 @@ public class PlayerController_Revamped : MonoBehaviour
             Debug.Log("Unable to set 'Data.instance.playerController' Data instance not found.");
         }
 
-        Network_Transmitter.transmitter.startOnlineGeneration();
         transform.position = new Vector3(-30, 10, -30);
         
     }

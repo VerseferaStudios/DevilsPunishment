@@ -44,11 +44,11 @@ public class GameState : NetworkBehaviour
         if(isServer)
         {
             state = "GAME_START";
-            Network_Transmitter.transmitter.player.RpcSendChatMessage("Set state to " + state);
+            //Network_Transmitter.transmitter.player.RpcSendChatMessage("Set state to " + state);
         }
         else
         {
-            Network_Transmitter.transmitter.player.RpcSendChatMessage(state);
+            //Network_Transmitter.transmitter.player.RpcSendChatMessage(state);
         }
 
 

@@ -536,8 +536,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
         Debug.Log("startPos = " + startPos + " && doorPos = " +  doorPos);
         Debug.Log("doorName = " + doorName + " && doorName2 = " + doorName2);
-        Debug.Log(Data.instance.roomNewScript.gameObject.name);
-        Data.instance.roomNewScript.ConnectTwoRooms(startPos, doors[partNo].transform.position, doorName, doorName2, Vector3.zero, Vector3.one, true);
+        //Debug.Log(Data.instance.roomNewScript.gameObject.name);
+        //Data.instance.roomNewScript.ConnectTwoRooms(startPos, doors[partNo].transform.position, doorName, doorName2, Vector3.zero, Vector3.one, true);
         door_done[partNo] = true;
     }
 

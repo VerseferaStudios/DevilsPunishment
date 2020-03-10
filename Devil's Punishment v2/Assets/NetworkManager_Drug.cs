@@ -42,9 +42,16 @@ public class NetworkManager_Drug : NetworkManager
     }
 
     //Referenced by HostGame Button
+
+    //public void startHosting2345()
+    //{
+        //StartCoroutine(startHostingHelper());
+    //}
+
     public void startHosting()
     {
-
+        Network_Transmitter.transmitter.startOnlineGeneration();
+        //yield return new WaitUntil(() => MapgenProgress.instance.percentage >= 85);
         base.StartHost();
 
         if(startCamera != null)

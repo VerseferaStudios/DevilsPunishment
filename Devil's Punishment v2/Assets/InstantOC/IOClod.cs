@@ -66,7 +66,8 @@ public class IOClod : IOCcomp {
 	}
 	
 	void Start () {
-		UpdateValues();
+        enabled = false;
+        UpdateValues();
 		if(transform.Find("Lod_0"))
 		{
 			lods = 1;
