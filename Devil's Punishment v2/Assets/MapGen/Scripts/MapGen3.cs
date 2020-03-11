@@ -266,7 +266,7 @@ public class MapGen3 : MonoBehaviour
                 }
                 else
                 {
-                    yCoord = 0f;
+                    //yCoord = 0f;
                 }
             }
             else

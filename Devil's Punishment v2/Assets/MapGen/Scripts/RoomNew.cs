@@ -380,6 +380,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         int[] lIdx = GetIdx(lPos);
         int prevMove = -1;
         int thisMove = -1;
+        List<int> moves = new List<int>();
+        List<Vector3> positions = new List<Vector3>();
         List<bool> freeSpaces = new List<bool>();
         for (int i = 0; i < 4; i++)
         {
@@ -490,8 +492,63 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 currentSpawnPos.x += -4;
             }
 
-            //currentSpawnPos
-            Instantiate(corridors[0], currentSpawnPos, Quaternion.identity);
+            moves.Add(thisMove);
+            positions.Add(currentSpawnPos);
+            /*
+            GameObject currentCorridor;
+
+            if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
+            {
+                //L Corridor!!!!!!!
+            }
+            else
+            {
+                currentCorridor = Instantiate(corridors[0], currentSpawnPos, Quaternion.identity);
+
+                currentCorridor.layer = 18;
+                /*
+                //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
+                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
+                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
+                *//*
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                if (thisMove == 0 || thisMove == 2)
+                {
+                    currentCorridor.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    //Data.instance.corridorCount++;
+
+                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
+                }
+                else
+                {
+                    currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //Data.instance.corridorCount++;
+
+                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
+                }
+
+                //For now, later remove and put outside this else block
+
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+                {
+                    Instantiate(ventCover, currentSpawnPos, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(currentSpawnPos - new Vector3(1, 0, 1), currentSpawnPos + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+                    Data.instance.ctr1++;
+                }
+                
+            }
+            */
+
+            //spawnNowAt.x += increment;
+
+
+
 
             freeSpaces.Clear();
             manhattanDist.Clear();
@@ -509,6 +566,91 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             //Use recursion?
         }
+
+        for (int i = 0; i < moves.Count; i++)
+        {
+            GameObject currentCorridor;
+
+            //if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
+            if (i + 1 < moves.Count && (moves[i] == 0 || moves[i] == 2) && (moves[i + 1] == 1 || moves[i + 1] == 3))
+            {
+                //L Corridor!!!!!!!
+            }
+            else
+            {
+                currentCorridor = Instantiate(corridors[0], positions[i], Quaternion.identity);
+
+                currentCorridor.layer = 18;
+                /*
+                //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
+                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
+                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
+                */
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+                if (moves[i] == 0 || moves[i] == 2)
+                {
+                    currentCorridor.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    //Data.instance.corridorCount++;
+
+                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
+                }
+                else
+                {
+                    currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //Data.instance.corridorCount++;
+
+                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
+                }
+
+                //For now, later remove and put outside this else block
+
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+                {
+                    Instantiate(ventCover, positions[i], Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+                }
+
+                // ----------- Item Gen -----------
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+                {
+                    itemGenScript.SpawnItems(positions[i] - new Vector3(1, 0, 1), positions[i] + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+                    Data.instance.ctr1++;
+                }
+                
+            }
+        }
+
+        // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
+        visitedRooms.Add(lParentPos);
+        visitedRooms.Add(kParentPos);
+
+        Data.instance.connectedRooms.Add(visitedRooms);
+
+        visitedRooms = new List<Vector3>();
+
+        // ---------------------- Removes the used doors ----------------------
+
+        if (!fromDataSingleton)
+        {
+            spawnPoints.RemoveAt(l);
+
+            // -------------- decrease k if greater than i --------------                
+            if (k > l)
+            {
+                k--;
+            }
+            l--;
+
+            spawnPoints.RemoveAt(k);
+
+            // -------------- decrease k if greater than i --------------                
+            if (l > k)
+            {
+                l--;
+            }
+            k--;
+        }
+
         isDoneConnectTwoRooms = true;
         yield return null;
     }
@@ -566,7 +708,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log("Spawn4--");
         }
         */
-        if (kParentPos == lParentPos)
+                if (kParentPos == lParentPos)
         {
             Debug.Log("Error CONNECT 2 Rooms = " + lPos + " and " + kPos);
             fail_room_connect = true;
