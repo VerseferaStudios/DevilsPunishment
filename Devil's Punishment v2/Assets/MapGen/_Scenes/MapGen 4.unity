@@ -472,6 +472,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &759140491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 759140492}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &759140492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759140491}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -124, y: 0.936, z: -28}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1158723504
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -930,7 +960,7 @@ Camera:
   far clip plane: 1000
   field of view: 61
   orthographic: 1
-  orthographic size: 40
+  orthographic size: 90
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1269,6 +1299,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &2134142684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2134142685}
+  m_Layer: 0
+  m_Name: Helper Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2134142685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134142684}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2136395597
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,42 +1711,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
-      propertyPath: corridors.Array.data[1]
-      value: 
-      objectReference: {fileID: 1872152009092648023, guid: 5913564330b20614894f87b6e3dc627e,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
-      propertyPath: corridors.Array.data[2]
-      value: 
-      objectReference: {fileID: 8572832210636776603, guid: 95ef946f2f5f6f44aaf742cc7e02b178,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
-      propertyPath: corridors.Array.data[3]
-      value: 
-      objectReference: {fileID: 4767898886828146706, guid: 601189a576835ae449280339a746ed16,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
-      propertyPath: corridors.Array.data[4]
-      value: 
-      objectReference: {fileID: 4767898886828146706, guid: 7d16cadbbbe9e3f4fae867b671c7c4cb,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
-      propertyPath: corridors.Array.data[5]
-      value: 
-      objectReference: {fileID: 3326564945473969598, guid: 75eb304026a5ba4478984efa90dd6bb2,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
-      propertyPath: corridors.Array.data[7]
-      value: 
-      objectReference: {fileID: 1872152009092648023, guid: 5913564330b20614894f87b6e3dc627e,
-        type: 3}
-    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-        type: 3}
       propertyPath: laserRoom
       value: 
       objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
@@ -1715,6 +1739,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
         type: 3}
+    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: helper
+      value: 
+      objectReference: {fileID: 1884860911872695693, guid: a9cb3815d4a8c3d49aacbab5d1a558db,
+        type: 3}
+    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: helperTransform
+      value: 
+      objectReference: {fileID: 2134142685}
     - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
       propertyPath: GUIProgress

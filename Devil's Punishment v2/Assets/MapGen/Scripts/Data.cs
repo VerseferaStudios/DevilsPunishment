@@ -70,6 +70,8 @@ public class Data : MonoBehaviour
 
     public List<GameObject> roomsFloor1;
 
+    public List<int> oppositeOpenings = new List<int>();
+
     //public bool isPipeAtLeft = true;
 
     private void Awake()
@@ -101,6 +103,11 @@ public class Data : MonoBehaviour
         doorRotationHelper.Add("+x");
         doorRotationHelper.Add("-z");
         doorRotationHelper.Add("-x");
+
+        oppositeOpenings.Add(2);
+        oppositeOpenings.Add(3);
+        oppositeOpenings.Add(2);
+        oppositeOpenings.Add(2);
 
         //StartCoroutine(DoCheckPerSecond());
         //StartCoroutine(DoConnectedComponents());

@@ -43,6 +43,9 @@ public class MapGen3 : MonoBehaviour
 
     public RoomNew roomNewScript;
 
+    public GameObject helper;
+    public Transform helperTransform;
+
     private IEnumerator WaitForaWhile()
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
@@ -79,7 +82,7 @@ public class MapGen3 : MonoBehaviour
         arr[1] = 28;
         allRooms.Add(arr);
         CreateHolderForMapGen();
-        //Random.InitState(100);
+        Random.InitState(100);
         //Rooms();
 
         //StartCoroutine(WaitForaWhile());
@@ -88,7 +91,7 @@ public class MapGen3 : MonoBehaviour
         //syncronizeSeeds(seed);
 
         //syncronizeSeeds(Random.Range(1, 1000));
-        Random.InitState(Random.Range(1, 1000));
+        //Random.InitState(Random.Range(1, 1000));
 
 
 
@@ -100,6 +103,8 @@ public class MapGen3 : MonoBehaviour
         roomNewScript.ventCover = ventCover;
         roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
         roomNewScript.itemGenScript = itemGenScript;
+        roomNewScript.helper = helper;
+        roomNewScript.helperTransform = helperTransform;
         //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
         Data.instance.roomNewScript = roomNewScript;
 
