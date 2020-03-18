@@ -1094,9 +1094,9 @@ public class Data : MonoBehaviour
 
     public IEnumerator DoConnectedComponents()
     {
-        yield return new WaitUntil(() => isFirstPassDone == true);
-        isFirstPassDone = false;
-        yield return new WaitForSeconds(2f);
+        //yield return new WaitUntil(() => isFirstPassDone == true);
+        //isFirstPassDone = false;
+        //yield return new WaitForSeconds(2f);
         while (isOnce)
         {
             if (Time.time - startTime >= 3f && isOnce) //&& (count >= 5 || collidedCorridors.Count == 0)))
@@ -1233,6 +1233,7 @@ public class Data : MonoBehaviour
                 }
                 //Debug.LogError(ctr1);
                 //Debug.LogError(ctr2);
+                Debug.Log("Time.time = " + Time.time);
                 isConnectedComponentsCheckDone = true;
             }
             yield return new WaitForSeconds(2.0f);

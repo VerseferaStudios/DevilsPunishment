@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
@@ -41,7 +42,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     Color sample_room_col;
 
-    public List<List<bool>> occupiedCells;
+    public List<List<Cell>> mapCells;
+    //public List<List<bool>> occupiedCells;
+    //public List<List<bool>> visitedCells;
+    //public List<List<bool>> occupiedCells;
 
     public GameObject helper;
     public Transform helperTransform;
@@ -69,17 +73,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         Debug.Log(Data.instance.mapSizeX * Data.instance.zSize / 4);
         Debug.Log(Data.instance.mapSizeZ * Data.instance.zSize / 4);
 
-        occupiedCells = new List<List<bool>>();
-        List<bool> occupiedCellsRow = new List<bool>();
-        for (int i = 0; i < Data.instance.mapSizeZ * max / 4; i++)
-        {
-            occupiedCellsRow.Add(true);
-        }
+        mapCells = new List<List<Cell>>();
         for (int i = 0; i < Data.instance.mapSizeX * max / 4; i++)
         {
-            occupiedCells.Add(occupiedCellsRow);
+            List<Cell> occupiedCellsRow = new List<Cell>();
+            for (int j = 0; j < Data.instance.mapSizeZ * max / 4; j++)
+            {
+                occupiedCellsRow.Add(new Cell());
+            }
+            mapCells.Add(occupiedCellsRow);
         }
-        ChkPoses();
+
+        //ChkPoses();
         /*
         for (int i = 10; i < 40; i++)
         {
@@ -128,19 +133,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             {
                 for (int k = minZ; k <= maxZ; k++)
                 {
-                    Debug.Log("j = " + j + " & k = " + k);
+                    //Debug.Log("j = " + j + " & k = " + k);
                     int[] pos = new int[] { j, k };
                     Vector3 posV3 = GetPos(pos);
-                    Debug.Log(posV3);
-                    Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.green;
-                    occupiedCells[j][k] = false;
+                    //Debug.Log(posV3);
+                    //Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.green;
+                    mapCells[j][k].occupied = false;
+                    mapCells[j][k].occupied = false;
                 }
             }
 
-            Debug.Log(roomReferences.topRightCorner.position);
-            Debug.Log(roomReferences.bottomLeftCorner.position);
+            //Debug.Log(roomReferences.topRightCorner.position);
+            //Debug.Log(roomReferences.bottomLeftCorner.position);
         }
-
+        /*
         for (int i = 0; i < occupiedCells.Count; i++)
         {
             for (int j = 0; j < occupiedCells[i].Count; j++)
@@ -165,9 +171,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 }
             }
         }
+        */
+        //ChkPoses();
 
-        ChkPoses();
+    }
 
+    private void PopulateVisitedCells()
+    {
+        for (int i = 0; i < mapCells.Count; i++)
+        {
+            for (int j = 0; j < mapCells[i].Count; j++)
+            {
+                mapCells[i][j].visited = false;
+            }
+        }
     }
 
     private void ChkPoses()
@@ -175,15 +192,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         int[] x = GetIdx(chkPos);
         int[] x1 = GetIdx(chkPos1);
         int[] x2 = GetIdx(chkPos2);
-        Debug.Log("chkPos " + occupiedCells[x[0]][x[1]]);
-        Debug.Log("chkPos1 " + occupiedCells[x1[0]][x1[1]]);
-        Debug.Log("chkPos2 " + occupiedCells[x2[0]][x2[1]]);
+        Debug.Log("chkPos " + mapCells[x[0]][x[1]].occupied);
+        Debug.Log("chkPos1 " + mapCells[x1[0]][x1[1]].occupied);
+        Debug.Log("chkPos2 " + mapCells[x2[0]][x2[1]].occupied);
     }
 
     public void StartScript()
     {
         PopulateOccupiedCells();
-        return;
+        PopulateVisitedCells();
+        //return;
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
@@ -375,7 +393,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                                     kParentPos, lParentPos, false));
 
                     //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
-                    yield return new WaitForSeconds(2);
+                    //yield return new WaitForSeconds(2);
 
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
@@ -405,15 +423,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             {
 
                 //MakeInitHallways();
-
+                /*
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 MapgenProgress.instance.addProgress(2);
-                
+                */
 		        StartCoroutine(Data.instance.DoConnectedComponents());
+                Debug.Log("Time.time = " + Time.time);
+                yield return new WaitForSeconds(5);
+                yield return new WaitUntil(() => Data.instance.isConnectedComponentsCheckDone);
+                /*
                 StartCoroutine(Data.instance.DoCheckPerSecond());
 
                 Data.instance.canStartCorridorTestSpawner = true;
-
+                */
+                InstantiateAllCorridors();
             }
             //Debug.LogError(Data.instance.ctr1);
 
@@ -455,6 +478,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public IEnumerator ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
 
+        PopulateVisitedCells();
+
         Vector3 currentSpawnPos = kPos;
         Vector3 newSpawnPos = kPos;
         Vector3 prevSpawnPos = kPos;
@@ -479,7 +504,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         int count = 0;
         bool reachedDestination = false;
         Debug.Log("B4 while");
-        ChkPoses();
+        //ChkPoses();
 
         while (!reachedDestination)
         {
@@ -492,59 +517,63 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             Debug.Log(occupiedCells.Count);
             */
             Debug.Log("During while");
-            ChkPoses();
+            //ChkPoses();
 
             kIdx = GetIdx(currentSpawnPos);
 
-            if (kIdx[1] - 1 < occupiedCells[kIdx[0]].Count && occupiedCells[kIdx[0]][kIdx[1] - 1])  //0 or North // mirror image so add z
+            if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null && 
+                (!mapCells[kIdx[0]][kIdx[1] - 1].visited && kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
             {
                 freeSpaces[0] = true;
             }
             else
             {
-                Debug.Log("North occupied");
+                //Debug.Log("North occupied or visited");
                 freeSpaces[0] = false;
             }
             Vector3 gotPos = GetPos(new int[] { kIdx[0], kIdx[1] - 1 });
-            Debug.Log("pos = " + gotPos);
-            Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
+            //Debug.Log("pos = " + gotPos);
+            //Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
             //Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
 
-            if (kIdx[0] - 1 < occupiedCells.Count && occupiedCells[kIdx[0] - 1][kIdx[1]])           //1 or East // mirror image so add x
+            if (mapCells[kIdx[0] - 1] != null && mapCells[kIdx[0] - 1][kIdx[1]] != null &&
+                (!mapCells[kIdx[0] - 1][kIdx[1]].visited && kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
             {
                 freeSpaces[1] = true;
             }
             else
             {
-                Debug.Log("East occupied");
+                //Debug.Log("East occupied or visited");
                 freeSpaces[1] = false;
             }
-            Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
-            Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
+            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
+            //Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
 
-            if (kIdx[1] + 1 < occupiedCells[kIdx[0]].Count && occupiedCells[kIdx[0]][kIdx[1] + 1])  //2 or South // mirror image so minus z
+            if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] + 1] != null &&
+                (!mapCells[kIdx[0]][kIdx[1] + 1].visited && kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied))  //2 or South // mirror image so minus z
             {
                 freeSpaces[2] = true;
             }
             else
             {
-                Debug.Log("South occupied");
+                //Debug.Log("South occupied or visited");
                 freeSpaces[2] = false;
             }
-            Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
-            Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
+            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
+            //Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
 
-            if (kIdx[0] + 1 < occupiedCells.Count && occupiedCells[kIdx[0] + 1][kIdx[1]])           //1 or West // mirror image so minus x
+            if (mapCells[kIdx[0] + 1] != null & mapCells[kIdx[0] + 1][kIdx[1]] != null &&
+                (!mapCells[kIdx[0] + 1][kIdx[1]].visited && kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied))           //1 or West // mirror image so minus x
             {
                 freeSpaces[3] = true;
             }
             else
             {
-                Debug.Log("West occupied");
+                //Debug.Log("West occupied or visited");
                 freeSpaces[3] = false;
             }
-                Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
-                Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
+                //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
+                //Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
 
             int ctr = 0;
             for (int i = 0; i < 4; i++)
@@ -557,11 +586,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     DistanceHelper(i, out newSpawnPos, newSpawnPos);
                     newDistance = Mathf.Abs(lPos.x - newSpawnPos.x) + Mathf.Abs(lPos.z - newSpawnPos.z);
                     manhattanDist.Add(newDistance);
-                    Debug.Log("newDistance = " + newDistance);
+                    //Debug.Log("newDistance = " + newDistance);
                 }
                 else
                 {
-                    Debug.Log("newDistance NNN = " + 500);
+                    //Debug.Log("newDistance NNN = " + 500);
                     manhattanDist.Add(500);
                 }
             }
@@ -577,13 +606,15 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             */
             initDistance = Mathf.Min(manhattanDist.ToArray());//check equal too in prev looopppp
+            /*
             for (int i = 0; i < manhattanDist.Count; i++)
             {
                 Debug.Log(" => " + manhattanDist[i]);
             }
             Debug.Log("min is " + initDistance);
-            thisMove = manhattanDist.IndexOf(initDistance);
             Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
+            */
+            thisMove = manhattanDist.IndexOf(initDistance);
             DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
             newSpawnPos = prevSpawnPos;
 
@@ -608,59 +639,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
             moves.Add(thisMove);
             positions.Add(currentSpawnPos);
-            /*
-            GameObject currentCorridor;
-
-            if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
-            {
-                //L Corridor!!!!!!!
-            }
-            else
-            {
-                currentCorridor = Instantiate(corridors[0], currentSpawnPos, Quaternion.identity);
-
-                currentCorridor.layer = 18;
-                /*
-                //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
-                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
-                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
-                *//*
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                if (thisMove == 0 || thisMove == 2)
-                {
-                    currentCorridor.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    //Data.instance.corridorCount++;
-
-                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
-                }
-                else
-                {
-                    currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                    //Data.instance.corridorCount++;
-
-                    currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
-                }
-
-                //For now, later remove and put outside this else block
-
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, currentSpawnPos, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
-                }
-
-                // ----------- Item Gen -----------
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
-                {
-                    itemGenScript.SpawnItems(currentSpawnPos - new Vector3(1, 0, 1), currentSpawnPos + new Vector3(1, 0, 1), 1, currentCorridor.transform);
-                    Data.instance.ctr1++;
-                }
-                
-            }
-            */
-
-            //spawnNowAt.x += increment;
-
 
 
 
@@ -673,6 +651,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
             reachedDestination = (currentSpawnPos.x == lPos.x) && (currentSpawnPos.z == lPos.z);
 
+            mapCells[kIdx[0]][kIdx[1]].visited = true;
+
             //yield return new WaitForSeconds(0.1f);
             if (reachedDestination)
             {
@@ -684,7 +664,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Use recursion?
         }
         Debug.Log("After while");
-        ChkPoses();
+        //ChkPoses();
 
         // --------------- Add L (or I) corridor to door at begining room ---------------
         List<int> openings = new List<int>();
@@ -698,12 +678,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         if(nextCorridorMove == openings[0])
         {
             Debug.Log("I Corridor");
-            InstantiateICorridor(kPos, kParentPos, lParentPos, moves[0]);
+            AddICorridorSpawnInfo(kPos, moves[0], false);
         }
         else
         {
             Debug.Log("L Corridor");
-            InstantiateLCorridor(openings, kPos, kParentPos, lParentPos);
+            AddLCorridorSpawnInfo(openings, kPos);
         }
 
         //In between I Corridors
@@ -712,7 +692,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //GameObject currentCorridor;
 
             //Debug.Log("moves[i] = " + moves[i]);
-            if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
+            //if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
             //Debug.Log("positions[i] = " + positions[i]);
 
             //if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
@@ -728,11 +708,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 nextCorridorMove1 %= 4;
                 openings1.Add(nextCorridorMove1);
                 openings1.Add(moves[i + 1]);
-                InstantiateLCorridor(openings1, positions[i], kParentPos, lParentPos);
+                AddLCorridorSpawnInfo(openings1, positions[i]);
+                //InstantiateLCorridor(openings1, positions[i], kParentPos, lParentPos);
             }
             else
             {
-                InstantiateICorridor(positions[i], kParentPos, lParentPos, moves[i]);
+                AddICorridorSpawnInfo(positions[i], moves[i], false);
+                //InstantiateICorridor(positions[i], kParentPos, lParentPos, moves[i], false);
             }
         }
 
@@ -753,12 +735,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         if(moves[moves.Count - 2] == openings[1])
         {
             Debug.Log("I Corridor");
-            InstantiateICorridor(lPos, kParentPos, lParentPos, doorMove);
+            AddICorridorSpawnInfo(lPos, doorMove, false);
         }
         else
         {
             Debug.Log("L Corridor");
-            InstantiateLCorridor(openings, lPos, kParentPos, lParentPos);
+            AddLCorridorSpawnInfo(openings, lPos);
         }
 
 
@@ -798,6 +780,40 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         yield return null;
     }
 
+    private void InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
+    {
+        Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Vector3 lParentPos = Vector3.zero;
+        for (int i = 0; i < mapCells.Count; i++)
+        {
+            for (int j = 0; j < mapCells[i].Count; j++)
+            {
+                if (mapCells[i][j].corridorIdx != -1)
+                {
+                    string corridorName = CorridorsListIdxToCorridorName(mapCells[i][j].corridorIdx);
+                    int[] kIdx = new int[] { i, j };
+                    Vector3 pos = GetPos(kIdx);
+                    if (corridorName.EndsWith("I"))
+                    {
+                        InstantiateICorridor(pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("L"))
+                    {
+                        InstantiateLCorridor(kIdx, pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("T"))
+                    {
+                        InstantiateTCorridor(kIdx, pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("X"))
+                    {
+                        InstantiateXCorridor(pos, kParentPos, lParentPos);
+                    }
+                }
+            }
+        }
+    }
+
     private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
     {
         newSpawnPos = newSpawnPosOriginal;
@@ -823,10 +839,114 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
     }
 
-    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos, int movesI)
+    private void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride)
     {
+        Debug.Log("I info");
+        int[] kIdx = GetIdx(posI);
+        int yRotation = (movesI == 0 || movesI == 2) ? 0 : 90;
+        /*
+        if(Vector3.Distance(posI, new Vector3(-124, 0, -20)) < 6)
+        {
+            Debug.Log("I Corr collision check => ");
+            Debug.Log("mapCells[kIdx[0]][kIdx[1]].corridorIdx = " + mapCells[kIdx[0]][kIdx[1]].corridorIdx);
+            Debug.Log("mapCells[kIdx[0]][kIdx[1]].corridorYRot = " + mapCells[kIdx[0]][kIdx[1]].corridorYRot);
+        }
+        */
+
+        if (mapCells[kIdx[0]][kIdx[1]].corridorIdx == -1
+           && mapCells[kIdx[0]][kIdx[1]].corridorYRot == -1)
+        {
+            mapCells[kIdx[0]][kIdx[1]].corridorIdx = 0;
+            mapCells[kIdx[0]][kIdx[1]].corridorYRot = yRotation;
+        }
+        else if (!(mapCells[kIdx[0]][kIdx[1]].corridorIdx == 0
+                && mapCells[kIdx[0]][kIdx[1]].corridorYRot == (int)yRotation))
+        /*(mapCells[kIdx[0]][kIdx[1]].corridorIdx == 0 
+        && (mapCells[kIdx[0]][kIdx[1]].corridorYRot == yRotation + 90
+        || mapCells[kIdx[0]][kIdx[1]].corridorYRot == yRotation - 90)
+        && !isOverride)*/
+        {
+            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI");
+        }
+    }
+
+    private void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn)
+    {
+        Debug.Log("L info");
+        float yRotation = Data.instance.ConvertToRotation(openings);
+        int corridorIdx = ChooseLCorridor(yRotation);
+        int[] kIdx = GetIdx(posToSpawn);
+
+        if (mapCells[kIdx[0]][kIdx[1]].corridorIdx == -1
+           && mapCells[kIdx[0]][kIdx[1]].corridorYRot == -1)
+        {
+            mapCells[kIdx[0]][kIdx[1]].corridorIdx = corridorIdx;
+            mapCells[kIdx[0]][kIdx[1]].corridorYRot = (int)yRotation;
+        }
+        else if (!(mapCells[kIdx[0]][kIdx[1]].corridorIdx == corridorIdx
+            && mapCells[kIdx[0]][kIdx[1]].corridorYRot == (int)yRotation))
+            //&& !isOverride)
+        {
+            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL");
+        }
+    }
+
+    private void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew)
+    {
+        Debug.Log("T info");
+        if(mapCells[kIdx[0]][kIdx[1]].corridorIdx == -1 
+           && mapCells[kIdx[0]][kIdx[1]].corridorYRot == -1)
+        {
+            mapCells[kIdx[0]][kIdx[1]].corridorIdx = 3; //or 4
+            mapCells[kIdx[0]][kIdx[1]].corridorYRot = yRotationNew;
+        }
+        else if (!(mapCells[kIdx[0]][kIdx[1]].corridorIdx == 3
+            && mapCells[kIdx[0]][kIdx[1]].corridorYRot == yRotationNew))
+            //&& !isOverride)
+        {
+            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT");
+        }
+    }
+
+    private void AddXCorridorSpawnInfo(int [] kIdx)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
+    {
+        Debug.Log("X info");
+        mapCells[kIdx[0]][kIdx[1]].corridorIdx = 5;
+        mapCells[kIdx[0]][kIdx[1]].corridorYRot = 0;
+    }
+    
+    private void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName)
+    {
+        List<int> openings1, openings2;
+        openings1 = Data.instance.ConvertToOpenings(corridorName, yRotation, false);
+        openings2 = Data.instance.ConvertToOpenings(CorridorsListIdxToCorridorName(mapCells[kIdx[0]][kIdx[1]].corridorIdx),
+                                                    mapCells[kIdx[0]][kIdx[1]].corridorYRot, false);
+        openings1.AddRange(openings2);
+
+        openings1 = openings1.Distinct().ToList();
+
+        if (openings1.Count == 3)
+        {
+            if (corridorName.EndsWith("T"))
+            {
+                mapCells[kIdx[0]][kIdx[1]].corridorIdx = 3; //or 4
+                mapCells[kIdx[0]][kIdx[1]].corridorYRot = yRotation;
+                return;
+            }
+            float yRotationNew = Data.instance.ConvertToRotation(openings1);
+            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew);
+        }
+        else if (openings1.Count == 4)
+        {
+            AddXCorridorSpawnInfo(kIdx);
+        }
+    }
+
+    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        int[] kIdx = GetIdx(posI);
         GameObject currentCorridor;
-        currentCorridor = Instantiate(corridors[0], posI, Quaternion.identity);
+        currentCorridor = Instantiate(corridors[0]/*corridors[mapCells[kIdx[0]][kIdx[1]].corridorIdx]*/, posI, Quaternion.identity);
 
         currentCorridor.layer = 18;
         /*
@@ -836,20 +956,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         */
         currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        if (movesI == 0 || movesI == 2)
-        {
-            currentCorridor.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //Data.instance.corridorCount++;
 
-            currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
-        }
-        else
-        {
-            currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-            //Data.instance.corridorCount++;
-
-            currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
-        }
+        currentCorridor.transform.rotation = Quaternion.Euler(0, mapCells[kIdx[0]][kIdx[1]].corridorYRot, 0);
+        //Data.instance.corridorCount++;
+        currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (mapCells[kIdx[0]][kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
 
         //For now, later remove and put outside this else block
 
@@ -866,15 +976,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
     }
 
-    private void InstantiateLCorridor(List<int> openings, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    private void InstantiateLCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
     {
-        float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        GameObject currCorridor1 = Instantiate(corridors[mapCells[kIdx[0]][kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
         currCorridor1.layer = 18;
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        if (yRotation == 0)
+        currCorridor1.transform.rotation = Quaternion.Euler(0, mapCells[kIdx[0]][kIdx[1]].corridorYRot, 0);
+        if (mapCells[kIdx[0]][kIdx[1]].corridorYRot == 0)
         {
             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
             currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
@@ -882,6 +991,158 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
         }
     }
+
+    private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        float yRotation = mapCells[kIdx[0]][kIdx[1]].corridorYRot;
+        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
+        //MapgenProgress.instance.addProgress(1);
+        if (yRotation == 0)
+        {
+            //isErroneousTCorr = true;
+            currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
+            //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
+        }
+        if (yRotation == 270 || yRotation == -90 || yRotation == 180)
+        {
+
+            if (yRotation == -90 || yRotation == 270)
+            {
+                currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
+            }
+
+            //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
+            //Destroy(bc);
+            currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+            //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
+        }
+
+        currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+
+        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+        // TODO: Commented out for console clear 10/02/19
+        // Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+    }
+
+    private void InstantiateXCorridor(Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        //spawnAtPos.x = Mathf.Round(posToSpawn.x);
+        //spawnAtPos.z = Mathf.Round(posToSpawn.z);
+        CorridorNew corridorNew = Instantiate(corridors[5], posToSpawn, Quaternion.identity, mapGenHolderTransform).GetComponentInChildren<CorridorNew>();
+
+        corridorNew.rooms.Add(kParentPos);
+        corridorNew.rooms.Add(lParentPos);
+
+        //MapgenProgress.instance.addProgress(2);
+    }
+
+    private string CorridorsListIdxToCorridorName(int idx)
+    {
+        if(idx == 0)
+        {
+            return "CorridorI";
+        }
+        else if(idx == 3 || idx == 4)
+        {
+            return "CorridorT";
+        }
+        else if(idx == 5)
+        {
+            return "CorridorX";
+        }
+        else if(idx == 1 || idx == 2 || idx == 7)
+        {
+            return "CorridorL";
+        }
+        else //if(idx == 6)
+        {
+            return "CorridorDeadEnd";
+        }
+    }
+
+    /*
+    private void InstantiateTorXCorridor(List<int> openings, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        List<int> openings1 = new List<int>(), openings2 = new List<int>();
+        openings1 = ConvertToOpenings(collidedCorridors[i].transform.parent.tag, collidedCorridors[i].transform.rotation.eulerAngles.y,
+                                        (collidedCorridors[i].transform.parent.localScale.x == -1) ? true : false);
+        openings2 = ConvertToOpenings(collidedCorridors[j].transform.parent.tag, collidedCorridors[j].transform.rotation.eulerAngles.y,
+                                        (collidedCorridors[j].transform.parent.localScale.x == -1) ? true : false);
+        openings1.AddRange(openings2);
+
+
+        openings1 = openings1.Distinct().ToList();
+
+        isError = false;
+
+        if (openings1.Count == 3)
+        {
+            float yRotation = ConvertToRotation(openings1);
+            Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
+            spawnAtPos.x = Mathf.Round(spawnAtPos.x);
+            spawnAtPos.z = Mathf.Round(spawnAtPos.z);
+            GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorT2 : corridorT1, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+            MapgenProgress.instance.addProgress(1);
+            if (yRotation == 0)
+            {
+                //isErroneousTCorr = true;
+                currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
+                //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
+            }
+            if (yRotation == 270 || yRotation == -90 || yRotation == 180)
+            {
+
+                if (yRotation == -90 || yRotation == 270)
+                {
+                    currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
+                }
+
+                //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
+                //Destroy(bc);
+                currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+                //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
+            }
+
+            currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+            // TODO: Commented out for console clear 10/02/19
+            // Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+        }
+        else if (openings1.Count == 4)//done separate
+        {
+        /*
+            Vector3 spawnAtPos = collidedCorridors[j].transform.parent.transform.position;
+            spawnAtPos.x = Mathf.Round(spawnAtPos.x);
+            spawnAtPos.z = Mathf.Round(spawnAtPos.z);
+            Instantiate(corridorX, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
+            MapgenProgress.instance.addProgress(2);
+            *//*
+        }
+        else
+        {
+            Debug.Log("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
+            isError = true;
+            Debug.Log("Count = " + openings1.Count);
+            Debug.Log("Position = " + collidedCorridors[i].transform.position);
+            Debug.Log("Name i = " + collidedCorridors[i].transform.parent.name);
+            Debug.Log("Name j = " + collidedCorridors[j].transform.parent.name);
+
+            foreach (var item in openings1)
+            {
+                Debug.Log(item);
+            }
+            Debug.Log("openings2");
+            foreach (var item in openings2)
+            {
+                Debug.Log(item);
+            }
+
+            //Debug.Log("rotation = " + collidedCorridors[j].transform.rotation.eulerAngles.y);
+            //Debug.Log("parent name " + collidedCorridors[j].transform.parent.name);
+        }
+    }
+    */
 
     public IEnumerator ConnectTwoRoomsOld(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {

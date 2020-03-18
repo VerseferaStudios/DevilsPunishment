@@ -197,7 +197,7 @@ public class RoomNewVents : MonoBehaviour
 
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 //StartCoroutine(Data.instance.DoConnectedComponents());
-                StartCoroutine(Data.instance.DoCheckVentsPerSecond()); // EDIT FOR VENTS!!!
+                //StartCoroutine(Data.instance.DoCheckVentsPerSecond()); // EDIT FOR VENTS!!!
             }
 
         }
