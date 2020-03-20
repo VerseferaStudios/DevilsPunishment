@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -488832403, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: test
+  m_EditorClassIdentifier: 
+  versionNumber: 1000
+  globalNodeId: 8
+  nodes:
+  - nodeId: 1
+    process: {fileID: 114734039238370242}
+    inputs: 080000000000000000000000000000000000000000000000
+    finalNode: 1
+  - nodeId: 2
+    process: {fileID: 114138284114902172}
+    inputs: 
+    finalNode: 0
+  - nodeId: 4
+    process: {fileID: 114210937248308954}
+    inputs: 05000000
+    finalNode: 0
+  - nodeId: 5
+    process: {fileID: 114072331110676856}
+    inputs: 0700000006000000
+    finalNode: 0
+  - nodeId: 6
+    process: {fileID: 114331711909326442}
+    inputs: 
+    finalNode: 0
+  - nodeId: 7
+    process: {fileID: 114363112230998282}
+    inputs: 
+    finalNode: 0
+  - nodeId: 8
+    process: {fileID: 114228601388983120}
+    inputs: 050000000200000000000000
+    finalNode: 0
+  nodePositions:
+  - nodeId: 1
+    nodePos: {x: 3992, y: 10}
+  - nodeId: 2
+    nodePos: {x: 3631, y: 493}
+  - nodeId: 4
+    nodePos: {x: 3700, y: 188}
+  - nodeId: 5
+    nodePos: {x: 3563, y: 376}
+  - nodeId: 6
+    nodePos: {x: 3455, y: 418}
+  - nodeId: 7
+    nodePos: {x: 3334, y: 372}
+  - nodeId: 8
+    nodePos: {x: 3763, y: 377}
+  checksum: 3813069555fc213db9a63bc4067ca1f5
+--- !u!114 &114072331110676856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -538552255, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: Blend
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  alpha: 0
+  blendMode: 0
+--- !u!114 &114138284114902172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 515822840, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: Uniform Color
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  color: {x: 0.8113208, y: 0.24875402, z: 0.24875402, w: 1}
+--- !u!114 &114210937248308954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -191203640, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: High Pass
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  alpha: 0
+  threshold: {x: 0.5, y: 0.5, z: 0.5, w: 1}
+--- !u!114 &114228601388983120
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 50615648, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: Interpolate
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  alpha: 0
+  offset: 0
+--- !u!114 &114331711909326442
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1076491161, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: FBM Noise
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  seed: 42
+  scaleX: 4
+  scaleY: 4
+  octaves: 4
+  lacunarity: 2
+  gain: 0.5
+--- !u!114 &114363112230998282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 523783703, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: Ridge Noise
+  m_EditorClassIdentifier: 
+  brightness: 0
+  contrast: 1
+  seed: 42
+  scaleX: 4
+  scaleY: 4
+  octaves: 4
+  lacunarity: 2
+  gain: 0.5
+--- !u!114 &114734039238370242
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -462716759, guid: 5bcf95b6a5d4b7a44a90dd43cd5b14ff, type: 3}
+  m_Name: Output
+  m_EditorClassIdentifier: 
+  preview: 0
+  normalStrength: 0.75

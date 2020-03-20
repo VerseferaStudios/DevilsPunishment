@@ -39,6 +39,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private bool[] door_done;
 
+    public RoomReferencesModularRoom roomReferencesModularRoom;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,6 @@ public class ModularRoomAssembler : MonoBehaviour
         door_done = new bool[noOfParts];
         door_done[0] = true;
 
-        roomHolderTransform = new GameObject("Modular Room 1").transform;
         roomCentrePos = door_corridor_Pos - new Vector3(0, 0, 20);
         roomHolderTransform.position = roomCentrePos;
         roomHolderTransform.tag = "Modular Room stuff";
@@ -312,6 +313,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 Transform t = Instantiate(floor).transform;
                 t.parent = floor_holder[partNo];
                 t.localPosition = new Vector3(i * 4, 0, -j * 4);
+                roomReferencesModularRoom.roomFloors.Add(t.position);
                 if(j == 2 && i == 2)
                 {
                     t = Instantiate(grill).transform;

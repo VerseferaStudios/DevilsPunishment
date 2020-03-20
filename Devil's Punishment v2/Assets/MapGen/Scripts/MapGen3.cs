@@ -276,7 +276,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 3)) //no modular room spawned for now!!!
+                switch (Random.Range(1, 4)) //yes modular room spawned for now!!!
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -311,32 +311,41 @@ public class MapGen3 : MonoBehaviour
             }
 
             GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-            RoomReferences roomReferences;
 
             //roomToSpawn = null;
             if (roomToSpawn == null)
             {
                 Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
                 Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
+
+                
+
+                Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
+                Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
+                spawnedRoom = roomHolderTransform.gameObject;
+                RoomReferencesModularRoom roomReferencesModularRoom = spawnedRoom.AddComponent<RoomReferencesModularRoom>();
+                roomReferencesModularRoom.doors = Data.instance.modularRoomAssembler.doors;
+                roomReferencesModularRoom.ventParent = new GameObject("Vent Parent").transform;
+                roomReferencesModularRoom.roomFloors = new List<Vector3>();
+                Data.instance.modularRoomAssembler.roomReferencesModularRoom = roomReferencesModularRoom;
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferencesModularRoom.ventParent);
+                Data.instance.roomsFloor1Modular.Add(spawnedRoom);
                 Data.instance.modularRoomAssembler.StartScript();
-                spawnedRoom = Data.instance.modularRoomAssembler.roomHolderTransform.gameObject;
-                roomReferences = spawnedRoom.AddComponent<RoomReferences>();
-                roomReferences.doors = Data.instance.modularRoomAssembler.doors;
-                roomReferences.ventParent = new GameObject("Vent Parent").transform;
             }
             else
             {
                 spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-                roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+                RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
                 CallOffsetAndDoorFns(spawnedRoom, yRotation);
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
+                Data.instance.roomsFloor1.Add(spawnedRoom);
             }
 
-            Data.instance.roomsFloor1.Add(spawnedRoom);
 
             //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
-            if (i != 1)
-                SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------

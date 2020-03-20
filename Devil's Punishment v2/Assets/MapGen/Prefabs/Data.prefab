@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  n: 0
+  mapSizeX: 4
+  mapSizeZ: 2
   roomsLoaderPrefab: {fileID: 0}
   mapGenHolderTransform: {fileID: 0}
   xSize: 0
@@ -78,6 +81,9 @@ MonoBehaviour:
   canStartCorridorTestSpawner: 0
   doorRotationHelper: []
   modularRoomAssembler: {fileID: 0}
+  roomsFloor1: []
+  roomsFloor1Modular: []
+  oppositeOpenings: 
 --- !u!114 &4162967055878268604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,16 +98,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door_corridor_Transform: {fileID: 0}
   door_corridor_Pos: {x: 0, y: 0, z: 0}
-  door_room_Pos: {x: 0, y: 0, z: 0}
+  roomCentrePos: {x: 0, y: 0, z: 0}
+  wall_roomdoor_Pos: {x: 0, y: 0, z: 0}
   doors: []
   mat: {fileID: 0}
   roomHolderTransform: {fileID: 0}
-  side_wall: {fileID: 2281963198306682094, guid: bb6fec29f708d2b46892d3d168c8ece7,
+  side_wall: {fileID: 6876753079698740922, guid: 725685d464c648d40a65a6ea362b055f,
     type: 3}
-  wall_with_door: {fileID: 7440344509891470897, guid: 894a7d53be10734409da8cbfb0daa833,
+  wall_with_door: {fileID: 6648056774900532606, guid: 96a8a649f3102f8448afac34514fb499,
     type: 3}
-  floor: {fileID: 6678682570404294113, guid: b826dd53ffbc6684e94f436eb32315a7, type: 3}
-  ceiling: {fileID: 6678682570404294113, guid: b826dd53ffbc6684e94f436eb32315a7, type: 3}
-  grill: {fileID: 6166752751574218313, guid: 6900c75db63c3c444abcb5f7ebc73f67, type: 3}
+  floor: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
+  ceiling: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
+  grill: {fileID: 5822355591748013331, guid: 6150da0c2e6d7404da4ee78db8eb8130, type: 3}
   size_x: 
   size_z: 
+  roomReferencesModularRoom: {fileID: 0}

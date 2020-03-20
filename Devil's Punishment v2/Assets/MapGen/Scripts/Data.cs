@@ -69,6 +69,7 @@ public class Data : MonoBehaviour
     public ModularRoomAssembler modularRoomAssembler;
 
     public List<GameObject> roomsFloor1;
+    public List<GameObject> roomsFloor1Modular;
 
     public List<int> oppositeOpenings = new List<int>();
 
@@ -1114,11 +1115,12 @@ public class Data : MonoBehaviour
                 }
                 //Debug.Log("AFTERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
-
+                /*
                 GameObject[] roomsArray;
                 roomsArray = GameObject.FindGameObjectsWithTag("Room");
-                roomsFloor1 = roomsArray.ToList<GameObject>();
-
+                roomsFloor1 = roomsArray.ToList();
+                roomsFloor1Modular = GameObject.FindGameObjectsWithTag("Modular Room stuff").ToList();
+                */
 
 
                 /*

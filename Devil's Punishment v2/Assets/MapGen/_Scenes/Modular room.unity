@@ -208,11 +208,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f411ca46cb0ac4c8520b9269e98a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door_corridor_Transform: {fileID: 676417121}
+  door_corridor_Transform: {fileID: 1894949772}
   door_corridor_Pos: {x: 0, y: 0, z: 0}
-  door_room_Pos: {x: 0, y: 2, z: -2}
+  roomCentrePos: {x: 0, y: 0, z: -20}
+  wall_roomdoor_Pos: {x: 0, y: 2, z: 18}
+  doors:
+  - {fileID: 0}
+  - {fileID: 0}
   mat: {fileID: 2100000, guid: 14a4880dc816d1f49aa2ca64f0ce7afd, type: 2}
-  roomHolderTransform: {fileID: 0}
+  roomHolderTransform: {fileID: 1437539008}
   side_wall: {fileID: 6876753079698740922, guid: 725685d464c648d40a65a6ea362b055f,
     type: 3}
   wall_with_door: {fileID: 6648056774900532606, guid: 96a8a649f3102f8448afac34514fb499,
@@ -220,8 +224,9 @@ MonoBehaviour:
   floor: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
   ceiling: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
   grill: {fileID: 5822355591748013331, guid: 6150da0c2e6d7404da4ee78db8eb8130, type: 3}
-  size_x: 0600000008000000
-  size_z: 0800000006000000
+  size_x: 0800000007000000
+  size_z: 0800000001000000
+  roomReferencesModularRoom: {fileID: 0}
 --- !u!114 &233848277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8bc9d17efac8646a6a1f8e1abeb15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &676417120
+--- !u!1 &1437539007
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,28 +247,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 676417121}
+  - component: {fileID: 1437539008}
+  - component: {fileID: 1437539009}
   m_Layer: 0
-  m_Name: Corridor Door
-  m_TagString: Untagged
-  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_Name: Modular Room tryout
+  m_TagString: Modular Room stuff
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &676417121
+--- !u!4 &1437539008
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 676417120}
+  m_GameObject: {fileID: 1437539007}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1437539009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437539007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf94ffd201d256459019a70a57abbe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doors: []
+  roomFloors:
+  - {x: 0, y: 0, z: -4}
+  ventParent: {fileID: 0}
 --- !u!1 &1448357895
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +353,37 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1894949771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1894949772}
+  m_Layer: 0
+  m_Name: Corridor Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1894949772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894949771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1607639359466828331
 PrefabInstance:
@@ -383,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 1607639358510438562, guid: d7e143e078c92bb46a3f500b48ef1d16,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1607639358510438562, guid: d7e143e078c92bb46a3f500b48ef1d16,
         type: 3}

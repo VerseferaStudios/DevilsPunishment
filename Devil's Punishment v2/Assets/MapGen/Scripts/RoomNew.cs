@@ -110,7 +110,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         for (int i = 0; i < Data.instance.roomsFloor1.Count; i++)
         {
             roomReferences = Data.instance.roomsFloor1[i].GetComponent<RoomReferences>();
-            
+
+            Debug.Log("pos = " + Data.instance.roomsFloor1[i].transform.position);
+            Debug.Log("name = " + Data.instance.roomsFloor1[i].name);
             //do topright and bottom left after seeing rotation and localPos etc and 4 units squares/ cells OcupIeDDCElls
             int[] idxTopRight = GetIdx(roomReferences.topRightCorner.position);
             //idxTopRight[0]++;
@@ -146,12 +148,26 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log(roomReferences.topRightCorner.position);
             //Debug.Log(roomReferences.bottomLeftCorner.position);
         }
-        /*
-        for (int i = 0; i < occupiedCells.Count; i++)
+
+        RoomReferencesModularRoom roomReferencesModularRoom;
+        for (int i = 0; i < Data.instance.roomsFloor1Modular.Count; i++)
         {
-            for (int j = 0; j < occupiedCells[i].Count; j++)
+            roomReferencesModularRoom = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModularRoom>();
+            int[] idxs;
+            for (int j = 0; j < roomReferencesModularRoom.roomFloors.Count; j++)
             {
-                if(occupiedCells[i][j] == false)
+                idxs = GetIdx(roomReferencesModularRoom.roomFloors[j]);
+                mapCells[idxs[0]][idxs[1]].occupied = false;
+            }
+        }
+
+
+        
+        for (int i = 0; i < mapCells.Count; i++)
+        {
+            for (int j = 0; j < mapCells[i].Count; j++)
+            {
+                if(mapCells[i][j].occupied == false)
                 {
                     Debug.Log("i = " + i + " & j = " + j);
                     int[] pos = new int[] { i, j };
@@ -167,11 +183,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     Vector3 posV3 = GetPos(pos);
                     posV3.y += 15;
                     //Debug.Log(posV3);
-                    Instantiate(helper, posV3, Quaternion.identity, helperTransform);//.GetComponent<MeshRenderer>().sharedMaterial.color = Color.white;
+                    //Instantiate(helper, posV3, Quaternion.identity, helperTransform);//.GetComponent<MeshRenderer>().sharedMaterial.color = Color.white;
                 }
             }
         }
-        */
+        
         //ChkPoses();
 
     }
@@ -499,23 +515,31 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         float newDistance = initDistance;
         List<float> manhattanDist = new List<float>();
 
-        //Debug.Log(kPos);
-        //Debug.Log(lPos);
+        Debug.Log(kPos);
+        Debug.Log(lPos);
         int count = 0;
         bool reachedDestination = false;
         Debug.Log("B4 while");
         //ChkPoses();
 
+        if(kPos.x == lPos.x && kPos.z == lPos.z)
+        {
+            reachedDestination = true;
+            Debug.Log("EROOR WTF!");
+            isDoneConnectTwoRooms = true;
+            yield return null;
+        }
+
         while (!reachedDestination)
         {
-            /*
+            
             Debug.Log("kIdx[0] = " + kIdx[0]);
             Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
             Debug.Log(kName);
             Debug.Log(kParentPos);
             Debug.Log(kPos);
-            Debug.Log(occupiedCells.Count);
-            */
+            Debug.Log(mapCells.Count);
+            
             Debug.Log("During while");
             //ChkPoses();
 
@@ -528,13 +552,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             else
             {
-                //Debug.Log("North occupied or visited");
+                Debug.Log("North occupied or visited");
                 freeSpaces[0] = false;
             }
             Vector3 gotPos = GetPos(new int[] { kIdx[0], kIdx[1] - 1 });
-            //Debug.Log("pos = " + gotPos);
-            //Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
-            //Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
+            Debug.Log("pos = " + gotPos);
+            Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
+            Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
 
             if (mapCells[kIdx[0] - 1] != null && mapCells[kIdx[0] - 1][kIdx[1]] != null &&
                 (!mapCells[kIdx[0] - 1][kIdx[1]].visited && kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
@@ -543,11 +567,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             else
             {
-                //Debug.Log("East occupied or visited");
+                Debug.Log("East occupied or visited");
                 freeSpaces[1] = false;
             }
-            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
-            //Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
+            Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
+            Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
 
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] + 1] != null &&
                 (!mapCells[kIdx[0]][kIdx[1] + 1].visited && kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied))  //2 or South // mirror image so minus z
@@ -556,11 +580,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             else
             {
-                //Debug.Log("South occupied or visited");
+                Debug.Log("South occupied or visited");
                 freeSpaces[2] = false;
             }
-            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
-            //Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
+            Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
+            Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
 
             if (mapCells[kIdx[0] + 1] != null & mapCells[kIdx[0] + 1][kIdx[1]] != null &&
                 (!mapCells[kIdx[0] + 1][kIdx[1]].visited && kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied))           //1 or West // mirror image so minus x
@@ -569,11 +593,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             else
             {
-                //Debug.Log("West occupied or visited");
+                Debug.Log("West occupied or visited");
                 freeSpaces[3] = false;
             }
-                //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
-                //Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
+                Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
+                Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
 
             int ctr = 0;
             for (int i = 0; i < 4; i++)
@@ -586,11 +610,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     DistanceHelper(i, out newSpawnPos, newSpawnPos);
                     newDistance = Mathf.Abs(lPos.x - newSpawnPos.x) + Mathf.Abs(lPos.z - newSpawnPos.z);
                     manhattanDist.Add(newDistance);
-                    //Debug.Log("newDistance = " + newDistance);
+                    Debug.Log("newDistance = " + newDistance);
                 }
                 else
                 {
-                    //Debug.Log("newDistance NNN = " + 500);
+                    Debug.Log("newDistance NNN = " + 500);
                     manhattanDist.Add(500);
                 }
             }
@@ -606,14 +630,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             */
             initDistance = Mathf.Min(manhattanDist.ToArray());//check equal too in prev looopppp
-            /*
+            
             for (int i = 0; i < manhattanDist.Count; i++)
             {
                 Debug.Log(" => " + manhattanDist[i]);
             }
             Debug.Log("min is " + initDistance);
             Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
-            */
+            
             thisMove = manhattanDist.IndexOf(initDistance);
             DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
             newSpawnPos = prevSpawnPos;
@@ -671,6 +695,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         //Add opening according to the door type wuth the help of Data.instance.nearDoorL
         openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
+        if(moves.Count <= 0)
+        {
+            reachedDestination = true;
+            Debug.Log("EROOR WTF!");
+            isDoneConnectTwoRooms = true;
+            yield return null;
+        }
         int nextCorridorMove = moves[0];
         nextCorridorMove += 2;
         nextCorridorMove %= 4;
@@ -691,9 +722,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         {
             //GameObject currentCorridor;
 
-            //Debug.Log("moves[i] = " + moves[i]);
-            //if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
-            //Debug.Log("positions[i] = " + positions[i]);
+            Debug.Log("moves[i] = " + moves[i]);
+            if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
+            Debug.Log("positions[i] = " + positions[i]);
 
             //if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
             if (i + 1 < moves.Count && 
@@ -701,7 +732,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                  (moves[i] == 1 || moves[i] == 3) && (moves[i + 1] == 0 || moves[i + 1] == 2)))
             {
                 //L Corridor!!!!!!!
-                //Debug.Log("L Corridor in above pos");
+                Debug.Log("L Corridor in above pos");
                 List<int> openings1 = new List<int>();
                 int nextCorridorMove1 = moves[i];
                 nextCorridorMove1 += 2;
