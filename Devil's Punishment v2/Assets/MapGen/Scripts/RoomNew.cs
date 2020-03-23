@@ -9,7 +9,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     //private List<Transform> spawnPoints = new List<Transform>();
     private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
-    public GameObject[] vents;
     private Transform corridorsParent;
     //private MapGen3 mapGen3;
     private float nextTime = 0f;
@@ -17,6 +16,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private List<Vector3> visitedRooms = new List<Vector3>();
     private Vector3 spawnNowAt;
     private int k = 0, l = 0;
+
+    [Header("Vents Stuff")]
+    public GameObject[] vents;
+    private Transform ventsParent;
 
     /// <summary>
     /// If we are taking an extra turn forming a `L shape rather than an L shape 

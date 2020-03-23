@@ -292,6 +292,7 @@ public class MapGen3 : MonoBehaviour
                         break;
                     case 3:
                         roomToSpawn = null;
+                        yCoord = 0;
                         break;
                         /*
                 case 3:
@@ -317,8 +318,6 @@ public class MapGen3 : MonoBehaviour
             {
                 Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
                 Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
-
-                
 
                 Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
                 Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
@@ -428,7 +427,7 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().corridors = vents;
+        gb.AddComponent<RoomNewVents>().vents = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
@@ -461,7 +460,8 @@ public class MapGen3 : MonoBehaviour
     {
         if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
         {
-            if (i == k - 1)
+            if (i == k - 1) // not right, what if there's a vent cover spawned later in a corridor when doors are connected by A* ?!?!
+                //instead set a bool when corridor A* is done so that Vent A* can start and also use then same functions in RoomNew
             {
                 //GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
                 GameObject gb = Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
