@@ -39,7 +39,7 @@ public class genActivate : MonoBehaviour
             case genPart.A:
                 if(Inventory.instance.ContainsItem("Generator Part A"))
                 {
-                    Inventory.instance.inventory.RemoveAt(10);
+                    Inventory.instance.EmptySlot(10);
                     GameState.gameState.addState(GameState.gameStateType.GenPartA);
                     activateGen();
                     
@@ -49,7 +49,7 @@ public class genActivate : MonoBehaviour
             case genPart.B:
                 if (Inventory.instance.ContainsItem("Generator Part B"))
                 {
-                    Inventory.instance.inventory.RemoveAt(11);
+                    Inventory.instance.EmptySlot(11);
                     GameState.gameState.addState(GameState.gameStateType.GenPartB);
                     activateGen();
 
@@ -59,7 +59,7 @@ public class genActivate : MonoBehaviour
             case genPart.C:
                 if (Inventory.instance.ContainsItem("Generator Part C"))
                 {
-                    Inventory.instance.inventory.RemoveAt(12);
+                    Inventory.instance.EmptySlot(12);
                     GameState.gameState.addState(GameState.gameStateType.GenPartC);
                     activateGen();
 

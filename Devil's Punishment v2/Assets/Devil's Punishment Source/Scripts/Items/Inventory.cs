@@ -523,7 +523,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void EmptySlot(int index) {
+    public void EmptySlot(int index) {
         inventory[index].item = null;
         inventory[index].stack = 0;
     }
