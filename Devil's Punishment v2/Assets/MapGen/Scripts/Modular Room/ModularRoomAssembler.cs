@@ -41,6 +41,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     public RoomReferencesModularRoom roomReferencesModularRoom;
 
+    public bool isModularRoomAssemblingDone = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +51,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     public void StartScript()
     {
+        isModularRoomAssemblingDone = false;
+
         doors = new GameObject[noOfParts];
         Debug.Log(Random.Range(1, 1));
         doors[0] = door_corridor_Transform.gameObject;
@@ -114,6 +118,7 @@ public class ModularRoomAssembler : MonoBehaviour
         //StartCoroutine(CombineAfterDelay());
         //PlaceRemainingWalls();
         Debug.Log(Random.Range(1, 1));
+        isModularRoomAssemblingDone = true;
 
     }
 
@@ -196,8 +201,8 @@ public class ModularRoomAssembler : MonoBehaviour
             Debug.LogError("Ouch! Room part size less than 2");
             this.enabled = false;
         }
-        size_x.Add(Random.Range(8 / 4, 40 / 4)); //Change to 36 units max size if needed
-        size_z.Add(Random.Range(8 / 4, 40 / 4));
+        size_x.Add(Random.Range(8 / 4, (40 / 2) / 4)); //Change to 36 units max size if needed
+        size_z.Add(Random.Range(8 / 4, (40 / 2) / 4));
         Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
         size_x[partNo]--;
         size_z[partNo]--;

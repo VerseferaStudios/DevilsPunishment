@@ -8,7 +8,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
     //private List<Transform> spawnPoints = new List<Transform>();
     private List<GameObject> spawnPoints = new List<GameObject>();
-    public GameObject[] corridors;
+    public GameObject[] corridorsOrVents;
     private Transform corridorsParent;
     //private MapGen3 mapGen3;
     private float nextTime = 0f;
@@ -18,7 +18,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private int k = 0, l = 0;
 
     [Header("Vents Stuff")]
-    public GameObject[] vents;
     private Transform ventsParent;
 
     /// <summary>
@@ -57,6 +56,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private Vector3 chkPos1 = new Vector3(-156, 0, -28);
     private Vector3 chkPos2 = new Vector3(-152, 0, -28);
 
+    private int safetyCounter = 0;
+    public bool isPopulateOCDone = false;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
@@ -64,6 +66,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     void Start()
     {
+        PopulateOccupiedCells();
         //StartScript();
     }
 
@@ -86,7 +89,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             mapCells.Add(occupiedCellsRow);
         }
-
+        isPopulateOCDone = true;
         //ChkPoses();
         /*
         for (int i = 10; i < 40; i++)
@@ -109,13 +112,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
         }
         */
-        RoomReferences roomReferences;
-        for (int i = 0; i < Data.instance.roomsFloor1.Count; i++)
-        {
-            roomReferences = Data.instance.roomsFloor1[i].GetComponent<RoomReferences>();
+    }
 
-            Debug.Log("pos = " + Data.instance.roomsFloor1[i].transform.position);
-            Debug.Log("name = " + Data.instance.roomsFloor1[i].name);
+    public IEnumerator PopulateOccupiedCellsNormalRooms(RoomReferences roomReferences)
+    {
+        //yield return new WaitUntil(() => isPopulateOCDone);
+
+        //for (int i = 0; i < Data.instance.roomsFloor1.Count; i++)
+        {
+            //roomReferences = Data.instance.roomsFloor1[i].GetComponent<RoomReferences>();
+
+            //Debug.Log("pos = " + Data.instance.roomsFloor1[i].transform.position);
+            Debug.Log("pos = " + roomReferences.transform.position);
+            //Debug.Log("name = " + Data.instance.roomsFloor1[i].name);
+            Debug.Log("name = " + roomReferences.gameObject.name);
             //do topright and bottom left after seeing rotation and localPos etc and 4 units squares/ cells OcupIeDDCElls
             int[] idxTopRight = GetIdx(roomReferences.topRightCorner.position);
             //idxTopRight[0]++;
@@ -142,8 +152,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     int[] pos = new int[] { j, k };
                     Vector3 posV3 = GetPos(pos);
                     //Debug.Log(posV3);
-                    //Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.green;
-                    mapCells[j][k].occupied = false;
+                    Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.green;
                     mapCells[j][k].occupied = false;
                 }
             }
@@ -152,19 +161,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log(roomReferences.bottomLeftCorner.position);
         }
 
-        RoomReferencesModularRoom roomReferencesModularRoom;
-        for (int i = 0; i < Data.instance.roomsFloor1Modular.Count; i++)
-        {
-            roomReferencesModularRoom = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModularRoom>();
-            int[] idxs;
-            for (int j = 0; j < roomReferencesModularRoom.roomFloors.Count; j++)
-            {
-                idxs = GetIdx(roomReferencesModularRoom.roomFloors[j]);
-                mapCells[idxs[0]][idxs[1]].occupied = false;
-            }
-        }
-
-
+        //PopulateOccupiedCellsModularRoom();
         
         for (int i = 0; i < mapCells.Count; i++)
         {
@@ -177,7 +174,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     Vector3 posV3 = GetPos(pos);
                     posV3.y += 10;
                     Debug.Log(posV3);
-                    Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.blue;
+                    //Instantiate(helper, posV3, Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.blue;
                 }
                 else
                 {
@@ -191,8 +188,27 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
         }
         
+        yield return null;
         //ChkPoses();
 
+    }
+
+    public IEnumerator PopulateOccupiedCellsModularRoom(RoomReferencesModularRoom roomReferencesModularRoom)
+    {
+        //yield return new WaitUntil(() => isPopulateOCDone);
+
+        //for (; i < Data.instance.roomsFloor1Modular.Count; i++)
+        {
+            //roomReferencesModularRoom = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModularRoom>();
+            int[] idxs;
+            for (int j = 0; j < roomReferencesModularRoom.roomFloors.Count; j++)
+            {
+                idxs = GetIdx(roomReferencesModularRoom.roomFloors[j]);
+                //Instantiate(helper, roomReferencesModularRoom.roomFloors[j], Quaternion.identity, helperTransform).GetComponent<MeshRenderer>().sharedMaterial.color = Color.green;
+                mapCells[idxs[0]][idxs[1]].occupied = false;
+            }
+        }
+        yield return null;
     }
 
     private void PopulateVisitedCells()
@@ -218,7 +234,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public void StartScript()
     {
-        PopulateOccupiedCells();
         PopulateVisitedCells();
         //return;
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
@@ -259,7 +274,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
-                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currentCorridor = Instantiate(corridorsOrVents[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currentCorridor.layer = 18;
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
@@ -547,6 +562,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //ChkPoses();
 
             kIdx = GetIdx(currentSpawnPos);
+            Debug.Log("mapcells count = " + mapCells.Count);
 
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null && 
                 (!mapCells[kIdx[0]][kIdx[1] - 1].visited && kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
@@ -702,8 +718,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         {
             reachedDestination = true;
             Debug.Log("EROOR WTF!");
+            fail_room_connect = true;
             isDoneConnectTwoRooms = true;
-            yield return null;
+            yield break;
         }
         int nextCorridorMove = moves[0];
         nextCorridorMove += 2;
@@ -980,7 +997,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         int[] kIdx = GetIdx(posI);
         GameObject currentCorridor;
-        currentCorridor = Instantiate(corridors[0]/*corridors[mapCells[kIdx[0]][kIdx[1]].corridorIdx]*/, posI, Quaternion.identity);
+        currentCorridor = Instantiate(corridorsOrVents[0]/*corridors[mapCells[kIdx[0]][kIdx[1]].corridorIdx]*/, posI, Quaternion.identity);
 
         currentCorridor.layer = 18;
         /*
@@ -1012,7 +1029,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     private void InstantiateLCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
     {
-        GameObject currCorridor1 = Instantiate(corridors[mapCells[kIdx[0]][kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        GameObject currCorridor1 = Instantiate(corridorsOrVents[mapCells[kIdx[0]][kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
         currCorridor1.layer = 18;
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -1029,7 +1046,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
     {
         float yRotation = mapCells[kIdx[0]][kIdx[1]].corridorYRot;
-        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
+        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridorsOrVents[4] : corridorsOrVents[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
         //MapgenProgress.instance.addProgress(1);
         if (yRotation == 0)
         {
@@ -1064,7 +1081,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         //spawnAtPos.x = Mathf.Round(posToSpawn.x);
         //spawnAtPos.z = Mathf.Round(posToSpawn.z);
-        CorridorNew corridorNew = Instantiate(corridors[5], posToSpawn, Quaternion.identity, mapGenHolderTransform).GetComponentInChildren<CorridorNew>();
+        CorridorNew corridorNew = Instantiate(corridorsOrVents[5], posToSpawn, Quaternion.identity, mapGenHolderTransform).GetComponentInChildren<CorridorNew>();
 
         corridorNew.rooms.Add(kParentPos);
         corridorNew.rooms.Add(lParentPos);
@@ -1339,7 +1356,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform); 
+        GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform); 
         currCorridor1.layer = 18;
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -1415,7 +1432,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         spawnNowAt = From;
         Debug.Log("SPAWN HALF = " + From + " from and to " + to);
         // ----------- Variable for corridor to spawn at each for loop step -----------                
-        GameObject corridorToSpawn = corridors[0];
+        GameObject corridorToSpawn = corridorsOrVents[0];
 
         // -------------- Spawns corridors along z axis since x coord is constant --------------                
         if (From.x == to.x)
@@ -1445,7 +1462,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.layer = 18;
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -1480,7 +1497,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.layer = 18;
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -1564,7 +1581,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.layer = 18;
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -1600,7 +1617,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currCorridor1.layer = 18;
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);

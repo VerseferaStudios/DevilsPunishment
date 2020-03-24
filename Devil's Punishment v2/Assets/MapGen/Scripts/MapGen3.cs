@@ -50,7 +50,7 @@ public class MapGen3 : MonoBehaviour
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
         Random.InitState(mapseed);  // changed this to our given mapseed
-        Rooms();
+        StartCoroutine(Rooms());
     }
 
     public int mapseed;
@@ -82,23 +82,22 @@ public class MapGen3 : MonoBehaviour
         arr[1] = 28;
         allRooms.Add(arr);
         CreateHolderForMapGen();
-        Random.InitState(100);
+        //Random.InitState(100);
         //Rooms();
 
         //StartCoroutine(WaitForaWhile());
 
         //Random.state = GoodStates.states[0];
-        //syncronizeSeeds(seed);
+        //syncronizeSeeds(Random.Range(1, 1000));
 
         //syncronizeSeeds(Random.Range(1, 1000));
-        //Random.InitState(Random.Range(1, 1000));
+        Random.InitState(Random.Range(1, 1000));
 
 
 
         ItemGen itemGenScript = GetComponent<ItemGen>();
         roomNewScript = gameObject.AddComponent<RoomNew>();
-        roomNewScript.corridors = corridors;
-        roomNewScript.vents = vents;
+        roomNewScript.corridorsOrVents = corridors;
         roomNewScript.allRooms = allRooms;
         roomNewScript.ventCover = ventCover;
         roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
@@ -111,7 +110,7 @@ public class MapGen3 : MonoBehaviour
 
 
         //StateData.states.Add(Random.state);
-        Rooms();
+        StartCoroutine(Rooms());
 
         Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data.instance.corridorT1 = corridors[3];
@@ -154,14 +153,15 @@ public class MapGen3 : MonoBehaviour
 
         CreateHolderForMapGen();
 
-        Rooms();
+        StartCoroutine(Rooms());
         
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Rooms()
+    public IEnumerator Rooms()
     {
+        yield return new WaitUntil(() => roomNewScript.isPopulateOCDone);
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
         {
@@ -331,6 +331,8 @@ public class MapGen3 : MonoBehaviour
                     SpawnVentCoverInRoom(i, k, roomReferencesModularRoom.ventParent);
                 Data.instance.roomsFloor1Modular.Add(spawnedRoom);
                 Data.instance.modularRoomAssembler.StartScript();
+                yield return new WaitUntil(() => Data.instance.modularRoomAssembler.isModularRoomAssemblingDone);
+                StartCoroutine(roomNewScript.PopulateOccupiedCellsModularRoom(roomReferencesModularRoom));
             }
             else
             {
@@ -340,6 +342,7 @@ public class MapGen3 : MonoBehaviour
                 if (i != 1)
                     SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
                 Data.instance.roomsFloor1.Add(spawnedRoom);
+                StartCoroutine(roomNewScript.PopulateOccupiedCellsNormalRooms(roomReferences));
             }
 
 
@@ -427,7 +430,7 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().vents = vents;
+        //gb.AddComponent<RoomNewVents>().vents = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
