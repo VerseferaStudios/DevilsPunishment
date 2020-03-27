@@ -343,6 +343,7 @@ public class MapGen3 : MonoBehaviour
                     SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
                 Data.instance.roomsFloor1.Add(spawnedRoom);
                 StartCoroutine(roomNewScript.PopulateOccupiedCellsNormalRooms(roomReferences));
+                yield return new WaitForSeconds(1f);
             }
 
 

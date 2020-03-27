@@ -252,7 +252,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         // ------------------- Convert array of doors / spawnPoints into list -------------------
         spawnPoints.AddRange(tempSpawnPoints);
         //Debug.Log("spawnPoints.Count = " + spawnPoints.Count);
-
+        /*
         // ------------------- Find exactly overlapping doors/spawnPoints, spawn a corridor at thst position, and destroy both doors/spawnPoints -------------------
         for (int i = 0; i < spawnPoints.Count; i++)
         {
@@ -274,6 +274,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             if (isFound)
             {
+                //WHY insatntiat here??
                 GameObject currentCorridor = Instantiate(corridorsOrVents[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 currentCorridor.layer = 18;
                 currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
@@ -318,7 +319,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 isFound = false;
             }
         }
-
+        */
 
         //put all adjacnt rooms in same component
         /*
@@ -478,24 +479,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         yield return null;
     }
 
-    public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
-    {
-        counter++;
-        //if(roomsHelper != null)
-        {
-            //Destroy(roomsHelper.gameObject);
-        }
-        //roomsHelper = new GameObject("RoomsHelper " + counter).transform;
-
-        Transform t = new GameObject(counter + " = " + k + ", " + l + " 1").transform;
-        t.position = kPos;
-        t = new GameObject(counter + " = " + k + ", " + l + " 2").transform;
-        t.position = lPos;
-
-        //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
-        yield return null;
-    }
-
     private int[] GetIdx(Vector3 pos)
     {
         int x = Mathf.RoundToInt(pos.x / -4);
@@ -548,22 +531,27 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             yield return null;
         }
 
+        //Debug.Log("kIdx[0] = " + kIdx[0]);
+        //Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
+        //Debug.Log(kName);
+        //Debug.Log(kParentPos);
+        //Debug.Log(kPos);
+        //Debug.Log(mapCells.Count);
+
         while (!reachedDestination)
         {
-            
-            Debug.Log("kIdx[0] = " + kIdx[0]);
-            Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
-            Debug.Log(kName);
-            Debug.Log(kParentPos);
-            Debug.Log(kPos);
-            Debug.Log(mapCells.Count);
-            
+
+
             Debug.Log("During while");
             //ChkPoses();
 
             kIdx = GetIdx(currentSpawnPos);
-            Debug.Log("mapcells count = " + mapCells.Count);
 
+            //Debug.Log("kIdx[0] = " + kIdx[0]);
+            //Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
+            //Debug.Log("currentSpawnPos = " + currentSpawnPos);
+
+            //Debug.Log("mapcells count = " + mapCells.Count);
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null && 
                 (!mapCells[kIdx[0]][kIdx[1] - 1].visited && kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
             {
@@ -575,9 +563,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 freeSpaces[0] = false;
             }
             Vector3 gotPos = GetPos(new int[] { kIdx[0], kIdx[1] - 1 });
-            Debug.Log("pos = " + gotPos);
-            Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
-            Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
+            //Debug.Log("pos = " + gotPos);
+            //Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
+            //Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
 
             if (mapCells[kIdx[0] - 1] != null && mapCells[kIdx[0] - 1][kIdx[1]] != null &&
                 (!mapCells[kIdx[0] - 1][kIdx[1]].visited && kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
@@ -615,8 +603,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Debug.Log("West occupied or visited");
                 freeSpaces[3] = false;
             }
-                Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
-                Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
+                //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
+                //Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
 
             int ctr = 0;
             for (int i = 0; i < 4; i++)
@@ -629,11 +617,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     DistanceHelper(i, out newSpawnPos, newSpawnPos);
                     newDistance = Mathf.Abs(lPos.x - newSpawnPos.x) + Mathf.Abs(lPos.z - newSpawnPos.z);
                     manhattanDist.Add(newDistance);
-                    Debug.Log("newDistance = " + newDistance);
+                    //Debug.Log("newDistance = " + newDistance);
                 }
                 else
                 {
-                    Debug.Log("newDistance NNN = " + 500);
+                    //Debug.Log("newDistance NNN = " + 500);
                     manhattanDist.Add(500);
                 }
             }
@@ -654,10 +642,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             {
                 Debug.Log(" => " + manhattanDist[i]);
             }
-            Debug.Log("min is " + initDistance);
-            Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
+            //Debug.Log("min is " + initDistance);
             
             thisMove = manhattanDist.IndexOf(initDistance);
+            //Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
             DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
             newSpawnPos = prevSpawnPos;
 
@@ -692,7 +680,15 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 freeSpaces.Add(false);
             }
 
-            reachedDestination = (currentSpawnPos.x == lPos.x) && (currentSpawnPos.z == lPos.z);
+            //Debug.Log(currentSpawnPos + " " + lPos + " => currentspawnpos and lpos for break condn (reachedDest)");
+            //Debug.Log("(currentSpawnPos.x == lPos.x) => " + (currentSpawnPos.x == lPos.x));
+            //Debug.Log(currentSpawnPos.x);
+            //Debug.Log(currentSpawnPos.z);
+            //Debug.Log(lPos.x);
+            //Debug.Log(lPos.z);
+            //Debug.Log("(currentSpawnPos.z == lPos.z) => " + (currentSpawnPos.z == lPos.z));
+
+            reachedDestination = Mathf.Approximately(currentSpawnPos.x, lPos.x) && Mathf.Approximately(currentSpawnPos.z, lPos.z);
 
             mapCells[kIdx[0]][kIdx[1]].visited = true;
 
@@ -1195,563 +1191,15 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     }
     */
 
-    public IEnumerator ConnectTwoRoomsOld(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
-    {
-        //yield return new WaitUntil(() => Input.GetKey(KeyCode.Tab));
-        //making all y coordinates of all corridors equal to 0.5f
-        //StartCoroutine(ShowRoomsBeingConnected(k, l, kPos, lPos));
-        kPos.y = lPos.y = 0.5f;
-        //Debug.Log("kPos and lPos = " + kPos + " " + lPos);
-
-        Vector3 targetPos = new Vector3(0, 3, 0);
-
-        Vector3 From = kPos;
-
-        Debug.Log("CONNECT 2 Rooms = " + From + " from and to " + lPos + "Door names ; kName = " + kName + " ; lName = " + lName);
-
-        // ------------------- Doesnt (xD) Connects (x and x) or (z and z) doors in different rooms with I shape with no hindrance -------------------
-        /*
-        if (
-            // -------------- if x doors AND z differnce == xSize --------------
-            (kPos.x == lPos.x && Mathf.Abs(kPos.z - lPos.z) == Data.instance.xSize)
-            ||
-            // -------------- if z doors AND x differnce == 10 --------------
-            (kPos.z == lPos.z && Mathf.Abs(kPos.x - lPos.x) == Data.instance.xSize)
-            )
-        {
-            //targetPos = spawnPoints[i].transform.position;
-            //Debug.Log("Spawn4--");
-        }
-        */
-                if (kParentPos == lParentPos)
-        {
-            Debug.Log("Error CONNECT 2 Rooms = " + lPos + " and " + kPos);
-            fail_room_connect = true;
-            isDoneConnectTwoRooms = true;
-            yield return null;
-        }
-        // ------------------- Connects x and z doors with L shape with no hindrance -------------------
-        else if (kName.EndsWith("x") && lName.EndsWith("z"))
-        {
-            targetPos = new Vector3(From.x, 0.5f, lPos.z);
-            Debug.Log("Spawn2");
-        }
-
-        // ------------------- Connects z and x doors with L shape with no hindrance -------------------
-        else if (kName.EndsWith("z") && lName.EndsWith("x"))
-        {
-            targetPos = new Vector3(lPos.x, 0.5f, From.z);
-            Debug.Log("Spawn3");
-        }
-
-        // --------------------- Connects x and x doors ---------------------
-        else if (kName.EndsWith("x") && lName.EndsWith("x"))
-        {
-            //-------------- Connects x and x doors with `L shape to avoid hindrance --------------
-            if (kPos.x != lPos.x)
-            {
-                //check and go nearer to destination
-                Vector3 to = kPos;
-                to.z += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                // ------------------- Calls the actual spawning function -------------------
-                isDoneSpawnHalf = false;
-                StartCoroutine(spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos));
-                yield return new WaitUntil(() => isDoneSpawnHalf);
-                isExtraTurn = true;
-                From = to;
-                targetPos = new Vector3(lPos.x, 0.5f, From.z);
-                Debug.Log("Spawn5a");
-                /*
-                //Debug.Log("From = " + From);
-                //Debug.Log(targetPos);
-                //Debug.Log(spawnPoints[i].transform.position);
-                */
-            }
-            //-------------- Connects x and x doors with I shape since there's no hindrance --------------
-            else
-            {
-                Debug.Log("Spawn5b");
-                targetPos = lPos;
-            }
-        }
-
-        // --------------------- Connects z and z doors ---------------------
-        else if (kName.EndsWith("z") && lName.EndsWith("z"))
-        {
-            //-------------- Connects z and z doors with `L shape to avoid hindrance --------------
-            if (kPos.z != lPos.z)
-            {
-                //check and go nearer to destination
-                Vector3 to = kPos;
-                to.x += Data.instance.xSize / 2;     //Check 5 or 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                // ------------------- Calls the actual spawning function -------------------
-                isDoneSpawnHalf = false;
-                StartCoroutine(spawnHalf(kPos, to, true, kName, lName, kParentPos, lParentPos));
-                yield return new WaitUntil(() => isDoneSpawnHalf);
-                isExtraTurn = true;
-                From = to;
-                targetPos = new Vector3(From.x, 0.5f, lPos.z);
-                Debug.Log("Spawn6a");
-                /*
-                //Debug.Log("From = " + From);
-                //Debug.Log(targetPos);
-                //Debug.Log(spawnPoints[i].transform.position);
-                */
-            }
-            //-------------- Connects z and z doors with I shape since there's no hindrance --------------
-            else
-            {
-                Debug.Log("Spawn6b");
-                targetPos = lPos;
-            }
-        }
-
-        if(targetPos == new Vector3(0, 3, 0))
-        {
-            fail_room_connect = true;
-            isDoneConnectTwoRooms = true;
-            yield return null;
-        }
-
-        // ------------------- Calls the actual spawning function -------------------
-        isDoneSpawnHalf = false;
-        StartCoroutine(spawnHalf(From, targetPos, !isExtraTurn, kName, lName, kParentPos, lParentPos));
-        yield return new WaitUntil(() => isDoneSpawnHalf);
-
-        isExtraTurn = false;
-
-        if (targetPos != lPos)
-        {
-            isDoneSpawnHalf = false;
-            StartCoroutine(spawnHalf(targetPos, lPos, false, kName, lName, kParentPos, lParentPos));
-            yield return new WaitUntil(() => isDoneSpawnHalf);
-        }
-
-        //GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-
-        // --------------- Add L corridor to door at end room ---------------
-        List<int> openings = new List<int>();
-
-        if (targetPos.x == lPos.x)
-        {
-            //Add the previously stored storedOpening meant for this L corridor
-            openings.Add(storedOpening);
-        }
-        else if (targetPos.z == lPos.z)
-        {
-            //Add the previously stored storedOpening meant for this L corridor
-            openings.Add(storedOpening);
-        }
-
-        //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-        openings.Add(Data.instance.NeardoorLIndexSearch(lName[4].ToString() + lName[5].ToString()));
-        /*
-        //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (lName[4].ToString() + lName[5].ToString())
-                + " " + kPos + " " + lPos + " "
-                + spawnPoints[k].name + " " + lName);
-        */
-        //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + openings[0] + " " + openings[1]
-        //+ " " + kPos + " " + lPos);
-
-        float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], lPos, Quaternion.identity, Data.instance.mapGenHolderTransform); 
-        currCorridor1.layer = 18;
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        if (yRotation == 0)
-        {
-            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-            currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-        }
-
-
-        // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-        visitedRooms.Add(lParentPos);
-        visitedRooms.Add(kParentPos);
-
-        //CheckDuplicatesAndConnect(lParentPos, spawnPoints[k].transform.parent.transform.position);
-
-        Data.instance.connectedRooms.Add(visitedRooms);
-
-        /*
-        //Debug.Log("VISITED ROOMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        foreach (var item in visitedRooms)
-        {
-            //Debug.Log(item);
-        }
-        //Debug.Log("CONNECTED ROOMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        foreach (var item in Data.instance.connectedRooms)
-        {
-            foreach (var item1 in item)
-            {
-                //Debug.Log(item1);
-            }
-        }
-        */
-
-        visitedRooms = new List<Vector3>();
-
-        ////Debug.Log("Added a door of ____ " + spawnPoints[i].transform.parent.transform.position);
-        ////Debug.Log("Added a door of ____ " + spawnPoints[k].transform.parent.transform.position);
-
-        // ---------------------- Removes the used doors ----------------------
-
-        if (!fromDataSingleton)
-        {
-            spawnPoints.RemoveAt(l);
-
-            // -------------- decrease k if greater than i --------------                
-            if (k > l)
-            {
-                k--;
-            }
-            l--;
-
-            spawnPoints.RemoveAt(k);
-
-            // -------------- decrease k if greater than i --------------                
-            if (l > k)
-            {
-                l--;
-            }
-            k--;
-        }
-        isDoneConnectTwoRooms = true;
-        yield return null;
-    }
-
-    // ---------------------- Spawns I corridors from "Vector3 From", to "Vector3 to" except start and finish (where L corridor is needed)----------------------
-    private IEnumerator spawnHalf(Vector3 From, Vector3 to, bool isFirst, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos)
-    {
-        // ----------- Variable for position to spawn at each for loop step -----------                
-        spawnNowAt = From;
-        Debug.Log("SPAWN HALF = " + From + " from and to " + to);
-        // ----------- Variable for corridor to spawn at each for loop step -----------                
-        GameObject corridorToSpawn = corridorsOrVents[0];
-
-        // -------------- Spawns corridors along z axis since x coord is constant --------------                
-        if (From.x == to.x)
-        {
-            int increment = (From.z > to.z) ? -4 : 4;
-
-            // ----------- Skips required corridors ----------- 
-            int i = 1;
-
-            //Instantiates L corridor in correct rotation at the door of a room
-            if (isFirst)
-            {
-                List<int> openings = new List<int>();
-
-                //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.z > to.z) ? 0 : 2;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 0 ? 2 : 0);
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + (storedOpening == 0 ? 2 : 0) + " " + (kName[4].ToString() + kName[5].ToString())
-                    //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                    //+ kName + " " + lName);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.layer = 18;
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-
-                isFirst = false;
-            }
-            //Instantiate L corridor in correct rotation at the join of two straight corridors (which are in L shape)
-            else
-            {
-                List<int> openings = new List<int>();
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + storedOpening + " " + ((From.z > to.z) ? 2 : 0)
-                    //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                    //+ kName + " " + lName);
-
-                //Add the previously stored storedOpening meant for this L corridor
-                openings.Add(storedOpening);
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.z > to.z) ? 0 : 2;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 0 ? 2 : 0);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.layer = 18;
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-            }
-            spawnNowAt.z += increment;
-
-            //Spawn I corridors
-            for (; i < Mathf.Abs(From.z - to.z) / Data.instance.corridorSize; i++)
-            {
-                ////Debug.Log("Loop 1 = " + i);
-                //yield return new WaitForSeconds(0.25f);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.15f/*- 0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currentCorridor.layer = 18;
-                /*
-                //Move CollisionDetector of corridor I by +0.25f in x axis to keep it in grid
-                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
-                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x + 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
-                */
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                /*
-                Data.instance.corridorCount++;
-                if (Data.instance.isCollided)
-                {
-                    Data.instance.isCollided = false;
-                    //check current corridor and rotation. check the already instantiated once type AND rotation (using other) ?????//check later
-
-                }
-                */
-                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, -0.08f);
-
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
-                }
-
-                // ----------- Item Gen -----------
-                if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
-                {
-                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
-                    Data.instance.ctr1++;
-                }
-
-                spawnNowAt.z += increment;
-            }
-        }
-
-        // -------------- Spawns corridors along x axis since z coord is constant --------------                
-        else if (From.z == to.z)
-        {
-            int increment = (From.x > to.x) ? -4 : 4;
-
-            // ----------- Skips required corridors ----------- 
-            int i = 1;
-
-            //Instantiates L corridor in correct rotation at the door of a room
-            if (isFirst)
-            {
-                List<int> openings = new List<int>();
-
-                //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-                openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.x > to.x) ? 1 : 3;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 1 ? 3 : 1);
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + ((From.x > to.x) ? 3 : 1) + " " + (kName[4].ToString() + kName[5].ToString())
-                    //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                    //+ kName + " " + lName);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.layer = 18;
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-
-                isFirst = false;
-            }
-            //Instantiate L corridor in correct rotation at the join of two straight corridors (which are in L shape)
-            else
-            {
-                List<int> openings = new List<int>();
-
-                //Debug.Log(Data.instance.ConvertToRotation(openings) + " " + storedOpening + " " + ((From.x > to.x) ? 3 : 1)
-                    //+ " " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " "
-                    //+ kName + " " + lName);
-
-                //Add the previously stored storedOpening meant for this L corridor
-                openings.Add(storedOpening);
-
-                //storedOpening is for the next L corridor in line
-                storedOpening = (From.x > to.x) ? 1 : 3;
-
-                //Add the opposite of storedOpening since this one will be facing the next L corridor
-                openings.Add(storedOpening == 1 ? 3 : 1);
-
-                float yRotation = Data.instance.ConvertToRotation(openings);
-
-                GameObject currCorridor1 = Instantiate(corridorsOrVents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currCorridor1.layer = 18;
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-
-                if (yRotation == 0)
-                {
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-                    currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-                    //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-                    currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-
-            }
-            spawnNowAt.x += increment;
-
-            //Spawn I corridors
-            for (; i < Mathf.Abs(From.x - to.x) / Data.instance.corridorSize; i++)
-            {
-                ////Debug.Log("Loop 2 = " + i);
-                //yield return new WaitForSeconds(0.25f);
-                GameObject currentCorridor = Instantiate(corridorToSpawn, spawnNowAt/*new Vector3(spawnNowAt.x + 0.4f/*0.25f, spawnNowAt.y, spawnNowAt.z)*/, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currentCorridor.layer = 18;
-                /*
-                //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
-                Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
-                collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
-                */
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-                currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                //Data.instance.corridorCount++;
-
-                currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, 0.226f);
-
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
-                {
-                    Instantiate(ventCover, spawnNowAt, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
-                }
-
-                // ----------- Item Gen -----------
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
-                {
-                    itemGenScript.SpawnItems(spawnNowAt - new Vector3(1, 0, 1), spawnNowAt + new Vector3(1, 0, 1), 1, currentCorridor.transform);
-                    Data.instance.ctr1++;
-                }
-
-                spawnNowAt.x += increment;
-
-            }
-        }
-        isDoneSpawnHalf = true;
-        yield return null;
-    }
-
     private int ChooseLCorridor(float yRotation)
     {
         return (yRotation == 0 || yRotation == 180) ? 2 : ((yRotation == 90) ? 7 : 1);
-    }
-
-    // ---------------------- Checks if spawnPoints k and i belong to the same room or adjacent rooms ----------------------
-    private bool CheckIfSameOrAdjacentRoom(int k, int i)
-    {
-        bool isDoorTypeX = spawnPoints[k].name.EndsWith("x") ? true : false;
-
-        // ------------- Check x axis ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize)
-        {
-            return true;
-        }
-        // ------------- Check z axis ------------- 
-        else if (Mathf.Abs(spawnPoints[k].transform.position.z - spawnPoints[i].transform.position.z) == Data.instance.xSize)
-        {
-            return true;
-        }
-
-        // ------------- Check between x door and z door (in L shape) ------------- 
-        if (Mathf.Abs(spawnPoints[k].transform.position.x - spawnPoints[i].transform.position.x) == Data.instance.xSize / 2 
-            && spawnPoints[k].transform.parent.position == spawnPoints[i].transform.parent.position)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public int Compare(GameObject x, GameObject y)
     {
         return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
                     - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
-    }
-
-
-    private void CheckDuplicatesAndConnect(List<Vector3> rooms)
-    {
-        for (int i = 0; i < Data.instance.connectedRooms.Count; i++)
-        {
-            for (int j = 0; j < Data.instance.connectedRooms[i].Count; j++)
-            {
-                if(rooms[0] == Data.instance.connectedRooms[i][j])
-                {
-                    Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(rooms[0] / 2 + rooms[1] / 2, rooms));
-                }
-            }
-        }
-    }
-
-    private void CompareAndAddAdjacent()
-    {
-        Vector3 collidedConnectedRoomToSearch;
-        for (int i = 0; i < Data.instance.connectedRoomsThroughCollision.Count; i++)
-        {
-            for (int j = 0; j < Data.instance.connectedRoomsThroughCollision[i].rooms.Count; j++)
-            {
-                collidedConnectedRoomToSearch = Data.instance.connectedRoomsThroughCollision[i].rooms[j];
-                for (int k = 0; k < Data.instance.connectedRooms.Count; k++)
-                {
-                    for (int q = 0; q < Data.instance.connectedRooms[k].Count; q++)
-                    {
-                        // -------------- Now we are taking an element of connectedRoomsThroughCollision (collidedConnectedRoomToSearch)  -------------- 
-                        // -------------- and comparing it with every element of connectedRooms -------------- 
-                        // -------------- and adding the req ones to connectedRoomsThroughCollision --------------
-                        // -------------- and removing the same ones from connectedRooms --------------
-                        if (collidedConnectedRoomToSearch == Data.instance.connectedRooms[k][q])
-                        {
-                            Data.instance.connectedRoomsThroughCollision.Add(new ConnectedComponent(/*Data.instance.connectedRoomsThroughCollision[i].corridorPos*/ new Vector3(1, 1, 1), Data.instance.connectedRooms[k]));
-                            Data.instance.connectedRooms.RemoveAt(k);
-                            k--;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void MakeInitHallways()
@@ -1761,107 +1209,3 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     }
 
 }
-    /*
-    private string checkCollisions(Vector3 From, Vector3 to)
-    {
-        int ctr = 0;
-        bool goToNext = false;
-        Vector3 FromTemp = From;
-        Vector3 targetPos = new Vector3(FromTemp.x, 0.5f, to.z);
-        //From to targetPos, x constant
-        for (int i = 0; i < Data.instance.allRooms.Count; i++)
-        {
-            ////Debug.Log(((int[])Data.instance.allRooms[i])[1]);
-            if(Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - FromTemp.x) != Data.instance.xSize/2 + 1 && Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - FromTemp.x) < Data.instance.xSize)
-            {
-                ctr++;
-                goToNext = true;
-                break;
-            }
-        }
-        if (goToNext)
-        {
-            //targetPos to to, z constant
-            FromTemp = targetPos;
-            targetPos = to;
-            int i = 0;
-            for (i = 0; i < Data.instance.allRooms.Count; i++)
-            {
-                if (Mathf.Abs(-((int[])Data.instance.allRooms[i])[0] - FromTemp.z) != Data.instance.zSize/2 + 1 && Mathf.Abs(-((int[])Data.instance.allRooms[i])[0] - FromTemp.z) < Data.instance.zSize)
-                {
-                    goToNext = true;
-                    break;
-                }
-            }
-            if (i == Data.instance.allRooms.Count)
-                return "xz";
-        }
-        if (goToNext)
-        {
-            targetPos = new Vector3(to.x, 0.5f, FromTemp.z);
-            FromTemp = From;
-            //z const
-            for (int i = 0; i < Data.instance.allRooms.Count; i++)
-            {
-                if (Mathf.Abs(-((int[])Data.instance.allRooms[i])[0] - FromTemp.z) != Data.instance.zSize/2 + 1 && Mathf.Abs(-((int[])Data.instance.allRooms[i])[0] - FromTemp.z) < Data.instance.zSize)
-                {
-                    goToNext = true;
-                    break;
-                }
-            }
-        }
-        if (goToNext)
-        {
-            //x const
-            FromTemp = targetPos;
-            targetPos = to;
-            int i = 0;
-            for (i = 0; i < Data.instance.allRooms.Count; i++)
-            {
-                if (Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - FromTemp.x) != Data.instance.xSize/2 + 1 && Mathf.Abs(-((int[])Data.instance.allRooms[i])[1] - FromTemp.x) < Data.instance.xSize)
-                {
-                    goToNext = true;
-                    break;
-                }
-            }
-            if (i == Data.instance.allRooms.Count)
-                return "zx";
-        }
-        if (goToNext)
-            return "No";
-        else
-            return "No";
-    }
-    */
-    // Update is called once per frame
-
-
-
-/*
- * //Colour scheme
-            if (k == 2)
-            {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.green;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.green;
-            }
-            else if (k == 4)
-            {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.red;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.red;
-            }
-            else if (k == 6)
-            {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.white;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.white;
-            }
-            else if (k == 8)
-            {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.yellow;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.yellow;
-            }
-            else if (k == 10)
-            {
-                spawnPoints[k].GetComponent<Renderer>().material.color = Color.cyan;
-                spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.cyan;
-            }
-            */
