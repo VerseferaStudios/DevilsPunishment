@@ -38,7 +38,7 @@ public class GunController : MonoBehaviour
     [HideInInspector]
     public bool inputEnabled;
 
-
+	public CameraShake cameraShake;
     Gun[] guns;
 
 
@@ -67,8 +67,9 @@ public class GunController : MonoBehaviour
 
     float timeBetweenShots = .04f;
     float shootTimer;
-
-    float defaultFOV;
+	public float shakeDuration = .15f;
+	public float shakeMagnitude = 0.1f;
+	float defaultFOV;
 
     float bulletSpreadCoefficient;
 
@@ -350,10 +351,10 @@ public class GunController : MonoBehaviour
 		playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
 		playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
 
-		
+		StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
 		//void wait4ReloadAsync()
 		//{
-			do
+		do
 			{
 				gunAnimator.SetBool("Reload", false);
 				gunAnimator.SetTrigger("Fire");
