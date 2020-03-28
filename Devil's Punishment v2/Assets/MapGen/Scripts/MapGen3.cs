@@ -276,7 +276,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4)) //yes modular room spawned for now!!!
+                switch (4) //yes modular room spawned for now!!!
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -343,7 +343,7 @@ public class MapGen3 : MonoBehaviour
                     SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
                 Data.instance.roomsFloor1.Add(spawnedRoom);
                 StartCoroutine(roomNewScript.PopulateOccupiedCellsNormalRooms(roomReferences));
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.01f);
             }
 
 
@@ -431,7 +431,7 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        //gb.AddComponent<RoomNewVents>().vents = vents;
+        gb.AddComponent<RoomNewVents>().corridors = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------

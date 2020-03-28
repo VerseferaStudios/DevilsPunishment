@@ -680,15 +680,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 freeSpaces.Add(false);
             }
 
-            //Debug.Log(currentSpawnPos + " " + lPos + " => currentspawnpos and lpos for break condn (reachedDest)");
-            //Debug.Log("(currentSpawnPos.x == lPos.x) => " + (currentSpawnPos.x == lPos.x));
-            //Debug.Log(currentSpawnPos.x);
-            //Debug.Log(currentSpawnPos.z);
-            //Debug.Log(lPos.x);
-            //Debug.Log(lPos.z);
-            //Debug.Log("(currentSpawnPos.z == lPos.z) => " + (currentSpawnPos.z == lPos.z));
+            Debug.Log(currentSpawnPos + " " + lPos + " => currentspawnpos and lpos for break condn (reachedDest)");
+            Debug.Log("(currentSpawnPos.x == lPos.x) => " + (currentSpawnPos.x == lPos.x));
+            Debug.Log(currentSpawnPos.x);
+            Debug.Log(currentSpawnPos.z);
+            Debug.Log(lPos.x);
+            Debug.Log(lPos.z);
+            Debug.Log("(currentSpawnPos.z == lPos.z) => " + (currentSpawnPos.z == lPos.z));
 
-            reachedDestination = Mathf.Approximately(currentSpawnPos.x, lPos.x) && Mathf.Approximately(currentSpawnPos.z, lPos.z);
+            reachedDestination = Mathf.Abs(currentSpawnPos.x - lPos.x) < 3.9f && Mathf.Abs(currentSpawnPos.z - lPos.z) < 3.9f; // be careful
+            //reachedDestination = Mathf.Approximately(currentSpawnPos.x, lPos.x) && Mathf.Approximately(currentSpawnPos.z, lPos.z);
 
             mapCells[kIdx[0]][kIdx[1]].visited = true;
 
