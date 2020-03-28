@@ -53,10 +53,10 @@ public class GunController : MonoBehaviour
     bool raised = false;
     float aiming = 0;
 	bool isAiming = false;
-	public float recoilRecNotAiming = 1f;
-	public float recoilRecAiming = 100f;
-	public float recoilFactorAiming = 0.05f;
-	public float recoilFactorNotAiming = 1f;
+	public float recoilRecNotAiming;
+	public float recoilRecAiming;
+	public float recoilFactorAiming;
+	public float recoilFactorNotAiming;
 	Vector3 standardPosition = new Vector3(0, -1.55f, 0);
 	Quaternion standardRotation;
 	Vector3 aimingPosition = new Vector3(0.0035f, -1.493f, 0.2f);
@@ -67,8 +67,8 @@ public class GunController : MonoBehaviour
 
     float timeBetweenShots = .04f;
     float shootTimer;
-	public float shakeDuration = .15f;
-	public float shakeMagnitude = 0.1f;
+	public float shakeDuration;
+	public float shakeMagnitude ;
 	float defaultFOV;
 
     float bulletSpreadCoefficient;
@@ -289,10 +289,11 @@ public class GunController : MonoBehaviour
 					aiming = 0f;
 				} else
 				{
-					aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2") ? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+					aiming = (Input.GetButton("Fire2") ? 1.0f : 0.0f);
 					if(Input.GetButton("Fire2"))
 					{
 						isAiming = true;
+						recoil = Vector2.zero;
 					}
 					else
 					{
@@ -413,11 +414,11 @@ public class GunController : MonoBehaviour
 
 		if(isAiming)
 		{
-			recoil += new Vector2(UnityEngine.Random.Range(-.05f, .05f), 1.0f) * (recoilAmount * recoilFactorAiming);
+			recoil += new Vector2(UnityEngine.Random.Range(-.05f, .05f), 0.0f) * recoilAmount * recoilFactorAiming;
 		}
 		else
 		{
-			recoil += new Vector2(UnityEngine.Random.Range(-.2f, .2f), 1.0f) * recoilAmount * recoilFactorNotAiming;
+			recoil += new Vector2(UnityEngine.Random.Range(-.2f, .2f), 0.0f) * recoilAmount * recoilFactorNotAiming;
 		}
 
         clip--;
@@ -561,7 +562,7 @@ public class GunController : MonoBehaviour
 
     void Sway() {
 
-		float swayLimit = 10.0f;
+		float swayLimit = 5.0f;
 
 		if (inputEnabled)
 		{
@@ -571,6 +572,7 @@ public class GunController : MonoBehaviour
 				0f);
 		}
 
+		
 		if (isAiming)
 		{
 			recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * recoilRecAiming);
