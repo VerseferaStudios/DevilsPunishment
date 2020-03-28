@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -36,15 +37,18 @@ public class MapGen3 : MonoBehaviour
     public GameObject ventCover;
 
     [Header("ScriptableObjects")]
-    public StateData StateData, GoodStates;
+    public StateData StateData;
+    public StateData GoodStates;
     public ReloadGoodStates ReloadGoodStatesData;
 
     private Vector2 mapCentre;
 
     public RoomNew roomNewScript;
 
+    [Header("Dev Helpers")]
     public GameObject helper;
     public Transform helperTransform;
+    public TextMeshProUGUI text;
 
     private IEnumerator WaitForaWhile()
     {
@@ -91,9 +95,10 @@ public class MapGen3 : MonoBehaviour
         //syncronizeSeeds(Random.Range(1, 1000));
 
         //syncronizeSeeds(Random.Range(1, 1000));
-        Random.InitState(Random.Range(1, 1000));
 
-
+        int randSeed = Random.Range(1, 1000);
+        text.text = randSeed + "";
+        Random.InitState(randSeed);
 
         ItemGen itemGenScript = GetComponent<ItemGen>();
         roomNewScript = gameObject.AddComponent<RoomNew>();
