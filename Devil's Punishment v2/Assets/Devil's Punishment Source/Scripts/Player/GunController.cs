@@ -53,6 +53,7 @@ public class GunController : MonoBehaviour
     bool raised = false;
     float aiming = 0;
 	bool isAiming = false;
+	bool isShaking = false;
 	public float recoilRecNotAiming;
 	public float recoilRecAiming;
 	public float recoilFactorAiming;
@@ -339,6 +340,7 @@ public class GunController : MonoBehaviour
 		if (shootTimer > 0f) return;
 		if (busyFiringAlready) return;
 		busyFiringAlready = true;
+		isShaking = false;
 
 		shootTimer = timeBetweenShots;
 		clipStock = inventory.GetEquippedGunAmmo();
@@ -352,7 +354,11 @@ public class GunController : MonoBehaviour
 		playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
 		playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
 
-		StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
+		if(!isShaking)
+		{
+			StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
+		}
+
 		//void wait4ReloadAsync()
 		//{
 		do
@@ -373,10 +379,15 @@ public class GunController : MonoBehaviour
 		{
 			//Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
 			UnityEngine.Random.seed = UnityEngine.Random.Range(-9999, 9999);
-			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
-			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
-            //Say hey we're shooting to server
-            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset*2);
+			
+
+			bulletSpreadCoefficient += 1.0f - aiming * 0.2f;
+
+			
+			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-0.5f, 0.5f));
+			Vector3 yAdjust = new Vector3(0.0f, -0.2f, 0.0f);
+			//Say hey we're shooting to server
+            Ray ray = new Ray(transform.position + yAdjust, Camera.main.transform.forward + offset*2);
 			RaycastHit hit;
                 
 
@@ -414,16 +425,17 @@ public class GunController : MonoBehaviour
 
 		if(isAiming)
 		{
-			recoil += new Vector2(UnityEngine.Random.Range(-.05f, .05f), 0.0f) * recoilAmount * recoilFactorAiming;
+			recoil += new Vector2(UnityEngine.Random.Range(-.1f, .1f), 0.01f) * recoilAmount * recoilFactorAiming;
 		}
 		else
 		{
-			recoil += new Vector2(UnityEngine.Random.Range(-.2f, .2f), 0.0f) * recoilAmount * recoilFactorNotAiming;
+			recoil += new Vector2(UnityEngine.Random.Range(-.8f, .4f), 0.5f) * recoilAmount * recoilFactorNotAiming;
 		}
 
         clip--;
 		busyFiringAlready = false;
-    }
+		isShaking = true;
+	}
 
 	// Don't reload if already doing it once (don't stack reloads); Can't figure out how to pull this off...
 	IEnumerator Reload()
