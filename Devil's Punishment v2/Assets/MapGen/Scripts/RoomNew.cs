@@ -206,8 +206,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     isDoneConnectTwoRooms = false;
                     fail_room_connect = false;
 
-                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
-                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+                    //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+                    //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
 
                     Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
                                     spawnPoints[k].name + " " + spawnPoints[l].name + " " +
@@ -219,8 +219,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
                     yield return new WaitForSeconds(2);
 
-                    spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
-                    spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
+                    //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     
                     yield return new WaitUntil(() => isDoneConnectTwoRooms);
                     if (fail_room_connect)
