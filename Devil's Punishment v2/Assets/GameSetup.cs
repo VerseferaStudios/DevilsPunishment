@@ -31,7 +31,7 @@ public class GameSetup : MonoBehaviour
     public void clientActive(Network_Player ply)
     {
         // Cyan light for client
-        levelNetworkLED.color = Color.cyan;
+      //  levelNetworkLED.color = Color.cyan;
         Network_Transmitter.transmitter.startClient(ply);
         
 
@@ -42,7 +42,7 @@ public class GameSetup : MonoBehaviour
     {
         // Green light for host
       //  levelGen01.SetActive(true);
-        levelNetworkLED.color = Color.green;
+      //  levelNetworkLED.color = Color.green;
        Network_Transmitter.transmitter.startClient(ply);
        
 

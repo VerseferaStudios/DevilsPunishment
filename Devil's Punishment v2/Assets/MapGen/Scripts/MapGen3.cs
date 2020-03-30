@@ -53,7 +53,10 @@ public class MapGen3 : MonoBehaviour
 
     public void syncronizeSeeds(int seed)
     {
-        if(GetComponent<MapGen2ndFloor>() != null)// .TryGetComponent(typeof(HingeJoint), out Component component))//(out MapGen2ndFloor mapGen2ndFloor))
+       
+
+
+        if (GetComponent<MapGen2ndFloor>() != null)// .TryGetComponent(typeof(HingeJoint), out Component component))//(out MapGen2ndFloor mapGen2ndFloor))
         {
             GetComponent<MapGen2ndFloor>().setSeed(seed);
         }
@@ -81,13 +84,13 @@ public class MapGen3 : MonoBehaviour
         //Random.InitState(100);
         //Rooms();
 
-        //StartCoroutine(WaitForaWhile());
+        // StartCoroutine(WaitForaWhile());
 
         //Random.state = GoodStates.states[0];
         //syncronizeSeeds(seed);
 
-        syncronizeSeeds(Random.Range(1, 1000));
-        Random.InitState(Random.Range(1, 1000));
+        syncronizeSeeds(seed);
+        Random.InitState(seed);
 
         //StateData.states.Add(Random.state);
         Rooms();

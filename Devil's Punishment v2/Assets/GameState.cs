@@ -17,8 +17,10 @@ public class GameState : NetworkBehaviour
     public void setSpawnPos(Transform pos)
     {
         spawnPosition = pos;
+        Network_Transmitter.transmitter.player.gameObject.GetComponent<CharacterController>().enabled = false;
         //Teleport player to start Room
         Network_Transmitter.transmitter.player.gameObject.transform.position = pos.position;
+        Network_Transmitter.transmitter.player.gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
 

@@ -28,14 +28,14 @@ public class CuffController : MonoBehaviour
     {
         //StartCoroutine(StartAfterDelay());
         playerController = GetComponent<PlayerController_Revamped>();
-        Cuff();
+      //  Cuff();
     }
 
     private IEnumerator StartAfterDelay()
     {
         yield return new WaitForSeconds(5f);
         playerController = GetComponent<PlayerController_Revamped>();
-        Cuff();
+      //  Cuff();
     }
 
 
