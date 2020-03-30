@@ -94,10 +94,12 @@ public class MapGen3 : MonoBehaviour
         //Random.state = GoodStates.states[0];
         //syncronizeSeeds(Random.Range(1, 1000));
 
-
-        int randSeed = Random.Range(1, 1000);
-        text.text = randSeed + "";
-        Random.InitState(randSeed);
+        if(seed == -1)
+        {
+            seed = Random.Range(1, 1000);
+        }
+        text.text = seed + "";
+        Random.InitState(seed);
         //syncronizeSeeds(randSeed);
 
         ItemGen itemGenScript = GetComponent<ItemGen>();

@@ -11,6 +11,7 @@ public class Cell
     public float hCost;
     public float gCost;
     public Vector3 pos;
+    public Cell parent;
 
     public Cell()
     {

@@ -506,6 +506,17 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         return new Vector3(idx[0] * -4, 0, idx[1] * -4);
     }
 
+    public Transform door1, door2;
+    public void ConnectThese2()
+    {
+        PopulateOccupiedCells();
+        PopulateVisitedCells();
+        PopulateHnGCostOfCells();
+        StartCoroutine(ConnectTwoRooms(door1.position, door2.position, 
+                                       door1.gameObject.name, door2.gameObject.name, 
+                                       door1.parent.position, door2.parent.position, false));
+    }
+
     public IEnumerator ConnectTwoRooms(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
 
@@ -616,16 +627,30 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             Vector3 tempSpawnPos = currentSpawnPos;
             float leastFNo = 99;
             float currFNo;
+            bool isCheck = (currentSpawnPos.x == -32 || currentSpawnPos.x == -28) && currentSpawnPos.z == -80;
 
             Debug.Log("mapcells count = " + mapCells.Count);
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null &&
-                prevCell != mapCells[kIdx[0]][kIdx[1] - 1] &&
-                (kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
+                mapCells[kIdx[0]][kIdx[1]].parent != mapCells[kIdx[0]][kIdx[1] - 1])  //0 or North // mirror image so add z
             {
-                freeSpaces[0] = true;
+                mapCells[kIdx[0]][kIdx[1] - 1].parent = mapCells[kIdx[0]][kIdx[1]];
+                if (isCheck)
+                {
+                    Debug.Log("prevCell pos = " + prevCell.pos + " " + mapCells[kIdx[0]][kIdx[1] - 1].pos);
+                }
+                //kIdx[1] - 1 < mapCells[kIdx[0]].Count &&
                 tempSpawnPos.z += 4;
-                mapCells[kIdx[0]][kIdx[1] - 1].hCost = hCost(lPos, tempSpawnPos);
-                mapCells[kIdx[0]][kIdx[1] - 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                if (mapCells[kIdx[0]][kIdx[1] - 1].occupied)
+                {
+                    mapCells[kIdx[0]][kIdx[1] - 1].hCost = hCost(lPos, tempSpawnPos);
+                    mapCells[kIdx[0]][kIdx[1] - 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                }
+                else
+                {
+                    //mapCells[kIdx[0]][kIdx[1] - 1].hCost = 99;//hCost(lPos, tempSpawnPos);
+                    //mapCells[kIdx[0]][kIdx[1] - 1].gCost = 99;//mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                }
+                //freeSpaces[0] = true;
                 currFNo = mapCells[kIdx[0]][kIdx[1] - 1].hCost + mapCells[kIdx[0]][kIdx[1] - 1].gCost;
                 mapCells[kIdx[0]][kIdx[1] - 1].pos = tempSpawnPos;
                 AddToSortedOpenList(mapCells[kIdx[0]][kIdx[1] - 1], currFNo);
@@ -634,11 +659,12 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     leastFCellSuccessor = mapCells[kIdx[0]][kIdx[1] - 1];
                     leastFNo = currFNo;
                 }
+                Debug.Log("north fno = " + currFNo);
             }
             else
             {
                 Debug.Log("North occupied or visited");
-                freeSpaces[0] = false;
+                //freeSpaces[0] = false;
             }
             tempSpawnPos = currentSpawnPos;
             Vector3 gotPos = GetPos(new int[] { kIdx[0], kIdx[1] - 1 });
@@ -647,13 +673,20 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             //Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
 
             if (mapCells[kIdx[0] - 1] != null && mapCells[kIdx[0] - 1][kIdx[1]] != null &&
-                prevCell != mapCells[kIdx[0] - 1][kIdx[1]] &&
-                (kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
+                mapCells[kIdx[0]][kIdx[1]].parent != mapCells[kIdx[0] - 1][kIdx[1]])           //1 or East // mirror image so add x
             {
-                freeSpaces[1] = true;
+                mapCells[kIdx[0] - 1][kIdx[1]].parent = mapCells[kIdx[0]][kIdx[1]];
+                if (isCheck)
+                {
+                    Debug.Log("prevCell pos = " + prevCell.pos + " " + mapCells[kIdx[0] - 1][kIdx[1]].pos);
+                }
+                //freeSpaces[1] = true;
                 tempSpawnPos.x += 4;
-                mapCells[kIdx[0] - 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
-                mapCells[kIdx[0] - 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                if (kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied)
+                {
+                    mapCells[kIdx[0] - 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
+                    mapCells[kIdx[0] - 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                }
                 currFNo = mapCells[kIdx[0] - 1][kIdx[1]].hCost + mapCells[kIdx[0] - 1][kIdx[1]].gCost;
                 mapCells[kIdx[0] - 1][kIdx[1]].pos = tempSpawnPos;
                 AddToSortedOpenList(mapCells[kIdx[0] - 1][kIdx[1]], currFNo);
@@ -662,24 +695,32 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     leastFCellSuccessor = mapCells[kIdx[0] - 1][kIdx[1]];
                     leastFNo = currFNo;
                 }
+                Debug.Log("east fno = " + currFNo);
             }
             else
             {
                 Debug.Log("East occupied or visited");
-                freeSpaces[1] = false;
+                //freeSpaces[1] = false;
             }
             tempSpawnPos = currentSpawnPos;
-            Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
-            Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
+            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
+            //Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
 
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] + 1] != null &&
-                prevCell != mapCells[kIdx[0]][kIdx[1] + 1] &&
-                (kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied))  //2 or South // mirror image so minus z
+                mapCells[kIdx[0]][kIdx[1]].parent != mapCells[kIdx[0]][kIdx[1] + 1])  //2 or South // mirror image so minus z
             {
-                freeSpaces[2] = true;
+                mapCells[kIdx[0]][kIdx[1] + 1].parent = mapCells[kIdx[0]][kIdx[1]];
+                if (isCheck)
+                {
+                    Debug.Log("prevCell pos = " + prevCell.pos + " " + mapCells[kIdx[0]][kIdx[1] + 1].pos);
+                }
+                //freeSpaces[2] = true;
                 tempSpawnPos.z -= 4;
-                mapCells[kIdx[0]][kIdx[1] + 1].hCost = hCost(lPos, tempSpawnPos);
-                mapCells[kIdx[0]][kIdx[1] + 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                if (kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied)
+                {
+                    mapCells[kIdx[0]][kIdx[1] + 1].hCost = hCost(lPos, tempSpawnPos);
+                    mapCells[kIdx[0]][kIdx[1] + 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                }
                 currFNo = mapCells[kIdx[0]][kIdx[1] + 1].hCost + mapCells[kIdx[0]][kIdx[1] + 1].gCost;
                 mapCells[kIdx[0]][kIdx[1] + 1].pos = tempSpawnPos;
                 AddToSortedOpenList(mapCells[kIdx[0]][kIdx[1] + 1], currFNo);
@@ -688,24 +729,32 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     leastFCellSuccessor = mapCells[kIdx[0]][kIdx[1] + 1];
                     leastFNo = currFNo;
                 }
+                Debug.Log("south fno = " + currFNo);
             }
             else
             {
                 Debug.Log("South occupied or visited");
-                freeSpaces[2] = false;
+                //freeSpaces[2] = false;
             }
             tempSpawnPos = currentSpawnPos;
-            Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
-            Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
+            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
+            //Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
 
             if (mapCells[kIdx[0] + 1] != null & mapCells[kIdx[0] + 1][kIdx[1]] != null &&
-                prevCell != mapCells[kIdx[0] + 1][kIdx[1]] &&
-                (kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied))           //1 or West // mirror image so minus x
+                mapCells[kIdx[0]][kIdx[1]].parent != mapCells[kIdx[0] + 1][kIdx[1]])           //1 or West // mirror image so minus x
             {
-                freeSpaces[3] = true;
+                mapCells[kIdx[0] + 1][kIdx[1]].parent = mapCells[kIdx[0]][kIdx[1]];
+                if (isCheck)
+                {
+                    Debug.Log("prevCell pos = " + prevCell.pos + " " + mapCells[kIdx[0] + 1][kIdx[1]].pos);
+                }
+                //freeSpaces[3] = true;
                 tempSpawnPos.x -= 4;
-                mapCells[kIdx[0] + 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
-                mapCells[kIdx[0] + 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                if (kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied)
+                {
+                    mapCells[kIdx[0] + 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
+                    mapCells[kIdx[0] + 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                }
                 currFNo = mapCells[kIdx[0] + 1][kIdx[1]].hCost + mapCells[kIdx[0] + 1][kIdx[1]].gCost;
                 mapCells[kIdx[0] + 1][kIdx[1]].pos = tempSpawnPos;
                 AddToSortedOpenList(mapCells[kIdx[0] + 1][kIdx[1]], currFNo);
@@ -714,22 +763,23 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     leastFCellSuccessor = mapCells[kIdx[0] + 1][kIdx[1]];
                     leastFNo = currFNo;
                 }
+                Debug.Log("west fno = " + currFNo);
             }
             else
             {
                 Debug.Log("West occupied or visited");
-                freeSpaces[3] = false;
+                //freeSpaces[3] = false;
             }
             tempSpawnPos = currentSpawnPos;
 
             closedList.Add(leastFCell);
             ///mapCells[kIdx[0]][kIdx[1]].visited = true;
 
-            freeSpaces.Clear();
-            for (int i = 0; i < 4; i++)
-            {
-                freeSpaces.Add(false);
-            }
+            //freeSpaces.Clear();
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    freeSpaces.Add(false);
+            //}
         }
 
             //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
