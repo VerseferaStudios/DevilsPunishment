@@ -195,8 +195,8 @@ public class ModularRoomAssembler : MonoBehaviour
             Debug.LogError("Ouch! Room part size less than 2");
             this.enabled = false;
         }
-        size_x.Add(Random.Range(8 / 4, 40 / 4)); //Change to 36 units max size if needed
-        size_z.Add(Random.Range(8 / 4, 40 / 4));
+        size_x.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2)); //Change to 36 units max size if needed
+        size_z.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2));
         Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
         size_x[partNo]--;
         size_z[partNo]--;

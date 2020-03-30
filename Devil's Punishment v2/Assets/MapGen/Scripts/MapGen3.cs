@@ -275,7 +275,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4))
+                switch (Random.Range(1, 3)) // no modular room added
                 {
                     case 0:
                         roomToSpawn = startRoom;
