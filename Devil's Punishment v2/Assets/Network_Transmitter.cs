@@ -16,7 +16,7 @@ public class Network_Transmitter : NetworkBehaviour
     public GameState gS;
 
     [SyncVar]
-    private int mapSeed = 23;
+    private int mapSeed = 135;
 
 
     bool genOnce = false;
@@ -26,7 +26,7 @@ public class Network_Transmitter : NetworkBehaviour
         if (isServer && !genOnce)
         {
             
-            mapSeed = Random.Range(0, 1000);
+           // mapSeed = Random.Range(0, 1000);
             player.RpcSendChatMessage(mapSeed.ToString()+  " We generated");          
             genOnce = true;
             mapGen.startMapGeneration(mapSeed);
