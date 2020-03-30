@@ -6,8 +6,15 @@ using UnityEngine;
 public class RoomNewVents : MonoBehaviour
 {
     //private List<Transform> spawnPoints = new List<Transform>();
-    public GameObject[] vents;
-    private Transform ventsParent;
+    private List<GameObject> spawnPoints = new List<GameObject>();
+    public GameObject[] corridors;
+    private Transform corridorsParent;
+    //private MapGen3 mapGen3;
+    private float nextTime = 0f;
+    private bool breakLoop = false;
+    private List<Vector3> visitedRooms = new List<Vector3>();
+    private Vector3 spawnNowAt;
+    private int k = 0, l = 0;
 
     /// <summary>
     /// If we are taking an extra turn forming a `L shape rather than an L shape 
@@ -16,6 +23,7 @@ public class RoomNewVents : MonoBehaviour
     private bool isExtraTurn = false;
 
     //storedOpening is for the next L corridor in line
+    private int storedOpening;
 
     void Start()
     {
@@ -194,7 +202,7 @@ public class RoomNewVents : MonoBehaviour
 
         }
 
-        //ventsParent = (GameObject.Find("Corridors") as GameObject).transform;
+        //corridorsParent = (GameObject.Find("Corridors") as GameObject).transform;
         //Debug.Log(Data.instance.corridorCount + "corridor count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     //Start EDITING vents from somewhere here
@@ -344,7 +352,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         //+ " " + kPos + " " + lPos);
 
         float yRotation = Data.instance.ConvertToRotation(openings);
-        GameObject currCorridor1 = Instantiate(vents[8], lPos, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+        GameObject currCorridor1 = Instantiate(corridors[8], lPos, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
@@ -438,7 +446,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(vents[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
@@ -473,7 +481,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
             float yRotation = Data.instance.ConvertToRotation(openings);
 
-            GameObject currCorridor1 = Instantiate(vents[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
+            GameObject currCorridor1 = Instantiate(corridors[8], spawnNowAt, Quaternion.identity);//, Data.instance.mapGenHolderTransform);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
             //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
@@ -498,7 +506,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         // ----------- Variable for position to spawn at each for loop step -----------                
         spawnNowAt = From;
         // ----------- Variable for corridor to spawn at each for loop step -----------                
-        GameObject corridorToSpawn = vents[0];
+        GameObject corridorToSpawn = corridors[0];
 
         // -------------- Spawns corridors along z axis since x coord is constant --------------                
         if (From.x == to.x)
@@ -528,7 +536,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(vents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -596,7 +604,7 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
 
                 float yRotation = Data.instance.ConvertToRotation(openings);
 
-                GameObject currCorridor1 = Instantiate(vents[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
+                GameObject currCorridor1 = Instantiate(corridors[ChooseLCorridor(yRotation)], spawnNowAt, Quaternion.identity, Data.instance.mapGenHolderTransform);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
                 //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
                 currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
