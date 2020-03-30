@@ -42,6 +42,8 @@ public class MapGen3 : MonoBehaviour
     private Vector2 mapCentre;
     private int mapSizeX = 4, mapSizeZ = 2;
 
+    public RoomNew roomNewScript;
+
     private IEnumerator WaitForaWhile()
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
@@ -91,6 +93,21 @@ public class MapGen3 : MonoBehaviour
 
         syncronizeSeeds(seed);
         Random.InitState(seed);
+
+
+
+        ItemGen itemGenScript = GetComponent<ItemGen>();
+        roomNewScript = gameObject.AddComponent<RoomNew>();
+        roomNewScript.corridors = corridors;
+        roomNewScript.vents = vents;
+        roomNewScript.allRooms = allRooms;
+        roomNewScript.ventCover = ventCover;
+        roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
+        roomNewScript.itemGenScript = itemGenScript;
+        //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
+        Data.instance.roomNewScript = roomNewScript;
+
+
 
         //StateData.states.Add(Random.state);
         Rooms();
@@ -209,11 +226,11 @@ public class MapGen3 : MonoBehaviour
                 ++k;
             }
             ++l;
-            //MapgenProgress.instance.addProgress(3);
+            MapgenProgress.instance.addProgress(3);
 
         }
 
-      //  MapgenProgress.instance.addProgress(3);
+        MapgenProgress.instance.addProgress(3);
         /*
         List<GameObject> staticRooms = new List<GameObject>();
         staticRooms.Add(liftRoom);
@@ -227,7 +244,7 @@ public class MapGen3 : MonoBehaviour
         }
         */
         // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
-        ItemGen itemGenScript = GetComponent<ItemGen>();
+        //ItemGen itemGenScript = GetComponent<ItemGen>();
         for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
@@ -272,6 +289,9 @@ public class MapGen3 : MonoBehaviour
                         roomToSpawn = laserRoom;
                         yCoord = 1;
                         break;
+                    case 3:
+                        roomToSpawn = null;
+                        break;
                         /*
                 case 3:
                     roomToSpawn = roomT;
@@ -288,20 +308,37 @@ public class MapGen3 : MonoBehaviour
             {
                 Data2ndFloor.instance.liftRoomPos = roomPos;
             }
-            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
 
-            RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+            GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+            RoomReferences roomReferences;
 
-            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+            //roomToSpawn = null;
+            if (roomToSpawn == null)
+            {
+                Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
+                Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
+                Data.instance.modularRoomAssembler.StartScript();
+                spawnedRoom = Data.instance.modularRoomAssembler.roomHolderTransform.gameObject;
+                roomReferences = spawnedRoom.AddComponent<RoomReferences>();
+                roomReferences.doors = Data.instance.modularRoomAssembler.doors;
+                roomReferences.ventParent = new GameObject("Vent Parent").transform;
+            }
+            else
+            {
+                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+                roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+                CallOffsetAndDoorFns(spawnedRoom, yRotation);
+            }
 
-            if(i != 1)
+            //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+
+            if (i != 1)
                 SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
-            CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
-            {
+            {/*
                 RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
                 roomNewScript.corridors = corridors;
                 roomNewScript.vents = vents;
@@ -311,7 +348,8 @@ public class MapGen3 : MonoBehaviour
                 roomNewScript.itemGenScript = itemGenScript;
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
-
+                */
+                roomNewScript.StartScript();
                 //ConnectToMapGen(roomNewScript);
 
             }
@@ -339,7 +377,7 @@ public class MapGen3 : MonoBehaviour
         Data.instance.allRooms = allRooms;
         Data.instance.xSize = xSize;
         Data.instance.zSize = zSize;
-        
+
     }
 
     private float LookToMapCentre(Vector2 pos)

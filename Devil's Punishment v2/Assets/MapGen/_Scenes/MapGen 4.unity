@@ -876,6 +876,7 @@ GameObject:
   - component: {fileID: 1353477417}
   - component: {fileID: 1353477416}
   - component: {fileID: 1353477415}
+  - component: {fileID: 1353477419}
   m_Layer: 0
   m_Name: Main Camera (1)
   m_TagString: MainCamera
@@ -890,7 +891,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353477414}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c46ab66e9a05e844bb41a65c568d6c19, type: 3}
   m_Name: 
@@ -959,6 +960,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1353477419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353477414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c658782c4b4ed8488b7ad1ef4e59a07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  percentageGUI: {fileID: 0}
+  panel: {fileID: 0}
+  percentage: 0
 --- !u!1 &1414926032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1078,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c70e4b3ef5bf374bba42e0a7bbfc24d, type: 3}
@@ -1585,6 +1601,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: GUIProgress
+      value: 
+      objectReference: {fileID: 228431975}
+    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7846860429511563593, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1640,15 +1666,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
-      propertyPath: GUIProgress
-      value: 
-      objectReference: {fileID: 228431975}
-    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+      propertyPath: staticRooms.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: numberOfRooms
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72b04878a4c5edd46a7c8b0eb184feb0, type: 3}
@@ -1658,61 +1684,12 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8687177794943754389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8687177794943754391 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7846860429511563592, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
-    type: 3}
-  m_PrefabInstance: {fileID: 8687177794943754389}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8687177794943754392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687177794943754391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomsLoaderPrefab: {fileID: 0}
-  mapGenHolderTransform: {fileID: 0}
-  xSize: 0
-  zSize: 0
-  corridorSize: 4
-  collidedCorridors: []
-  collidedVents: []
-  startTime: 0
-  nearDoorL: []
-  corridorT1: {fileID: 0}
-  corridorT2: {fileID: 0}
-  corridorX: {fileID: 0}
-  ventT: {fileID: 0}
-  ventX: {fileID: 0}
-  spawnPointsFirstPos: {x: 0, y: 0, z: 0}
-  count: 0
-  roomIndicator: {fileID: 0}
-  ctr: 0
-  isOnce: 1
-  isDonePrevFnCall: 1
-  prevCount: 0
-  counter: 0
-  counter1: 0
-  isFinishedCheckCollisions: 0
-  isFinishedCheckCollisionsVents: 0
-  isFinishedAddAndRemoveConnectedRooms: 0
-  isConnectedComponentsCheckDone: 0
-  roomNewScript: {fileID: 0}
-  ctr1: 0
-  playerController: {fileID: 0}
-  canStartCorridorTestSpawner: 0
 --- !u!1001 &9004979133491826906
 PrefabInstance:
   m_ObjectHideFlags: 0

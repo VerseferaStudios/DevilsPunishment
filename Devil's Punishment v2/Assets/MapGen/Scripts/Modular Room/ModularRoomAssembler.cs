@@ -8,7 +8,9 @@ public class ModularRoomAssembler : MonoBehaviour
 
     public Transform door_corridor_Transform;
     public Vector3 door_corridor_Pos;
-    public Vector3 door_room_Pos;
+    public Vector3 roomCentrePos;
+    public Vector3 wall_roomdoor_Pos;
+    public GameObject[] doors;
     public Material mat;
     //public Texture2D packedTexture;
 
@@ -35,18 +37,26 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private List<int> nswe_helper;
 
+    private bool[] door_done;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartScript();
+        //StartScript();
     }
 
     public void StartScript()
     {
+        doors = new GameObject[noOfParts];
         Debug.Log(Random.Range(1, 1));
+        doors[0] = door_corridor_Transform.gameObject;
         door_corridor_Pos = door_corridor_Transform.position;
+        door_done = new bool[noOfParts];
+        door_done[0] = true;
 
         roomHolderTransform = new GameObject("Modular Room 1").transform;
+        roomCentrePos = door_corridor_Pos - new Vector3(0, 0, 20);
+        roomHolderTransform.position = roomCentrePos;
         roomHolderTransform.tag = "Modular Room stuff";
 
         size_x = new List<int>();
@@ -76,7 +86,12 @@ public class ModularRoomAssembler : MonoBehaviour
                 pos.Add(TranslatePartToChosenDirection(i));
             }
             DecideRoomOriginOrCorner_CreateHolders(i, pos[i]);
-            door_room_Pos = door_corridor_Pos + new Vector3(0, 2, -2) - roomHolderTransform.position; // doesnt work yet
+            wall_roomdoor_Pos = door_corridor_Pos + new Vector3(0, 2, -2) - roomHolderTransform.position; // doesnt work yet
+            if(i == 0)
+            {
+                doors[0].transform.SetParent(partHolderTransforms[0]);
+                doors[0].tag = "Corridor Spawn Points";
+            }
 
         }
 
@@ -95,8 +110,9 @@ public class ModularRoomAssembler : MonoBehaviour
         for (int i = 0; i < noOfParts; i++)
             CombineMeshes(i);
             */
-        StartCoroutine(CombineAfterDelay());
+        //StartCoroutine(CombineAfterDelay());
         //PlaceRemainingWalls();
+        Debug.Log(Random.Range(1, 1));
 
     }
 
@@ -379,7 +395,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
         Transform t;
-        Vector3 pos;
+        Vector3 posCurr = Vector3.zero;
         GameObject toSpawn;
 
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
@@ -391,16 +407,24 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     toSpawn = side_wall;
-                    pos = new Vector3(i * 4, 2 + j * 4, 4 / 2);
-                    if (pos == door_room_Pos)
+                    posCurr = new Vector3(i * 4, 2 + j * 4, 4 / 2);
+                    if (posCurr == wall_roomdoor_Pos)
                     {
                         toSpawn = wall_with_door;
                     }
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && Random.Range(0f, 1f) < .1f)
+                    {
+                        DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
+                    }
                     t = Instantiate(toSpawn).transform;
                     t.parent = walls_holder[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+            }
+            if (!door_done[partNo])
+            {
+                DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
             }
         }
 
@@ -414,16 +438,24 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     toSpawn = side_wall;
-                    pos = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
-                    if (pos == door_room_Pos)
+                    posCurr = new Vector3(i * 4, 2 + j * 4, -4 / 2 - size_z[partNo] * 4);
+                    if (posCurr == wall_roomdoor_Pos)
                     {
                         toSpawn = wall_with_door;
                     }
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && Random.Range(0f, 1f) < .1f)
+                    {
+                        DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
+                    }
                     t = Instantiate(toSpawn).transform;
                     t.parent = walls_holder[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+            }
+            if (!door_done[partNo])
+            {
+                DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
             }
         }
 
@@ -436,13 +468,20 @@ public class ModularRoomAssembler : MonoBehaviour
             {
                 for (int j = 0; j < height; j++)
                 {
-                    pos = new Vector3(4 / 2, 2 + j * 4, -i * 4);
-
+                    posCurr = new Vector3(4 / 2, 2 + j * 4, -i * 4);
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && Random.Range(0f, 1f) < .1f)
+                    {
+                        DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
+                    }
                     t = Instantiate(side_wall).transform;
                     t.parent = walls_holder2[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+            }
+            if (!door_done[partNo])
+            {
+                DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
             }
         }
 
@@ -454,15 +493,52 @@ public class ModularRoomAssembler : MonoBehaviour
             {
                 for (int j = 0; j < height; j++)
                 {
-                    pos = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
-
+                    posCurr = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && Random.Range(0f, 1f) < .1f)
+                    {
+                        DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
+                    }
                     t = Instantiate(side_wall).transform;
                     t.parent = walls_holder2[partNo];
-                    t.localPosition = pos;
+                    t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
             }
         }
+        if (!door_done[partNo])
+        {
+            DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
+        }
+    }
+
+    private void DoorSpawnHelper(string doorName, int partNo, bool isWallHolder2, Vector3 posCurr, int xAdd, int zAdd)
+    {
+        doors[partNo] = new GameObject(doorName);
+        doors[partNo].tag = "Corridor Spawn Points";
+        doors[partNo].transform.SetParent(partHolderTransforms[partNo]);
+        Vector3 startPos = ((isWallHolder2) ? walls_holder2 : walls_holder)[partNo].position + posCurr + new Vector3(xAdd, -2, zAdd);
+        Vector3 doorPos = startPos;
+
+        if (doorName[5] == 'z')
+        {
+            doorPos.z = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.z;
+        }
+        else
+        {
+            doorPos.x = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.x;
+        }
+
+        doors[partNo].transform.position = doorPos;
+
+        string doorName2 = doorName.Substring(0, 4);
+        doorName2 += doorName[4] == '+' ? '-' : '+';
+        doorName2 += doorName[5];
+
+        Debug.Log("startPos = " + startPos + " && doorPos = " +  doorPos);
+        Debug.Log("doorName = " + doorName + " && doorName2 = " + doorName2);
+        //Debug.Log(Data.instance.roomNewScript.gameObject.name);
+        //Data.instance.roomNewScript.ConnectTwoRooms(startPos, doors[partNo].transform.position, doorName, doorName2, Vector3.zero, Vector3.one, true);
+        door_done[partNo] = true;
     }
 
     private void PlaceRemainingWalls()
@@ -535,7 +611,7 @@ public class ModularRoomAssembler : MonoBehaviour
                   //  Debug.Log(meshFilters[i].gameObject.name);
             }
             //meshFilters[i].gameObject.GetComponent<Renderer>().material = matNew;
-            Debug.Log("i = " + i + " && meshFilters[i].gameObject.name = " + meshFilters[i].gameObject.name);
+            //Debug.Log("i = " + i + " && meshFilters[i].gameObject.name = " + meshFilters[i].gameObject.name);
             combine[i].mesh = meshFilters[i].sharedMesh;
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             //Debug.Log("meshfilters = " + meshFilters[i].gameObject.name);

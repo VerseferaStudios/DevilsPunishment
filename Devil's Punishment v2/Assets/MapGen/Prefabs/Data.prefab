@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5431061716499982330}
   - component: {fileID: 5964857482625183223}
+  - component: {fileID: 4162967055878268604}
   m_Layer: 0
   m_Name: Data
   m_TagString: Untagged
@@ -43,17 +44,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsLoaderPrefab: {fileID: 0}
+  mapGenHolderTransform: {fileID: 0}
   xSize: 0
   zSize: 0
-  collisionCount: 0
-  corridorCount: 0
-  isCollided: 0
+  corridorSize: 4
   collidedCorridors: []
+  collidedVents: []
   startTime: 0
   nearDoorL: []
   corridorT1: {fileID: 0}
   corridorT2: {fileID: 0}
   corridorX: {fileID: 0}
+  ventT: {fileID: 0}
+  ventX: {fileID: 0}
   spawnPointsFirstPos: {x: 0, y: 0, z: 0}
+  count: 0
   roomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
     type: 3}
+  ctr: 0
+  isOnce: 1
+  isDonePrevFnCall: 1
+  prevCount: 0
+  counter: 0
+  counter1: 0
+  isFinishedCheckCollisions: 0
+  isFinishedCheckCollisionsVents: 0
+  isFinishedAddAndRemoveConnectedRooms: 0
+  isConnectedComponentsCheckDone: 0
+  roomNewScript: {fileID: 0}
+  ctr1: 0
+  playerController: {fileID: 0}
+  canStartCorridorTestSpawner: 0
+  doorRotationHelper: []
+  modularRoomAssembler: {fileID: 0}
+--- !u!114 &4162967055878268604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841075158073676714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f411ca46cb0ac4c8520b9269e98a2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door_corridor_Transform: {fileID: 0}
+  door_corridor_Pos: {x: 0, y: 0, z: 0}
+  door_room_Pos: {x: 0, y: 0, z: 0}
+  doors: []
+  mat: {fileID: 0}
+  roomHolderTransform: {fileID: 0}
+  side_wall: {fileID: 2281963198306682094, guid: bb6fec29f708d2b46892d3d168c8ece7,
+    type: 3}
+  wall_with_door: {fileID: 7440344509891470897, guid: 894a7d53be10734409da8cbfb0daa833,
+    type: 3}
+  floor: {fileID: 6678682570404294113, guid: b826dd53ffbc6684e94f436eb32315a7, type: 3}
+  ceiling: {fileID: 6678682570404294113, guid: b826dd53ffbc6684e94f436eb32315a7, type: 3}
+  grill: {fileID: 6166752751574218313, guid: 6900c75db63c3c444abcb5f7ebc73f67, type: 3}
+  size_x: 
+  size_z: 
