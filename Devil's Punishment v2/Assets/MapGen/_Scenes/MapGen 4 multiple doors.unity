@@ -683,7 +683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 160}
+  m_AnchoredPosition: {x: 0, y: 32.06}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &626995289
@@ -734,8 +734,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 33.8
+  m_fontSizeBase: 33.8
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1918,7 +1918,7 @@ PrefabInstance:
         type: 3}
       propertyPath: helper
       value: 
-      objectReference: {fileID: 903746914638481628, guid: bc887e2245195e64c87213b550837925,
+      objectReference: {fileID: 1884860911872695693, guid: a9cb3815d4a8c3d49aacbab5d1a558db,
         type: 3}
     - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
@@ -1930,6 +1930,11 @@ PrefabInstance:
       propertyPath: text
       value: 
       objectReference: {fileID: 626995289}
+    - target: {fileID: 7846860429511563598, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: numberOfRooms
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7846860429511563593, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2043,8 +2048,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
         type: 3}
-    m_RemovedComponents:
-    - {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0, type: 3}
+    - target: {fileID: 2522176558677017640, guid: 72b04878a4c5edd46a7c8b0eb184feb0,
+        type: 3}
+      propertyPath: numberOfRooms
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72b04878a4c5edd46a7c8b0eb184feb0, type: 3}
 --- !u!114 &8687177794943754390 stripped
 MonoBehaviour:

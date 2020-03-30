@@ -94,11 +94,11 @@ public class MapGen3 : MonoBehaviour
         //Random.state = GoodStates.states[0];
         //syncronizeSeeds(Random.Range(1, 1000));
 
-        //syncronizeSeeds(Random.Range(1, 1000));
 
         int randSeed = Random.Range(1, 1000);
         text.text = randSeed + "";
         Random.InitState(randSeed);
+        //syncronizeSeeds(randSeed);
 
         ItemGen itemGenScript = GetComponent<ItemGen>();
         roomNewScript = gameObject.AddComponent<RoomNew>();
@@ -281,7 +281,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (4) //yes modular room spawned for now!!!
+                switch (Random.Range(1, 3)) //no modular room spawned for now!!!
                 {
                     case 0:
                         roomToSpawn = startRoom;

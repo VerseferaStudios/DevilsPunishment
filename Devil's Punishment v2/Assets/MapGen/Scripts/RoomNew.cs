@@ -56,8 +56,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private Vector3 chkPos1 = new Vector3(-156, 0, -28);
     private Vector3 chkPos2 = new Vector3(-152, 0, -28);
 
-    private int safetyCounter = 0;
     public bool isPopulateOCDone = false;
+
+    private List<Cell> openList;
+    private List<Cell> closedList;
 
     public void initSeed(int seed)
     {
@@ -218,6 +220,18 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             for (int j = 0; j < mapCells[i].Count; j++)
             {
                 mapCells[i][j].visited = false;
+            }
+        }
+    }
+
+    private void PopulateHnGCostOfCells()
+    {
+        for (int i = 0; i < mapCells.Count; i++)
+        {
+            for (int j = 0; j < mapCells[i].Count; j++)
+            {
+                mapCells[i][j].gCost = 99;
+                mapCells[i][j].hCost = 99;
             }
         }
     }
@@ -471,7 +485,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                 Data.instance.canStartCorridorTestSpawner = true;
                 */
-                InstantiateAllCorridors();
+                //InstantiateAllCorridors();
             }
             //Debug.LogError(Data.instance.ctr1);
 
@@ -496,15 +510,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
 
         PopulateVisitedCells();
+        PopulateHnGCostOfCells();
 
         Vector3 currentSpawnPos = kPos;
-        Vector3 newSpawnPos = kPos;
-        Vector3 prevSpawnPos = kPos;
         int[] kIdx = GetIdx(kPos);
-        int[] lIdx = GetIdx(lPos);
-        int prevMove = -1;
-        int thisMove = -1;
-        List<int> moves = new List<int>();
         List<Vector3> positions = new List<Vector3>();
         List<bool> freeSpaces = new List<bool>();
         for (int i = 0; i < 4; i++)
@@ -513,8 +522,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
 
         float initDistance = Mathf.Abs(lPos.x - currentSpawnPos.x) + Mathf.Abs(lPos.z - currentSpawnPos.z);
-        float newDistance = initDistance;
-        List<float> manhattanDist = new List<float>();
 
         Debug.Log(kPos);
         Debug.Log(lPos);
@@ -538,93 +545,216 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //Debug.Log(kPos);
         //Debug.Log(mapCells.Count);
 
-        while (!reachedDestination)
+        openList = new List<Cell>();
+        closedList = new List<Cell>();
+
+        mapCells[kIdx[0]][kIdx[1]].gCost = 0;
+        mapCells[kIdx[0]][kIdx[1]].hCost = hCost(lPos, kPos);
+        mapCells[kIdx[0]][kIdx[1]].pos = kPos;
+        openList.Add(mapCells[kIdx[0]][kIdx[1]]);
+
+        Cell leastFCell; //q in A*
+        Cell leastFCellSuccessor;
+        Cell prevCell;
+
+        //while (!reachedDestination)
+        while (openList.Count != 0)
         {
 
+            count++;
+            Debug.Log("count = " + count);
+            if (count > 50) break;
+
+            leastFCell = openList[openList.Count - 1];//LeastFHelper();
+            openList.RemoveAt(openList.Count - 1);
+            currentSpawnPos = leastFCell.pos;
+            prevCell = leastFCell;
 
             Debug.Log("During while");
             //ChkPoses();
 
             kIdx = GetIdx(currentSpawnPos);
 
-            //Debug.Log("kIdx[0] = " + kIdx[0]);
-            //Debug.Log("kIdx[1] + 1 = " + (int)(kIdx[1] + 1));
+            Debug.Log("kIdx[0] = " + kIdx[0]);
+            Debug.Log("kIdx[1] - 1 = " + (int)(kIdx[1] - 1));
             //Debug.Log("currentSpawnPos = " + currentSpawnPos);
 
-            //Debug.Log("mapcells count = " + mapCells.Count);
-            if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null && 
-                (!mapCells[kIdx[0]][kIdx[1] - 1].visited && kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
+            if (kIdx[0] >= mapCells.Count || kIdx[0] < 0)
+            {
+                //TRACKBACK
+                ///moves.pop for lengthForMoveNotChange;
+                ///update currentSpawnPos;
+                ///and other values!!!
+                ///
+
+                //freeSpaces and manhattanDist no need to clear
+
+
+                //continue;
+
+                //isDoneConnectTwoRooms = true;
+                //fail_room_connect = true;
+                //yield break;
+            }
+            if (kIdx[1] - 1 >= mapCells[kIdx[0]].Count || kIdx[1] - 1 < 0)
+            {
+                //TRACKBACK
+
+                //isDoneConnectTwoRooms = true;
+                //fail_room_connect = true;
+                //yield break;
+            }
+
+
+            //Break Condition
+            reachedDestination = Mathf.Abs(currentSpawnPos.x - lPos.x) < 3.9f && Mathf.Abs(currentSpawnPos.z - lPos.z) < 3.9f; // be careful
+            if (reachedDestination)
+            {
+                break;
+            }
+
+            Vector3 tempSpawnPos = currentSpawnPos;
+            float leastFNo = 99;
+            float currFNo;
+
+            Debug.Log("mapcells count = " + mapCells.Count);
+            if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] - 1] != null &&
+                prevCell != mapCells[kIdx[0]][kIdx[1] - 1] &&
+                (kIdx[1] - 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] - 1].occupied))  //0 or North // mirror image so add z
             {
                 freeSpaces[0] = true;
+                tempSpawnPos.z += 4;
+                mapCells[kIdx[0]][kIdx[1] - 1].hCost = hCost(lPos, tempSpawnPos);
+                mapCells[kIdx[0]][kIdx[1] - 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                currFNo = mapCells[kIdx[0]][kIdx[1] - 1].hCost + mapCells[kIdx[0]][kIdx[1] - 1].gCost;
+                mapCells[kIdx[0]][kIdx[1] - 1].pos = tempSpawnPos;
+                AddToSortedOpenList(mapCells[kIdx[0]][kIdx[1] - 1], currFNo);
+                if (currFNo < leastFNo)
+                {
+                    leastFCellSuccessor = mapCells[kIdx[0]][kIdx[1] - 1];
+                    leastFNo = currFNo;
+                }
             }
             else
             {
                 Debug.Log("North occupied or visited");
                 freeSpaces[0] = false;
             }
+            tempSpawnPos = currentSpawnPos;
             Vector3 gotPos = GetPos(new int[] { kIdx[0], kIdx[1] - 1 });
             //Debug.Log("pos = " + gotPos);
             //Debug.Log("kIdx[0] & kIdx[1] - 1 = " + kIdx[0] + " " + (int)(kIdx[1] - 1));
             //Debug.Log(GetIdx(gotPos)[0] + " " + GetIdx(gotPos)[1]);
 
             if (mapCells[kIdx[0] - 1] != null && mapCells[kIdx[0] - 1][kIdx[1]] != null &&
-                (!mapCells[kIdx[0] - 1][kIdx[1]].visited && kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
+                prevCell != mapCells[kIdx[0] - 1][kIdx[1]] &&
+                (kIdx[0] - 1 < mapCells.Count && mapCells[kIdx[0] - 1][kIdx[1]].occupied))           //1 or East // mirror image so add x
             {
                 freeSpaces[1] = true;
+                tempSpawnPos.x += 4;
+                mapCells[kIdx[0] - 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
+                mapCells[kIdx[0] - 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                currFNo = mapCells[kIdx[0] - 1][kIdx[1]].hCost + mapCells[kIdx[0] - 1][kIdx[1]].gCost;
+                mapCells[kIdx[0] - 1][kIdx[1]].pos = tempSpawnPos;
+                AddToSortedOpenList(mapCells[kIdx[0] - 1][kIdx[1]], currFNo);
+                if (currFNo < leastFNo)
+                {
+                    leastFCellSuccessor = mapCells[kIdx[0] - 1][kIdx[1]];
+                    leastFNo = currFNo;
+                }
             }
             else
             {
                 Debug.Log("East occupied or visited");
                 freeSpaces[1] = false;
             }
+            tempSpawnPos = currentSpawnPos;
             Debug.Log("pos = " + GetPos(new int[] { kIdx[0] - 1, kIdx[1] }));
             Debug.Log("kIdx[0] - 1 & kIdx[1]= " + (int)(kIdx[0] - 1) + " " + kIdx[1]);
 
             if (mapCells[kIdx[0]] != null && mapCells[kIdx[0]][kIdx[1] + 1] != null &&
-                (!mapCells[kIdx[0]][kIdx[1] + 1].visited && kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied))  //2 or South // mirror image so minus z
+                prevCell != mapCells[kIdx[0]][kIdx[1] + 1] &&
+                (kIdx[1] + 1 < mapCells[kIdx[0]].Count && mapCells[kIdx[0]][kIdx[1] + 1].occupied))  //2 or South // mirror image so minus z
             {
                 freeSpaces[2] = true;
+                tempSpawnPos.z -= 4;
+                mapCells[kIdx[0]][kIdx[1] + 1].hCost = hCost(lPos, tempSpawnPos);
+                mapCells[kIdx[0]][kIdx[1] + 1].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                currFNo = mapCells[kIdx[0]][kIdx[1] + 1].hCost + mapCells[kIdx[0]][kIdx[1] + 1].gCost;
+                mapCells[kIdx[0]][kIdx[1] + 1].pos = tempSpawnPos;
+                AddToSortedOpenList(mapCells[kIdx[0]][kIdx[1] + 1], currFNo);
+                if (currFNo < leastFNo)
+                {
+                    leastFCellSuccessor = mapCells[kIdx[0]][kIdx[1] + 1];
+                    leastFNo = currFNo;
+                }
             }
             else
             {
                 Debug.Log("South occupied or visited");
                 freeSpaces[2] = false;
             }
+            tempSpawnPos = currentSpawnPos;
             Debug.Log("pos = " + GetPos(new int[] { kIdx[0], kIdx[1] + 1 }));
             Debug.Log("kIdx[0] & kIdx[1] + 1 = " + kIdx[0] + " " + (int)(kIdx[1] + 1));
 
             if (mapCells[kIdx[0] + 1] != null & mapCells[kIdx[0] + 1][kIdx[1]] != null &&
-                (!mapCells[kIdx[0] + 1][kIdx[1]].visited && kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied))           //1 or West // mirror image so minus x
+                prevCell != mapCells[kIdx[0] + 1][kIdx[1]] &&
+                (kIdx[0] + 1 < mapCells.Count && mapCells[kIdx[0] + 1][kIdx[1]].occupied))           //1 or West // mirror image so minus x
             {
                 freeSpaces[3] = true;
+                tempSpawnPos.x -= 4;
+                mapCells[kIdx[0] + 1][kIdx[1]].hCost = hCost(lPos, tempSpawnPos);
+                mapCells[kIdx[0] + 1][kIdx[1]].gCost = mapCells[kIdx[0]][kIdx[1]].gCost + 4;
+                currFNo = mapCells[kIdx[0] + 1][kIdx[1]].hCost + mapCells[kIdx[0] + 1][kIdx[1]].gCost;
+                mapCells[kIdx[0] + 1][kIdx[1]].pos = tempSpawnPos;
+                AddToSortedOpenList(mapCells[kIdx[0] + 1][kIdx[1]], currFNo);
+                if (currFNo < leastFNo)
+                {
+                    leastFCellSuccessor = mapCells[kIdx[0] + 1][kIdx[1]];
+                    leastFNo = currFNo;
+                }
             }
             else
             {
                 Debug.Log("West occupied or visited");
                 freeSpaces[3] = false;
             }
-                //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
-                //Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
+            tempSpawnPos = currentSpawnPos;
 
-            int ctr = 0;
+            closedList.Add(leastFCell);
+            ///mapCells[kIdx[0]][kIdx[1]].visited = true;
+
+            freeSpaces.Clear();
             for (int i = 0; i < 4; i++)
             {
-                //newDistance = initDistance;
-                if (freeSpaces[i])
-                {
-                    ctr++;
-                    newSpawnPos = prevSpawnPos;
-                    DistanceHelper(i, out newSpawnPos, newSpawnPos);
-                    newDistance = Mathf.Abs(lPos.x - newSpawnPos.x) + Mathf.Abs(lPos.z - newSpawnPos.z);
-                    manhattanDist.Add(newDistance);
-                    //Debug.Log("newDistance = " + newDistance);
-                }
-                else
-                {
-                    //Debug.Log("newDistance NNN = " + 500);
-                    manhattanDist.Add(500);
-                }
+                freeSpaces.Add(false);
             }
+        }
+
+            //Debug.Log("pos = " + GetPos(new int[] { kIdx[0] + 1, kIdx[1]}));
+            //Debug.Log("kIdx[0] + 1 & kIdx[1] = " + (int)(kIdx[0] + 1 )+ " " + kIdx[1]);
+
+            //int ctr = 0;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    //newDistance = initDistance;
+            //    if (freeSpaces[i])
+            //    {
+            //        ctr++;
+
+            //        newSpawnPos = prevSpawnPos;
+            //        DistanceHelper(i, out newSpawnPos, newSpawnPos);
+            //        newDistance = hCost(lPos, newSpawnPos);
+            //        manhattanDist.Add(newDistance);
+            //        //Debug.Log("newDistance = " + newDistance);
+            //    }
+            //    else
+            //    {
+            //        //Debug.Log("newDistance NNN = " + 500);
+            //        manhattanDist.Add(500);
+            //    }
+            //}
             /*
             if(ctr > 1)
             {
@@ -636,160 +766,168 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 prevMove = thisMove;
             }
             */
-            initDistance = Mathf.Min(manhattanDist.ToArray());//check equal too in prev looopppp
-            
-            for (int i = 0; i < manhattanDist.Count; i++)
-            {
-                Debug.Log(" => " + manhattanDist[i]);
-            }
+            //initDistance = Mathf.Min(manhattanDist.ToArray());//check equal too in prev looopppp
+
+            //initDistance = MinFn(manhattanDist, out equalIdxs);
+
+            //for (int i = 0; i < manhattanDist.Count; i++)
+            //{
+            //    Debug.Log(" => " + manhattanDist[i]);
+            //}
             //Debug.Log("min is " + initDistance);
-            
-            thisMove = manhattanDist.IndexOf(initDistance);
-            //Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
-            DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
-            newSpawnPos = prevSpawnPos;
 
-            prevMove = thisMove;
+            //thisMove = manhattanDist.IndexOf(leastFNo);
+            ////Debug.Log("newSpawnPos = " + newSpawnPos + "& thisMove = " + thisMove);
+            //DistanceHelper(thisMove, out prevSpawnPos, prevSpawnPos);
+            //newSpawnPos = prevSpawnPos;
 
-            if(thisMove == 0)
-            {
-                currentSpawnPos.z += 4;
-            }
-            else if (thisMove == 1)
-            {
-                currentSpawnPos.x += 4;
-            }
-            else if (thisMove == 2)
-            {
-                currentSpawnPos.z += -4;
-            }
-            else if (thisMove == 3)
-            {
-                currentSpawnPos.x += -4;
-            }
+            //if(thisMove == prevMove)
+            //{
+            //    lengthForMoveNotChange++;
+            //}
+            //else
+            //{
+            //    lengthForMoveNotChange = 0;
+            //}
+            //prevMove = thisMove;
 
-            moves.Add(thisMove);
-            positions.Add(currentSpawnPos);
+            //if(thisMove == 0)
+            //{
+            //    currentSpawnPos.z += 4;
+            //}
+            //else if (thisMove == 1)
+            //{
+            //    currentSpawnPos.x += 4;
+            //}
+            //else if (thisMove == 2)
+            //{
+            //    currentSpawnPos.z += -4;
+            //}
+            //else if (thisMove == 3)
+            //{
+            //    currentSpawnPos.x += -4;
+            //}
+
+        //    movesCount++;
+        //    moves.Add(thisMove);
+        //    positions.Add(currentSpawnPos);
 
 
 
-            freeSpaces.Clear();
-            manhattanDist.Clear();
-            for (int i = 0; i < 4; i++)
-            {
-                freeSpaces.Add(false);
-            }
+        //    manhattanDist.Clear();
 
-            Debug.Log(currentSpawnPos + " " + lPos + " => currentspawnpos and lpos for break condn (reachedDest)");
-            Debug.Log("(currentSpawnPos.x == lPos.x) => " + (currentSpawnPos.x == lPos.x));
-            Debug.Log(currentSpawnPos.x);
-            Debug.Log(currentSpawnPos.z);
-            Debug.Log(lPos.x);
-            Debug.Log(lPos.z);
-            Debug.Log("(currentSpawnPos.z == lPos.z) => " + (currentSpawnPos.z == lPos.z));
+        //    Debug.Log(currentSpawnPos + " " + lPos + " => currentspawnpos and lpos for break condn (reachedDest)");
+        //    Debug.Log("(currentSpawnPos.x == lPos.x) => " + (currentSpawnPos.x == lPos.x));
+        //    Debug.Log(currentSpawnPos.x);
+        //    Debug.Log(currentSpawnPos.z);
+        //    Debug.Log(lPos.x);
+        //    Debug.Log(lPos.z);
+        //    Debug.Log("(currentSpawnPos.z == lPos.z) => " + (currentSpawnPos.z == lPos.z));
 
-            reachedDestination = Mathf.Abs(currentSpawnPos.x - lPos.x) < 3.9f && Mathf.Abs(currentSpawnPos.z - lPos.z) < 3.9f; // be careful
-            //reachedDestination = Mathf.Approximately(currentSpawnPos.x, lPos.x) && Mathf.Approximately(currentSpawnPos.z, lPos.z);
+        //    reachedDestination = Mathf.Abs(currentSpawnPos.x - lPos.x) < 3.9f && Mathf.Abs(currentSpawnPos.z - lPos.z) < 3.9f; // be careful
+        //    reachedDestination = Mathf.Approximately(currentSpawnPos.x, lPos.x) && Mathf.Approximately(currentSpawnPos.z, lPos.z);
 
-            mapCells[kIdx[0]][kIdx[1]].visited = true;
+        //    mapCells[kIdx[0]][kIdx[1]].visited = true;
 
-            //yield return new WaitForSeconds(0.1f);
-            if (reachedDestination)
-            {
-                break;
-            }
-            count++;
-            Debug.Log("count = " + count);
-            if (count > 100) break;
-            //Use recursion?
-        }
+        //    yield return new WaitForSeconds(0.1f);
+        //    if (reachedDestination)
+        //    {
+        //        break;
+        //    }
+        //    Use recursion?
+        //}
         Debug.Log("After while");
         //ChkPoses();
+
+        for (int i = 0; i < closedList.Count; i++)
+        {
+            Instantiate(helper, closedList[i].pos, Quaternion.identity);
+        }
 
         // --------------- Add L (or I) corridor to door at begining room ---------------
         List<int> openings = new List<int>();
 
         //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-        openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
-        if(moves.Count <= 0)
-        {
-            reachedDestination = true;
-            Debug.Log("EROOR WTF!");
-            fail_room_connect = true;
-            isDoneConnectTwoRooms = true;
-            yield break;
-        }
-        int nextCorridorMove = moves[0];
-        nextCorridorMove += 2;
-        nextCorridorMove %= 4;
-        openings.Add(moves[0]);
-        if(nextCorridorMove == openings[0])
-        {
-            Debug.Log("I Corridor");
-            AddICorridorSpawnInfo(kPos, moves[0], false);
-        }
-        else
-        {
-            Debug.Log("L Corridor");
-            AddLCorridorSpawnInfo(openings, kPos);
-        }
+        //openings.Add(Data.instance.NeardoorLIndexSearch(kName[4].ToString() + kName[5].ToString()));
+        //if(moves.Count <= 0)
+        //{
+        //    reachedDestination = true;
+        //    Debug.Log("EROOR WTF!");
+        //    fail_room_connect = true;
+        //    isDoneConnectTwoRooms = true;
+        //    yield break;
+        //}
+        //int nextCorridorMove = moves[0];
+        //nextCorridorMove += 2;
+        //nextCorridorMove %= 4;
+        //openings.Add(moves[0]);
+        //if(nextCorridorMove == openings[0])
+        //{
+        //    Debug.Log("I Corridor");
+        //    AddICorridorSpawnInfo(kPos, moves[0], false);
+        //}
+        //else
+        //{
+        //    Debug.Log("L Corridor");
+        //    AddLCorridorSpawnInfo(openings, kPos);
+        //}
 
-        //In between I Corridors
-        for (int i = 0; i < moves.Count - 1; i++)
-        {
-            //GameObject currentCorridor;
+        ////In between I Corridors
+        //for (int i = 0; i < moves.Count - 1; i++)
+        //{
+        //    //GameObject currentCorridor;
 
-            Debug.Log("moves[i] = " + moves[i]);
-            if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
-            Debug.Log("positions[i] = " + positions[i]);
+        //    Debug.Log("moves[i] = " + moves[i]);
+        //    if (i + 1 < moves.Count) Debug.Log("moves[i + 1] = " + moves[i + 1]);
+        //    Debug.Log("positions[i] = " + positions[i]);
 
-            //if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
-            if (i + 1 < moves.Count && 
-                ((moves[i] == 0 || moves[i] == 2) && (moves[i + 1] == 1 || moves[i + 1] == 3) ||
-                 (moves[i] == 1 || moves[i] == 3) && (moves[i + 1] == 0 || moves[i + 1] == 2)))
-            {
-                //L Corridor!!!!!!!
-                Debug.Log("L Corridor in above pos");
-                List<int> openings1 = new List<int>();
-                int nextCorridorMove1 = moves[i];
-                nextCorridorMove1 += 2;
-                nextCorridorMove1 %= 4;
-                openings1.Add(nextCorridorMove1);
-                openings1.Add(moves[i + 1]);
-                AddLCorridorSpawnInfo(openings1, positions[i]);
-                //InstantiateLCorridor(openings1, positions[i], kParentPos, lParentPos);
-            }
-            else
-            {
-                AddICorridorSpawnInfo(positions[i], moves[i], false);
-                //InstantiateICorridor(positions[i], kParentPos, lParentPos, moves[i], false);
-            }
-        }
+        //    //if (initDistance == Mathf.Abs(kPos.x - lPos.x) || initDistance == Mathf.Abs(kPos.z - lPos.z))
+        //    if (i + 1 < moves.Count && 
+        //        ((moves[i] == 0 || moves[i] == 2) && (moves[i + 1] == 1 || moves[i + 1] == 3) ||
+        //         (moves[i] == 1 || moves[i] == 3) && (moves[i + 1] == 0 || moves[i + 1] == 2)))
+        //    {
+        //        //L Corridor!!!!!!!
+        //        Debug.Log("L Corridor in above pos");
+        //        List<int> openings1 = new List<int>();
+        //        int nextCorridorMove1 = moves[i];
+        //        nextCorridorMove1 += 2;
+        //        nextCorridorMove1 %= 4;
+        //        openings1.Add(nextCorridorMove1);
+        //        openings1.Add(moves[i + 1]);
+        //        AddLCorridorSpawnInfo(openings1, positions[i]);
+        //        //InstantiateLCorridor(openings1, positions[i], kParentPos, lParentPos);
+        //    }
+        //    else
+        //    {
+        //        AddICorridorSpawnInfo(positions[i], moves[i], false);
+        //        //InstantiateICorridor(positions[i], kParentPos, lParentPos, moves[i], false);
+        //    }
+        //}
 
 
 
-        // --------------- Add L (or I) corridor to door at destination room ---------------
-        openings = new List<int>();
+        //// --------------- Add L (or I) corridor to door at destination room ---------------
+        //openings = new List<int>();
 
-        int doorMove = moves[moves.Count - 2];
-        doorMove += 2;
-        doorMove %= 4;
-        openings.Add(doorMove);
+        //int doorMove = moves[moves.Count - 2];
+        //doorMove += 2;
+        //doorMove %= 4;
+        //openings.Add(doorMove);
 
-        //Add opening according to the door type wuth the help of Data.instance.nearDoorL
-        openings.Add(Data.instance.NeardoorLIndexSearch(lName[4].ToString() + lName[5].ToString()));
-        //Debug.Log("lName = " + lName + "&& openings = " + openings[0] + " " + openings[1]);
-        //Debug.Log("doorMove = " + doorMove);
-        if(moves[moves.Count - 2] == openings[1])
-        {
-            Debug.Log("I Corridor");
-            AddICorridorSpawnInfo(lPos, doorMove, false);
-        }
-        else
-        {
-            Debug.Log("L Corridor");
-            AddLCorridorSpawnInfo(openings, lPos);
-        }
+        ////Add opening according to the door type wuth the help of Data.instance.nearDoorL
+        //openings.Add(Data.instance.NeardoorLIndexSearch(lName[4].ToString() + lName[5].ToString()));
+        ////Debug.Log("lName = " + lName + "&& openings = " + openings[0] + " " + openings[1]);
+        ////Debug.Log("doorMove = " + doorMove);
+        //if(moves[moves.Count - 2] == openings[1])
+        //{
+        //    Debug.Log("I Corridor");
+        //    AddICorridorSpawnInfo(lPos, doorMove, false);
+        //}
+        //else
+        //{
+        //    Debug.Log("L Corridor");
+        //    AddLCorridorSpawnInfo(openings, lPos);
+        //}
 
 
 
@@ -828,6 +966,71 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         yield return null;
     }
 
+    private void AddToSortedOpenList(Cell cell, float leastFNo)
+    {
+
+        if (openList.Count > 0 && openList[openList.Count - 1].hCost + openList[openList.Count - 1].gCost < leastFNo)
+        {
+            //skip
+        }
+        else if (closedList.Count > 0 && closedList[closedList.Count - 1].hCost + closedList[closedList.Count - 1].gCost < leastFNo)
+        {
+            //skip
+        }
+        else
+        {
+            openList.Add(cell);
+        }
+        //for (int i = closedList.Count - 1; i >= 0; i--)
+        //{
+        //    if(closedList[i].hCost + closedList[i].gCost > cell.hCost + cell.gCost)
+        //    {
+
+        //    }
+        //}
+    }
+
+    private float hCost(Vector3 destinationPos, Vector3 newSpawnPos)
+    {
+        return Mathf.Abs(destinationPos.x - newSpawnPos.x) + Mathf.Abs(destinationPos.z - newSpawnPos.z);
+    }
+
+    private Cell LeastFHelper()
+    {
+        float leastFno = 999;
+        float currFno;
+        Cell leastFCell = null;
+        for (int i = 0; i < openList.Count; i++)
+        {
+            currFno = openList[i].hCost + openList[i].gCost;
+            if (currFno < leastFno)
+            {
+                leastFno = currFno;
+                leastFCell = openList[i];
+            }
+        }
+        return leastFCell;
+    }
+    /*
+    private float MinFn(List<float> manhattanDist, out List<int> x)
+    {
+        float min = 999;
+        int firstIdx = -1;
+        for (int i = 0; i < manhattanDist.Count; i++)
+        {
+            if(manhattanDist[i] < min)
+            {
+                min = manhattanDist[i];
+                firstIdx = i;
+            }
+            else if(manhattanDist[i] == min)
+            {
+                x.Add(firstIdx);
+                x.Add(i);
+            }
+        }
+    }
+    */
     private void InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
         Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

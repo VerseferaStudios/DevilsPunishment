@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Data2ndFloor : MonoBehaviour
 {
+    public int mapSizeX = 4, mapSizeZ = 2;
+
     public GameObject roomsLoaderPrefab;  
     public Transform mapGenHolderTransform;
     public float floor2Height = 15f;

@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapGen2ndFloor : MonoBehaviour
 {
@@ -39,7 +40,8 @@ public class MapGen2ndFloor : MonoBehaviour
     public ReloadGoodStates ReloadGoodStatesData;
 
     private Vector2 mapCentre;
-    private int mapSizeX = 4, mapSizeZ = 2;
+
+    public RoomNew2ndFloor roomNew2ndFloorScript;
 
     public void setSeed(int seed)
     {
@@ -51,14 +53,29 @@ public class MapGen2ndFloor : MonoBehaviour
     {
         n = numberOfRooms - 1;
 
-        float x = - (48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = - (48 * ((float)(mapSizeZ - 1) / 2)) - 28;
+        float x = - (48 * ((float)(Data.instance.mapSizeX - 1) / 2)) - 28;
+        float z = - (48 * ((float)(Data.instance.mapSizeZ - 1) / 2)) - 28;
         mapCentre = new Vector2(x, z);
         Debug.Log(mapCentre);
 
         GUIProgress.SetActive(true);
         CreateHolderForMapGen();
-        //Random.state = GoodStates.states[0];
+
+
+        ItemGen itemGenScript = GetComponent<ItemGen>();
+        roomNew2ndFloorScript = gameObject.AddComponent<RoomNew2ndFloor>();
+        roomNew2ndFloorScript.corridorsOrVents = corridors;
+        roomNew2ndFloorScript.allRooms = allRooms;
+        roomNew2ndFloorScript.ventCover = ventCover;
+        roomNew2ndFloorScript.mapGenHolderTransform = mapGenHolderTransform;
+        roomNew2ndFloorScript.itemGenScript = itemGenScript;
+        //roomNew2ndFloorScript.helper = helper;
+        //roomNew2ndFloorScript.helperTransform = helperTransform;
+        //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
+        Data2ndFloor.instance.roomNew2ndFloorScript = roomNew2ndFloorScript;
+
+
+
         //StateData.states.Add(Random.state);
         StartCoroutine(StartScriptAfterDelay());
         Data2ndFloor.instance.roomsLoaderPrefab = roomsLoaderPrefab;
@@ -110,12 +127,13 @@ public class MapGen2ndFloor : MonoBehaviour
     // ------------- Start Script after delay (to wait for lift room) -------------
     private IEnumerator StartScriptAfterDelay()
     {
-        yield return new WaitForSeconds(5f);
+        //yield return new WaitForSeconds(5f);
         Data.instance.canStartCorridorTestSpawner = false;
-        Rooms();
+        yield return new WaitUntil(() => roomNew2ndFloorScript.isPopulateOCDone);
+        StartCoroutine(Rooms());
     }
 
-    public void Rooms()
+    public IEnumerator Rooms()
     {
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
@@ -157,8 +175,8 @@ public class MapGen2ndFloor : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
+            arr[0] = 48 * Random.Range(0, Data2ndFloor.instance.mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, Data2ndFloor.instance.mapSizeX) + 28;
 
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -222,7 +240,7 @@ public class MapGen2ndFloor : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4))
+                switch (Random.Range(1, 3)) //no modular room spawned for now!!!
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -236,6 +254,10 @@ public class MapGen2ndFloor : MonoBehaviour
                         roomToSpawn = laserRoom;
                         yCoord = 1;
                         break;
+                    case 3:
+                        roomToSpawn = null;
+                        yCoord = 0;
+                        break;
                         /*
                 case 3:
                     roomToSpawn = roomT;
@@ -248,41 +270,83 @@ public class MapGen2ndFloor : MonoBehaviour
 
             float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], Data2ndFloor.instance.floor2Height + yCoord, -((float[])allRooms[i])[0]);
-            /*
+            
             if (i == 0)
             {
                 float oldY = roomPos.y;
                 roomPos = Data2ndFloor.instance.liftRoomPos;
                 roomPos.y = oldY;
             }
-            */
-            GameObject spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+
+            GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+
+            //roomToSpawn = null;
+            if (roomToSpawn == null)
+            {
+                Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
+                Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
+
+                Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
+                Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
+                spawnedRoom = roomHolderTransform.gameObject;
+                RoomReferencesModularRoom roomReferencesModularRoom = spawnedRoom.AddComponent<RoomReferencesModularRoom>();
+                roomReferencesModularRoom.doors = Data.instance.modularRoomAssembler.doors;
+                roomReferencesModularRoom.ventParent = new GameObject("Vent Parent").transform;
+                roomReferencesModularRoom.roomFloors = new List<Vector3>();
+                Data.instance.modularRoomAssembler.roomReferencesModularRoom = roomReferencesModularRoom;
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferencesModularRoom.ventParent);
+                Data.instance.roomsFloor1Modular.Add(spawnedRoom);
+                Data.instance.modularRoomAssembler.StartScript();
+                yield return new WaitUntil(() => Data.instance.modularRoomAssembler.isModularRoomAssemblingDone);
+                StartCoroutine(roomNew2ndFloorScript.PopulateOccupiedCellsModularRoom(roomReferencesModularRoom));
+            }
+            else
+            {
+                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+                RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+                CallOffsetAndDoorFns(spawnedRoom, yRotation);
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
+                Data.instance.roomsFloor1.Add(spawnedRoom);
+                StartCoroutine(roomNew2ndFloorScript.PopulateOccupiedCellsNormalRooms(roomReferences));
+
+                for (int j = 0; j < roomReferences.doors.Length; j++)
+                {
+                    roomReferences.doors[j].tag = "Corridor Spawn Points 2nd Floor";
+                }
+
+                yield return new WaitForSeconds(0.01f);
+            }
 
             spawnedRoom.tag = "Room 2nd Floor";
 
-            spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
+            //spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
 
-            RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+            //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
-            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+            //SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
-            SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
-
-            CallOffsetAndDoorFns(spawnedRoom, yRotation);
+            //CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
             {
-                RoomNew2ndFloor roomNew2ndFloorScript = spawnedRoom.AddComponent<RoomNew2ndFloor>();
-                roomNew2ndFloorScript.corridors = corridors;
+                /*
+                roomNew2ndFloorScript = spawnedRoom.AddComponent<RoomNew2ndFloor>();
+                roomNew2ndFloorScript.corridorsOrVents = corridors;
                 roomNew2ndFloorScript.vents = vents;
                 roomNew2ndFloorScript.allRooms = allRooms;
                 roomNew2ndFloorScript.ventCover = ventCover;
                 roomNew2ndFloorScript.mapGenHolderTransform = mapGenHolderTransform;
                 roomNew2ndFloorScript.itemGenScript = itemGenScript;
                 //roomNew2ndFloorScript.ventCoverProbabilty = ventCoverProbabilty;
+                */
                 Data2ndFloor.instance.roomNew2ndFloorScript = roomNew2ndFloorScript;
-
+                Data2ndFloor.instance.allRooms = allRooms;
+                Data2ndFloor.instance.xSize = xSize;
+                Data2ndFloor.instance.zSize = zSize;
+                roomNew2ndFloorScript.StartScript();
                 //ConnectToMapGen(roomNew2ndFloorScript);
 
             }
@@ -306,11 +370,6 @@ public class MapGen2ndFloor : MonoBehaviour
         }
         //Debug.Log("_________________DONE___________________");
         */
-
-        Data2ndFloor.instance.allRooms = allRooms;
-        Data2ndFloor.instance.xSize = xSize;
-        Data2ndFloor.instance.zSize = zSize;
-
         
     }
 
