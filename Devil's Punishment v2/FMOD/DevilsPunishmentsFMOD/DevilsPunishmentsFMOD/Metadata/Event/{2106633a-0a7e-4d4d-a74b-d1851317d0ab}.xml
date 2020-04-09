@@ -60,7 +60,7 @@
 			<destination>{2b2bc904-d12d-444c-b955-88e60e3802fb}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{ac0a7962-8d2b-4f65-8b8c-fd951c9a1d4d}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{996eceb0-e722-4507-9e4a-fe38eb2a01c2}" />
@@ -120,6 +120,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{6a5cb6e0-c82b-43eb-a3ba-cc122afc796b}">
+		<property name="volume">
+			<value>-18</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{af2a1391-2536-43c0-a459-96bf9e549a0c}</destination>
 		</relationship>
@@ -162,7 +165,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{5b8c54c1-6c60-4fb2-b00e-e97b1ac0378e}">
 		<property name="volume">
-			<value>-10</value>
+			<value>-7.5</value>
 		</property>
 		<property name="name">
 			<value>Footsteps</value>
@@ -201,7 +204,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{6bc434c6-4b23-47c5-b342-e51729df52ea}">
 		<property name="volume">
-			<value>-17.5</value>
+			<value>-13</value>
 		</property>
 		<property name="name">
 			<value>Heavy</value>
@@ -244,7 +247,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{3e2f12a8-702f-44c3-ae14-f48d50b9582c}">
 		<property name="volume">
-			<value>-31</value>
+			<value>-17.5</value>
 		</property>
 		<property name="name">
 			<value>Clothing</value>
@@ -284,7 +287,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{0490c1d7-b5fa-41f2-aead-af05902ac196}">
 		<property name="volume">
-			<value>-37</value>
+			<value>-19.5</value>
 		</property>
 		<property name="name">
 			<value>Chains</value>
@@ -644,6 +647,9 @@
 		</property>
 	</object>
 	<object class="SFXReverbEffect" id="{60192a18-c76e-497f-884f-6ce04701501c}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
 		<property name="decayTime">
 			<value>2400</value>
 		</property>

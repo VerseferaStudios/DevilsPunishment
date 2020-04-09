@@ -57,7 +57,7 @@
 			<destination>{87a56f60-912a-4a8c-8d6a-803be16201df}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{ac0a7962-8d2b-4f65-8b8c-fd951c9a1d4d}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{b1c3fabb-f4bc-44e1-a001-20dd0a2cc756}" />
@@ -113,7 +113,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{4172970b-7a52-4a9a-b3ca-8509ddd38fff}">
 		<property name="volume">
-			<value>1.5</value>
+			<value>-8.5</value>
 		</property>
 		<relationship name="effectChain">
 			<destination>{4e7553d3-f1cc-4778-b608-2355c9cf49f4}</destination>
@@ -618,6 +618,9 @@
 		</property>
 	</object>
 	<object class="SFXReverbEffect" id="{6ddf597b-5610-4def-977a-ccb348021ee4}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
 		<property name="decayTime">
 			<value>3500</value>
 		</property>

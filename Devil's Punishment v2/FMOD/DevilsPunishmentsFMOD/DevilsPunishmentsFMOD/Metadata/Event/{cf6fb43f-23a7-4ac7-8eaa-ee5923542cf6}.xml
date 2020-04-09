@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.00.00">
 	<object class="Event" id="{cf6fb43f-23a7-4ac7-8eaa-ee5923542cf6}">
 		<property name="name">
-			<value>Foley</value>
+			<value>Shotgun_Foley</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -53,7 +53,7 @@
 			<destination>{0f4d3a69-97f8-48ac-bb6b-c8c98b3b1330}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{4d9c45ae-70c7-45e7-a251-5c85df122486}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{67291849-5a03-4512-a446-b9688e80e281}" />
@@ -121,6 +121,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{aa8166cf-3337-41d4-8b52-be54835607af}">
+		<property name="volume">
+			<value>-8.5</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -148,6 +151,7 @@
 		<relationship name="effects">
 			<destination>{096c604e-d234-4715-95e4-5b0d9a8c764d}</destination>
 			<destination>{708a4fe1-a7a6-4f66-a8e3-31b28d0fb2a2}</destination>
+			<destination>{98696ac8-3623-460f-8d42-1ba8a86fb84f}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{87b94bf7-adfe-4f55-a882-cf74e5b699cc}" />
@@ -228,6 +232,14 @@
 		</property>
 		<property name="highGain">
 			<value>-6</value>
+		</property>
+	</object>
+	<object class="SFXReverbEffect" id="{98696ac8-3623-460f-8d42-1ba8a86fb84f}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
+		<property name="wetLevel">
+			<value>-20</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{a16cbcfc-188b-41a2-a361-c7590472fd0c}" />

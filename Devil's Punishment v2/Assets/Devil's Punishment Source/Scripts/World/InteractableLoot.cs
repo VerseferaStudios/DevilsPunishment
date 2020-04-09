@@ -60,11 +60,11 @@ public class InteractableLoot : MonoBehaviour, IInteractable
         }
         if (gameObject.tag == "Medkit")
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/UI/Inventory/Inventory_Open", GetComponent<Transform>().position);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Pickups/Items/MedKit_PU", GetComponent<Transform>().position);
         }
         if (gameObject.tag == "GlowSticks")
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/UI/Inventory/Inventory_Open", GetComponent<Transform>().position);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Pickups/Items/Glowstick_PU", GetComponent<Transform>().position);
         }
         if (gameObject.tag == "LSD")
         {
@@ -76,15 +76,15 @@ public class InteractableLoot : MonoBehaviour, IInteractable
         }
         if (gameObject.tag == "HandgunAmmo")
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/UI/Inventory/Inventory_Open", GetComponent<Transform>().position);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Pickups/Ammo/Handgun_Ammo_PU", GetComponent<Transform>().position);
+        }
+        if (gameObject.tag == "ShotgunAmmo")
+        {
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Pickups/Ammo/Shotgun_Ammo_PU", GetComponent<Transform>().position);
         }
         if (gameObject.tag == "RifleAmmo")
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/UI/Inventory/Inventory_Open", GetComponent<Transform>().position);
-        }
-        if (gameObject.tag == "RifleAmmo")
-        {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/UI/Inventory/Inventory_Open", GetComponent<Transform>().position);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Pickups/Ammo/Rifle_Ammo_PU", GetComponent<Transform>().position);
         }
     }
 

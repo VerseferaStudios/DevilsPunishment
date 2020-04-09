@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.00.00">
 	<object class="Event" id="{fc8012fc-1f43-44e9-9516-2274cbbff310}">
 		<property name="name">
-			<value>Foley</value>
+			<value>Rifle_Foley</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -58,7 +58,7 @@
 			<destination>{29c1dd81-b708-4867-88ec-282827039ddb}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{4d9c45ae-70c7-45e7-a251-5c85df122486}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{dfa31eee-9217-4911-8128-600bbad75554}" />
@@ -123,7 +123,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{3d139ea5-e4af-4799-b943-c276ed410c10}">
 		<property name="volume">
-			<value>-2.5</value>
+			<value>-17</value>
 		</property>
 		<property name="pitch">
 			<value>3</value>
@@ -312,6 +312,7 @@
 		<relationship name="effects">
 			<destination>{5431aac6-1205-45da-a27a-6f6e4062dbae}</destination>
 			<destination>{2f95ba21-e1c5-4c53-8009-b531c07e6600}</destination>
+			<destination>{fadb687e-e4d4-4ff9-9753-628735a12186}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{117f0f4b-9a03-4e67-b08a-d425a70fe5b2}" />
@@ -422,6 +423,9 @@
 	<object class="MixerBusPanner" id="{02c00642-70b0-4b62-973c-395c559edafa}" />
 	<object class="MixerBusFader" id="{5431aac6-1205-45da-a27a-6f6e4062dbae}" />
 	<object class="ThreeEQEffect" id="{2f95ba21-e1c5-4c53-8009-b531c07e6600}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
 		<property name="lowGain">
 			<value>3</value>
 		</property>
@@ -430,6 +434,14 @@
 		</property>
 		<property name="highGain">
 			<value>-0.5</value>
+		</property>
+	</object>
+	<object class="SFXReverbEffect" id="{fadb687e-e4d4-4ff9-9753-628735a12186}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
+		<property name="wetLevel">
+			<value>-20</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{265cf105-2c5a-49a6-be1a-4d92b99b9874}" />

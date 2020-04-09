@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.00.00">
 	<object class="Event" id="{8750ef0d-af4b-403c-8eed-66436bfeee6e}">
 		<property name="name">
-			<value>Foley</value>
+			<value>Handgun_Foley</value>
 		</property>
 		<property name="outputFormat">
 			<value>4</value>
@@ -59,7 +59,7 @@
 			<destination>{ab070007-6601-4408-a0af-28fac5a808e8}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{4d9c45ae-70c7-45e7-a251-5c85df122486}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{11db0f78-65f2-42e3-abec-0ffbaa69096e}" />
@@ -132,6 +132,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{2f7d26e4-e740-4a48-87f8-653e5521e430}">
+		<property name="volume">
+			<value>-9</value>
+		</property>
 		<property name="pitch">
 			<value>2.60000014</value>
 		</property>
@@ -367,6 +370,7 @@
 	<object class="MixerBusEffectChain" id="{f2372339-ad8f-43c6-bac2-b12719343d21}">
 		<relationship name="effects">
 			<destination>{6b32be10-28f1-4091-9a27-9b139e35fe71}</destination>
+			<destination>{a5b7f9ff-61cf-4517-a673-d362e00ba782}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{bd1ee85e-a171-4c56-8d65-253589bdfcee}" />
@@ -551,6 +555,11 @@
 	</object>
 	<object class="MixerBusPanner" id="{c3a6d317-9c02-4c30-b84a-45d4ce792d12}" />
 	<object class="MixerBusFader" id="{6b32be10-28f1-4091-9a27-9b139e35fe71}" />
+	<object class="SFXReverbEffect" id="{a5b7f9ff-61cf-4517-a673-d362e00ba782}">
+		<property name="wetLevel">
+			<value>-20</value>
+		</property>
+	</object>
 	<object class="AutomationPoint" id="{f4f80e44-9343-4ad7-8bed-8da8534539c2}">
 		<property name="position">
 			<value>1.6653345369377348e-16</value>
