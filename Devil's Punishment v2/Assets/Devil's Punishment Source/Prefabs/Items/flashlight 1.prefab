@@ -82,17 +82,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abe63da92ee0ed438601913b42a2147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flashlightButton: 0
-  glowLightIntensity: 0
-  glowLightRadius: 0
-  glowColor: {r: 0, g: 0, b: 0, a: 0}
-  flashLightInsensity: 0
-  flashLightRange: 0
-  flashLightAngle: 0
-  flashColor: {r: 0, g: 0, b: 0, a: 0}
-  isFlickerEnabled: 1
+  glowStick: {fileID: 0}
+  flashLight: {fileID: 0}
+  pickUp: {fileID: 0}
+  glow: {fileID: 0}
+  beam: {fileID: 0}
   isUpgraded: 0
-  flicker_range: 0.1
+  countno: 0
 --- !u!1 &7155394958610071559
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +103,7 @@ GameObject:
   - component: {fileID: 5775185449174803758}
   m_Layer: 10
   m_Name: flashlight 1
-  m_TagString: Untagged
+  m_TagString: Flashlight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

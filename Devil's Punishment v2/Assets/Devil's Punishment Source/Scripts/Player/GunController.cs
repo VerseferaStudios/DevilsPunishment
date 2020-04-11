@@ -444,8 +444,8 @@ public class GunController : MonoBehaviour
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
 		float breakPoint = .5f;
-		// Wait for other states to finish
-		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
+        // Wait for other states to finish
+        while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
 		{
 			yield return null;
 		}
@@ -648,6 +648,7 @@ public class GunController : MonoBehaviour
 				foreach (GameObject part in HANDGUN_PARTS)
 				{
 					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+
 				}
 				break;
 			case GunItem.WeaponClassification.SHOTGUN:
