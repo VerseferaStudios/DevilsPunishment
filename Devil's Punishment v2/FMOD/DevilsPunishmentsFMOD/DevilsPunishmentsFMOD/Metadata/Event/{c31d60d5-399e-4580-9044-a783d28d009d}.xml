@@ -8,7 +8,7 @@
 			<value>2</value>
 		</property>
 		<relationship name="folder">
-			<destination>{29790a59-dd18-404f-9737-b92d1258b1d9}</destination>
+			<destination>{74ee4b53-726e-466c-8451-67178c377147}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{aa390070-6a45-416d-b2c2-9d219ea789a3}</destination>
@@ -56,7 +56,7 @@
 			<destination>{9ec2dfee-465d-4997-b415-9edb1e88f392}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ff5c3f7e-899f-4137-9158-8f64d13196c8}</destination>
+			<destination>{ac0a7962-8d2b-4f65-8b8c-fd951c9a1d4d}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{b0ea2742-06d1-4fda-b3a5-d53644a04963}" />
@@ -102,6 +102,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{b9c055ef-9441-4128-86f6-c39717afff60}">
+		<property name="volume">
+			<value>-3</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{6d58a5f8-1cc2-4334-b7ba-f4dcf03ec497}</destination>
 		</relationship>
@@ -532,11 +535,17 @@
 	<object class="MixerBusFader" id="{a22301b2-b5d2-4d81-8be2-341b6a100f27}" />
 	<object class="SpatialiserEffect" id="{4ae4998d-9df6-43d9-ad60-f96e47c6445a}" />
 	<object class="SFXReverbEffect" id="{9b98be22-dbaf-4fc0-a6e3-7c55b532c829}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
 		<property name="decayTime">
-			<value>2400</value>
+			<value>2000</value>
 		</property>
 		<property name="HFDecayRatio">
 			<value>21</value>
+		</property>
+		<property name="wetLevel">
+			<value>-20.5</value>
 		</property>
 	</object>
 	<object class="AutomationPoint" id="{4e4caffc-5cf5-4219-82d9-c33b28dbd681}">
