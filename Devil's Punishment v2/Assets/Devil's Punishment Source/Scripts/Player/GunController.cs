@@ -416,10 +416,10 @@ public class GunController : MonoBehaviour
         muzzleFlashParticles.Play();
 		//Debug.Log("Playing Ejection Particles...");
         ejectionParticles.Play();
-        if(soundManager != null)
-        {
-            soundManager.PlaySound("AssaultRifle", "Shot");
-        }
+        //if(soundManager != null)
+        //{
+        //    soundManager.PlaySound("AssaultRifle", "Shot");
+        //}
         
 		// magic number to adjust also here
 

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class F_Handgun : MonoBehaviour
 {
+    private float lastFireTime;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        lastFireTime = Time.time;
     }
 
     // Update is called once per frame
@@ -28,12 +30,15 @@ public class F_Handgun : MonoBehaviour
 
     void PlayHgFireEvent()
     {
-        FMOD.Studio.EventInstance HFire = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Handgun/Handgun_Blast");
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(HFire, transform, GetComponent<Rigidbody>());
-        HFire.start();
-        HFire.release();
+        if(Time.time > lastFireTime + 0.15f)
+        {
+            FMOD.Studio.EventInstance HFire = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Handgun/Handgun_Blast");
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(HFire, transform, GetComponent<Rigidbody>());
+            HFire.start();
+            HFire.release();
 
-        print("FMOD-AUDIO-PLAYING");
+            print("FMOD-AUDIO-PLAYING");
+        }
     }
 
     void PlayHgAimEvent()
