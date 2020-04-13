@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1429220940808579178}
   - component: {fileID: 5849186731651494733}
   - component: {fileID: 1578928543410343646}
-  - component: {fileID: 711587999977107505}
+  - component: {fileID: -2962953151464818658}
   m_Layer: 10
   m_Name: ShotRenderer
   m_TagString: Untagged
@@ -58,6 +58,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -140,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f6759ac6d199f4d8d08740653824eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &711587999977107505
+--- !u!114 &-2962953151464818658
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,27 +150,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4540924108743251992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 

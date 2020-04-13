@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using static GameSetup;
 
 public class NetworkManager_Drug : NetworkManager
@@ -23,7 +23,6 @@ public class NetworkManager_Drug : NetworkManager
     public void joinIPGame()
     {
         base.networkAddress = IPInputField.text;
-        base.networkPort = 7777;
         Debug.Log(base.networkAddress);
        
         base.StartClient();
@@ -31,15 +30,6 @@ public class NetworkManager_Drug : NetworkManager
 
     }
 
-    
-    void OnClientConnected(NetworkMessage msg)
-    {
-       
-        NetworkServer.SetClientReady(msg.conn);
-        //msg.conn.playerControllers[0].gameObject.GetComponent<NetworkPlayer>();
-
-   
-    }
 
     //Referenced by HostGame Button
     public void startHosting()
