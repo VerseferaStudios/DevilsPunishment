@@ -40809,7 +40809,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -48092,7 +48092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   postFXColorGrading: {fileID: 0}
-  brightnessPercent: {fileID: 0}
+  brightnessPercent: {fileID: 84273482811730943}
 --- !u!114 &2090704046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51984,6 +51984,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8920101605759196922, guid: b4f3ea091da1d2740a775eafba5a40ba,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2090704047}
+    - target: {fileID: 8920101605759196922, guid: b4f3ea091da1d2740a775eafba5a40ba,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BrightnessSlider
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4f3ea091da1d2740a775eafba5a40ba, type: 3}
 --- !u!4 &352705552134410080 stripped
@@ -51992,6 +52002,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8656086170576148116}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &84273482811730943 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8722345253860195691, guid: b4f3ea091da1d2740a775eafba5a40ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 8656086170576148116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8873648682842657925
 PrefabInstance:
   m_ObjectHideFlags: 0
