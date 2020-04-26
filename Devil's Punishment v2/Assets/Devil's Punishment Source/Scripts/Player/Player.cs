@@ -35,7 +35,12 @@ public class Player : MonoBehaviour
         ToggleInventory();
         ToggleGameMenu();
 		if (inventory.equippedGun != null) { gunController.InitGun(); }
-        postFXColorGrading = GameSetup.setup.postFXColorGrading;
+        if (GameSetup.setup)
+        {
+            postFXColorGrading = GameSetup.setup.postFXColorGrading;
+        }
+
+        // Needs GameSetup script in scene with references
 	}
 
     void Update() {

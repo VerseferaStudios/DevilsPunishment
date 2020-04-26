@@ -28,7 +28,7 @@ public class CuffController : MonoBehaviour
     {
         //StartCoroutine(StartAfterDelay());
         playerController = GetComponent<PlayerController_Revamped>();
-      //  Cuff();
+        Uncuff();
     }
 
     private IEnumerator StartAfterDelay()
