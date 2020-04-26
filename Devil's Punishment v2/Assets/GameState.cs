@@ -7,6 +7,7 @@ public class GameState : NetworkBehaviour
 {
     public static GameState gameState;
 
+
     public List<gameStateType> game_state;
 
     public string computerName;
@@ -35,13 +36,18 @@ public class GameState : NetworkBehaviour
         GenPartC
     }
 
+    void Awake()
+    {
+        gameState = this;
+    }
+
     [SyncVar]
     public string state;
     // Start is called before the first frame update
     public void StartGame()
     {
         computerName = SystemInfo.deviceName;
-        gameState = this;
+        
         
         if(isServer)
         {

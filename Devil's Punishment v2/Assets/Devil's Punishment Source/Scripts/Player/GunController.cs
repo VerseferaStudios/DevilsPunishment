@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
+
 public class GunController : MonoBehaviour
 {
 
@@ -30,13 +32,13 @@ public class GunController : MonoBehaviour
 
     public float recoilAmount = 4.0f;
 
-    public float swayAmount = 2.0f;
-    public float swaySpeed = 3.0f;
+    public float swayAmount = 1.0f;
+    public float swaySpeed = 6.0f;
 
     [HideInInspector]
     public bool inputEnabled;
 
-
+	public CameraShake cameraShake;
     Gun[] guns;
 
 
@@ -50,7 +52,12 @@ public class GunController : MonoBehaviour
     bool crouching = false;
     bool raised = false;
     float aiming = 0;
-
+	bool isAiming = false;
+	bool isShaking = false;
+	public float recoilRecNotAiming;
+	public float recoilRecAiming;
+	public float recoilFactorAiming;
+	public float recoilFactorNotAiming;
 	Vector3 standardPosition = new Vector3(0, -1.55f, 0);
 	Quaternion standardRotation;
 	Vector3 aimingPosition = new Vector3(0.0035f, -1.493f, 0.2f);
@@ -61,8 +68,9 @@ public class GunController : MonoBehaviour
 
     float timeBetweenShots = .04f;
     float shootTimer;
-
-    float defaultFOV;
+	public float shakeDuration;
+	public float shakeMagnitude ;
+	float defaultFOV;
 
     float bulletSpreadCoefficient;
 
@@ -130,7 +138,7 @@ public class GunController : MonoBehaviour
 		}
 	}
 
-    public int GetClip() {
+	public int GetClip() {
         return clip;
     }
 
@@ -282,10 +290,19 @@ public class GunController : MonoBehaviour
 					aiming = 0f;
 				} else
 				{
-					aiming = Mathf.Lerp(aiming, Input.GetButton("Fire2") ? 1.0f : 0.0f, Time.deltaTime * 13.0f);
+					aiming = (Input.GetButton("Fire2") ? 1.0f : 0.0f);
+					if(Input.GetButton("Fire2"))
+					{
+						isAiming = true;
+						recoil = Vector2.zero;
+					}
+					else
+					{
+						isAiming = false;
+					}
 				}
 			}
-        }
+		}
     }
 
     void EvaluateInput() {
@@ -319,28 +336,32 @@ public class GunController : MonoBehaviour
 	//Don't allow multiple activations of the fire method just because you're waiting for an animation to finish...
 	bool busyFiringAlready = false;
 	async Task Fire()
-	{	
+	{
 		if (shootTimer > 0f) return;
 		if (busyFiringAlready) return;
 		busyFiringAlready = true;
-		
+		isShaking = false;
+
 		shootTimer = timeBetweenShots;
-        clipStock = inventory.GetEquippedGunAmmo();
+		clipStock = inventory.GetEquippedGunAmmo();
 		// Make sure muzzle and ejector are childed to root bone on guns, otherwise the positions will move unpredictably
 		muzzle.position = equippedGun.muzzle.position;
 		ejector.position = equippedGun.ejector.position;
 
-		float aimingCoefficient = 1.0f/(1.0f+aiming*2.0f);
+		float aimingCoefficient = 1.0f / (1.0f + aiming * 2.0f);
 
-        playerController.AddToViewVector(recoil.x*aimingCoefficient, 0f);
-        playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
-        playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
+		playerController.AddToViewVector(recoil.x * aimingCoefficient, 0f);
+		playerController.AddToVerticalAngleSubractive(-.2f * aimingCoefficient);
+		playerController.AddToVerticalAngleSubractive(-recoil.y * .3f * aimingCoefficient);
 
-        recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * 14.0f);
-		
+		if(!isShaking)
+		{
+			StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
+		}
+
 		//void wait4ReloadAsync()
 		//{
-			do
+		do
 			{
 				gunAnimator.SetBool("Reload", false);
 				gunAnimator.SetTrigger("Fire");
@@ -357,11 +378,16 @@ public class GunController : MonoBehaviour
 		for (int i = 0; i < (isShotgun?10:1); i++)
 		{
 			//Debug.Log("NUM Projectiles: " + (weaponIsShotgun() ? 10 : 1));
-			Random.seed = Random.Range(-9999, 9999);
-			bulletSpreadCoefficient += 1.0f - aiming * 0.15f;
-			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-            //Say hey we're shooting to server
-            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward + offset*2);
+			UnityEngine.Random.seed = UnityEngine.Random.Range(-9999, 9999);
+			
+
+			bulletSpreadCoefficient += 1.0f - aiming * 0.2f;
+
+			
+			Vector3 offset = bulletSpreadCoefficient * .0075f * new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-0.5f, 0.5f));
+			Vector3 yAdjust = new Vector3(0.0f, -0.2f, 0.0f);
+			//Say hey we're shooting to server
+            Ray ray = new Ray(transform.position + yAdjust, Camera.main.transform.forward + offset*2);
 			RaycastHit hit;
                 
 
@@ -390,17 +416,26 @@ public class GunController : MonoBehaviour
         muzzleFlashParticles.Play();
 		//Debug.Log("Playing Ejection Particles...");
         ejectionParticles.Play();
-        if(soundManager != null)
-        {
-            soundManager.PlaySound("AssaultRifle", "Shot");
-        }
+        //if(soundManager != null)
+        //{
+        //    soundManager.PlaySound("AssaultRifle", "Shot");
+        //}
         
+		// magic number to adjust also here
 
+		if(isAiming)
+		{
+			recoil += new Vector2(UnityEngine.Random.Range(-.1f, .1f), 0.01f) * recoilAmount * recoilFactorAiming;
+		}
+		else
+		{
+			recoil += new Vector2(UnityEngine.Random.Range(-.8f, .4f), 0.5f) * recoilAmount * recoilFactorNotAiming;
+		}
 
-        //recoil += new Vector2(Random.Range(-.2f, .2f), -1.0f) * recoilAmount * .05f;
         clip--;
 		busyFiringAlready = false;
-    }
+		isShaking = true;
+	}
 
 	// Don't reload if already doing it once (don't stack reloads); Can't figure out how to pull this off...
 	IEnumerator Reload()
@@ -409,8 +444,8 @@ public class GunController : MonoBehaviour
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
 		float breakPoint = .5f;
-		// Wait for other states to finish
-		while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
+        // Wait for other states to finish
+        while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
 		{
 			yield return null;
 		}
@@ -539,22 +574,33 @@ public class GunController : MonoBehaviour
 
     void Sway() {
 
-		float swayLimit = 10.0f;
+		float swayLimit = 5.0f;
 
-		if (aiming < .5f && inputEnabled)
+		if (inputEnabled)
 		{
 			swayOffset = new Vector3(
-				Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x * 2.0f,
+				Mathf.Clamp(swayOffset.x - Input.GetAxisRaw("Mouse X"), -swayLimit, swayLimit) + recoil.x,
 				Mathf.Clamp(swayOffset.y - Input.GetAxisRaw("Mouse Y"), -swayLimit, swayLimit),
 				0f);
 		}
+
+		
+		if (isAiming)
+		{
+			recoil = Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * recoilRecAiming);
+			swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * recoilRecAiming);
+		}
 		else
 		{
-			swayOffset += Vector3.forward * recoil.y * .5f;
+			recoil = (Vector2.Lerp(recoil, Vector2.zero, Time.deltaTime * recoilRecNotAiming));
+			swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * recoilRecNotAiming);
 		}
 
-		swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
+		//swayOffset = Vector3.Lerp(swayOffset, Vector3.zero, Time.deltaTime * swaySpeed);
 		transform.localPosition = swayOffset * .001f * swayAmount;
+
+
+
 		/*
 		transform.localRotation = Quaternion.Lerp(transform.localRotation,
 		Quaternion.Euler(0f, 0f, crouching ? -20f : 0f),
@@ -602,6 +648,7 @@ public class GunController : MonoBehaviour
 				foreach (GameObject part in HANDGUN_PARTS)
 				{
 					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+
 				}
 				break;
 			case GunItem.WeaponClassification.SHOTGUN:

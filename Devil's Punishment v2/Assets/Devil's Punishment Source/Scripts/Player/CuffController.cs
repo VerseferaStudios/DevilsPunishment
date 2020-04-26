@@ -42,7 +42,7 @@ public class CuffController : MonoBehaviour
     //Can that item get picked up?
     public void Cuff()
     {
-        isCuffed = true;
+        isCuffed = false;
         pisLocked = true;
         risLocked = true;
         sisLocked = true;
