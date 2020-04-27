@@ -34,7 +34,7 @@ public class ControlsManager : MonoBehaviour
     public PlayerControls.InputDevice inputPlayer1 = PlayerControls.InputDevice.Keyboard;
     public PlayerControls.InputDevice inputPlayer2 = PlayerControls.InputDevice.XBox360;
 
-    void Start()
+    void Awake()
     {
         Player1 = new PlayerControls(inputPlayer1, true);
         Player2 = new PlayerControls(inputPlayer2, true);

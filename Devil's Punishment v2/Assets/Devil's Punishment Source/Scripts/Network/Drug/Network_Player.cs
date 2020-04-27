@@ -45,7 +45,7 @@ public class Network_Player : NetworkBehaviour
         player = playerO;
         playerTransform = playerO.transform;
 
-        fetchPlayer(); // Go on to fetch single assets that might (or might not) exist on the player
+       // fetchPlayer(); // Go on to fetch single assets that might (or might not) exist on the player
 
         
     }

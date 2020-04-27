@@ -324,16 +324,6 @@ public class PlayerController_Revamped : MonoBehaviour
             targetRotation = Mathf.Atan2(-inputDirection.x, -inputDirection.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSMoothVelocity, turnSmoothing);
             velocity = -transform.forward * speed + Vector3.up * velocityY;
-
-            switch (isSprinting)
-            {
-                case true:
-                  //  _animator.SetInteger("RunIntensity", -2);
-                    break;
-                case false:
-                  //  _animator.SetInteger("RunIntensity", -1);
-                    break;
-            }
         }
         //The Backward half
         else if (inputAngle > 270f || inputAngle < 90f)
@@ -341,15 +331,6 @@ public class PlayerController_Revamped : MonoBehaviour
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSMoothVelocity, turnSmoothing);
             velocity = transform.forward * speed + Vector3.up * velocityY;
-            switch (isSprinting)
-            {
-                case true:
-                  //  _animator.SetInteger("RunIntensity", 2);
-                    break;
-                case false:
-                 //   _animator.SetInteger("RunIntensity", 1);
-                    break;
-            }
         }
         //Exactly Left
         else if (inputAngle == 90f)
@@ -360,17 +341,8 @@ public class PlayerController_Revamped : MonoBehaviour
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = rotation;
-            switch (isSprinting)
-            {
-                case true:
-                 //   _animator.SetInteger("RunIntensity", 4);
-                    break;
-                case false:
-                  //  _animator.SetInteger("RunIntensity", 3);
-                    break;
-            }
 
-       //     Debug.Log(lookPos);
+
             velocity = -transform.right * speed + Vector3.up * velocityY;
         }
         else if (inputAngle == 270f)
@@ -383,17 +355,8 @@ public class PlayerController_Revamped : MonoBehaviour
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
-            switch (isSprinting)
-            {
-                case true:
-            //        _animator.SetInteger("RunIntensity", 6);
-                    break;
-                case false:
-               //     _animator.SetInteger("RunIntensity", 5);
-                    break;
-            }
 
-       //     Debug.Log(lookPos);
+
             velocity = transform.right.normalized * speed + Vector3.up * velocityY;
 
         }
@@ -408,14 +371,11 @@ public class PlayerController_Revamped : MonoBehaviour
         }
 
 
-        else if (inputDirection == Vector2.zero)
-        {
-       //     _animator.SetInteger("RunIntensity", 0);
-        }
+
 
 
         #endregion
-
+        Locomotion();
 
        chcon.Move(velocity * Time.deltaTime);
 
@@ -424,10 +384,36 @@ public class PlayerController_Revamped : MonoBehaviour
     }
 
 
+
+
     public Animator _animator;
 
     public float turnSmoothing = 1f;
     public float turnSMoothVelocity = 0f;
+
+    public void Locomotion()
+    {
+        Vector2 movementDirection = movementInputRaw.normalized;
+        //Debug.Log(movementDirection + " " + movementInputRaw);
+        float generalSpeedMultiplier = 1.0f *
+            (isCrouching ? .5f : 1.0f) *
+            (isSprinting ? 2f : 1.0f) *
+            (1.0f - .5f * GunController.instance.GetAimingCoefficient());
+
+        float targetSpeed = movementSpeed * generalSpeedMultiplier;
+        float targetForwardAnimationSpeed = movementInputRaw.y * (isSprinting ? 2.0f : 1.0f);
+        float targetRightAnimationSpeed = movementInputRaw.x;
+
+        speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * movementSmoothingSpeed);
+        forwardAnimationSpeed = Mathf.Lerp(forwardAnimationSpeed, targetForwardAnimationSpeed, Time.deltaTime * movementSmoothingSpeed * 2f);
+        rightAnimationSpeed = Mathf.Lerp(rightAnimationSpeed, targetRightAnimationSpeed, Time.deltaTime * movementSmoothingSpeed * 2f);
+
+        Vector3 velocity =
+        ((movementDirection.y * transform.forward) + (movementDirection.x * transform.right))
+         * speed * Time.deltaTime;
+
+        isMoving = (velocity.sqrMagnitude > 0f);
+    }
 
     public void VerticalLocomotion()
     {

@@ -16,11 +16,7 @@ public class GameSetup : MonoBehaviour
     public void Awake()
     {
         setup = this;
-    }
 
-    public bool vSync = false;
-    private void Start()
-    {
         postFXVolume.profile.TryGetSettings(out postFXColorGrading);
 
         if (!vSync)
@@ -28,6 +24,8 @@ public class GameSetup : MonoBehaviour
             Application.targetFrameRate = 300;
         }
     }
+
+    public bool vSync = false;
     public void clientActive(Network_Player ply)
     {
         // Cyan light for client
