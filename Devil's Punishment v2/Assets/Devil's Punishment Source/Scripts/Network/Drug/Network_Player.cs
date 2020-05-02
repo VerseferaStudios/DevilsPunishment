@@ -24,7 +24,9 @@ public class Network_Player : NetworkBehaviour
         Network_Transmitter.transmitter.player = this;
         Network_Transmitter.transmitter.registerPlayer(this);
 
-        if(isServer)
+        username = SystemInfo.deviceName; // Using the computer name for now as username
+
+        if (isServer)
         {
             GameSetup.setup.generateLevel(this);
         }
@@ -38,17 +40,6 @@ public class Network_Player : NetworkBehaviour
 
 
 
-    public Network_Player(GameObject playerO)
-    {
-
-        username = SystemInfo.deviceName; // Using the computer name for now as username
-        player = playerO;
-        playerTransform = playerO.transform;
-
-       // fetchPlayer(); // Go on to fetch single assets that might (or might not) exist on the player
-
-        
-    }
 
     public string getUsername()
     {
@@ -60,8 +51,8 @@ public class Network_Player : NetworkBehaviour
     public void Cmdbroadcast_Shots(Vector3 start, Quaternion rot)
     {
         GameObject shotRandy = Instantiate(bp);
-        shotRandy.transform.position = start;
-        shotRandy.transform.rotation = rot;
+     //   shotRandy.transform.position = start;
+      //  shotRandy.transform.rotation = rot;
 
 
         NetworkServer.Spawn(shotRandy);

@@ -36,7 +36,7 @@ public class Network_Transmitter : NetworkBehaviour
         else
         {
             mapGen.startMapGeneration(mapSeed);
-          //  player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
+            player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
             gS.StartGame();
         }
 
@@ -68,7 +68,7 @@ public class Network_Transmitter : NetworkBehaviour
         }
         else
         {
-            CmdsendMessage("Player " + " has joined the lobby!","client ");
+            CmdsendMessage("Player " + " has joined the lobby!","client");
             
         }
     }
