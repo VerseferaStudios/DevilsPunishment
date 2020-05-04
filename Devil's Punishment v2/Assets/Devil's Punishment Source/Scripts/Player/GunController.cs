@@ -716,4 +716,5 @@ public class GunController : MonoBehaviour
 			playerAnimator.SetBool("Fire",shooting);
 		}
     }
+
 }

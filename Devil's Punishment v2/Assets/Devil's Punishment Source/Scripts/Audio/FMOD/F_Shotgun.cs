@@ -13,7 +13,13 @@ public class F_Shotgun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetButtonDown("Aim"))
+        {
+            FMOD.Studio.EventInstance SAim = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Gun Handling/Gun_Aim");
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(SAim, transform, GetComponent<Rigidbody>());
+            SAim.start();
+            SAim.release();
+        }
     }
 
     void PlaySgReloadEvent()
