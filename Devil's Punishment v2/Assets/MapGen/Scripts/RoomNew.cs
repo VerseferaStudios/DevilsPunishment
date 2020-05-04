@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
@@ -238,9 +239,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
                                     spawnPoints[k].name + " " + spawnPoints[l].name + " " +
                                     spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
+
+                    
+                    
                     StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                     spawnPoints[k].name, spawnPoints[l].name,
                                     kParentPos, lParentPos, false));
+
+
 
                     //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
                     yield return new WaitForSeconds(2);
@@ -288,6 +294,24 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
         yield return null;
     }
+
+    public NavMeshAgent navMeshAgent;
+    public Vector3 NavMeshAI()
+    {
+        navMeshAgent.enabled = true;
+        if (navMeshAgent.isOnNavMesh)
+        {
+            NavMeshPath path = new NavMeshPath();
+            if(navMeshAgent.CalculatePath(Vector3.zero, path))
+            {
+                navMeshAgent.path = path;
+            }
+        }
+        Vector3 pos = navMeshAgent.steeringTarget;
+        navMeshAgent.enabled = false;
+        return pos;
+    }
+
 
     public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
     {

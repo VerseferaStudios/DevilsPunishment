@@ -20,7 +20,7 @@ public class F_Rifle : MonoBehaviour
         print("FMOD-AUDIO-PLAYING");
     }
 
-    void PlayRFireEvent()
+    public void PlayRFireEvent()
     {
         FMOD.Studio.EventInstance RFire = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Rifle/Rifle_Blast");
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(RFire, transform, GetComponent<Rigidbody>());

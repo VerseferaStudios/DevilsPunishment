@@ -28,7 +28,7 @@ public class F_Handgun : MonoBehaviour
         print("FMOD-AUDIO-PLAYING");
     }
 
-    void PlayHgFireEvent()
+    public void PlayHgFireEvent()
     {
         if(Time.time > lastFireTime + 0.15f)
         {

@@ -26,7 +26,7 @@ public class F_Shotgun : MonoBehaviour
         print("FMOD-AUDIO-PLAYING");
     }
 
-    void PlaySgFireEvent()
+    public void PlaySgFireEvent()
     {
         FMOD.Studio.EventInstance SFire = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Shotgun/Shotgun_Blast");
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(SFire, transform, GetComponent<Rigidbody>());

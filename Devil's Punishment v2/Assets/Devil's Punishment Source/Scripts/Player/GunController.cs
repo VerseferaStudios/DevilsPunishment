@@ -93,6 +93,10 @@ public class GunController : MonoBehaviour
     private int clip;
     private string ammoName;
 
+	public F_Handgun f_HandgunScript;
+	public F_Rifle f_RifleScript;
+	public F_Shotgun f_ShotgunScript;
+
     void Awake() {
         instance = this;
     }
@@ -362,11 +366,27 @@ public class GunController : MonoBehaviour
 		//void wait4ReloadAsync()
 		//{
 		do
+		{
+			gunAnimator.SetBool("Reload", false);
+			gunAnimator.SetTrigger("Fire");
+			if (weaponIsAssaultRifle())
 			{
-				gunAnimator.SetBool("Reload", false);
-				gunAnimator.SetTrigger("Fire");
-				await Task.Delay(1);
-			} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
+				f_RifleScript.PlayRFireEvent();
+			}
+			else if (weaponIsHandGun())
+			{
+				f_HandgunScript.PlayHgFireEvent();
+			}
+			else if (weaponIsShotgun())
+			{
+				f_ShotgunScript.PlaySgFireEvent();
+			}
+			else
+			{
+				Debug.LogWarning("Unrecognised gun!");
+			}
+			await Task.Delay(1);
+		} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 			
 		//}
 		//await Task.Run(() =>wait4ReloadAsync());
