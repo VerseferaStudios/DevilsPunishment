@@ -27,7 +27,7 @@ public class Network_Transmitter : NetworkBehaviour
         {
             
            // mapSeed = Random.Range(0, 1000);
-            player.RpcSendChatMessage(mapSeed.ToString()+  " We generated");          
+           // player.RpcSendChatMessage(mapSeed.ToString()+  " We generated");          
             genOnce = true;
             mapGen.startMapGeneration(mapSeed);
             gS.StartGame();    
@@ -35,8 +35,9 @@ public class Network_Transmitter : NetworkBehaviour
         }
         else
         {
+            
             mapGen.startMapGeneration(mapSeed);
-            player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
+          //  player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
             gS.StartGame();
         }
 

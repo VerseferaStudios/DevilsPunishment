@@ -37,10 +37,6 @@ public class NetworkManager_Drug : NetworkManager
 
         base.StartHost();
 
-        if(startCamera != null)
-        {
-            startCamera.SetActive(false);
-        }
          // Generates level for host
         
     }

@@ -77,13 +77,13 @@ public class GameState : NetworkBehaviour
             switch (gST)
             {
                 case gameStateType.FleeGenRoom:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Fled gen room!", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Opened generator room", username);
                     break;
                 case gameStateType.CutCuffs:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Cut cuffs", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Opened laser room", username);
                     break;
                 case gameStateType.EndRoom:
-                    Network_Transmitter.transmitter.sendNetworkMessage("Reached end room, activated generator?", username);
+                    Network_Transmitter.transmitter.sendNetworkMessage("Opened end room", username);
                     break;
                 case gameStateType.GenPartA:
                     Network_Transmitter.transmitter.sendNetworkMessage("Gen Part A inserted!", username);
