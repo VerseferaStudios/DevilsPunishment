@@ -17,6 +17,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     private List<Vector3> visitedRooms = new List<Vector3>();
     private Vector3 spawnNowAt;
     private int k = 0, l = 0;
+    public int mapSizeX, mapSizeZ;
 
     /// <summary>
     /// If we are taking an extra turn forming a `L shape rather than an L shape 
@@ -41,6 +42,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public bool fail_room_connect;
 
     Color sample_room_col;
+
+    [Header("Test")]
+    public GameObject testGridSquare;
+
+    public SquareGrid squareGrid;
 
     public void initSeed(int seed)
     {
@@ -187,7 +193,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
             for (l = 0; l < spawnPoints.Count; l++) //i = 0 makes no diff; some rooms are getting overlooked, y //EXPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                Debug.Log("K = " + k + " && L = " + l);
+                //Debug.Log("K = " + k + " && L = " + l);
 
                 //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
                 if (k == l)
@@ -218,13 +224,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
                     //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
 
-                    Debug.Log("spawn Points");
-                    for (int i = 0; i < spawnPoints.Count; i++)
-                    {
-                        Debug.Log(spawnPoints[i].transform.position);
-                        Debug.Log(spawnPoints[i].name);
-                    }
-                    Debug.Log("K = " + k + " && L = " + l);
+                    //Debug.Log("spawn Points");
+                    //for (int i = 0; i < spawnPoints.Count; i++)
+                    //{
+                    //    Debug.Log(spawnPoints[i].transform.position);
+                    //    Debug.Log(spawnPoints[i].name);
+                    //}
+                    //Debug.Log("K = " + k + " && L = " + l);
                     Vector3 kParentPos = spawnPoints[k].transform.parent.position;
                     Vector3 lParentPos = spawnPoints[l].transform.parent.position;
                     if (spawnPoints[k].transform.parent.name.StartsWith("Modular"))
@@ -236,15 +242,38 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         lParentPos = spawnPoints[l].transform.parent.parent.position;
                     }
                     if (lParentPos == kParentPos) continue;
-                    Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
-                                    spawnPoints[k].name + " " + spawnPoints[l].name + " " +
-                                    spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
+                    //Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
+                    //                spawnPoints[k].name + " " + spawnPoints[l].name + " " +
+                    //                spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
 
-                    
-                    
-                    StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
-                                    spawnPoints[k].name, spawnPoints[l].name,
-                                    kParentPos, lParentPos, false));
+
+                    // ----------------------------------------------------------------------------------
+
+                    // ---------------------------------- AStar Trials ----------------------------------
+                    Debug.Log("sqr width = " + squareGrid.width);
+                    Debug.Log("sqr height = " + squareGrid.height);
+                    AStarSearch aStarSearch = new AStarSearch( squareGrid
+                                                             , new Location(spawnPoints[k].transform.position / -4)
+                                                             , new Location(spawnPoints[l].transform.position / -4));
+
+                    List<Location> locations = aStarSearch.FindPath();
+                    Debug.Log("Locations count = " + locations.Count);
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        Instantiate(testGridSquare, locations[i].vector3() * -4, Quaternion.identity);
+                    }
+
+                    isDoneConnectTwoRooms = true;
+                    fail_room_connect = false;
+
+                    // ---------------------------------- AStar Trials ----------------------------------
+
+                    // ----------------------------------------------------------------------------------
+
+
+                    //StartCoroutine(ConnectTwoRooms(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
+                    //                spawnPoints[k].name, spawnPoints[l].name,
+                    //                kParentPos, lParentPos, false));
 
 
 

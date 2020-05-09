@@ -44,6 +44,11 @@ public class MapGen3 : MonoBehaviour
 
     public RoomNew roomNewScript;
 
+    [Header("Test")]
+    public GameObject testGridSquare;
+
+    public SquareGrid squareGrid;
+
     private IEnumerator WaitForaWhile()
     {
         yield return new WaitUntil(() => Input.GetKey(KeyCode.P));
@@ -104,6 +109,9 @@ public class MapGen3 : MonoBehaviour
         roomNewScript.ventCover = ventCover;
         roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
         roomNewScript.itemGenScript = itemGenScript;
+        roomNewScript.mapSizeX = mapSizeX;
+        roomNewScript.mapSizeZ = mapSizeZ;
+        roomNewScript.testGridSquare = testGridSquare;
         //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
         Data.instance.roomNewScript = roomNewScript;
 
@@ -161,6 +169,19 @@ public class MapGen3 : MonoBehaviour
 
     public void Rooms()
     {
+
+        int xOverall = (int)xSize * mapSizeX;
+        int zOverall = (int)zSize * mapSizeZ;
+        squareGrid = new SquareGrid(0, 0, xOverall, zOverall);
+        squareGrid.tiles = new TileType[xOverall, zOverall];
+        for (int i = 0; i < xOverall; i++)
+        {
+            for (int j = 0; j < zOverall; j++)
+            {
+                squareGrid.tiles[i, j] = TileType.Floor;
+            }
+        }
+
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
         {
@@ -330,6 +351,57 @@ public class MapGen3 : MonoBehaviour
                 CallOffsetAndDoorFns(spawnedRoom, yRotation);
             }
 
+
+
+            Debug.Log(roomReferences.topRightCorner.position.x / -4);
+            Debug.Log(roomReferences.bottomLeftCorner.position.x / -4);
+            Debug.Log(roomReferences.topRightCorner.position.z / -4);
+            Debug.Log(roomReferences.bottomLeftCorner.position.z / -4);
+
+            float tempPosVal;
+            if(roomReferences.topRightCorner.position.x > roomReferences.bottomLeftCorner.position.x)
+            {
+
+            }
+            else
+            {
+                tempPosVal = roomReferences.topRightCorner.position.x;
+                roomReferences.topRightCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
+                                                                     , roomReferences.topRightCorner.position.y
+                                                                     , roomReferences.topRightCorner.position.z);
+                roomReferences.bottomLeftCorner.position = new Vector3(tempPosVal
+                                                                     , roomReferences.bottomLeftCorner.position.y
+                                                                     , roomReferences.bottomLeftCorner.position.z);
+            }
+            if (roomReferences.topRightCorner.position.z > roomReferences.bottomLeftCorner.position.z)
+            {
+
+            }
+            else
+            {
+                tempPosVal = roomReferences.topRightCorner.position.z;
+                roomReferences.topRightCorner.position = new Vector3(roomReferences.topRightCorner.position.x
+                                                                     , roomReferences.topRightCorner.position.y
+                                                                     , roomReferences.bottomLeftCorner.position.z);
+                roomReferences.bottomLeftCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
+                                                                     , roomReferences.bottomLeftCorner.position.y
+                                                                     , tempPosVal);
+            }
+
+            for (int q = (int)(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
+            {
+                Debug.Log("|");
+                for (int r = (int)(roomReferences.topRightCorner.position.z / -4) ; r < roomReferences.bottomLeftCorner.position.z / -4; r++)
+                {
+                    Debug.Log("-");
+                    squareGrid.tiles[q, r] = TileType.Wall;
+                    Instantiate(testGridSquare, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                }
+            }
+
+
+
+
             //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
             if (i != 1)
@@ -349,6 +421,14 @@ public class MapGen3 : MonoBehaviour
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
                 */
+                roomNewScript.squareGrid = squareGrid;
+                for (int d = 0; d < 40; d++)
+                {
+                    for (int f = 0; f < 40; f++)
+                    {
+                        Debug.Log(squareGrid.tiles[d, f]);
+                    }
+                }
                 roomNewScript.StartScript();
                 //ConnectToMapGen(roomNewScript);
 
@@ -415,7 +495,7 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().corridors = vents;
+        //gb.AddComponent<RoomNewVents>().corridors = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
@@ -484,15 +564,15 @@ public class MapGen3 : MonoBehaviour
             //yRotInt = Mathf.Abs(yRotInt);
             //Debug.Log("doorRot ; oldName 4 and 5 idx = " + (oldName[4] + "" + oldName[5]));
             int idx = Data.instance.doorRotationHelper.IndexOf((oldName[4] + "" + oldName[5]).ToString());
-            Debug.Log("doorRot ; idx b4 = " + idx);
+            //Debug.Log("doorRot ; idx b4 = " + idx);
             idx += yRotInt;
-            Debug.Log("doorRot ; idx b/w = " + idx);
+            //Debug.Log("doorRot ; idx b/w = " + idx);
             idx %= 4;
             if(idx < 0)
             {
                 idx += 4;
             }
-            Debug.Log("doorRot ; idx after = " + idx);
+            //Debug.Log("doorRot ; idx after = " + idx);
             return "Door" + Data.instance.doorRotationHelper[idx];
         }
     }

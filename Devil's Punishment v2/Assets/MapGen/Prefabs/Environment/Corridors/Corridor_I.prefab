@@ -98,6 +98,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -227,7 +228,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: dc1e884b0953a324388f68b746959e2f, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5241115938431614737, guid: bc887e2245195e64c87213b550837925, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc887e2245195e64c87213b550837925, type: 3}
 --- !u!4 &8693691680234942416 stripped
 Transform:
