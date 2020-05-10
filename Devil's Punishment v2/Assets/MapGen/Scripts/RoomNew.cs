@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -258,9 +259,55 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                     List<Location> locations = aStarSearch.FindPath();
                     Debug.Log("Locations count = " + locations.Count);
+
+                    Vector3 prevLoc = spawnPoints[k].transform.position;
+                    Vector3 currLoc;
+                    Vector3 nextLoc;
+                    //int prevMove = Data.instance.doorRotationHelper.IndexOf(spawnPoints[k].name[4] + spawnPoints[k].name[5] + "");
+                    int currMove;
+                    int nextMove;
+
                     for (int i = 0; i < locations.Count; i++)
                     {
-                        Instantiate(testGridSquare, locations[i].vector3() * -4, Quaternion.identity);
+                        currLoc = locations[i].vector3() * -4;
+                        currMove = MoveHelper(prevLoc, currLoc);
+                        if(i + 1 < locations.Count)
+                        {
+                            nextLoc = locations[i + 1].vector3() * -4;
+                            nextMove = MoveHelper(currLoc, nextLoc);
+                        }
+                        else
+                        {
+                            nextMove = Data.instance.doorRotationHelper.IndexOf(spawnPoints[l].name[4] + spawnPoints[l].name[5] + "");
+                            nextMove += 2;
+                            nextMove %= 4;
+                        }
+                        yield return new WaitForSeconds(0.1f);
+
+                        if ((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3) ||
+                            (nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2))
+                        {
+                            //L Corridor!!!!!!!
+
+                            List<int> openings1 = new List<int>();
+                            currMove += 2;
+                            currMove %= 4;
+                            openings1.Add(nextMove);
+                            openings1.Add(currMove);
+                            AddLCorridorSpawnInfo(openings1, currLoc);
+                            InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+                        }
+                        else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
+                             //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
+                        {
+                            //! Corridor
+                            AddICorridorSpawnInfo(currLoc, nextMove, false);
+                            InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
+                        }
+
+                        //Instantiate(testGridSquare, currLoc, Quaternion.identity);
+                        prevLoc = currLoc;
+                        //prevMove = currMove;
                     }
 
                     isDoneConnectTwoRooms = true;
@@ -312,8 +359,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 MapgenProgress.instance.addProgress(2);
                 
-		        StartCoroutine(Data.instance.DoConnectedComponents());
-                StartCoroutine(Data.instance.DoCheckPerSecond());
+		        //StartCoroutine(Data.instance.DoConnectedComponents());
+                //StartCoroutine(Data.instance.DoCheckPerSecond());
 
                 Data.instance.canStartCorridorTestSpawner = true;
 
@@ -322,6 +369,328 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         }
         yield return null;
+    }
+
+    // -------------- Move helper assuming the cells are adjacent --------------
+    private int MoveHelper(Vector3 prevLoc, Vector3 currLoc)
+    {
+        if(prevLoc.x == currLoc.x)
+        {
+            if(currLoc.z > prevLoc.z)
+            {
+                return 0;
+            }
+            else
+            {
+                return 2;
+            }
+        }
+        else
+        {
+            if (currLoc.x > prevLoc.x)
+            {
+                return 1;
+            }
+            else
+            {
+                return 3;
+            }
+        }
+    }
+
+    private int[] GetIdx(Vector3 pos)
+    {
+        int x = Mathf.RoundToInt(pos.x / -4);
+        int z = Mathf.RoundToInt(pos.z / -4);
+
+        return new int[] { x, z };
+    }
+
+    private Vector3 GetPos(int[] idx)
+    {
+        return new Vector3(idx[0] * -4, 0, idx[1] * -4);
+    }
+
+    private void InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
+    {
+        Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Vector3 lParentPos = Vector3.zero;
+        for (int i = 0; i < squareGrid.tiles.Length; i++)
+        {
+            for (int j = 0; j < squareGrid.tiles.Length; j++)
+            {
+                if (squareGrid.tiles[i, j].corridorIdx != -1)
+                {
+                    string corridorName = CorridorsListIdxToCorridorName(squareGrid.tiles[i, j].corridorIdx);
+                    int[] kIdx = new int[] { i, j };
+                    Vector3 pos = GetPos(kIdx);
+                    if (corridorName.EndsWith("I"))
+                    {
+                        InstantiateICorridor(pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("L"))
+                    {
+                        InstantiateLCorridor(kIdx, pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("T"))
+                    {
+                        InstantiateTCorridor(kIdx, pos, kParentPos, lParentPos);
+                    }
+                    else if (corridorName.EndsWith("X"))
+                    {
+                        InstantiateXCorridor(pos, kParentPos, lParentPos);
+                    }
+                }
+            }
+        }
+    }
+
+    private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
+    {
+        newSpawnPos = newSpawnPosOriginal;
+        if (i == 0)
+        {
+            //Debug.Log("dh = 0");
+            newSpawnPos.z += 4;
+        }
+        else if (i == 1)
+        {
+            //Debug.Log("dh = 1");
+            newSpawnPos.x += 4;
+        }
+        else if (i == 2)
+        {
+            //Debug.Log("dh = 2");
+            newSpawnPos.z += -4;
+        }
+        else if (i == 3)
+        {
+            //Debug.Log("dh = 3");
+            newSpawnPos.x += -4;
+        }
+    }
+
+    private void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride)
+    {
+        Debug.Log("I info");
+        int[] kIdx = GetIdx(posI);
+        int yRotation = (movesI == 0 || movesI == 2) ? 0 : 90;
+        /*
+        if(Vector3.Distance(posI, new Vector3(-124, 0, -20)) < 6)
+        {
+            Debug.Log("I Corr collision check => ");
+            Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx);
+            Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot);
+        }
+        */
+
+        if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
+           && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
+        {
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 0;
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotation;
+        }
+        else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 0
+                && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
+        /*(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 0 
+        && (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation + 90
+        || squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation - 90)
+        && !isOverride)*/
+        {
+            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI");
+        }
+    }
+
+    private void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn)
+    {
+        Debug.Log("L info");
+        float yRotation = Data.instance.ConvertToRotation(openings);
+        int corridorIdx = ChooseLCorridor(yRotation);
+        int[] kIdx = GetIdx(posToSpawn);
+
+        if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
+           && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
+        {
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = corridorIdx;
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = (int)yRotation;
+        }
+        else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
+            && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
+        //&& !isOverride)
+        {
+            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL");
+        }
+    }
+
+    private void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew)
+    {
+        Debug.Log("T info");
+        if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
+           && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
+        {
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 3; //or 4
+            squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotationNew;
+        }
+        else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 3
+            && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
+        //&& !isOverride)
+        {
+            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT");
+        }
+    }
+
+    private void AddXCorridorSpawnInfo(int[] kIdx)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
+    {
+        Debug.Log("X info");
+        squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 5;
+        squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = 0;
+    }
+
+    private void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName)
+    {
+        List<int> openings1, openings2;
+        openings1 = Data.instance.ConvertToOpenings(corridorName, yRotation, false);
+        openings2 = Data.instance.ConvertToOpenings(CorridorsListIdxToCorridorName(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx),
+                                                    squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, false);
+        openings1.AddRange(openings2);
+
+        openings1 = openings1.Distinct().ToList();
+
+        if (openings1.Count == 3)
+        {
+            if (corridorName.EndsWith("T"))
+            {
+                squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 3; //or 4
+                squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotation;
+                return;
+            }
+            float yRotationNew = Data.instance.ConvertToRotation(openings1);
+            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew);
+        }
+        else if (openings1.Count == 4)
+        {
+            AddXCorridorSpawnInfo(kIdx);
+        }
+    }
+
+    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        int[] kIdx = GetIdx(posI);
+        GameObject currentCorridor;
+        currentCorridor = Instantiate(corridors[0]/*corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx]*/, posI, Quaternion.identity);
+
+        currentCorridor.layer = 18;
+        /*
+        //Move CollisionDetector of corridor I by -0.25f in x axis to keep it in grid
+        Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
+        collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
+        */
+        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+        currentCorridor.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
+        //Data.instance.corridorCount++;
+        currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
+
+        //For now, later remove and put outside this else block
+
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+        {
+            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+        }
+
+        // ----------- Item Gen -----------
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+        {
+            itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+            Data.instance.ctr1++;
+        }
+    }
+
+    private void InstantiateLCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        GameObject currCorridor1 = Instantiate(corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        currCorridor1.layer = 18;
+        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        currCorridor1.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
+        if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0)
+        {
+            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+            currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
+    }
+
+    private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        float yRotation = squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot;
+        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
+        //MapgenProgress.instance.addProgress(1);
+        if (yRotation == 0)
+        {
+            //isErroneousTCorr = true;
+            currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
+            //currCorridor.transform.localPosition += new Vector3(0, 5, 0);
+        }
+        if (yRotation == 270 || yRotation == -90 || yRotation == 180)
+        {
+
+            if (yRotation == -90 || yRotation == 270)
+            {
+                currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
+            }
+
+            //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
+            //Destroy(bc);
+            currCorridor.transform.localScale = new Vector3(-1, 1, 1);
+            //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
+        }
+
+        currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+
+        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+
+        // TODO: Commented out for console clear 10/02/19
+        // Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
+    }
+
+    private void InstantiateXCorridor(Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        //spawnAtPos.x = Mathf.Round(posToSpawn.x);
+        //spawnAtPos.z = Mathf.Round(posToSpawn.z);
+        CorridorNew corridorNew = Instantiate(corridors[5], posToSpawn, Quaternion.identity, mapGenHolderTransform).GetComponentInChildren<CorridorNew>();
+
+        corridorNew.rooms.Add(kParentPos);
+        corridorNew.rooms.Add(lParentPos);
+
+        //MapgenProgress.instance.addProgress(2);
+    }
+
+    private string CorridorsListIdxToCorridorName(int idx)
+    {
+        if (idx == 0)
+        {
+            return "CorridorI";
+        }
+        else if (idx == 3 || idx == 4)
+        {
+            return "CorridorT";
+        }
+        else if (idx == 5)
+        {
+            return "CorridorX";
+        }
+        else if (idx == 1 || idx == 2 || idx == 7)
+        {
+            return "CorridorL";
+        }
+        else //if(idx == 6)
+        {
+            return "CorridorDeadEnd";
+        }
     }
 
     public NavMeshAgent navMeshAgent;

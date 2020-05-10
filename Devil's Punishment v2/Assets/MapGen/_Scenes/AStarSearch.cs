@@ -62,6 +62,13 @@ public class Location
     }
 }
 
+public class Cell
+{
+    public TileType tile;
+    public int corridorIdx = -1;
+    public int corridorYRot = -1;
+}
+
 public class SquareGrid
 {
     // DIRS is directions
@@ -94,7 +101,7 @@ public class SquareGrid
 
     // This is a 2d array that stores each tile's type and movement cost
     // using the TileType enum defined above
-    public TileType[,] tiles = new TileType[40, 40];
+    public Cell[,] tiles;// = new Cell[40, 40];
 
     // Check if a location is within the bounds of this grid.
     public bool InBounds(Location id)
@@ -105,7 +112,7 @@ public class SquareGrid
     // Everything that isn't a Wall is Passable
     public bool Passable(Location id)
     {
-        return (int)tiles[id.x, id.z] < System.Int32.MaxValue;
+        return (int)tiles[id.x, id.z].tile < System.Int32.MaxValue;
     }
 
     // If the heuristic = 2f, the movement is diagonal
@@ -113,9 +120,9 @@ public class SquareGrid
     {
         if (AStarSearch.Heuristic(a, b) == 2f)
         {
-            return (float)(int)tiles[b.x, b.z] * Mathf.Sqrt(2f);
+            return (float)(int)tiles[b.x, b.z].tile * Mathf.Sqrt(2f);
         }
-        return (float)(int)tiles[b.x, b.z];
+        return (float)(int)tiles[b.x, b.z].tile;
     }
 
     // Check the tiles that are next to, above, below, or diagonal to

@@ -172,13 +172,20 @@ public class MapGen3 : MonoBehaviour
 
         int xOverall = (int)xSize * mapSizeX;
         int zOverall = (int)zSize * mapSizeZ;
-        squareGrid = new SquareGrid(0, 0, xOverall, zOverall);
-        squareGrid.tiles = new TileType[xOverall, zOverall];
+        squareGrid = new SquareGrid(0, 0, xOverall, zOverall)
+        {
+            tiles = new Cell[xOverall, zOverall]
+        };
         for (int i = 0; i < xOverall; i++)
         {
             for (int j = 0; j < zOverall; j++)
             {
-                squareGrid.tiles[i, j] = TileType.Floor;
+                squareGrid.tiles[i, j] = new Cell
+                {
+                    tile = TileType.Floor,
+                    corridorIdx = -1,
+                    corridorYRot = -1
+                };
             }
         }
 
@@ -388,17 +395,24 @@ public class MapGen3 : MonoBehaviour
                                                                      , tempPosVal);
             }
 
-            for (int q = (int)(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
+            for (int q = Mathf.RoundToInt(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
             {
                 Debug.Log("|");
                 for (int r = (int)(roomReferences.topRightCorner.position.z / -4) ; r < roomReferences.bottomLeftCorner.position.z / -4; r++)
                 {
                     Debug.Log("-");
-                    squareGrid.tiles[q, r] = TileType.Wall;
+                    squareGrid.tiles[q, r].tile = TileType.Wall;
                     Instantiate(testGridSquare, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
                 }
             }
 
+            for (int q = 0; q < roomReferences.doors.Length; q++)
+            {
+                int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
+                int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
+                squareGrid.tiles[x, z].tile = TileType.Floor;
+                Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+            }
 
 
 
