@@ -303,7 +303,10 @@ public class AStarSearch
                     float priority = newCost + Heuristic(neighbor, goal);
                     frontier.Enqueue(neighbor, priority);
                 }
-                //yield return new WaitForSeconds(aStarVisualisationTime);
+                if(aStarVisualisationTime != 0)
+                {
+                    yield return new WaitForSeconds(aStarVisualisationTime);
+                }
             }
         }
         Data.instance.isDoneConnectTwoRooms = true;

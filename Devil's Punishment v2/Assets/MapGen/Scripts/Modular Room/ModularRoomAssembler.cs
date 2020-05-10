@@ -41,6 +41,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     public RoomReferencesModular roomReferencesModular;
 
+    public float doorProbability = 0.01f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -420,7 +422,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     {
                         toSpawn = wall_with_door;
                     }
-                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && Random.Range(0f, 1f) < .1f)
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && Random.Range(0f, 1f) < doorProbability)
                     {
                         DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
                     }
@@ -429,10 +431,6 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
-            }
-            if (!door_done[partNo])
-            {
-                DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
             }
         }
 
@@ -451,7 +449,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     {
                         toSpawn = wall_with_door;
                     }
-                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && Random.Range(0f, 1f) < .1f)
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && Random.Range(0f, 1f) < doorProbability)
                     {
                         DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
                     }
@@ -460,10 +458,6 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
-            }
-            if (!door_done[partNo])
-            {
-                DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
             }
         }
 
@@ -477,7 +471,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     posCurr = new Vector3(4 / 2, 2 + j * 4, -i * 4);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && Random.Range(0f, 1f) < .1f)
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && Random.Range(0f, 1f) < doorProbability)
                     {
                         DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
                     }
@@ -486,10 +480,6 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
-            }
-            if (!door_done[partNo])
-            {
-                DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
             }
         }
 
@@ -502,7 +492,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     posCurr = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && Random.Range(0f, 1f) < .1f)
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && Random.Range(0f, 1f) < doorProbability)
                     {
                         DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
                     }
@@ -515,7 +505,21 @@ public class ModularRoomAssembler : MonoBehaviour
         }
         if (!door_done[partNo])
         {
-            DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
+            switch(Random.Range(0, 4))
+            {
+                case 0:
+                    DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
+                    break;
+                case 1:
+                    DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
+                    break;
+                case 2:
+                    DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
+                    break;
+                case 3:
+                    DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
+                    break;
+            }
         }
     }
 
@@ -525,24 +529,24 @@ public class ModularRoomAssembler : MonoBehaviour
         doors[partNo].tag = "Corridor Spawn Points";
         doors[partNo].transform.SetParent(partHolderTransforms[partNo]);
         Vector3 startPos = ((isWallHolder2) ? walls_holder2 : walls_holder)[partNo].position + posCurr + new Vector3(xAdd, -2, zAdd);
-        Vector3 doorPos = startPos;
+        //Vector3 doorPos = startPos;
 
-        if (doorName[5] == 'z')
-        {
-            doorPos.z = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.z;
-        }
-        else
-        {
-            doorPos.x = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.x;
-        }
+        //if (doorName[5] == 'z')
+        //{
+        //    doorPos.z = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.z;
+        //}
+        //else
+        //{
+        //    doorPos.x = 20 * (doorName[4] == '-' ? -1 : 1) + roomCentrePos.x;
+        //}
 
-        doors[partNo].transform.position = doorPos;
+        doors[partNo].transform.position = startPos;
 
         string doorName2 = doorName.Substring(0, 4);
         doorName2 += doorName[4] == '+' ? '-' : '+';
         doorName2 += doorName[5];
 
-        Debug.Log("startPos = " + startPos + " && doorPos = " +  doorPos);
+        Debug.Log("startPos = " + startPos/* + " && doorPos = " +  doorPos*/);
         Debug.Log("doorName = " + doorName + " && doorName2 = " + doorName2);
         Debug.Log("xAdd = " + xAdd + " && zAdd = " + zAdd);
         //Debug.Log(Data.instance.roomNewScript.gameObject.name);

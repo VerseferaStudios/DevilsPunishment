@@ -78,6 +78,8 @@ MonoBehaviour:
   canStartCorridorTestSpawner: 0
   doorRotationHelper: []
   modularRoomAssembler: {fileID: 0}
+  roomsFloor1Modular: []
+  isDoneConnectTwoRooms: 0
 --- !u!114 &4162967055878268604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +94,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door_corridor_Transform: {fileID: 0}
   door_corridor_Pos: {x: 0, y: 0, z: 0}
-  door_room_Pos: {x: 0, y: 0, z: 0}
+  roomCentrePos: {x: 0, y: 0, z: 0}
+  wall_roomdoor_Pos: {x: 0, y: 0, z: 0}
   doors: []
   mat: {fileID: 0}
   roomHolderTransform: {fileID: 0}
@@ -105,3 +108,5 @@ MonoBehaviour:
   grill: {fileID: 6166752751574218313, guid: 6900c75db63c3c444abcb5f7ebc73f67, type: 3}
   size_x: 
   size_z: 
+  roomReferencesModular: {fileID: 0}
+  doorProbability: 0.2
