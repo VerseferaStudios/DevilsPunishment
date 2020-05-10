@@ -64,6 +64,22 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public void StartScript()
     {
+
+
+        RoomReferencesModular roomReferencesModular;
+        int x, z;
+        for (int i = 0; i < Data.instance.roomsFloor1Modular.Count; i++)
+        {
+            roomReferencesModular = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModular>();
+            for (int j = 0; j < roomReferencesModular.roomFloors.Count; j++)
+            {
+                x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
+                z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
+                squareGrid.tiles[x, z].tile = TileType.Wall;
+            }
+        }
+
+
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------

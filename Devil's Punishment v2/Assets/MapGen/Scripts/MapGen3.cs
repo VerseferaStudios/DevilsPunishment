@@ -348,11 +348,30 @@ public class MapGen3 : MonoBehaviour
             {
                 Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
                 Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
+
+                Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
+                Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
+                spawnedRoom = roomHolderTransform.gameObject;
+
+                RoomReferencesModular roomReferencesModular = spawnedRoom.AddComponent<RoomReferencesModular>();
+                roomReferencesModular.doors = Data.instance.modularRoomAssembler.doors;
+                roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
+
+                roomReferencesModular.roomFloors = new List<Vector3>();
+                Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
                 Data.instance.modularRoomAssembler.StartScript();
-                spawnedRoom = Data.instance.modularRoomAssembler.roomHolderTransform.gameObject;
-                roomReferences = spawnedRoom.AddComponent<RoomReferences>();
-                roomReferences.doors = Data.instance.modularRoomAssembler.doors;
-                roomReferences.ventParent = new GameObject("Vent Parent").transform;
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferencesModular.ventParent);
+                //Data.instance.roomsFloor1Modular.Add(spawnedRoom);
+
+
+            }
+            else
+            {
+                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+                roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+                CallOffsetAndDoorFns(spawnedRoom, yRotation);
+
 
                 #region tile Floor
 
@@ -406,30 +425,15 @@ public class MapGen3 : MonoBehaviour
                 }
                 #endregion
 
-            }
-            else
-            {
-                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-                roomReferences = spawnedRoom.GetComponent<RoomReferences>();
-                CallOffsetAndDoorFns(spawnedRoom, yRotation);
 
+                //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
 
+                if (i != 1)
+                    SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
             }
 
 
 
-            //Debug.Log(roomReferences.topRightCorner.position.x / -4);
-            //Debug.Log(roomReferences.bottomLeftCorner.position.x / -4);
-            //Debug.Log(roomReferences.topRightCorner.position.z / -4);
-            //Debug.Log(roomReferences.bottomLeftCorner.position.z / -4);
-
-
-
-
-            //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
-
-            if (i != 1)
-                SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------

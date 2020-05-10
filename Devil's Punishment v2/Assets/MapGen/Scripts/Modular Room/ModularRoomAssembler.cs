@@ -39,6 +39,8 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private bool[] door_done;
 
+    public RoomReferencesModular roomReferencesModular;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -312,7 +314,10 @@ public class ModularRoomAssembler : MonoBehaviour
                 Transform t = Instantiate(floor).transform;
                 t.parent = floor_holder[partNo];
                 t.localPosition = new Vector3(i * 4, 0, -j * 4);
-                if(j == 2 && i == 2)
+
+                roomReferencesModular.roomFloors.Add(t.position);
+
+                if (j == 2 && i == 2)
                 {
                     t = Instantiate(grill).transform;
                     t.parent = floor_holder[partNo];

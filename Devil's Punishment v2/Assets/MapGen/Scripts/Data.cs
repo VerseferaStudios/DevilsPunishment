@@ -67,6 +67,8 @@ public class Data : MonoBehaviour
     public List<string> doorRotationHelper = new List<string>();
 
     public ModularRoomAssembler modularRoomAssembler;
+    public List<GameObject> roomsFloor1Modular;
+
 
     //public bool isPipeAtLeft = true;
 
