@@ -422,7 +422,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     {
                         toSpawn = wall_with_door;
                     }
-                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && Random.Range(0f, 1f) < doorProbability)
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0)// && Random.Range(0f, 1f) < doorProbability)
                     {
                         DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
                     }

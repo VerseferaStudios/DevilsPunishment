@@ -45,7 +45,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     Color sample_room_col;
 
     [Header("Test")]
-    public GameObject testGridSquare;
+    public GameObject testGridCube;
     public Transform testGridPlaneHolder;
     Color testGridOrigCol;
     public float aStarVisualisationTime = 0.001f;
@@ -76,7 +76,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
-                Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
             }
         }
 

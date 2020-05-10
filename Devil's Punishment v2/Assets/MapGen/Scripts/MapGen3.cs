@@ -46,7 +46,7 @@ public class MapGen3 : MonoBehaviour
     public RoomNew roomNewScript;
 
     [Header("Test")]
-    public GameObject testGridSquare;
+    public GameObject testGridCube;
     public GameObject testGridPlane;
     public Transform testGridPlaneHolder;
     public float aStarVisualisationTime = 0;
@@ -118,7 +118,7 @@ public class MapGen3 : MonoBehaviour
         roomNewScript.itemGenScript = itemGenScript;
         roomNewScript.mapSizeX = mapSizeX;
         roomNewScript.mapSizeZ = mapSizeZ;
-        roomNewScript.testGridSquare = testGridSquare;
+        roomNewScript.testGridCube = testGridCube;
         //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
         Data.instance.roomNewScript = roomNewScript;
 
@@ -417,7 +417,7 @@ public class MapGen3 : MonoBehaviour
                     {
                         //Debug.Log("-");
                         squareGrid.tiles[q, r].tile = TileType.Wall;
-                        Instantiate(testGridSquare, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                        Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
                     }
                 }
 
@@ -426,7 +426,7 @@ public class MapGen3 : MonoBehaviour
                     int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
                     int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
                     squareGrid.tiles[x, z].tile = TileType.Floor;
-                    Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
                 }
                 #endregion
 
