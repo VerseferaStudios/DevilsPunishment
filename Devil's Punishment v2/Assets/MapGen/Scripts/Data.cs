@@ -89,8 +89,8 @@ public class Data : MonoBehaviour
 
     private void Start()
     {
-
         modularRoomAssembler = GetComponent<ModularRoomAssembler>();
+        roomsFloor1Modular = new List<GameObject>();
 
         startTime = Time.time;
         nearDoorL.Add("-z");

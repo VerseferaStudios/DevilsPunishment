@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class MapGen3 : MonoBehaviour
 {
@@ -49,6 +50,7 @@ public class MapGen3 : MonoBehaviour
     public GameObject testGridPlane;
     public Transform testGridPlaneHolder;
     public float aStarVisualisationTime = 0;
+    public TextMeshProUGUI seedText;
 
     public SquareGrid squareGrid;
 
@@ -99,7 +101,9 @@ public class MapGen3 : MonoBehaviour
         //Random.state = GoodStates.states[0];
         //syncronizeSeeds(seed);
 
-        syncronizeSeeds(seed);
+        //syncronizeSeeds(seed);
+        if(seed == -1) seed = Random.Range(0, 1000);
+        seedText.text = seed + "";
         Random.InitState(seed);
 
 
@@ -354,11 +358,12 @@ public class MapGen3 : MonoBehaviour
                 spawnedRoom = roomHolderTransform.gameObject;
 
                 RoomReferencesModular roomReferencesModular = spawnedRoom.AddComponent<RoomReferencesModular>();
-                roomReferencesModular.doors = Data.instance.modularRoomAssembler.doors;
+                //roomReferencesModular.doors = Data.instance.modularRoomAssembler.doors;
                 roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
 
                 roomReferencesModular.roomFloors = new List<Vector3>();
                 Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
+                Data.instance.roomsFloor1Modular.Add(spawnedRoom);
                 Data.instance.modularRoomAssembler.StartScript();
                 if (i != 1)
                     SpawnVentCoverInRoom(i, k, roomReferencesModular.ventParent);

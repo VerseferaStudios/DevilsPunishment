@@ -56,7 +56,10 @@ public class ModularRoomAssembler : MonoBehaviour
         door_done = new bool[noOfParts];
         door_done[0] = true;
 
-        roomHolderTransform = new GameObject("Modular Room 1").transform;
+        roomReferencesModular.doors = new GameObject[noOfParts];
+        roomReferencesModular.doors[0] = doors[0];
+
+        //roomHolderTransform = new GameObject("Modular Room 1").transform;
         roomCentrePos = door_corridor_Pos - new Vector3(0, 0, 20);
         roomHolderTransform.position = roomCentrePos;
         roomHolderTransform.tag = "Modular Room stuff";
@@ -541,9 +544,12 @@ public class ModularRoomAssembler : MonoBehaviour
 
         Debug.Log("startPos = " + startPos + " && doorPos = " +  doorPos);
         Debug.Log("doorName = " + doorName + " && doorName2 = " + doorName2);
+        Debug.Log("xAdd = " + xAdd + " && zAdd = " + zAdd);
         //Debug.Log(Data.instance.roomNewScript.gameObject.name);
         //Data.instance.roomNewScript.ConnectTwoRooms(startPos, doors[partNo].transform.position, doorName, doorName2, Vector3.zero, Vector3.one, true);
         door_done[partNo] = true;
+
+        roomReferencesModular.doors[partNo] = doors[partNo];
     }
 
     private void PlaceRemainingWalls()

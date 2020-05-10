@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
     //private List<Transform> spawnPoints = new List<Transform>();
-    private List<GameObject> spawnPoints = new List<GameObject>();
+    [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
     public GameObject[] vents;
     private Transform corridorsParent;
@@ -76,6 +76,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
+                Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
             }
         }
 
