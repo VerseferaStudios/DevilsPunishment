@@ -70,6 +70,8 @@ public class Data : MonoBehaviour
 
     //public bool isPipeAtLeft = true;
 
+    public bool isDoneConnectTwoRooms = false;
+
     private void Awake()
     {
         if(instance == null)

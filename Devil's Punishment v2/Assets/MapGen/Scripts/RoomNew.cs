@@ -38,7 +38,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     
     private int counter = 0;
 
-    private bool isDoneSpawnHalf = false, isDoneConnectTwoRooms = false;
+    private bool isDoneSpawnHalf = false;
 
     public bool fail_room_connect;
 
@@ -46,6 +46,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     [Header("Test")]
     public GameObject testGridSquare;
+    public Transform testGridPlaneHolder;
+    Color testGridOrigCol;
+    public float aStarVisualisationTime = 0.001f;
 
     public SquareGrid squareGrid;
 
@@ -219,7 +222,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 //if (x)
                 {
                     //StartCoroutine(ShowRoomsBeingConnected(k, l, spawnPoints[k].transform.position, spawnPoints[l].transform.position));
-                    isDoneConnectTwoRooms = false;
+                    Data.instance.isDoneConnectTwoRooms = false;
                     fail_room_connect = false;
 
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
@@ -243,19 +246,28 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         lParentPos = spawnPoints[l].transform.parent.parent.position;
                     }
                     if (lParentPos == kParentPos) continue;
-                    //Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
-                    //                spawnPoints[k].name + " " + spawnPoints[l].name + " " +
-                    //                spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
+                    Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
+                                    spawnPoints[k].name + " " + spawnPoints[l].name + " " +
+                                    spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
 
 
                     // ----------------------------------------------------------------------------------
 
                     // ---------------------------------- AStar Trials ----------------------------------
+
+
+                    testGridOrigCol = testGridPlaneHolder.GetChild(0).GetComponent<Renderer>().material.color;
+
+
                     Debug.Log("sqr width = " + squareGrid.width);
                     Debug.Log("sqr height = " + squareGrid.height);
                     AStarSearch aStarSearch = new AStarSearch( squareGrid
                                                              , new Location(spawnPoints[k].transform.position / -4)
-                                                             , new Location(spawnPoints[l].transform.position / -4));
+                                                             , new Location(spawnPoints[l].transform.position / -4)
+                                                             , testGridPlaneHolder, (int)Data.instance.zSize * mapSizeZ / 4, aStarVisualisationTime);
+
+                    StartCoroutine(aStarSearch.ShowAStar());
+                    yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms);
 
                     List<Location> locations = aStarSearch.FindPath();
                     Debug.Log("Locations count = " + locations.Count);
@@ -263,46 +275,61 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     Vector3 prevLoc = spawnPoints[k].transform.position;
                     Vector3 currLoc;
                     Vector3 nextLoc;
-                    //int prevMove = Data.instance.doorRotationHelper.IndexOf(spawnPoints[k].name[4] + spawnPoints[k].name[5] + "");
+                    //int prevMove = Data.instance.doorRotationHelper.IndexOf((spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString()).ToString());
                     int currMove;
                     int nextMove;
 
-                    for (int i = 0; i < locations.Count; i++)
+                    for (int i = -1; i < locations.Count; i++)
                     {
-                        currLoc = locations[i].vector3() * -4;
-                        currMove = MoveHelper(prevLoc, currLoc);
-                        if(i + 1 < locations.Count)
+                        if (i == -1)
+                        {
+                            currLoc = spawnPoints[k].transform.position;
+                            currMove = Data.instance.doorRotationHelper.IndexOf((spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString()).ToString());
+                            Debug.Log("Door " + spawnPoints[k].name[4] + spawnPoints[k].name[5]);
+                            Debug.Log("currMove = " + currMove);
+                        }
+                        else
+                        {
+                            currLoc = locations[i].vector3() * -4;
+                            //Debug.Log("currLoc = " + currLoc);
+                            currMove = MoveHelper(prevLoc, currLoc);
+                        }
+                        currMove += 2;
+                        currMove %= 4;
+                        if (i + 1 < locations.Count)
                         {
                             nextLoc = locations[i + 1].vector3() * -4;
                             nextMove = MoveHelper(currLoc, nextLoc);
                         }
                         else
                         {
-                            nextMove = Data.instance.doorRotationHelper.IndexOf(spawnPoints[l].name[4] + spawnPoints[l].name[5] + "");
+                            nextMove = Data.instance.doorRotationHelper.IndexOf((spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString()).ToString());
                             nextMove += 2;
                             nextMove %= 4;
+                            //Debug.Log("Door " + spawnPoints[l].name[4] + spawnPoints[l].name[5]);
+                            //Debug.Log("nextMove = " + nextMove);
+                            //Debug.Log("currMove = " + currMove);
                         }
-                        yield return new WaitForSeconds(0.1f);
+                        //yield return new WaitForSeconds(0.1f);
 
                         if ((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3) ||
                             (nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2))
                         {
                             //L Corridor!!!!!!!
-
+                            //Debug.Log("currMove = " + currMove);
+                            //Debug.Log("nextMove = " + nextMove);
                             List<int> openings1 = new List<int>();
-                            currMove += 2;
-                            currMove %= 4;
                             openings1.Add(nextMove);
                             openings1.Add(currMove);
                             AddLCorridorSpawnInfo(openings1, currLoc);
-                            InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+                            //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
                         }
                         else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
                              //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
                         {
                             //! Corridor
                             AddICorridorSpawnInfo(currLoc, nextMove, false);
-                            InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
+                            //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
                         }
 
                         //Instantiate(testGridSquare, currLoc, Quaternion.identity);
@@ -310,7 +337,6 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                         //prevMove = currMove;
                     }
 
-                    isDoneConnectTwoRooms = true;
                     fail_room_connect = false;
 
                     // ---------------------------------- AStar Trials ----------------------------------
@@ -325,12 +351,21 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
 
                     //yield return new WaitUntil(() => Input.GetKey(KeyCode.L));
-                    yield return new WaitForSeconds(2);
+                    //yield return new WaitForSeconds(2);
 
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
-                    
-                    yield return new WaitUntil(() => isDoneConnectTwoRooms);
+
+
+                    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
+
+                    for (int i = 0; i < testGridPlaneHolder.childCount; i++)
+                    {
+                        testGridPlaneHolder.GetChild(i).GetComponent<Renderer>().material.color = testGridOrigCol;
+                    }
+
+
+                    //yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms); // not needed
                     if (fail_room_connect)
                     {
                         continue;
@@ -355,6 +390,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             {
 
                 //MakeInitHallways();
+
+                StartCoroutine(InstantiateAllCorridors());
+                //InstantiateAllCorridors();
+
 
                 Debug.Log("---------------------aesrdtfgyuhij0------------------------------------");
                 MapgenProgress.instance.addProgress(2);
@@ -411,14 +450,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         return new Vector3(idx[0] * -4, 0, idx[1] * -4);
     }
 
-    private void InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
+    private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
         Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Vector3 lParentPos = Vector3.zero;
-        for (int i = 0; i < squareGrid.tiles.Length; i++)
+        for (int i = 0; i < (int)Data.instance.xSize * mapSizeX / 4; i++)
         {
-            for (int j = 0; j < squareGrid.tiles.Length; j++)
+            Debug.Log("i = " + i);
+            for (int j = 0; j < (int)Data.instance.zSize * mapSizeZ / 4; j++)
             {
+                Debug.Log("j = " + j);
                 if (squareGrid.tiles[i, j].corridorIdx != -1)
                 {
                     string corridorName = CorridorsListIdxToCorridorName(squareGrid.tiles[i, j].corridorIdx);
@@ -440,9 +481,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     {
                         InstantiateXCorridor(pos, kParentPos, lParentPos);
                     }
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
         }
+        yield return null;
     }
 
     private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
@@ -761,7 +804,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         {
             Debug.Log("Error CONNECT 2 Rooms = " + lPos + " and " + kPos);
             fail_room_connect = true;
-            isDoneConnectTwoRooms = true;
+            //isDoneConnectTwoRooms = true;
             yield return null;
         }
         // ------------------- Connects x and z doors with L shape with no hindrance -------------------
@@ -845,7 +888,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         if(targetPos == new Vector3(0, 3, 0))
         {
             fail_room_connect = true;
-            isDoneConnectTwoRooms = true;
+            //isDoneConnectTwoRooms = true;
             yield return null;
         }
 
@@ -955,7 +998,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             }
             k--;
         }
-        isDoneConnectTwoRooms = true;
+        //isDoneConnectTwoRooms = true;
         yield return null;
     }
 

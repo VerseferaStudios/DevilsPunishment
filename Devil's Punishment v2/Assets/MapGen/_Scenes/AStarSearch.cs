@@ -42,6 +42,8 @@ public class Location
     {
         this.x = Mathf.RoundToInt(position.x);
         this.z = Mathf.RoundToInt(position.z);
+        Debug.Log("x = " + x);
+        Debug.Log("z = " + z);
     }
 
     public Vector3 vector3()
@@ -132,23 +134,23 @@ public class SquareGrid
         foreach (var dir in DIRS)
         {
             Location next = new Location(id.x + dir.x, id.z + dir.z);
-            Debug.Log("width = " + width);
-            Debug.Log("height = " + height);
-            Debug.Log("next = " + next.vector3());
-            Debug.Log("(0 <= id.x) = " + (0 <= next.x));
-            Debug.Log("(id.x < width) = " + (next.x < width));
-            Debug.Log("(0 <= id.z) = " + (0 <= next.z));
-            //Debug.Log("(y) = " + (y));
-            Debug.Log("(id.z) = " + (next.z));
-            Debug.Log("(id.x) = " + (next.x));
-            Debug.Log("(id.z < height) = " + (next.z < height));
-            Debug.Log("InBounds(next) = " + InBounds(next));
+            //Debug.Log("width = " + width);
+            //Debug.Log("height = " + height);
+            //Debug.Log("next = " + next.vector3());
+            //Debug.Log("(0 <= id.x) = " + (0 <= next.x));
+            //Debug.Log("(id.x < width) = " + (next.x < width));
+            //Debug.Log("(0 <= id.z) = " + (0 <= next.z));
+            ////Debug.Log("(y) = " + (y));
+            //Debug.Log("(id.z) = " + (next.z));
+            //Debug.Log("(id.x) = " + (next.x));
+            //Debug.Log("(id.z < height) = " + (next.z < height));
+            //Debug.Log("InBounds(next) = " + InBounds(next));
             if (InBounds(next))
             {
-                Debug.Log("Passable(next) = " + Passable(next));
+                //Debug.Log("Passable(next) = " + Passable(next));
                 if (Passable(next))
                 {
-                    Debug.Log("returning " + next.vector3());
+                    //Debug.Log("returning " + next.vector3());
                     yield return next;
                 }
             }
@@ -208,20 +210,34 @@ public class AStarSearch
     private Location start;
     private Location goal;
 
+
+    SquareGrid graph;
+    Transform testGridPlaneHolder;
+    int zOverall;
+    float aStarVisualisationTime;
+
     static public float Heuristic(Location a, Location b)
     {
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.z - b.z);
     }
 
     // Conduct the A* search
-    public AStarSearch(SquareGrid graph, Location start, Location goal)
+    public AStarSearch(SquareGrid graph, Location start, Location goal, Transform testGridPlaneHolder, int zOverall, float aStarVisualisationTime)
     {
         // start is current sprite Location
         this.start = start;
         // goal is sprite destination eg tile user clicked on
         this.goal = goal;
-        Debug.Log("start.vector3() = " + start.vector3());
-        Debug.Log("goal.vector3() = " + goal.vector3());
+        //Debug.Log("start.vector3() = " + start.vector3());
+        //Debug.Log("goal.vector3() = " + goal.vector3());
+        this.graph = graph;
+        this.testGridPlaneHolder = testGridPlaneHolder;
+        this.zOverall = zOverall;
+        this.aStarVisualisationTime = aStarVisualisationTime;
+    }
+
+    public IEnumerator ShowAStar()
+    {
         // add the cross product of the start to goal and tile to goal vectors
         // Vector3 startToGoalV = Vector3.Cross(start.vector3,goal.vector3);
         // Location startToGoal = new Location(startToGoalV);
@@ -235,18 +251,18 @@ public class AStarSearch
 
         cameFrom.Add(start, start); // is set to start, None in example
         costSoFar.Add(start, 0f);
-        Debug.Log("-1");
+       //Debug.Log("-1");
 
         while (frontier.Count > 0f)
         {
             // Get the Location from the frontier that has the lowest
             // priority, then remove that Location from the frontier
-            Debug.Log("0 => " + frontier.Count);
+            //Debug.Log("0 => " + frontier.Count);
             Location current = frontier.Dequeue();
 
             // If we're at the goal Location, stop looking.
             if (current.Equals(goal)) break;
-            Debug.Log("0 => " + frontier.Count);
+            //Debug.Log("0 => " + frontier.Count);
 
             // Neighbors will return a List of valid tile Locations
             // that are next to, diagonal to, above or below current
@@ -254,7 +270,7 @@ public class AStarSearch
             //Debug.Log()
             foreach (var neighbor in a)
             {
-                Debug.Log("1");
+                //Debug.Log("1");
                 // If neighbor is diagonal to current, graph.Cost(current,neighbor)
                 // will return Sqrt(2). Otherwise it will return only the cost of
                 // the neighbor, which depends on its type, as set in the TileType enum.
@@ -268,10 +284,16 @@ public class AStarSearch
                 // cost is lower than the assigned one, add newCost for this neighbor
                 if (!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor])
                 {
-                    Debug.Log("2");
+                    //Debug.Log("2");
+                    int idx = neighbor.x * zOverall + neighbor.z;
+                   //Debug.Log(idx + " = idx");
+                    testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.gray;
+                   //Debug.Log(neighbor.vector3() * -4);
+
                     // If we're replacing the previous cost, remove it
                     if (costSoFar.ContainsKey(neighbor))
                     {
+                       //Debug.Log("replacing lower cost");
                         costSoFar.Remove(neighbor);
                         cameFrom.Remove(neighbor);
                     }
@@ -281,9 +303,11 @@ public class AStarSearch
                     float priority = newCost + Heuristic(neighbor, goal);
                     frontier.Enqueue(neighbor, priority);
                 }
+                //yield return new WaitForSeconds(aStarVisualisationTime);
             }
         }
-
+        Data.instance.isDoneConnectTwoRooms = true;
+        yield return null;
     }
 
     // Return a List of Locations representing the found path

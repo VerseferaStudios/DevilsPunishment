@@ -46,6 +46,9 @@ public class MapGen3 : MonoBehaviour
 
     [Header("Test")]
     public GameObject testGridSquare;
+    public GameObject testGridPlane;
+    public Transform testGridPlaneHolder;
+    public float aStarVisualisationTime = 0;
 
     public SquareGrid squareGrid;
 
@@ -115,7 +118,8 @@ public class MapGen3 : MonoBehaviour
         //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
         Data.instance.roomNewScript = roomNewScript;
 
-
+        Data.instance.xSize = xSize;
+        Data.instance.zSize = zSize;
 
         //StateData.states.Add(Random.state);
         Rooms();
@@ -126,8 +130,6 @@ public class MapGen3 : MonoBehaviour
         Data.instance.corridorX = corridors[5];
         Data.instance.ventT = vents[3];
         Data.instance.ventX = vents[5];
-        Data.instance.xSize = xSize;
-        Data.instance.zSize = zSize;
     }
 
 
@@ -170,8 +172,8 @@ public class MapGen3 : MonoBehaviour
     public void Rooms()
     {
 
-        int xOverall = (int)xSize * mapSizeX;
-        int zOverall = (int)zSize * mapSizeZ;
+        int xOverall = (int)xSize * mapSizeX / 4;
+        int zOverall = (int)zSize * mapSizeZ / 4;
         squareGrid = new SquareGrid(0, 0, xOverall, zOverall)
         {
             tiles = new Cell[xOverall, zOverall]
@@ -186,6 +188,7 @@ public class MapGen3 : MonoBehaviour
                     corridorIdx = -1,
                     corridorYRot = -1
                 };
+                //Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
             }
         }
 
@@ -303,7 +306,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 3)) // no modular room added
+                switch (Random.Range(1, 4)) // yes modular room added
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -350,69 +353,76 @@ public class MapGen3 : MonoBehaviour
                 roomReferences = spawnedRoom.AddComponent<RoomReferences>();
                 roomReferences.doors = Data.instance.modularRoomAssembler.doors;
                 roomReferences.ventParent = new GameObject("Vent Parent").transform;
+
+                #region tile Floor
+
+                float tempPosVal;
+                if (roomReferences.topRightCorner.position.x > roomReferences.bottomLeftCorner.position.x)
+                {
+
+                }
+                else
+                {
+                    tempPosVal = roomReferences.topRightCorner.position.x;
+                    roomReferences.topRightCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
+                                                                         , roomReferences.topRightCorner.position.y
+                                                                         , roomReferences.topRightCorner.position.z);
+                    roomReferences.bottomLeftCorner.position = new Vector3(tempPosVal
+                                                                         , roomReferences.bottomLeftCorner.position.y
+                                                                         , roomReferences.bottomLeftCorner.position.z);
+                }
+                if (roomReferences.topRightCorner.position.z > roomReferences.bottomLeftCorner.position.z)
+                {
+
+                }
+                else
+                {
+                    tempPosVal = roomReferences.topRightCorner.position.z;
+                    roomReferences.topRightCorner.position = new Vector3(roomReferences.topRightCorner.position.x
+                                                                         , roomReferences.topRightCorner.position.y
+                                                                         , roomReferences.bottomLeftCorner.position.z);
+                    roomReferences.bottomLeftCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
+                                                                         , roomReferences.bottomLeftCorner.position.y
+                                                                         , tempPosVal);
+                }
+
+                for (int q = Mathf.RoundToInt(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
+                {
+                    //Debug.Log("|");
+                    for (int r = (int)(roomReferences.topRightCorner.position.z / -4); r < roomReferences.bottomLeftCorner.position.z / -4; r++)
+                    {
+                        //Debug.Log("-");
+                        squareGrid.tiles[q, r].tile = TileType.Wall;
+                        Instantiate(testGridSquare, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                    }
+                }
+
+                for (int q = 0; q < roomReferences.doors.Length; q++)
+                {
+                    int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
+                    int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
+                    squareGrid.tiles[x, z].tile = TileType.Floor;
+                    Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                }
+                #endregion
+
             }
             else
             {
                 spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
                 roomReferences = spawnedRoom.GetComponent<RoomReferences>();
                 CallOffsetAndDoorFns(spawnedRoom, yRotation);
+
+
             }
 
 
 
-            Debug.Log(roomReferences.topRightCorner.position.x / -4);
-            Debug.Log(roomReferences.bottomLeftCorner.position.x / -4);
-            Debug.Log(roomReferences.topRightCorner.position.z / -4);
-            Debug.Log(roomReferences.bottomLeftCorner.position.z / -4);
+            //Debug.Log(roomReferences.topRightCorner.position.x / -4);
+            //Debug.Log(roomReferences.bottomLeftCorner.position.x / -4);
+            //Debug.Log(roomReferences.topRightCorner.position.z / -4);
+            //Debug.Log(roomReferences.bottomLeftCorner.position.z / -4);
 
-            float tempPosVal;
-            if(roomReferences.topRightCorner.position.x > roomReferences.bottomLeftCorner.position.x)
-            {
-
-            }
-            else
-            {
-                tempPosVal = roomReferences.topRightCorner.position.x;
-                roomReferences.topRightCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
-                                                                     , roomReferences.topRightCorner.position.y
-                                                                     , roomReferences.topRightCorner.position.z);
-                roomReferences.bottomLeftCorner.position = new Vector3(tempPosVal
-                                                                     , roomReferences.bottomLeftCorner.position.y
-                                                                     , roomReferences.bottomLeftCorner.position.z);
-            }
-            if (roomReferences.topRightCorner.position.z > roomReferences.bottomLeftCorner.position.z)
-            {
-
-            }
-            else
-            {
-                tempPosVal = roomReferences.topRightCorner.position.z;
-                roomReferences.topRightCorner.position = new Vector3(roomReferences.topRightCorner.position.x
-                                                                     , roomReferences.topRightCorner.position.y
-                                                                     , roomReferences.bottomLeftCorner.position.z);
-                roomReferences.bottomLeftCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
-                                                                     , roomReferences.bottomLeftCorner.position.y
-                                                                     , tempPosVal);
-            }
-
-            for (int q = Mathf.RoundToInt(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
-            {
-                Debug.Log("|");
-                for (int r = (int)(roomReferences.topRightCorner.position.z / -4) ; r < roomReferences.bottomLeftCorner.position.z / -4; r++)
-                {
-                    Debug.Log("-");
-                    squareGrid.tiles[q, r].tile = TileType.Wall;
-                    Instantiate(testGridSquare, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
-                }
-            }
-
-            for (int q = 0; q < roomReferences.doors.Length; q++)
-            {
-                int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
-                int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
-                squareGrid.tiles[x, z].tile = TileType.Floor;
-                Instantiate(testGridSquare, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
-            }
 
 
 
@@ -435,14 +445,17 @@ public class MapGen3 : MonoBehaviour
                 //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
                 Data.instance.roomNewScript = roomNewScript;
                 */
+                roomNewScript.aStarVisualisationTime = aStarVisualisationTime;
                 roomNewScript.squareGrid = squareGrid;
-                for (int d = 0; d < 40; d++)
-                {
-                    for (int f = 0; f < 40; f++)
-                    {
-                        Debug.Log(squareGrid.tiles[d, f]);
-                    }
-                }
+                roomNewScript.testGridPlaneHolder = testGridPlaneHolder;
+                //for (int d = 36; d < 38; d++)
+                //{
+                //    for (int f = 0; f < 20; f++)
+                //    {
+                //        squareGrid.tiles[d, f].tile = TileType.Wall;
+                //        //Debug.Log(squareGrid.tiles[d, f]);
+                //    }
+                //}
                 roomNewScript.StartScript();
                 //ConnectToMapGen(roomNewScript);
 
