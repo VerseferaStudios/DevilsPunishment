@@ -18,7 +18,7 @@ public  class Network_Disable_Component : NetworkBehaviour
     {
 
         
-        if (!isLocalPlayer)
+        if (!hasAuthority)
         {
             Debug.Log("Player is not local!");
             

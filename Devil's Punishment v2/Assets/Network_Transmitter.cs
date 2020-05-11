@@ -35,7 +35,7 @@ public class Network_Transmitter : NetworkBehaviour
         }
         else
         {
-            
+            genOnce = true;
             mapGen.startMapGeneration(mapSeed);
           //  player.RpcSendChatMessage(mapSeed.ToString()+ " We fetched from server");
             gS.StartGame();
