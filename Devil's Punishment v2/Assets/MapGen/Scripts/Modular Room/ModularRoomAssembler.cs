@@ -408,6 +408,10 @@ public class ModularRoomAssembler : MonoBehaviour
         Vector3 posCurr = Vector3.zero;
         GameObject toSpawn;
 
+        int randDoor = Random.Range(0, 2 * (size_x[partNo] + 1 + size_z[partNo] + 1));
+        int wallCount = 0;
+        Debug.Log("randDoor = " + randDoor);
+        Debug.Log("2 * (size_x[partNo] + 1 + size_z[partNo] + 1) = " + 2 * (size_x[partNo] + 1 + size_z[partNo] + 1));
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
         //if (!nswe_helper.Contains(0))
         //if (!nswe_helper.Contains(0))
@@ -422,7 +426,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     {
                         toSpawn = wall_with_door;
                     }
-                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0)// && Random.Range(0f, 1f) < doorProbability)
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && randDoor == wallCount)
                     {
                         DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
                     }
@@ -431,6 +435,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+                wallCount++;
             }
         }
 
@@ -449,7 +454,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     {
                         toSpawn = wall_with_door;
                     }
-                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && Random.Range(0f, 1f) < doorProbability)
+                    else if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && randDoor == wallCount)
                     {
                         DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
                     }
@@ -458,6 +463,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+                wallCount++;
             }
         }
 
@@ -471,7 +477,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     posCurr = new Vector3(4 / 2, 2 + j * 4, -i * 4);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && Random.Range(0f, 1f) < doorProbability)
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && randDoor == wallCount)
                     {
                         DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
                     }
@@ -480,6 +486,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+                wallCount++;
             }
         }
 
@@ -492,7 +499,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     posCurr = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && Random.Range(0f, 1f) < doorProbability)
+                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && randDoor == wallCount)
                     {
                         DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
                     }
@@ -501,25 +508,27 @@ public class ModularRoomAssembler : MonoBehaviour
                     t.localPosition = posCurr;
                     //t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
                 }
+                wallCount++;
             }
         }
         if (!door_done[partNo])
         {
-            switch(Random.Range(0, 4))
-            {
-                case 0:
-                    DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
-                    break;
-                case 1:
-                    DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
-                    break;
-                case 2:
-                    DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
-                    break;
-                case 3:
-                    DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
-                    break;
-            }
+            Debug.LogWarning("no door for partNo " + partNo);
+            //switch(Random.Range(0, 4))
+            //{
+            //    case 0:
+            //        DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2);
+            //        break;
+            //    case 1:
+            //        DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2);
+            //        break;
+            //    case 2:
+            //        DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0);
+            //        break;
+            //    case 3:
+            //        DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0);
+            //        break;
+            //}
         }
     }
 

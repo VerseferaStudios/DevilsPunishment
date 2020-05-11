@@ -11,6 +11,9 @@ public class MapGen3 : MonoBehaviour
     //10 x 10 cube
     //later//private int gridSize;
 
+    [Header("Dev")]
+    public bool isDevMode = false;
+
     public GameObject roomsLoaderPrefab, mapGenHolder;
     public Transform mapGenHolderTransform;
 
@@ -102,8 +105,11 @@ public class MapGen3 : MonoBehaviour
         //syncronizeSeeds(seed);
 
         //syncronizeSeeds(seed);
-        if(seed == -1) seed = Random.Range(0, 1000);
-        seedText.text = seed + "";
+        if (isDevMode)
+        {
+            if (seed == -1) seed = Random.Range(0, 1000);
+            seedText.text = seed + "";
+        }
         Random.InitState(seed);
 
 
@@ -118,7 +124,11 @@ public class MapGen3 : MonoBehaviour
         roomNewScript.itemGenScript = itemGenScript;
         roomNewScript.mapSizeX = mapSizeX;
         roomNewScript.mapSizeZ = mapSizeZ;
-        roomNewScript.testGridCube = testGridCube;
+        roomNewScript.isDevMode = isDevMode;
+        if (isDevMode)
+        {
+            roomNewScript.testGridCube = testGridCube;
+        }
         //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
         Data.instance.roomNewScript = roomNewScript;
 
@@ -192,7 +202,10 @@ public class MapGen3 : MonoBehaviour
                     corridorIdx = -1,
                     corridorYRot = -1
                 };
-                //Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
+                //if (isDevMode)
+                //{
+                //    Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
+                //}
             }
         }
 
@@ -417,7 +430,10 @@ public class MapGen3 : MonoBehaviour
                     {
                         //Debug.Log("-");
                         squareGrid.tiles[q, r].tile = TileType.Wall;
-                        Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                        if (isDevMode)
+                        {
+                            Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                        }
                     }
                 }
 
@@ -426,7 +442,10 @@ public class MapGen3 : MonoBehaviour
                     int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
                     int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
                     squareGrid.tiles[x, z].tile = TileType.Floor;
-                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                    if (isDevMode)
+                    {
+                        Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                    }
                 }
                 #endregion
 
@@ -456,7 +475,10 @@ public class MapGen3 : MonoBehaviour
                 */
                 roomNewScript.aStarVisualisationTime = aStarVisualisationTime;
                 roomNewScript.squareGrid = squareGrid;
-                roomNewScript.testGridPlaneHolder = testGridPlaneHolder;
+                if (isDevMode)
+                {
+                    roomNewScript.testGridPlaneHolder = testGridPlaneHolder;
+                }
                 //for (int d = 36; d < 38; d++)
                 //{
                 //    for (int f = 0; f < 20; f++)
@@ -531,7 +553,7 @@ public class MapGen3 : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        //gb.AddComponent<RoomNewVents>().corridors = vents;
+        gb.AddComponent<RoomNewVents>().corridors = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------

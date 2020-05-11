@@ -7,6 +7,8 @@ using UnityEngine.AI;
 
 public class RoomNew : MonoBehaviour, IComparer<GameObject>
 {
+    public bool isDevMode = false;
+
     //private List<Transform> spawnPoints = new List<Transform>();
     [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
@@ -76,7 +78,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
-                Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                if (isDevMode)
+                {
+                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                }
             }
         }
 
@@ -272,8 +277,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                     // ---------------------------------- AStar Trials ----------------------------------
 
-
-                    testGridOrigCol = testGridPlaneHolder.GetChild(0).GetComponent<Renderer>().material.color;
+                    if (isDevMode)
+                    {
+                        testGridOrigCol = testGridPlaneHolder.GetChild(0).GetComponent<Renderer>().material.color;
+                    }
 
 
                     Debug.Log("sqr width = " + squareGrid.width);
@@ -373,12 +380,13 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
 
-
-                    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
-
-                    for (int i = 0; i < testGridPlaneHolder.childCount; i++)
+                    if (isDevMode)
                     {
-                        testGridPlaneHolder.GetChild(i).GetComponent<Renderer>().material.color = testGridOrigCol;
+                        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
+                        for (int i = 0; i < testGridPlaneHolder.childCount; i++)
+                        {
+                            testGridPlaneHolder.GetChild(i).GetComponent<Renderer>().material.color = testGridOrigCol;
+                        }
                     }
 
 

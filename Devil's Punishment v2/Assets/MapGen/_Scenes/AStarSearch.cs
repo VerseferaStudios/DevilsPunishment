@@ -251,7 +251,7 @@ public class AStarSearch
 
         cameFrom.Add(start, start); // is set to start, None in example
         costSoFar.Add(start, 0f);
-       //Debug.Log("-1");
+        //Debug.Log("-1");
 
         while (frontier.Count > 0f)
         {
@@ -286,14 +286,17 @@ public class AStarSearch
                 {
                     //Debug.Log("2");
                     int idx = neighbor.x * zOverall + neighbor.z;
-                   //Debug.Log(idx + " = idx");
-                    testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.gray;
-                   //Debug.Log(neighbor.vector3() * -4);
+                    //Debug.Log(idx + " = idx");
+                    if (testGridPlaneHolder != null)
+                    {
+                        testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.gray;
+                    }
+                    //Debug.Log(neighbor.vector3() * -4);
 
                     // If we're replacing the previous cost, remove it
                     if (costSoFar.ContainsKey(neighbor))
                     {
-                       //Debug.Log("replacing lower cost");
+                        //Debug.Log("replacing lower cost");
                         costSoFar.Remove(neighbor);
                         cameFrom.Remove(neighbor);
                     }
@@ -303,7 +306,7 @@ public class AStarSearch
                     float priority = newCost + Heuristic(neighbor, goal);
                     frontier.Enqueue(neighbor, priority);
                 }
-                if(aStarVisualisationTime != 0)
+                if (aStarVisualisationTime != 0)
                 {
                     yield return new WaitForSeconds(aStarVisualisationTime);
                 }
