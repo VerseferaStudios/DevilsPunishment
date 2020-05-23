@@ -215,6 +215,7 @@ public class AStarSearch
     Transform testGridPlaneHolder;
     int zOverall;
     float aStarVisualisationTime;
+    bool isDevMode;
 
     static public float Heuristic(Location a, Location b)
     {
@@ -222,7 +223,7 @@ public class AStarSearch
     }
 
     // Conduct the A* search
-    public AStarSearch(SquareGrid graph, Location start, Location goal, Transform testGridPlaneHolder, int zOverall, float aStarVisualisationTime)
+    public AStarSearch(SquareGrid graph, Location start, Location goal, Transform testGridPlaneHolder, int zOverall, float aStarVisualisationTime, bool isDevMode)
     {
         // start is current sprite Location
         this.start = start;
@@ -234,6 +235,7 @@ public class AStarSearch
         this.testGridPlaneHolder = testGridPlaneHolder;
         this.zOverall = zOverall;
         this.aStarVisualisationTime = aStarVisualisationTime;
+        this.isDevMode = isDevMode;
     }
 
     public IEnumerator ShowAStar()
@@ -306,7 +308,7 @@ public class AStarSearch
                     float priority = newCost + Heuristic(neighbor, goal);
                     frontier.Enqueue(neighbor, priority);
                 }
-                if (aStarVisualisationTime != 0)
+                if (isDevMode && aStarVisualisationTime != 0)
                 {
                     yield return new WaitForSeconds(aStarVisualisationTime);
                 }

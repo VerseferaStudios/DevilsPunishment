@@ -297,7 +297,7 @@ public class MapGen3 : MonoBehaviour
         {
             GameObject roomToSpawn = generatorRoom;
             float yCoord = 1.5f; // Beware, its for gen room
-            if(i - 1 < staticRooms.Length)
+            if (i - 1 < staticRooms.Length)
             {
                 roomToSpawn = staticRooms[i - 1];
                 if (staticRooms[i - 1].name.Equals("Start Room"))
@@ -323,7 +323,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4)) // yes modular room added
+                switch (Random.Range(1, 4)) // yes modular room added // for dev purposes 1, 4 change later
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -338,6 +338,7 @@ public class MapGen3 : MonoBehaviour
                         yCoord = 1;
                         break;
                     case 3:
+                        yCoord = -1.5f;
                         roomToSpawn = null;
                         break;
                         /*

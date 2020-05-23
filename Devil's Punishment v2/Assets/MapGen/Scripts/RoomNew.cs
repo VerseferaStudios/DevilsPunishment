@@ -288,7 +288,9 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                     AStarSearch aStarSearch = new AStarSearch( squareGrid
                                                              , new Location(spawnPoints[k].transform.position / -4)
                                                              , new Location(spawnPoints[l].transform.position / -4)
-                                                             , testGridPlaneHolder, (int)Data.instance.zSize * mapSizeZ / 4, aStarVisualisationTime);
+                                                             , testGridPlaneHolder, (int)Data.instance.zSize * mapSizeZ / 4
+                                                             , aStarVisualisationTime
+                                                             , isDevMode);
 
                     StartCoroutine(aStarSearch.ShowAStar());
                     yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms);

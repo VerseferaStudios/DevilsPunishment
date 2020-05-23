@@ -108,6 +108,26 @@ public class Data : MonoBehaviour
         //StartCoroutine(DoConnectedComponents());
     }
 
+    public void TempCreateModularRoom()
+    {
+        Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
+        Data.instance.modularRoomAssembler.door_corridor_Transform.position = Vector3.zero + new Vector3(0, 0, 20); //Not Sure!!!;
+        Data.instance.modularRoomAssembler.door_corridor_Transform.tag = "Corridor Spawn Points";
+
+        Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
+        Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
+        GameObject spawnedRoom = roomHolderTransform.gameObject;
+
+        RoomReferencesModular roomReferencesModular = spawnedRoom.AddComponent<RoomReferencesModular>();
+        //roomReferencesModular.doors = Data.instance.modularRoomAssembler.doors;
+        roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
+
+        roomReferencesModular.roomFloors = new List<Vector3>();
+        Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
+        Data.instance.roomsFloor1Modular.Add(spawnedRoom);
+        Data.instance.modularRoomAssembler.StartScript();
+    }
+
     public void StartInstantiateCo()
     {
         StartCoroutine(InstantiateRoomsLoader());
