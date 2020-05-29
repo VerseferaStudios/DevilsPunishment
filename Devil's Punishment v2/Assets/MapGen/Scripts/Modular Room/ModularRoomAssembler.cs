@@ -351,7 +351,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     Transform t1 = Instantiate(grill).transform;
                     t1.parent = floor_holder[partNo];
                     t1.localPosition = new Vector3(i * 4, 2.11f, -j * 4);
-                    t1.localScale = Vector3.one * 2;
+                    //t1.localScale = Vector3.one * 2;
                 }
                 else
                 {

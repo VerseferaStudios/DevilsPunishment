@@ -21,8 +21,6 @@ public class Network_Player : NetworkBehaviour
 
     void Start()
     {
-        Network_Transmitter.transmitter.player = this;
-        Network_Transmitter.transmitter.registerPlayer(this);
 
         username = SystemInfo.deviceName; // Using the computer name for now as username
 
@@ -146,7 +144,8 @@ public class Network_Player : NetworkBehaviour
 
     void Awake()
     {
-
+        Debug.LogWarning("network player added");
+        Network_Transmitter.transmitter.player = this;
         // tell Network Manager we're awake
         Network_Transmitter.transmitter.registerPlayer(this);
 

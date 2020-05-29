@@ -323,7 +323,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(1, 4)) // yes modular room added // for dev purposes 1, 4 change later
+                switch (Random.Range(3, 4)) // yes modular room added // for dev purposes 1, 4 change later
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -338,7 +338,7 @@ public class MapGen3 : MonoBehaviour
                         yCoord = 1;
                         break;
                     case 3:
-                        yCoord = -1.5f;
+                        yCoord = -1.5f - 0.739f;
                         roomToSpawn = null;
                         break;
                         /*
