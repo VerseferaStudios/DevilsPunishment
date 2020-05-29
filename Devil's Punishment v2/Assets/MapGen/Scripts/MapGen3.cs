@@ -13,6 +13,14 @@ public class MapGen3 : MonoBehaviour
 
     [Header("Dev")]
     public bool isDevMode = false;
+    
+    public enum RoomSpawnType
+    {
+        Random,
+        RoundRobin
+    }
+    [Header("Dev")]
+    public RoomSpawnType roomSpawnMethod;
 
     public GameObject roomsLoaderPrefab, mapGenHolder;
     public Transform mapGenHolderTransform;
