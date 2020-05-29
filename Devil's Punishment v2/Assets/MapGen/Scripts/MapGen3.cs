@@ -395,39 +395,57 @@ public class MapGen3 : MonoBehaviour
                 #region tile Floor
 
                 float tempPosVal;
-                if (roomReferences.topRightCorner.position.x > roomReferences.bottomLeftCorner.position.x)
+                if (roomReferences.topRightItemGen.position.x > roomReferences.bottomLeftItemGen.position.x)
                 {
 
                 }
                 else
                 {
-                    tempPosVal = roomReferences.topRightCorner.position.x;
-                    roomReferences.topRightCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
-                                                                         , roomReferences.topRightCorner.position.y
-                                                                         , roomReferences.topRightCorner.position.z);
-                    roomReferences.bottomLeftCorner.position = new Vector3(tempPosVal
-                                                                         , roomReferences.bottomLeftCorner.position.y
-                                                                         , roomReferences.bottomLeftCorner.position.z);
+                    tempPosVal = roomReferences.topRightItemGen.position.x;
+                    roomReferences.topRightItemGen.position = new Vector3(roomReferences.bottomLeftItemGen.position.x
+                                                                         , roomReferences.topRightItemGen.position.y
+                                                                         , roomReferences.topRightItemGen.position.z);
+                    roomReferences.bottomLeftItemGen.position = new Vector3(tempPosVal
+                                                                         , roomReferences.bottomLeftItemGen.position.y
+                                                                         , roomReferences.bottomLeftItemGen.position.z);
+
+                    tempPosVal = roomReferences.topRightMapGen.position.x;
+                    roomReferences.topRightMapGen.position = new Vector3(roomReferences.bottomLeftMapGen.position.x
+                                                                         , roomReferences.topRightMapGen.position.y
+                                                                         , roomReferences.topRightMapGen.position.z);
+                    roomReferences.bottomLeftMapGen.position = new Vector3(tempPosVal
+                                                                         , roomReferences.bottomLeftMapGen.position.y
+                                                                         , roomReferences.bottomLeftMapGen.position.z);
+
                 }
-                if (roomReferences.topRightCorner.position.z > roomReferences.bottomLeftCorner.position.z)
+                if (roomReferences.topRightItemGen.position.z > roomReferences.bottomLeftItemGen.position.z)
                 {
 
                 }
                 else
                 {
-                    tempPosVal = roomReferences.topRightCorner.position.z;
-                    roomReferences.topRightCorner.position = new Vector3(roomReferences.topRightCorner.position.x
-                                                                         , roomReferences.topRightCorner.position.y
-                                                                         , roomReferences.bottomLeftCorner.position.z);
-                    roomReferences.bottomLeftCorner.position = new Vector3(roomReferences.bottomLeftCorner.position.x
-                                                                         , roomReferences.bottomLeftCorner.position.y
+                    tempPosVal = roomReferences.topRightItemGen.position.z;
+                    roomReferences.topRightItemGen.position = new Vector3(roomReferences.topRightItemGen.position.x
+                                                                         , roomReferences.topRightItemGen.position.y
+                                                                         , roomReferences.bottomLeftItemGen.position.z);
+                    roomReferences.bottomLeftItemGen.position = new Vector3(roomReferences.bottomLeftItemGen.position.x
+                                                                         , roomReferences.bottomLeftItemGen.position.y
                                                                          , tempPosVal);
+
+                    tempPosVal = roomReferences.topRightMapGen.position.z;
+                    roomReferences.topRightMapGen.position = new Vector3(roomReferences.topRightMapGen.position.x
+                                                                         , roomReferences.topRightMapGen.position.y
+                                                                         , roomReferences.bottomLeftMapGen.position.z);
+                    roomReferences.bottomLeftMapGen.position = new Vector3(roomReferences.bottomLeftMapGen.position.x
+                                                                         , roomReferences.bottomLeftMapGen.position.y
+                                                                         , tempPosVal);
+
                 }
 
-                for (int q = Mathf.RoundToInt(roomReferences.topRightCorner.position.x / -4); q < roomReferences.bottomLeftCorner.position.x / -4; q++)
+                for (int q = Mathf.RoundToInt(roomReferences.topRightMapGen.position.x / -4); q < roomReferences.bottomLeftMapGen.position.x / -4; q++)
                 {
                     //Debug.Log("|");
-                    for (int r = (int)(roomReferences.topRightCorner.position.z / -4); r < roomReferences.bottomLeftCorner.position.z / -4; r++)
+                    for (int r = (int)(roomReferences.topRightMapGen.position.z / -4); r < roomReferences.bottomLeftMapGen.position.z / -4; r++)
                     {
                         //Debug.Log("-");
                         squareGrid.tiles[q, r].tile = TileType.Wall;

@@ -264,7 +264,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
             RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
 
-            itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+            itemGenScript.SpawnItems(roomReferences.bottomLeftItemGen.position, roomReferences.topRightItemGen.position, 6, spawnedRoom.transform);
 
             SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
