@@ -304,7 +304,7 @@ public class MapGen3 : MonoBehaviour
         for (int i = 1; i < k; i++)
         {
             GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1.5f; // Beware, its for gen room
+            float yCoord = 1.0f; // Beware, its for gen room
             if (i - 1 < staticRooms.Length)
             {
                 roomToSpawn = staticRooms[i - 1];
@@ -584,29 +584,29 @@ public class MapGen3 : MonoBehaviour
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
-    private void ConnectToMapGen(RoomNew roomNewScript)
-    {
-        float min = 9999;
-        int minIdx = -1;
-        //-48, 0, -24
-        for (int i = 0; i < allRooms.Count; i++)
-        {
-            float current = -48 + ((float[])allRooms[i])[1] + -24 + ((float[])allRooms[i])[0];
-            if(current < min)
-            {
-                min = current;
-                minIdx = i;
-            }
-        }
-        if(minIdx != -1)
-        {
-            StartCoroutine(roomNewScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[minIdx])[1] + 24, 1, -((float[])allRooms[minIdx])[0]), new Vector3(-48, 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, 1, -24 + 24), true)); 
-        }
-        else
-        {
-            Debug.Log("ERROR!!!!");
-        }
-    }
+    //private void ConnectToMapGen(RoomNew roomNewScript)
+    //{
+    //    float min = 9999;
+    //    int minIdx = -1;
+    //    //-48, 0, -24
+    //    for (int i = 0; i < allRooms.Count; i++)
+    //    {
+    //        float current = -48 + ((float[])allRooms[i])[1] + -24 + ((float[])allRooms[i])[0];
+    //        if(current < min)
+    //        {
+    //            min = current;
+    //            minIdx = i;
+    //        }
+    //    }
+    //    if(minIdx != -1)
+    //    {
+    //        StartCoroutine(roomNewScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[minIdx])[1] + 24, 1, -((float[])allRooms[minIdx])[0]), new Vector3(-48, 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, 1, -24 + 24), true)); 
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("ERROR!!!!");
+    //    }
+    //}
 
     // ----------------------- Spawn Vent Cover in room -----------------------
     public void SpawnVentCoverInRoom(int i, int k, Transform ventParentTransform)

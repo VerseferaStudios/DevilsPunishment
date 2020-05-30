@@ -137,6 +137,7 @@ public class ModularRoomAssembler : MonoBehaviour
             doors[i].transform.position = new Vector3(doors[i].transform.position.x - offsetVal, doors[i].transform.position.y, doors[i].transform.position.z + offsetVal);
         }
 
+        Debug.Log("Time mod room = " + Time.time);
 
         //Remove trigger colliders
         StartCoroutine(RemoveWallTriggerColliders());
@@ -641,6 +642,7 @@ public class ModularRoomAssembler : MonoBehaviour
             //        break;
             //}
         }
+        Debug.Log("Time mod room = " + Time.time);
     }
 
     private void DoorSpawnHelper(string doorName, int partNo, bool isWallHolder2, Vector3 posCurr, int xAdd, int zAdd, out GameObject toSpawn, out Vector3 offset)

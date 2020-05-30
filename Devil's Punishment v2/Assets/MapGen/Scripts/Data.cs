@@ -73,6 +73,7 @@ public class Data : MonoBehaviour
     //public bool isPipeAtLeft = true;
 
     public bool isDoneConnectTwoRooms = false;
+    public bool isDoneModularRoom = false;
 
     private void Awake()
     {
@@ -1215,7 +1216,10 @@ public class Data : MonoBehaviour
                                 door1Pos.z = Mathf.Round(door1Pos.z);
 
                                 //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                StartCoroutine(roomNewScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true));
+                                StartCoroutine(roomNewScript.AStarHelper(door0Pos, door1Pos
+                                                                        , door0.name[4].ToString() + door0.name[5].ToString()
+                                                                        , door1.name[4].ToString() + door1.name[5].ToString()
+                                                                        , door0.parent.position, door1.parent.position, true));
                                 break;
                             }
                             else
