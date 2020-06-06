@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
@@ -331,7 +331,7 @@ public class MapGen3 : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(3, 4)) // yes modular room added // for dev purposes 1, 4 change later
+                switch (Random.Range(2, 3)) // yes modular room added // for dev purposes 1, 4 change later
                 {
                     case 0:
                         roomToSpawn = startRoom;
@@ -372,8 +372,8 @@ public class MapGen3 : MonoBehaviour
             //roomToSpawn = null;
             if (roomToSpawn == null)
             {
-                Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
-                Data.instance.modularRoomAssembler.door_corridor_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
+                Data.instance.modularRoomAssembler.room_start_Transform = new GameObject("Room Start").transform;
+                Data.instance.modularRoomAssembler.room_start_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
 
                 Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
                 Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;

@@ -111,9 +111,9 @@ public class Data : MonoBehaviour
 
     public void TempCreateModularRoom()
     {
-        Data.instance.modularRoomAssembler.door_corridor_Transform = new GameObject("Door+z").transform;
-        Data.instance.modularRoomAssembler.door_corridor_Transform.position = Vector3.zero + new Vector3(0, 0, 20); //Not Sure!!!;
-        Data.instance.modularRoomAssembler.door_corridor_Transform.tag = "Corridor Spawn Points";
+        Data.instance.modularRoomAssembler.room_start_Transform = new GameObject("Door+z").transform;
+        Data.instance.modularRoomAssembler.room_start_Transform.position = Vector3.zero + new Vector3(0, 0, 20); //Not Sure!!!;
+        Data.instance.modularRoomAssembler.room_start_Transform.tag = "Corridor Spawn Points";
 
         Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
         Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;

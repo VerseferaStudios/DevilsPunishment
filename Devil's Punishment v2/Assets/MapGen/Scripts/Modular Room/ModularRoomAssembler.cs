@@ -6,8 +6,8 @@ using UnityEngine;
 public class ModularRoomAssembler : MonoBehaviour
 {
 
-    public Transform door_corridor_Transform;
-    public Vector3 door_corridor_Pos;
+    public Transform room_start_Transform;
+    public Vector3 room_Start_Pos;
     public Vector3 roomCentrePos;
     //public Vector3 wall_roomdoor_Pos;
     public GameObject[] doors;
@@ -28,7 +28,7 @@ public class ModularRoomAssembler : MonoBehaviour
     public GameObject wall_with_door;
     public GameObject floor;
     public GameObject ceiling;
-    public GameObject grill;
+    public GameObject grill_with_frame;
     [SerializeField]
     private List<int> size_x, size_z;
     private int noOfParts = 2;
@@ -37,6 +37,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private List<int> nswe_helper;
 
+    [SerializeField]
     private bool[] door_done;
 
     public RoomReferencesModular roomReferencesModular;
@@ -59,16 +60,16 @@ public class ModularRoomAssembler : MonoBehaviour
         doors = new GameObject[noOfParts];
         wallColliders = new List<GameObject>();
         Debug.Log(Random.Range(1, 1));
-        doors[0] = door_corridor_Transform.gameObject;
-        door_corridor_Pos = door_corridor_Transform.position;
+        //doors[0] = room_start_Transform.gameObject;
+        room_Start_Pos = room_start_Transform.position;
         door_done = new bool[noOfParts];
-        door_done[0] = true;
+        //door_done[0] = true;
 
         roomReferencesModular.doors = new GameObject[noOfParts];
-        roomReferencesModular.doors[0] = doors[0];
+        //roomReferencesModular.doors[0] = doors[0];
 
         //roomHolderTransform = new GameObject("Modular Room 1").transform;
-        roomCentrePos = door_corridor_Pos - new Vector3(0, 0, 20);
+        roomCentrePos = room_Start_Pos - new Vector3(0, 0, 20);
         roomHolderTransform.position = roomCentrePos;
         roomHolderTransform.tag = "Modular Room stuff";
 
@@ -100,11 +101,12 @@ public class ModularRoomAssembler : MonoBehaviour
             }
             DecideRoomOriginOrCorner_CreateHolders(i, pos[i]);
             //wall_roomdoor_Pos = door_corridor_Pos + new Vector3(0, 2, -2) - roomHolderTransform.position; // doesnt work yet
-            if(i == 0)
-            {
-                doors[0].transform.SetParent(partHolderTransforms[0]);
-                doors[0].tag = "Corridor Spawn Points";
-            }
+            
+        //if(i == 0) for what???????
+            //{
+            //    doors[0].transform.SetParent(partHolderTransforms[0]);
+            //    doors[0].tag = "Corridor Spawn Points";
+            //} 
 
         }
 
@@ -118,6 +120,7 @@ public class ModularRoomAssembler : MonoBehaviour
         Debug.Log("rand = " + rand);
 
         PlaceFloor_Ceiling(0, rand);
+        Swap_NSWE();
         PlaceWall(0);
 
         Swap_NSWE();
@@ -320,7 +323,7 @@ public class ModularRoomAssembler : MonoBehaviour
     {
         if(partNo == 0)
         {
-            startFloorPos = new Vector3(door_corridor_Pos.x + Random.Range(-size_x[partNo], 0) * 4, door_corridor_Pos.y, door_corridor_Pos.z - 4);
+            startFloorPos = new Vector3(room_Start_Pos.x + Random.Range(-size_x[partNo], 0) * 4, room_Start_Pos.y, room_Start_Pos.z - 4);
         }
         startFloorPosList.Add(startFloorPos);
         GameObject sfp = new GameObject("startFloorPos");
@@ -349,7 +352,8 @@ public class ModularRoomAssembler : MonoBehaviour
                 if(randGrill == floorCount)
                 {
                     Debug.Log("floorCount = " + floorCount);
-                    Transform t1 = Instantiate(grill).transform;
+                    Transform t1 = Instantiate(grill_with_frame).transform;
+                    t1.GetChild(0).gameObject.SetActive(true);
                     t1.parent = floor_holder[partNo];
                     t1.localPosition = new Vector3(i * 4, 2.11f, -j * 4);
                     //t1.localScale = Vector3.one * 2;
@@ -491,7 +495,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //    toSpawn = wall_with_door;
                     //}//else if
                     //Debug.Log("wall count = " +  wallCount);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 0 && randDoor == wallCount)
+                    if (j == 0 && !door_done[partNo]/* && nswe_helper[partNo] != 0*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
                         Debug.Log("1 in");
@@ -531,7 +535,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //    toSpawn = wall_with_door;
                     //}//else if
                     //Debug.Log("wall count = " +  wallCount);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 2 && randDoor == wallCount)
+                    if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 2*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
                         Debug.Log("2 in");
@@ -566,7 +570,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 {
                     posCurr = new Vector3(4 / 2, 2 + j * 4, -i * 4);
                     //Debug.Log("wall count = " +  wallCount);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 1 && randDoor == wallCount)
+                    if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 1*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
                         Debug.Log("3 in");
@@ -600,7 +604,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 {
                     posCurr = new Vector3(-size_x[partNo] * 4 - 4 / 2, 2 + j * 4, -i * 4);
                     //Debug.Log("wall count = " +  wallCount);
-                    if (j == 0 && !door_done[partNo] && nswe_helper[partNo] != 3 && randDoor == wallCount)
+                    if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 3*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
                         Debug.Log("4 in");

@@ -80,6 +80,7 @@ MonoBehaviour:
   modularRoomAssembler: {fileID: 0}
   roomsFloor1Modular: []
   isDoneConnectTwoRooms: 0
+  isDoneModularRoom: 0
 --- !u!114 &4162967055878268604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,8 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f411ca46cb0ac4c8520b9269e98a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door_corridor_Transform: {fileID: 0}
-  door_corridor_Pos: {x: 0, y: 0, z: 0}
+  room_start_Transform: {fileID: 0}
+  room_Start_Pos: {x: 0, y: 0, z: 0}
   roomCentrePos: {x: 0, y: 0, z: 0}
   doors: []
   mat: {fileID: 0}
@@ -104,7 +105,8 @@ MonoBehaviour:
     type: 3}
   floor: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
   ceiling: {fileID: 7801007394127150731, guid: da68fc0207459874391c8abd26a2e5e9, type: 3}
-  grill: {fileID: 6430072811184709967, guid: 6f34ec7e6067e0a448db31b203d2c7e4, type: 3}
+  grill_with_frame: {fileID: 867967529729384698, guid: aee907b6e2ddcca448d1a5ab68d9fa2d,
+    type: 3}
   size_x: 
   size_z: 
   roomReferencesModular: {fileID: 0}
