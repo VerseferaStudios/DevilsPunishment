@@ -86,7 +86,7 @@ public class ModularRoomAssembler : MonoBehaviour
         startFloorPosList = new List<Vector3>();
 
         nswe_helper = new List<int>();
-        nswe_helper.Add(-1); //Since main room part doesnt have nswe //To keep PartNo intact
+        //nswe_helper.Add(-1); //Since main room part doesnt have nswe //To keep (idx of list) PartNo intact
 
         for (int i = 0; i < noOfParts; i++)
         {
@@ -117,10 +117,10 @@ public class ModularRoomAssembler : MonoBehaviour
         }
 
         int rand = Random.Range(0, sumFloors);
-        Debug.Log("rand = " + rand);
+        //Debug.Log("randGrill = " + rand);
 
         PlaceFloor_Ceiling(0, rand);
-        Swap_NSWE();
+        
         PlaceWall(0);
 
         Swap_NSWE();
@@ -250,6 +250,11 @@ public class ModularRoomAssembler : MonoBehaviour
     {
         int x = Random.Range(1, 4);
         Debug.Log("Choosing NSWE = " + x);
+        if(nswe_helper.Count <= 0)
+        {
+            nswe_helper.Add(x);
+            Swap_NSWE();
+        }
         nswe_helper.Add(x);
         return x; //0, 4 if coveering corridor door is solved
     }
@@ -440,6 +445,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private int RandomDoorHelper(int partNo)
     {
+        Debug.Log("nswe_helper[partNo] => " + nswe_helper[partNo]);
         switch (nswe_helper[partNo])
         {
             case 0:
@@ -459,7 +465,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 return Random.Range(0, 2 * (size_x[partNo] + 1) + size_z[partNo] + 1);
 
             default:
-                Debug.LogWarning("nswe_helper error");
+                Debug.LogWarning("nswe_helper error; nswe_helper[partNo] => " + nswe_helper[partNo]);
                 return -1;
 
         }
