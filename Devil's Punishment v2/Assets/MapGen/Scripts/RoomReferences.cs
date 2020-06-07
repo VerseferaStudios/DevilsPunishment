@@ -5,6 +5,7 @@ using UnityEngine;
 public class RoomReferences : MonoBehaviour
 {
     public GameObject[] doors;
+    public GameObject[] existingCorridors;
     public Transform topRightItemGen;
     public Transform bottomLeftItemGen;
     public Transform topRightMapGen;

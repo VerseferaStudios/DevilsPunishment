@@ -74,6 +74,46 @@ public class MapGen3 : MonoBehaviour
 
     public int mapseed;
 
+    public RoomReferences roomReferences;
+    public Vector3 prevTopRight, prevBottomLeft;
+    public List<Transform> cubes;
+
+    //private void Update()
+    //{
+    //    if (roomReferences.topRightMapGen.position != prevTopRight ||
+    //       roomReferences.bottomLeftMapGen.position != prevBottomLeft)
+    //    {
+    //        prevTopRight = roomReferences.topRightMapGen.position;
+    //        prevBottomLeft = roomReferences.bottomLeftMapGen.position;
+
+    //        int ctr = 0;
+    //        for (int q = -Mathf.RoundToInt(Mathf.RoundToInt(roomReferences.topRightMapGen.position.x) / 4); q <= -Mathf.RoundToInt(Mathf.RoundToInt(roomReferences.bottomLeftMapGen.position.x) / 4); q++)
+    //        {
+    //            //Debug.Log("|");
+    //            for (int r = -Mathf.RoundToInt(Mathf.RoundToInt(roomReferences.topRightMapGen.position.z) / 4); r <= -Mathf.RoundToInt(Mathf.RoundToInt(roomReferences.bottomLeftMapGen.position.z) / 4); r++)
+    //            {
+    //                //Debug.Log("-");
+
+    //                squareGrid.tiles[q, r].tile = TileType.Wall;
+    //                if (isDevMode)
+    //                {
+    //                    if (ctr < cubes.Count)
+    //                    {
+    //                        cubes[ctr].position = new Vector3(q * -4, 0, r * -4);
+    //                    }
+    //                    else
+    //                    {
+    //                        cubes.Add(Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity).transform);
+    //                        //Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+    //                    }
+    //                    ctr++;
+    //                }
+    //            }
+    //        }
+
+    //    }
+    //}
+
     public void syncronizeSeeds(int seed)
     {
        
@@ -397,7 +437,7 @@ public class MapGen3 : MonoBehaviour
             {
                 spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
                 roomReferences = spawnedRoom.GetComponent<RoomReferences>();
-                CallOffsetAndDoorFns(spawnedRoom, yRotation);
+                CallOffsetAndDoorAndSqGridFns(spawnedRoom, yRotation, roomReferences);
 
 
                 #region tile Floor
@@ -449,17 +489,21 @@ public class MapGen3 : MonoBehaviour
                                                                          , tempPosVal);
 
                 }
+                
+                this.roomReferences = roomReferences;
 
-                for (int q = Mathf.RoundToInt(roomReferences.topRightMapGen.position.x / -4); q < roomReferences.bottomLeftMapGen.position.x / -4; q++)
+                for (int q = -Mathf.CeilToInt(roomReferences.topRightMapGen.position.x / 4); q <= -Mathf.FloorToInt(roomReferences.bottomLeftMapGen.position.x / 4); q++)
                 {
                     //Debug.Log("|");
-                    for (int r = (int)(roomReferences.topRightMapGen.position.z / -4); r < roomReferences.bottomLeftMapGen.position.z / -4; r++)
+                    for (int r = -Mathf.CeilToInt(roomReferences.topRightMapGen.position.z / 4); r <= -Mathf.FloorToInt(roomReferences.bottomLeftMapGen.position.z / 4); r++)
                     {
                         //Debug.Log("-");
+
                         squareGrid.tiles[q, r].tile = TileType.Wall;
                         if (isDevMode)
                         {
-                            Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                            cubes.Add(Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity).transform);
+                            //Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
                         }
                     }
                 }
@@ -475,6 +519,7 @@ public class MapGen3 : MonoBehaviour
                     }
                 }
                 #endregion
+
 
 
                 //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
@@ -663,7 +708,7 @@ public class MapGen3 : MonoBehaviour
     }
 
     // ---------------------------- Call offset functions accordingly ----------------------------
-    public void CallOffsetAndDoorFns(GameObject spawnedRoom, float yRotation)
+    public void CallOffsetAndDoorAndSqGridFns(GameObject spawnedRoom, float yRotation, RoomReferences roomReferences)
     {
         if (yRotation == 90)
         {
@@ -674,13 +719,17 @@ public class MapGen3 : MonoBehaviour
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
             //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
 
-            /*
-            Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-            for (int z = 0; z < corridorsOfRoom.childCount; z++)
-            {
-                corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-            }
-            */
+
+            //ExistingCorridorsFn(roomReferences, (int)yRotation, 0.226f);
+
+
+            //Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+
+            //for (int z = 0; z < corridorsOfRoom.childCount; z++)
+            //{
+            //    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+            //}
+
 
         }
         else if (yRotation == 180 || yRotation == 270 || yRotation == -90)
@@ -691,6 +740,7 @@ public class MapGen3 : MonoBehaviour
                 ChangeDoorNames(spawnedRoom, yRotation);
                 //ChangeDoorNames(spawnedRoom, "Door-z");
                 GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
+                //ExistingCorridorsFn(roomReferences, (int)yRotation, -0.08f);
                 reqYRotationForCorridor = 0;
 
                 //-----------------234567-----------------
@@ -709,13 +759,14 @@ public class MapGen3 : MonoBehaviour
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
                 //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
 
-                /*
-                Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-                for (int z = 0; z < corridorsOfRoom.childCount; z++)
-                {
-                    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-                }
-                */
+                //ExistingCorridorsFn(roomReferences, (int)yRotation, 0.226f);
+
+                //Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
+                //for (int z = 0; z < corridorsOfRoom.childCount; z++)
+                //{
+                //    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
+                //}
+                
 
                 reqYRotationForCorridor = 90;
 
@@ -739,22 +790,36 @@ public class MapGen3 : MonoBehaviour
         else
         {
             GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
+            //ExistingCorridorsFn(roomReferences, (int)yRotation, -0.08f);
         }
 
 
+    }
+
+    // ---------------------------- Existing corridors offset and Square Grid stuff for AStar ----------------------------
+    private void ExistingCorridorsFn(RoomReferences roomReferences, int yRotation, float offset)
+    {
+        for (int q = 0; q < roomReferences.existingCorridors.Length; q++)
+        {
+            int x = Mathf.RoundToInt(roomReferences.existingCorridors[q].transform.position.x / -4);
+            int z = Mathf.RoundToInt(roomReferences.existingCorridors[q].transform.position.z / -4);
+            squareGrid.tiles[x, z].corridorIdx = 0; // For I corrdor
+            squareGrid.tiles[x, z].corridorIdx = yRotation;
+
+            //roomReferences.existingCorridors[q].transform.localPosition = new Vector3(roomReferences.existingCorridors[q].transform.localPosition.x, roomReferences.existingCorridors[q].transform.localPosition.y, roomReferences.existingCorridors[q].transform.localPosition.z + offset);
+
+        }
     }
 
     // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------
     private void GiveOffsetToRoom(Transform spawnedRoom, float offset)
     {
         spawnedRoom.GetChild(0).localPosition = new Vector3(spawnedRoom.GetChild(0).localPosition.x, spawnedRoom.GetChild(0).localPosition.y, spawnedRoom.GetChild(0).localPosition.z + offset);
-        Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
-        for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
-        {
-            
-            
-            corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
-        }
+        //Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
+        //for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
+        //{
+        //    corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
+        //}
     }
 
     // --------------------------------- Checks for collisions between ROOMS ---------------------------------

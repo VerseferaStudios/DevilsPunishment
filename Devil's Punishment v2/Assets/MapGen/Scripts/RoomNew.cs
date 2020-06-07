@@ -76,7 +76,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             roomReferencesModular = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModular>();
             for (int j = 0; j < roomReferencesModular.roomFloors.Count; j++)
             {
-        Debug.Log("Time mod room = " + Time.time);
+                Debug.Log("Time mod room = " + Time.time);
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
@@ -98,74 +98,76 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         spawnPoints.AddRange(tempSpawnPoints);
         //Debug.Log("spawnPoints.Count = " + spawnPoints.Count);
 
-        // ------------------- Find exactly overlapping doors/spawnPoints, spawn a corridor at thst position, and destroy both doors/spawnPoints -------------------
-        for (int i = 0; i < spawnPoints.Count; i++)
-        {
-            bool isFound = false;
-            int lastIdx = i;
-            for (int j = 0; j < spawnPoints.Count; j++)
-            {
-                if (i == j)
-                {
-                    continue;
-                }
-                ////Debug.Log("i = " + i + " & j = " + j);
-                if (spawnPoints[i].transform.position == spawnPoints[j].transform.position)
-                {
-                    isFound = true;
-                    lastIdx = j;
-                    break;
-                }
-            }
-            if (isFound)
-            {
-                GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
-                currentCorridor.layer = 18;
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
-                currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
-                if (spawnPoints[i].name.EndsWith("x"))
-                {
-                    currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-                //Debug.Log("Spawn1");
-                //Data.instance.corridorCount++;
+        #region Old Exactly Overlapping Doors
+        //// ------------------- Find exactly overlapping doors/spawnPoints, spawn a corridor at thst position, and destroy both doors/spawnPoints -------------------
+        //for (int i = 0; i < spawnPoints.Count; i++)
+        //{
+        //    bool isFound = false;
+        //    int lastIdx = i;
+        //    for (int j = 0; j < spawnPoints.Count; j++)
+        //    {
+        //        if (i == j)
+        //        {
+        //            continue;
+        //        }
+        //        ////Debug.Log("i = " + i + " & j = " + j);
+        //        if (spawnPoints[i].transform.position == spawnPoints[j].transform.position)
+        //        {
+        //            isFound = true;
+        //            lastIdx = j;
+        //            break;
+        //        }
+        //    }
+        //    if (isFound)
+        //    {
+        //        GameObject currentCorridor = Instantiate(corridors[0], spawnPoints[i].transform.position, Quaternion.identity, Data.instance.mapGenHolderTransform);
+        //        currentCorridor.layer = 18;
+        //        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[i].transform.parent.position);
+        //        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(spawnPoints[lastIdx].transform.parent.position);
+        //        if (spawnPoints[i].name.EndsWith("x"))
+        //        {
+        //            currentCorridor.transform.rotation = Quaternion.Euler(0, 90, 0);
+        //        }
+        //        //Debug.Log("Spawn1");
+        //        //Data.instance.corridorCount++;
 
-                // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
-                visitedRooms.Add(spawnPoints[i].transform.parent.position);
-                visitedRooms.Add(spawnPoints[lastIdx].transform.parent.position);
+        //        // ------------------- Added parents position to List<Vector3> to avoid future doors of the room -------------------
+        //        visitedRooms.Add(spawnPoints[i].transform.parent.position);
+        //        visitedRooms.Add(spawnPoints[lastIdx].transform.parent.position);
 
-                //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
+        //        //CheckDuplicatesAndConnect(spawnPoints[i].transform.parent.transform.position, spawnPoints[lastIdx].transform.parent.transform.position);
 
-                Data.instance.connectedRooms.Add(visitedRooms);
+        //        Data.instance.connectedRooms.Add(visitedRooms);
 
-                ////Debug.Log(spawnPoints[i].transform.position + "______________________________________________________");
-                spawnPoints.RemoveAt(i);
+        //        ////Debug.Log(spawnPoints[i].transform.position + "______________________________________________________");
+        //        spawnPoints.RemoveAt(i);
 
-                // -------------- decrease lastIdx if greater than i --------------
-                if (lastIdx > i)
-                {
-                    lastIdx--;
-                }
+        //        // -------------- decrease lastIdx if greater than i --------------
+        //        if (lastIdx > i)
+        //        {
+        //            lastIdx--;
+        //        }
 
-                i--;
+        //        i--;
 
-                spawnPoints.RemoveAt(lastIdx);
+        //        spawnPoints.RemoveAt(lastIdx);
 
-                // -------------- decrease i if greater than lastIdx --------------
-                if (i > lastIdx)
-                {
-                    i--;
-                }
-                lastIdx--;
+        //        // -------------- decrease i if greater than lastIdx --------------
+        //        if (i > lastIdx)
+        //        {
+        //            i--;
+        //        }
+        //        lastIdx--;
 
-                visitedRooms = new List<Vector3>();
+        //        visitedRooms = new List<Vector3>();
 
-                isFound = false;
-            }
-        }
+        //        isFound = false;
+        //    }
+        //}
+        #endregion
 
         //give data the first door according to which we r sorting
-        if(spawnPoints.Count > 0)
+        if (spawnPoints.Count > 0)
         {
             Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
         }
@@ -592,7 +594,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         int[] kIdx = GetIdx(posI);
         GameObject currentCorridor;
-        currentCorridor = Instantiate(corridors[0]/*corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx]*/, posI, Quaternion.identity);
+        currentCorridor = Instantiate(corridors[0]/*corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx]*/, posI, Quaternion.identity, mapGenHolderTransform);
 
         currentCorridor.layer = 18;
         /*
