@@ -226,12 +226,16 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
                     // ---------------------------------- AStar Trials ----------------------------------
 
-                    Debug.Log("k = " + k);
-                    Debug.Log("l = " + l);
+                    //Debug.Log("k = " + k);
+                    //Debug.Log("l = " + l);
                     isDoneAStarHelper = false;
+
+                    //if (isDevMode)
+                    //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
+
                     StartCoroutine(AStarHelper(spawnPoints[k].transform.position, spawnPoints[l].transform.position,
                                                spawnPoints[k].name[4].ToString() + spawnPoints[k].name[5].ToString(),
-                                               spawnPoints[l].name[4].ToString() + spawnPoints[k].name[5].ToString(),
+                                               spawnPoints[l].name[4].ToString() + spawnPoints[l].name[5].ToString(),
                                                kParentPos, lParentPos, false));
                     yield return new WaitUntil(() => isDoneAStarHelper);
 
@@ -294,18 +298,21 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     public IEnumerator AStarHelper(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
+        //Debug.Log("lName = " + lName);
+        //Debug.Log("kName = " + kName);
         if (isDevMode)
         {
             testGridOrigCol = testGridPlaneHolder.GetChild(0).GetComponent<Renderer>().material.color;
         }
 
 
-        Debug.Log("sqr width = " + squareGrid.width);
-        Debug.Log("sqr height = " + squareGrid.height);
+        //Debug.Log("sqr width = " + squareGrid.width);
+        //Debug.Log("sqr height = " + squareGrid.height);
+        int zOverall = (int)Data.instance.zSize * mapSizeZ / 4;
         AStarSearch aStarSearch = new AStarSearch(squareGrid
                                                  , new Location(kPos / -4)
                                                  , new Location(lPos / -4)
-                                                 , testGridPlaneHolder, (int)Data.instance.zSize * mapSizeZ / 4
+                                                 , testGridPlaneHolder, zOverall
                                                  , aStarVisualisationTime
                                                  , isDevMode);
 
@@ -313,7 +320,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms);
 
         List<Location> locations = aStarSearch.FindPath();
-        Debug.Log("Locations count = " + locations.Count);
+        //Debug.Log("Locations count = " + locations.Count);
 
         Vector3 prevLoc = kPos;
         Vector3 currLoc;
@@ -328,8 +335,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             {
                 currLoc = kPos;
                 currMove = Data.instance.doorRotationHelper.IndexOf(kName);
-                Debug.Log("Door " + kName);
-                Debug.Log("currMove = " + currMove);
+                //Debug.Log("Door " + kName);
+                //Debug.Log("currMove = " + currMove);
             }
             else
             {
@@ -364,14 +371,14 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 List<int> openings1 = new List<int>();
                 openings1.Add(nextMove);
                 openings1.Add(currMove);
-                AddLCorridorSpawnInfo(openings1, currLoc);
+                AddLCorridorSpawnInfo(openings1, currLoc, zOverall);
                 //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
             }
             else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
                  //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
             {
                 //! Corridor
-                AddICorridorSpawnInfo(currLoc, nextMove, false);
+                AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
                 //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
             }
 
@@ -430,10 +437,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         Vector3 lParentPos = Vector3.zero;
         for (int i = 0; i < (int)Data.instance.xSize * mapSizeX / 4; i++)
         {
-            Debug.Log("i = " + i);
+            //Debug.Log("i = " + i);
             for (int j = 0; j < (int)Data.instance.zSize * mapSizeZ / 4; j++)
             {
-                Debug.Log("j = " + j);
+                //Debug.Log("j = " + j);
                 if (squareGrid.tiles[i, j].corridorIdx != -1)
                 {
                     string corridorName = CorridorsListIdxToCorridorName(squareGrid.tiles[i, j].corridorIdx);
@@ -487,17 +494,30 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         }
     }
 
-    private void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride)
+    private void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride, int zOverall)
     {
-        Debug.Log("I info");
+        //Debug.Log("I info");
         int[] kIdx = GetIdx(posI);
         int yRotation = (movesI == 0 || movesI == 2) ? 0 : 90;
+
+
+        //Debug corridors AStar
+        if (isDevMode)
+        {
+            if (testGridPlaneHolder != null)
+            {
+                int idx = kIdx[0] * zOverall + kIdx[1];
+                testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.green;
+            }
+        }
+
+
         /*
         if(Vector3.Distance(posI, new Vector3(-124, 0, -20)) < 6)
         {
-            Debug.Log("I Corr collision check => ");
-            Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx);
-            Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot);
+            //Debug.Log("I Corr collision check => ");
+            //Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorIdx);
+            //Debug.Log("squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot = " + squareGrid.tiles[kIdx[0]][kIdx[1]].corridorYRot);
         }
         */
 
@@ -514,16 +534,28 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         || squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation - 90)
         && !isOverride)*/
         {
-            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI");
+            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI", zOverall);
         }
     }
 
-    private void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn)
+    private void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall)
     {
-        Debug.Log("L info");
+        //Debug.Log("L info");
         float yRotation = Data.instance.ConvertToRotation(openings);
         int corridorIdx = ChooseLCorridor(yRotation);
         int[] kIdx = GetIdx(posToSpawn);
+
+
+        //Debug corridors AStar
+        if (isDevMode)
+        {
+            if (testGridPlaneHolder != null)
+            {
+                int idx = kIdx[0] * zOverall + kIdx[1];
+                testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.red;
+            }
+        }
+
 
         if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
            && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
@@ -535,13 +567,26 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
         //&& !isOverride)
         {
-            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL");
+            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall);
         }
     }
 
-    private void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew)
+    private void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall)
     {
-        Debug.Log("T info");
+
+
+        //Debug corridors AStar
+        if (isDevMode)
+        {
+            if (testGridPlaneHolder != null)
+            {
+                int idx = kIdx[0] * zOverall + kIdx[1];
+                testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.black;
+            }
+        }
+
+
+        //Debug.Log("T info");
         if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
            && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
         {
@@ -552,23 +597,52 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
         //&& !isOverride)
         {
-            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT");
+            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT", zOverall);
         }
     }
 
-    private void AddXCorridorSpawnInfo(int[] kIdx)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
+    private void AddXCorridorSpawnInfo(int[] kIdx, int zOverall)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
     {
-        Debug.Log("X info");
+
+
+        //Debug corridors AStar
+        if (isDevMode)
+        {
+            if (testGridPlaneHolder != null)
+            {
+                int idx = kIdx[0] * zOverall + kIdx[1];
+                testGridPlaneHolder.GetChild(idx).GetComponent<Renderer>().material.color = Color.white;
+            }
+        }
+
+
+        //Debug.Log("X info");
         squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 5;
         squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = 0;
     }
 
-    private void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName)
+    private void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName, int zOverall)
     {
         List<int> openings1, openings2;
         openings1 = Data.instance.ConvertToOpenings(corridorName, yRotation, false);
         openings2 = Data.instance.ConvertToOpenings(CorridorsListIdxToCorridorName(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx),
                                                     squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, false);
+
+        //Debug.Log("T or X pos = " + GetPos(kIdx));
+        //Debug.Log("corridorName = " + corridorName);
+        //Debug.Log("yRotation = " + yRotation);
+        //Debug.Log("openings1 = " + openings1);
+        //foreach (var item in openings1)
+        //{
+        //    Debug.Log(item);
+        //}
+        //Debug.Log("openings2 = " + openings2);
+        //foreach (var item in openings2)
+        //{
+        //    Debug.Log(item);
+        //}
+
+
         openings1.AddRange(openings2);
 
         openings1 = openings1.Distinct().ToList();
@@ -582,11 +656,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
                 return;
             }
             float yRotationNew = Data.instance.ConvertToRotation(openings1);
-            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew);
+            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall);
         }
         else if (openings1.Count == 4)
         {
-            AddXCorridorSpawnInfo(kIdx);
+            AddXCorridorSpawnInfo(kIdx, zOverall);
         }
     }
 

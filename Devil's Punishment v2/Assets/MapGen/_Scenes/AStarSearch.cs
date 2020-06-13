@@ -42,8 +42,8 @@ public class Location
     {
         this.x = Mathf.RoundToInt(position.x);
         this.z = Mathf.RoundToInt(position.z);
-        Debug.Log("x = " + x);
-        Debug.Log("z = " + z);
+        //Debug.Log("x = " + x);
+        //Debug.Log("z = " + z);
     }
 
     public Vector3 vector3()

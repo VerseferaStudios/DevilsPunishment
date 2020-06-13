@@ -436,6 +436,7 @@ public class MapGen3 : MonoBehaviour
             else
             {
                 spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
+                Debug.Log("Room name = " + spawnedRoom.name);
                 roomReferences = spawnedRoom.GetComponent<RoomReferences>();
                 CallOffsetAndDoorAndSqGridFns(spawnedRoom, yRotation, roomReferences);
 
@@ -508,16 +509,60 @@ public class MapGen3 : MonoBehaviour
                     }
                 }
 
+                int x, z;
+                string doorName;
                 for (int q = 0; q < roomReferences.doors.Length; q++)
                 {
-                    int x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
-                    int z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
+                    x = Mathf.RoundToInt(roomReferences.doors[q].transform.position.x / -4);
+                    z = Mathf.RoundToInt(roomReferences.doors[q].transform.position.z / -4);
+
+                    Debug.Log("X = " + x);
+                    Debug.Log("Z = " + z);
+                    Debug.Log("actual door pos = " + roomReferences.doors[q].transform.position);
+                    Debug.Log("pos = " + GetPos(new int[] { x, z }));
+                    doorName = roomReferences.doors[q].name[4].ToString() + roomReferences.doors[q].name[5].ToString();
+
                     squareGrid.tiles[x, z].tile = TileType.Floor;
+                    for (int j = 0; j < 2; j++)
+                    {
+                        DoorFurtherHelper(doorName + "");
+                        Debug.Log("hey doorname = " + doorName);
+                        Debug.Log("X = " + x);
+                        Debug.Log("Z = " + z);
+                        Debug.Log("pos = " + GetPos(new int[] { x, z }));
+                        squareGrid.tiles[x, z].tile = TileType.Floor;
+                    }
                     if (isDevMode)
                     {
                         Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
                     }
                 }
+
+                // -------- prevent doors being isolated in the map (Shouldnt make room floors walkable!!!!!) --------
+                void DoorFurtherHelper(string doorLastName)
+                {
+                    switch (doorLastName)
+                    {
+                        case "+z":
+                            z--;
+                            break;
+                        case "+x":
+                            x--;
+                            break;
+                        case "-z":
+                            z++;
+                            break;
+                        case "-x":
+                            x++;
+                            break;
+                    }
+                }
+
+                Vector3 GetPos(int[] idx)
+                {
+                    return new Vector3(idx[0] * -4, 0.5f, idx[1] * -4);
+                }
+
                 #endregion
 
 
