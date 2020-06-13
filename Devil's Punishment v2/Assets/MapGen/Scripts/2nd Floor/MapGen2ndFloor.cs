@@ -262,7 +262,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
             spawnedRoom.transform.GetChild(1).tag = "Corridor Spawn Points 2nd Floor";
 
-            RoomReferences roomReferences = spawnedRoom.GetComponent<RoomReferences>();
+            RoomReferencesStatic roomReferences = spawnedRoom.GetComponent<RoomReferencesStatic>();
 
             itemGenScript.SpawnItems(roomReferences.bottomLeftItemGen.position, roomReferences.topRightItemGen.position, 6, spawnedRoom.transform);
 
@@ -411,10 +411,10 @@ public class MapGen2ndFloor : MonoBehaviour
     // -------------------- Change door names --------------------
     public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
     {
-        GameObject[] doors = spawnedRoom.GetComponent<RoomReferences>().doors;
+        GameObject[] doors = spawnedRoom.GetComponent<RoomReferencesStatic>().doors;
         for (int i = 0; i < doors.Length; i++)
         {
-            spawnedRoom.GetComponent<RoomReferences>().doors[i].name = doorName;
+            spawnedRoom.GetComponent<RoomReferencesStatic>().doors[i].name = doorName;
         }
     }
 

@@ -5,13 +5,13 @@ using UnityEngine;
 public class CorridorTestSpawner : MonoBehaviour
 {
     public GameObject corridorTest;
-    private RoomReferences roomReferencesScript;
+    private RoomReferencesStatic roomReferencesScript;
     private bool isLoopDone = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        roomReferencesScript = GetComponent<RoomReferences>();
+        roomReferencesScript = GetComponent<RoomReferencesStatic>();
         StartCoroutine(SpawnCorridorTest());
     }
 

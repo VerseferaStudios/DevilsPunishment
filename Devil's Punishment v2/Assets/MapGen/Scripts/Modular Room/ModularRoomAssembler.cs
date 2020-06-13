@@ -353,28 +353,28 @@ public class ModularRoomAssembler : MonoBehaviour
             for (int j = 0; j <= size_z[partNo]; j++)
             {
                 //Floor
-
-                if(randGrill == floorCount)
+                Transform t;
+                if (randGrill == floorCount)
                 {
                     Debug.Log("floorCount = " + floorCount);
-                    Transform t1 = Instantiate(grill_with_frame).transform;
-                    t1.GetChild(0).gameObject.SetActive(true);
-                    t1.parent = floor_holder[partNo];
-                    t1.localPosition = new Vector3(i * 4, 2.11f, -j * 4);
+                    t = Instantiate(grill_with_frame).transform;
+                    t.GetChild(0).gameObject.SetActive(true);
+                    t.parent = floor_holder[partNo];
+                    t.localPosition = new Vector3(i * 4, 2.11f, -j * 4);
                     //t1.localScale = Vector3.one * 2;
                 }
                 else
                 {
-                    Transform t2 = Instantiate(floor).transform;
-                    t2.parent = floor_holder[partNo];
-                    t2.localPosition = new Vector3(i * 4, 0, -j * 4);
-
-                    roomReferencesModular.roomFloors.Add(t2.position);
+                    t = Instantiate(floor).transform;
+                    t.parent = floor_holder[partNo];
+                    t.localPosition = new Vector3(i * 4, 0, -j * 4);
                 }
                 floorCount++;
+                
+                roomReferencesModular.roomFloors.Add(t.position);
 
                 //Ceilng
-                Transform t = Instantiate(ceiling).transform;
+                t = Instantiate(ceiling).transform;
                 t.parent = ceiling_holder[partNo];
                 t.localPosition = new Vector3(i * 4, height * 4, -j * 4);
             }

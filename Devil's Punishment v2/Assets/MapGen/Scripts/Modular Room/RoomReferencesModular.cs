@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomReferencesModular : MonoBehaviour
+public class RoomReferencesModular : RoomReferencesBase
 {
-    public GameObject[] doors;
     public List<Vector3> roomFloors;
-    public Transform ventParent;
 }
