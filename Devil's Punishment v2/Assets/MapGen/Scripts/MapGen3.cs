@@ -390,7 +390,7 @@ public class MapGen3 : TestFnsMapGen
                         yCoord = 1;
                         break;
                     case 3:
-                        yCoord = -1.5f - 0.739f;
+                        yCoord = -1.72f; //-1.5f - 0.739f;
                         roomToSpawn = null;
                         break;
                         /*
