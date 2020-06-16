@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 
-public class MapGen2ndFloor : MonoBehaviour
+public class MapGen2ndFloor : TestFnsMapGen
 {
     //first we'll see the ground floor
     //10 x 10 cube
@@ -268,7 +268,7 @@ public class MapGen2ndFloor : MonoBehaviour
 
             SpawnVentCoverInRoom(i, k, roomReferences.ventParent);
 
-            CallOffsetAndDoorFns(spawnedRoom, yRotation);
+            CallOffsetAndDoorAndSqGridFns(spawnedRoom, yRotation, roomReferences);
 
             // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
             if (i == k - 1)
@@ -377,17 +377,6 @@ public class MapGen2ndFloor : MonoBehaviour
         }
     }
 
-    // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------
-    private void GiveOffsetToRoom(Transform spawnedRoom, float offset)
-    {
-        spawnedRoom.GetChild(0).localPosition = new Vector3(spawnedRoom.GetChild(0).localPosition.x, spawnedRoom.GetChild(0).localPosition.y, spawnedRoom.GetChild(0).localPosition.z + offset);
-        Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
-        for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
-        {
-            corridorsOfRoomParent.GetChild(i).GetChild(0).localPosition = new Vector3(0, 0, offset);
-        }
-    }
-
     // ----------------------- Spawn Vent Cover in room -----------------------
     public void SpawnVentCoverInRoom(int i, int k, Transform ventParentTransform)
     {
@@ -405,94 +394,6 @@ public class MapGen2ndFloor : MonoBehaviour
                 //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
                 Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
-        }
-    }
-
-    // -------------------- Change door names --------------------
-    public void ChangeDoorNames(GameObject spawnedRoom, string doorName)
-    {
-        GameObject[] doors = spawnedRoom.GetComponent<RoomReferencesStatic>().doors;
-        for (int i = 0; i < doors.Length; i++)
-        {
-            spawnedRoom.GetComponent<RoomReferencesStatic>().doors[i].name = doorName;
-        }
-    }
-
-    // ---------------------------- Call offset functions accordingly ----------------------------
-    public void CallOffsetAndDoorFns(GameObject spawnedRoom, float yRotation)
-    {
-        if (yRotation == 90)
-        {
-            ChangeDoorNames(spawnedRoom, "Door+x");
-            GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
-            //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
-            //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
-            //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
-
-            /*
-            Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-            for (int z = 0; z < corridorsOfRoom.childCount; z++)
-            {
-                corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-            }
-            */
-
-        }
-        else if (yRotation == 180 || yRotation == 270 || yRotation == -90)
-        {
-            float reqYRotationForCorridor = 0;
-            if (yRotation == 180)
-            {
-                ChangeDoorNames(spawnedRoom, "Door-z");
-                GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
-                reqYRotationForCorridor = 0;
-
-                //-----------------234567-----------------
-                //if (spawnedRoom.name.Equals("End Room(Clone)"))
-                {
-                    spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.303f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + 0.31f);
-                }
-
-            }
-            else if (yRotation == 270 || yRotation == -90)
-            {
-                
-                ChangeDoorNames(spawnedRoom, "Door-x");
-                GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
-                //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
-                //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
-                //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
-
-                /*
-                Transform corridorsOfRoom = spawnedRoom.transform.GetChild(2);
-                for (int z = 0; z < corridorsOfRoom.childCount; z++)
-                {
-                    corridorsOfRoom.GetChild(z).localPosition = new Vector3(0, 0, 0.226f);
-                }
-                */
-
-                reqYRotationForCorridor = 90;
-
-                //-----------------234567-----------------
-                //if (spawnedRoom.name.Equals("End Room(Clone)"))
-                {
-                    spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x - 0.31f, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z - 0.303f);
-                }
-
-            }
-
-            for (int j = 0; j < spawnedRoom.transform.GetChild(2).childCount; j++)
-            {
-                spawnedRoom.transform.GetChild(2).GetChild(j).rotation = Quaternion.Euler(0, reqYRotationForCorridor, 0);
-            }
-
-
-
-        }
-        //probably +z....
-        else
-        {
-            GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
         }
     }
 

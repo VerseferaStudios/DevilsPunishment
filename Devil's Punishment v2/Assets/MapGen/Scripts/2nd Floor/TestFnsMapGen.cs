@@ -10,9 +10,9 @@ public class TestFnsMapGen : MonoBehaviour
     {
         if (yRotation == 90)
         {
-            ChangeDoorNames(spawnedRoom, yRotation);
+            ChangeDoorNames();
             //ChangeDoorNames(spawnedRoom, "Door+x");
-            GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
+            GiveOffsetToRoom(0.226f);
             //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
             //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
             //                                                  spawnedRoom.transform.localPosition.z + 0.065f); //*
@@ -35,9 +35,9 @@ public class TestFnsMapGen : MonoBehaviour
             float reqYRotationForCorridor = 0;
             if (yRotation == 180)
             {
-                ChangeDoorNames(spawnedRoom, yRotation);
+                ChangeDoorNames();
                 //ChangeDoorNames(spawnedRoom, "Door-z");
-                GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
+                GiveOffsetToRoom(-0.08f);
                 //ExistingCorridorsFn(roomReferences, (int)yRotation, -0.08f);
                 reqYRotationForCorridor = 0;
 
@@ -50,9 +50,9 @@ public class TestFnsMapGen : MonoBehaviour
             }
             else if (yRotation == 270 || yRotation == -90)
             {
-                ChangeDoorNames(spawnedRoom, yRotation);
+                ChangeDoorNames();
                 //ChangeDoorNames(spawnedRoom, "Door-x");
-                GiveOffsetToRoom(spawnedRoom.transform, 0.226f);
+                GiveOffsetToRoom(0.226f);
                 //spawnedRoom.transform.localPosition = new Vector3(spawnedRoom.transform.localPosition.x + 0.226f,  //*
                 //                                                  spawnedRoom.transform.localPosition.y,           //* This is for Start Room
                 //                                                  spawnedRoom.transform.localPosition.z - 0.065f); //*
@@ -87,15 +87,15 @@ public class TestFnsMapGen : MonoBehaviour
         //probably +z....
         else
         {
-            GiveOffsetToRoom(spawnedRoom.transform, -0.08f);
+            GiveOffsetToRoom(-0.08f);
             //ExistingCorridorsFn(roomReferences, (int)yRotation, -0.08f);
         }
 
 
         // ---------------------------- Shift/Give offset to room prefab correctly ----------------------------
-        void GiveOffsetToRoom(Transform spawnedRoom, float offset)
+        void GiveOffsetToRoom(float offset)
         {
-            spawnedRoom.GetChild(0).localPosition = new Vector3(spawnedRoom.GetChild(0).localPosition.x, spawnedRoom.GetChild(0).localPosition.y, spawnedRoom.GetChild(0).localPosition.z + offset);
+            spawnedRoom.transform.GetChild(0).localPosition = new Vector3(spawnedRoom.transform.GetChild(0).localPosition.x, spawnedRoom.transform.GetChild(0).localPosition.y, spawnedRoom.transform.GetChild(0).localPosition.z + offset);
             //Transform corridorsOfRoomParent = spawnedRoom.GetChild(2);
             //for (int i = 0; i < corridorsOfRoomParent.childCount; i++)
             //{
@@ -105,7 +105,7 @@ public class TestFnsMapGen : MonoBehaviour
 
 
         // -------------------- Change door names --------------------
-        void ChangeDoorNames(GameObject spawnedRoom, float yRotation)
+        void ChangeDoorNames()
         {
             GameObject[] doors = spawnedRoom.GetComponent<RoomReferencesStatic>().doors;
             for (int i = 0; i < doors.Length; i++)

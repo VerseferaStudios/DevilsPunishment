@@ -366,7 +366,11 @@ public class MapGen3 : TestFnsMapGen
                 }
                 else
                 {
-                    yCoord = 0f;
+                    if(!staticRooms[i - 1].name.Equals("Elevator Room"))
+                    {
+                        //yCoord = 0f;
+                        Debug.LogWarning("not in static room list; gen room yCoord used; error!");
+                    }
                 }
             }
             else
