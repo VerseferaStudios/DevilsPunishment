@@ -22,7 +22,7 @@ public class F_Handgun : MonoBehaviour
             HAim.start();
             HAim.release();
         }
-
+    }
         void PlayHgReloadEvent()
         {
             FMOD.Studio.EventInstance HReload = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Handgun/Handgun_Foley");
@@ -56,5 +56,5 @@ public class F_Handgun : MonoBehaviour
             print("FMOD-AUDIO-PLAYING");
         }
 
-    }
+  
 }
