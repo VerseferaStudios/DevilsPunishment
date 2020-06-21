@@ -6,7 +6,9 @@ public class StartRoom : MonoBehaviour
 {
     public Transform spawnPos;
 
-    void Awake()
+   
+
+    void Start()
     {
         GameState.gameState.setSpawnPos(spawnPos);
     }
