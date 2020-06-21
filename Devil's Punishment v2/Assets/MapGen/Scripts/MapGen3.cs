@@ -29,15 +29,12 @@ public class MapGen3 : TestFnsMapGen
     [Tooltip("Including Elevator")]
     public int numberOfRooms = 6; //Including Elevator
     private int n;
-    public ArrayList allRooms = new ArrayList();
     //public List<Vector2> allRooms = new List<Vector2>();
 
     private ArrayList gameObjectDetails = new ArrayList();
 
     public GameObject[] staticRooms;
     public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom, laserRoom;
-    
-    private float xSize = 48f, zSize = 48f;
 
     public GameObject[] corridors;
 
@@ -673,19 +670,6 @@ public class MapGen3 : TestFnsMapGen
             //roomReferences.existingCorridors[q].transform.localPosition = new Vector3(roomReferences.existingCorridors[q].transform.localPosition.x, roomReferences.existingCorridors[q].transform.localPosition.y, roomReferences.existingCorridors[q].transform.localPosition.z + offset);
 
         }
-    }
-
-    // --------------------------------- Checks for collisions between ROOMS ---------------------------------
-    private bool NoCollisions(float[] arr)
-    {
-        for (int i = 0; i < allRooms.Count; i++)
-        {
-            if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     /*

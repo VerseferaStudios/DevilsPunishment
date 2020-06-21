@@ -5,6 +5,9 @@ using UnityEngine;
 public class TestFnsMapGen : MonoBehaviour
 {
 
+    public ArrayList allRooms = new ArrayList();
+    protected float xSize = 48f, zSize = 48f;
+
     // ---------------------------- Call offset functions accordingly ----------------------------
     protected void CallOffsetAndDoorAndSqGridFns(GameObject spawnedRoom, float yRotation, RoomReferencesStatic roomReferences)
     {
@@ -211,4 +214,18 @@ public class TestFnsMapGen : MonoBehaviour
             }
         }
     }
+
+    // --------------------------------- Checks for collisions between ROOMS ---------------------------------
+    protected bool NoCollisions(float[] arr)
+    {
+        for (int i = 0; i < allRooms.Count; i++)
+        {
+            if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

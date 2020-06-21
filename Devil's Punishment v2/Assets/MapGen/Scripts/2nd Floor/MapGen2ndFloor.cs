@@ -18,14 +18,11 @@ public class MapGen2ndFloor : TestFnsMapGen
     [Tooltip("Including Elevator")]
     public int numberOfRooms = 6; //Including Elevator 
     private int n;
-    public ArrayList allRooms = new ArrayList();
     private ArrayList gameObjectDetails = new ArrayList();
 
     public GameObject[] staticRooms;
     public GameObject mainRoomIndicator, generatorRoom, startRoom, endRoom, laserRoom;
     
-    private float xSize = 48f, zSize = 48f;
-
     public GameObject[] corridors;
 
     //For Vents
@@ -395,19 +392,6 @@ public class MapGen2ndFloor : TestFnsMapGen
                 Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform).transform.GetChild(1).tag = "Vent Spawn Points 2nd Floor";
             }
         }
-    }
-
-    // --------------------------------- Checks for collisions between ROOMS ---------------------------------
-    private bool NoCollisions(float[] arr)
-    {
-        for (int i = 0; i < allRooms.Count; i++)
-        {
-            if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     /*
