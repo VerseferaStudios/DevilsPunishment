@@ -367,6 +367,11 @@ public class GunController : MonoBehaviour
 		//{
 		do
 		{
+			await Task.Delay(1);
+		} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload"));
+
+		do
+		{
 			gunAnimator.SetBool("Reload", false);
 			gunAnimator.SetTrigger("Fire");
 			if (weaponIsAssaultRifle())
@@ -387,10 +392,10 @@ public class GunController : MonoBehaviour
 			}
 			await Task.Delay(1);
 		} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
-			
+
 		//}
 		//await Task.Run(() =>wait4ReloadAsync());
-        
+
 		muzzleFlashLight.intensity = 0.5F;
 
 		bool isShotgun = weaponIsShotgun();
