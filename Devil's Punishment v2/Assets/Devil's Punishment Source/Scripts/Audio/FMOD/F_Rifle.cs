@@ -10,6 +10,17 @@ public class F_Rifle : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (Input.GetButtonDown("Aim"))
+        {
+            FMOD.Studio.EventInstance RAim = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Gun Handling/Gun_Aim");
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(RAim, transform, GetComponent<Rigidbody>());
+            RAim.start();
+            RAim.release();
+        }
+    }
+
     void PlayRReloadEvent()
     {
         FMOD.Studio.EventInstance RReload = FMODUnity.RuntimeManager.CreateInstance("event:/Player/Weapons/Rifle/Rifle_Foley");
