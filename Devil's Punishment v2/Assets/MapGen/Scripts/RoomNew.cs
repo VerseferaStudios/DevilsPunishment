@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RoomNew : MonoBehaviour, IComparer<GameObject>
+public class RoomNew : MonoBehaviour
 {
     public bool isDevMode = false;
 
@@ -55,20 +55,33 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     public SquareGrid squareGrid;
     private bool isDoneAStarHelper = false;
 
+    protected string corridorSpawnPointTag = "Corridor Spawn Points";
+    public float roomHeight;
+    protected bool isSetCorridorSPawnPointTag = false;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
     }
 
-    void Start()
+    protected virtual void SetCorridorSpawnPointTag()
     {
+        isSetCorridorSPawnPointTag = true;
+    }
+
+    protected virtual void Start()
+    {
+        SetCorridorSpawnPointTag();
+        Debug.Log("start room new");
         //StartScript();
     }
 
-    public void StartScript()
+    public IEnumerator StartScript()
     {
+        
+        yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
 
-
+        Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
         RoomReferencesModular roomReferencesModular;
         int x, z;
         for (int i = 0; i < Data.instance.roomsFloor1Modular.Count; i++)
@@ -76,7 +89,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
             roomReferencesModular = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModular>();
             for (int j = 0; j < roomReferencesModular.roomFloors.Count; j++)
             {
-                Debug.Log("Time mod room = " + Time.time);
+                //Debug.Log("Time mod room = " + Time.time);
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
@@ -91,7 +104,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
-        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Corridor Spawn Points");
+        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag(corridorSpawnPointTag);
         //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
 
         // ------------------- Convert array of doors / spawnPoints into list -------------------
@@ -167,10 +180,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         #endregion
 
         //give data the first door according to which we r sorting
-        if (spawnPoints.Count > 0)
-        {
-            Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
-        }
+        //if (spawnPoints.Count > 0)
+        //{
+        //    Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
+        //}
         // ------------------- Connect two doors of different rooms with suitable corridor shapes -------------------
         StartCoroutine(CallConnectRooms());
     }
@@ -428,7 +441,7 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
     private Vector3 GetPos(int[] idx)
     {
-        return new Vector3(idx[0] * -4, 0.5f, idx[1] * -4);
+        return new Vector3(idx[0] * -4, 0.5f + roomHeight, idx[1] * -4);
     }
 
     private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
@@ -676,8 +689,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         Transform collisionDetectorTransform = currentCorridor.transform.GetChild(1);
         collisionDetectorTransform.position = new Vector3(collisionDetectorTransform.position.x - 0.25f, collisionDetectorTransform.position.y, collisionDetectorTransform.position.z);
         */
-        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-        currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
         currentCorridor.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
         //Data.instance.corridorCount++;
@@ -702,8 +715,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         GameObject currCorridor1 = Instantiate(corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
         currCorridor1.layer = 18;
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-        currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
         currCorridor1.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
         if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0)
         {
@@ -741,8 +754,8 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
 
         currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
-        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
-        currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
+        //currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
+        //currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
         // TODO: Commented out for console clear 10/02/19
         // Debug.Log("added T at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
@@ -752,10 +765,10 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
     {
         //spawnAtPos.x = Mathf.Round(posToSpawn.x);
         //spawnAtPos.z = Mathf.Round(posToSpawn.z);
-        CorridorNew corridorNew = Instantiate(corridors[5], posToSpawn, Quaternion.identity, mapGenHolderTransform).GetComponentInChildren<CorridorNew>();
+        /*CorridorNew corridorNew = */Instantiate(corridors[5], posToSpawn, Quaternion.identity, mapGenHolderTransform)/*.GetComponentInChildren<CorridorNew>()*/;
 
-        corridorNew.rooms.Add(kParentPos);
-        corridorNew.rooms.Add(lParentPos);
+        //corridorNew.rooms.Add(kParentPos);
+        //corridorNew.rooms.Add(lParentPos);
 
         //MapgenProgress.instance.addProgress(2);
     }
@@ -825,11 +838,11 @@ public class RoomNew : MonoBehaviour, IComparer<GameObject>
         return (yRotation == 0 || yRotation == 180) ? 2 : ((yRotation == 90) ? 7 : 1);
     }
 
-    public int Compare(GameObject x, GameObject y)
-    {
-        return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
-                    - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
-    }
+    //public int Compare(GameObject x, GameObject y)
+    //{
+    //    return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
+    //                - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
+    //}
 
     #region Old Map Gen
     //public IEnumerator ConnectTwoRoomsOld(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)

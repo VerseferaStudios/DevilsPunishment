@@ -126,10 +126,10 @@ public class RoomNewVents : MonoBehaviour
         */
 
         //give data the first door according to which we r sorting
-        if (spawnPoints.Count > 0)
-        {
-            Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
-        }
+        //if (spawnPoints.Count > 0)
+        //{
+        //    Data.instance.spawnPointsFirstPos = spawnPoints[0].transform.position;
+        //}
 
         //sort according to the comparer (ie according to the distance from the first door)
         //spawnPoints.Sort(Compare);
@@ -673,11 +673,11 @@ else if (kName.EndsWith("z") && lName.EndsWith("z"))
         return false;
     }
 
-    public int Compare(GameObject x, GameObject y)
-    {
-        return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
-                    - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
-    }
+    //public int Compare(GameObject x, GameObject y)
+    //{
+    //    return (int)(Vector3.Distance(x.transform.position, Data.instance.spawnPointsFirstPos)
+    //                - Vector3.Distance(y.transform.position, Data.instance.spawnPointsFirstPos));
+    //}
 
 
     private void CheckDuplicatesAndConnect(List<Vector3> rooms)

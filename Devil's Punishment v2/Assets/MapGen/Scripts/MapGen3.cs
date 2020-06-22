@@ -3,16 +3,12 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 
 public class MapGen3 : TestFnsMapGen
 {
     //first we'll see the ground floor
     //10 x 10 cube
     //later//private int gridSize;
-
-    [Header("Dev")]
-    public bool isDevMode = false;
     
     public enum RoomSpawnType
     {
@@ -22,45 +18,66 @@ public class MapGen3 : TestFnsMapGen
     [Header("Dev")]
     public RoomSpawnType roomSpawnMethod;
 
-    public GameObject roomsLoaderPrefab, mapGenHolder;
-    public Transform mapGenHolderTransform;
-
-    [Header("Rooms")]
-    [Tooltip("Including Elevator")]
-    public int numberOfRooms = 6; //Including Elevator
-    private int n;
     //public List<Vector2> allRooms = new List<Vector2>();
 
     private ArrayList gameObjectDetails = new ArrayList();
-
-    public GameObject[] staticRooms;
-    public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom, laserRoom;
-
-    public GameObject[] corridors;
-
-    //For Vents
-    [Header("Vents")]
-    public GameObject[] vents;
-    private float ventCoverProbabilty = 0;//1;
-    public GameObject ventCover;
 
     [Header("ScriptableObjects")]
     public StateData StateData, GoodStates;
     public ReloadGoodStates ReloadGoodStatesData;
 
-    private Vector2 mapCentre;
-    private int mapSizeX = 4, mapSizeZ = 2;
+    protected override void Start()
+    {
+        base.Start();
+        Debug.Log("mapgen3");
+    }
 
-    public RoomNew roomNewScript;
+    protected override RoomNew AddRoomNewCorrectly()
+    {
+        return gameObject.AddComponent<RoomNew>();
+    }
 
-    [Header("Test")]
-    public GameObject testGridCube;
-    public GameObject testGridPlane;
-    public Transform testGridPlaneHolder;
-    public float aStarVisualisationTime = 0;
-    public TextMeshProUGUI seedText;
+    protected override void SetFloorNameForHolder()
+    {
+        floorNameForHolder = "1st Floor";
+    }
 
-    public SquareGrid squareGrid;
+    protected override void SetDoorTag()
+    {
+        floorDoorTag = "Corridor Spawn Points";
+    }
+
+    protected override void SetRoomTag()
+    {
+        floorRoomTag = "Room";
+    }
+
+    protected override void SetRoomHeight()
+    {
+        roomHeight = 0;
+    }
+
+    protected override bool AddingLiftForHigherFloors(int k)
+    {
+        Debug.Log("lift stuff in 1st floor");
+        return false;
+    }
+
+    protected override void AddLiftPosForLowerRoom(int i, Vector3 roomPos)
+    {
+        if (i == 1)
+        {
+            Data2ndFloor.instance.liftRoomPos = roomPos;
+        }
+    }
+
+    protected override void FirstFloorExtraInitRoom()
+    {
+        float[] arr = new float[2];
+        arr[0] = 28;
+        arr[1] = 28;
+        allRooms.Add(arr);
+    }
 
     private IEnumerator WaitForaWhile()
     {
@@ -73,7 +90,6 @@ public class MapGen3 : TestFnsMapGen
 
     //public RoomReferencesStatic roomReferences;
     public Vector3 prevTopRight, prevBottomLeft;
-    public List<Transform> cubes;
 
     //private void Update()
     //{
@@ -111,94 +127,12 @@ public class MapGen3 : TestFnsMapGen
     //    }
     //}
 
-    public void syncronizeSeeds(int seed)
+    protected override void syncronizeSeeds(int seed)
     {
-       
-
-
         if (GetComponent<MapGen2ndFloor>() != null)// .TryGetComponent(typeof(HingeJoint), out Component component))//(out MapGen2ndFloor mapGen2ndFloor))
         {
             GetComponent<MapGen2ndFloor>().setSeed(seed);
         }
-    }
-
-
-    public void startMapGeneration(int seed)
-    {
-        n = numberOfRooms + 1;
-
-
-
-
-
-        float x = -(48 * ((float)(mapSizeX - 1) / 2)) - 28;
-        float z = -(48 * ((float)(mapSizeZ - 1) / 2)) - 28;
-        mapCentre = new Vector2(x, z);
-        Debug.Log(mapCentre);
-
-        float[] arr = new float[2];
-        arr[0] = 28;
-        arr[1] = 28;
-        allRooms.Add(arr);
-        CreateHolderForMapGen();
-        //Random.InitState(100);
-        //Rooms();
-
-        // StartCoroutine(WaitForaWhile());
-
-        //Random.state = GoodStates.states[0];
-        //syncronizeSeeds(seed);
-
-        //syncronizeSeeds(seed);
-        if (isDevMode)
-        {
-            if (seed == -1) seed = Random.Range(0, 1000);
-            seedText.text = seed + "";
-        }
-        Random.InitState(seed);
-
-
-
-        ItemGen itemGenScript = GetComponent<ItemGen>();
-        roomNewScript = gameObject.AddComponent<RoomNew>();
-        roomNewScript.corridors = corridors;
-        roomNewScript.vents = vents;
-        roomNewScript.allRooms = allRooms;
-        roomNewScript.ventCover = ventCover;
-        roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
-        roomNewScript.itemGenScript = itemGenScript;
-        roomNewScript.mapSizeX = mapSizeX;
-        roomNewScript.mapSizeZ = mapSizeZ;
-        roomNewScript.isDevMode = isDevMode;
-        if (isDevMode)
-        {
-            roomNewScript.testGridCube = testGridCube;
-        }
-        //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
-        Data.instance.roomNewScript = roomNewScript;
-
-        Data.instance.xSize = xSize;
-        Data.instance.zSize = zSize;
-
-        //StateData.states.Add(Random.state);
-        Rooms();
-
-        Data.instance.roomsLoaderPrefab = roomsLoaderPrefab;
-        Data.instance.corridorT1 = corridors[3];
-        Data.instance.corridorT2 = corridors[4];
-        Data.instance.corridorX = corridors[5];
-        Data.instance.ventT = vents[3];
-        Data.instance.ventX = vents[5];
-    }
-
-
-
-    public void CreateHolderForMapGen()
-    {
-        mapGenHolder = new GameObject("1st Floor");
-        mapGenHolder.layer = 18;
-        mapGenHolderTransform = mapGenHolder.transform;//Instantiate(mapGenHolder).transform;
-        Data.instance.mapGenHolderTransform = mapGenHolderTransform;
     }
     
     // ---------------- Reload Map Gen with good states ----------------
@@ -220,397 +154,12 @@ public class MapGen3 : TestFnsMapGen
 
         Destroy(mapGenHolderTransform.gameObject);
 
-        CreateHolderForMapGen();
+        //CreateHolderForMapGen();
 
         Rooms();
         
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void Rooms()
-    {
-
-        int xOverall = (int)xSize * mapSizeX / 4;
-        int zOverall = (int)zSize * mapSizeZ / 4;
-        squareGrid = new SquareGrid(0, 0, xOverall, zOverall)
-        {
-            tiles = new Cell[xOverall, zOverall]
-        };
-        for (int i = 0; i < xOverall; i++)
-        {
-            for (int j = 0; j < zOverall; j++)
-            {
-                squareGrid.tiles[i, j] = new Cell
-                {
-                    tile = TileType.Floor,
-                    corridorIdx = -1,
-                    corridorYRot = -1
-                };
-                //if (isDevMode)
-                //{
-                //    Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
-                //}
-            }
-        }
-
-        /*
-        if (ReloadGoodStatesData.isReloadingGoodStates)
-        {
-            Random.state = GoodStates.states[ReloadGoodStatesData.i];
-            //ReloadGoodStatesData.isReloadingGoodStates = false;
-            ReloadGoodStatesData.i++;
-            if (ReloadGoodStatesData.i >= GoodStates.states.Count)
-            {
-                ReloadGoodStatesData.i = 0;
-            }
-        }
-        */
-        //Make this while and next loop into one? will Collisions be a prob?
-        int k = 0, l = 0;
-        while (k < n && l < 1000)
-        {
-            float[] arr = new float[2];
-
-            // ------------------- BOUNDS or SIZE of the grid -------------------
-
-
-
-            // 400 - 20 = 380 (MAX)
-            // 0 + 20 = 20 (MIN)
-            //Increments of 40
-
-            //arr[0] = 40 * Random.Range(0, 9) + 20;  //9 coz -> 9 * 40 + 20 = 380
-            //arr[1] = 40 * Random.Range(0, 9) + 20;
-
-
-            // 480 - 20 = 460 (MAX)
-            // 0 + 28 = 28 (MIN)
-            //Increments of 40
-
-            arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
-
-
-            //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
-            //arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
-
-
-            /*
-            if(k == 0)
-            {
-                arr[1] = 50;
-                arr[0] = 80;
-            }
-            else
-            {
-                arr[1] = 50;
-                arr[0] = 10;
-            }
-            */
-            // ------------------- Integer positions in GRID / positions according to sizes of rooms in GRID fashion -------------------
-            //arr[0] = Mathf.Round(((((int)arr[0])/zSize) * zSize) / zSize) * zSize;
-            //arr[1] = Mathf.Round(((((int)arr[1])/xSize) * xSize) / zSize) * zSize;
-
-            // ------------------- Checks for collisions between rooms  -------------------
-            if (NoCollisions(arr))
-            {
-                allRooms.Add(arr);
-                ++k;
-            }
-            ++l;
-            MapgenProgress.instance.addProgress(3);
-
-        }
-
-        MapgenProgress.instance.addProgress(3);
-        /*
-        List<GameObject> staticRooms = new List<GameObject>();
-        staticRooms.Add(liftRoom);
-        staticRooms.Add(startRoom);
-        staticRooms.Add(generatorRoom);
-        staticRooms.Add(endRoom);
-        // ------------------- Static Rooms ------------------- 
-        for (int i = 0; i < staticRooms.Count; i++)
-        {
-            Instantiate(staticRooms[i], )
-        }
-        */
-        // ------------------- RANDOMLY choosing ROOMS to spawn  -------------------
-        //ItemGen itemGenScript = GetComponent<ItemGen>();
-        for (int i = 1; i < k; i++)
-        {
-            GameObject roomToSpawn = generatorRoom;
-            float yCoord = 1.0f; // Beware, its for gen room
-            if (i - 1 < staticRooms.Length)
-            {
-                roomToSpawn = staticRooms[i - 1];
-                if (staticRooms[i - 1].name.Equals("Start Room"))
-                {
-                    yCoord = 0.064f;
-                }
-                else if (staticRooms[i - 1].name.Equals("End Room"))
-                {
-                    yCoord = 0.5f;
-                }
-                else if (staticRooms[i - 1].name.Equals("Laser Room"))
-                {
-                    yCoord = 1f;
-                }
-                else if (staticRooms[i - 1].name.Equals("Elevator Room"))
-                {
-                    yCoord = 0.2f;
-                }
-                else
-                {
-                    if(!staticRooms[i - 1].name.Equals("Elevator Room"))
-                    {
-                        //yCoord = 0f;
-                        Debug.LogWarning("not in static room list; gen room yCoord used; error!");
-                    }
-                }
-            }
-            else
-            {
-                switch (Random.Range(3, 4)) // yes modular room added // for dev purposes 1, 4 change later
-                {
-                    case 0:
-                        roomToSpawn = startRoom;
-                        yCoord = 0.064f;
-                        break;
-                    case 1:
-                        roomToSpawn = endRoom;
-                        yCoord = 0.5f;
-                        break;
-                    case 2:
-                        roomToSpawn = laserRoom;
-                        yCoord = 1;
-                        break;
-                    case 3:
-                        yCoord = -1.72f; //-1.5f - 0.739f;
-                        roomToSpawn = null;
-                        break;
-                        /*
-                case 3:
-                    roomToSpawn = roomT;
-                    break;
-                case 4:
-                    roomToSpawn = room4;
-                    break;*/
-                }
-            }
-
-            float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
-            Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord, -((float[])allRooms[i])[0]);
-            if (i == 1)
-            {
-                Data2ndFloor.instance.liftRoomPos = roomPos;
-            }
-
-            GameObject spawnedRoom; // = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-            RoomReferencesBase roomReferencesBase;
-
-            //roomToSpawn = null;
-            if (roomToSpawn == null)
-            {
-                Data.instance.modularRoomAssembler.room_start_Transform = new GameObject("Room Start").transform;
-                Data.instance.modularRoomAssembler.room_start_Transform.position = roomPos + new Vector3(0, 0, 20); //Not Sure!!!;
-
-                Transform roomHolderTransform = new GameObject("Modular Room 1").transform;
-                Data.instance.modularRoomAssembler.roomHolderTransform = roomHolderTransform;
-                spawnedRoom = roomHolderTransform.gameObject;
-
-                RoomReferencesModular roomReferencesModular = spawnedRoom.AddComponent<RoomReferencesModular>();
-                roomReferencesBase = roomReferencesModular;
-                //roomReferencesModular.doors = Data.instance.modularRoomAssembler.doors;
-                roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
-
-                roomReferencesModular.roomFloors = new List<Vector3>();
-                Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
-                Data.instance.roomsFloor1Modular.Add(spawnedRoom);
-                Data.instance.modularRoomAssembler.StartScript();
-                if (i != 1)
-                    SpawnVentCoverInRoom(i, k, roomReferencesModular.ventParent);
-                //Data.instance.roomsFloor1Modular.Add(spawnedRoom);
-
-
-            }
-            else
-            {
-                spawnedRoom = Instantiate(roomToSpawn, roomPos, Quaternion.Euler(0, yRotation, 0), mapGenHolderTransform);
-                Debug.Log("Room name = " + spawnedRoom.name);
-                RoomReferencesStatic roomReferencesStatic = spawnedRoom.GetComponent<RoomReferencesStatic>();
-                roomReferencesBase = roomReferencesStatic;
-                CallOffsetAndDoorAndSqGridFns(spawnedRoom, yRotation, roomReferencesStatic);
-
-
-                #region tile Floor
-
-                DoorHelper2(roomReferencesStatic, isDevMode, ref squareGrid, ref cubes, testGridCube);
-
-                #endregion
-
-
-
-                //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
-
-                if (i != 1)
-                    SpawnVentCoverInRoom(i, k, roomReferencesStatic.ventParent);
-            }
-
-
-            int x, z;
-            string doorName;
-            for (int q = 0; q < roomReferencesBase.doors.Length; q++)
-            {
-                x = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.x / -4);
-                z = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.z / -4);
-
-                Debug.Log("X = " + x);
-                Debug.Log("Z = " + z);
-                Debug.Log("actual door pos = " + roomReferencesBase.doors[q].transform.position);
-                Debug.Log("pos = " + GetPos(new int[] { x, z }));
-                doorName = roomReferencesBase.doors[q].name[4].ToString() + roomReferencesBase.doors[q].name[5].ToString();
-
-                squareGrid.tiles[x, z].tile = TileType.Floor;
-                for (int j = 0; j < 2; j++)
-                {
-                    DoorFurtherHelper(doorName + "");
-                    Debug.Log("hey doorname = " + doorName);
-                    Debug.Log("X = " + x);
-                    Debug.Log("Z = " + z);
-                    Debug.Log("pos = " + GetPos(new int[] { x, z }));
-                    squareGrid.tiles[x, z].tile = TileType.Floor;
-                }
-                if (isDevMode)
-                {
-                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity)
-                        .transform.GetChild(0).GetComponent<Renderer>().sharedMaterial.color = Color.blue;
-                }
-            }
-
-            // -------- prevent doors being isolated in the map (Shouldnt make room floors walkable!!!!!) --------
-            void DoorFurtherHelper(string doorLastName)
-            {
-                switch (doorLastName)
-                {
-                    case "+z":
-                        z--;
-                        break;
-                    case "+x":
-                        x--;
-                        break;
-                    case "-z":
-                        z++;
-                        break;
-                    case "-x":
-                        x++;
-                        break;
-                }
-            }
-
-            Vector3 GetPos(int[] idx)
-            {
-                return new Vector3(idx[0] * -4, 0.5f, idx[1] * -4);
-            }
-
-
-
-
-            // ------------------- Attaches RoomNew Script to last spawned Room and passes the corridors array (all types,I,4,T,L,etc) -------------------
-            if (i == k - 1)
-            {/*
-                RoomNew roomNewScript = spawnedRoom.AddComponent<RoomNew>();
-                roomNewScript.corridors = corridors;
-                roomNewScript.vents = vents;
-                roomNewScript.allRooms = allRooms;
-                roomNewScript.ventCover = ventCover;
-                roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
-                roomNewScript.itemGenScript = itemGenScript;
-                //roomNewScript.ventCoverProbabilty = ventCoverProbabilty;
-                Data.instance.roomNewScript = roomNewScript;
-                */
-                roomNewScript.aStarVisualisationTime = aStarVisualisationTime;
-                roomNewScript.squareGrid = squareGrid;
-                if (isDevMode)
-                {
-                    roomNewScript.testGridPlaneHolder = testGridPlaneHolder;
-                }
-                //for (int d = 36; d < 38; d++)
-                //{
-                //    for (int f = 0; f < 20; f++)
-                //    {
-                //        squareGrid.tiles[d, f].tile = TileType.Wall;
-                //        //Debug.Log(squareGrid.tiles[d, f]);
-                //    }
-                //}
-                roomNewScript.StartScript();
-                //ConnectToMapGen(roomNewScript);
-
-            }
-
-            MapgenProgress.instance.addProgress(1);
-
-            //gameObjectDetails.Add(roomScript);
-
-        }
-        
-
-        /*
-        ////Debug ALL ROOM POSITIONS
-
-        for (int i = 0; i < n; i++)
-        {
-            //Debug.Log("_________________" + i + "___________________");
-            float[] ddd = ((float[])allRooms[i]);
-            //Debug.Log(ddd[0]);
-            //Debug.Log(ddd[1]);
-        }
-        //Debug.Log("_________________DONE___________________");
-        */
-
-        Data.instance.allRooms = allRooms;
-        Data.instance.xSize = xSize;
-        Data.instance.zSize = zSize;
-
-    }
-
-    private float LookToMapCentre(Vector2 pos)
-    {
-        int xChange, yChange;
-        xChange = (int)(mapCentre.x - pos.x);
-        yChange = (int)(mapCentre.y - pos.y);
-        float yRotation;
-        if(Mathf.Abs(xChange) > Mathf.Abs(yChange))
-        {
-            if (xChange > 0)
-            {
-                yRotation = 90f;
-            }
-            else
-            {
-                yRotation = -90f;
-            }
-        }
-        else
-        {
-            if (yChange > 0)
-            {
-                yRotation = 0;
-            }
-            else
-            {
-                yRotation = 180;
-            }
-        }
-        return yRotation;
-    }
-
-    // ------------------------ Add RoomNewVents script after delay ------------------------
-    private IEnumerator AddRoomNewVents(GameObject gb)
-    {
-        yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().corridors = vents;
     }
 
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
@@ -637,25 +186,6 @@ public class MapGen3 : TestFnsMapGen
     //        Debug.Log("ERROR!!!!");
     //    }
     //}
-
-    // ----------------------- Spawn Vent Cover in room -----------------------
-    public void SpawnVentCoverInRoom(int i, int k, Transform ventParentTransform)
-    {
-        if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
-        {
-            if (i == k - 1)
-            {
-                //GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                GameObject gb = Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
-                StartCoroutine(AddRoomNewVents(gb));
-            }
-            else
-            {
-                //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
-            }
-        }
-    }
 
     // ---------------------------- Existing corridors offset and Square Grid stuff for AStar ----------------------------
     private void ExistingCorridorsFn(RoomReferencesStatic roomReferences, int yRotation, float offset)

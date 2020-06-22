@@ -59,7 +59,7 @@ public class ModularRoomAssembler : MonoBehaviour
     {
         doors = new GameObject[noOfParts];
         wallColliders = new List<GameObject>();
-        Debug.Log(Random.Range(1, 1));
+        //Debug.Log(Random.Range(1, 1));
         //doors[0] = room_start_Transform.gameObject;
         room_Start_Pos = room_start_Transform.position;
         door_done = new bool[noOfParts];
@@ -132,7 +132,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
 
 
-        Debug.Log("room mod 1234");
+        //Debug.Log("room mod 1234");
         roomHolderTransform.position = new Vector3(roomHolderTransform.position.x + offsetVal, roomHolderTransform.position.y, roomHolderTransform.position.z - offsetVal);
 
         for (int i = 0; i < doors.Length; i++)
@@ -140,7 +140,7 @@ public class ModularRoomAssembler : MonoBehaviour
             doors[i].transform.position = new Vector3(doors[i].transform.position.x - offsetVal, doors[i].transform.position.y, doors[i].transform.position.z + offsetVal);
         }
 
-        Debug.Log("Time mod room = " + Time.time);
+        //Debug.Log("Time mod room = " + Time.time);
 
         //Remove trigger colliders
         StartCoroutine(RemoveWallTriggerColliders());
@@ -151,7 +151,7 @@ public class ModularRoomAssembler : MonoBehaviour
             */
         //StartCoroutine(CombineAfterDelay());
         //PlaceRemainingWalls();
-        Debug.Log(Random.Range(1, 1));
+        //Debug.Log(Random.Range(1, 1));
 
     }
 
@@ -216,7 +216,7 @@ public class ModularRoomAssembler : MonoBehaviour
             }
             return sum;
         }
-        Debug.LogError("Wrong List identifier as parameter '" + list + "'");
+        //Debug.LogError("Wrong List identifier as parameter '" + list + "'");
         return -1;
     }
 
@@ -226,22 +226,22 @@ public class ModularRoomAssembler : MonoBehaviour
         int sum_z = SumOfList('z');
         if(40 - sum_x < 8 / 4)
         {
-            Debug.LogError("Ouch! Room part size less than 2");
+            //Debug.LogError("Ouch! Room part size less than 2");
             this.enabled = false;
         }
         if (40 - sum_z < 8 / 4)
         {
-            Debug.LogError("Ouch! Room part size less than 2");
+            //Debug.LogError("Ouch! Room part size less than 2");
             this.enabled = false;
         }
         size_x.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2)); //Change to 36 units max size if needed
         size_z.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2));
-        Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
+        //Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
         size_x[partNo]--;
         size_z[partNo]--;
         if(size_x[partNo] < 0 || size_z[partNo] < 0)
         {
-            Debug.LogError("Ouch! Negative room part size");
+            //Debug.LogError("Ouch! Negative room part size");
             this.enabled = false;
         }
     }
@@ -249,7 +249,7 @@ public class ModularRoomAssembler : MonoBehaviour
     private int NSWEPartChoose(int partNo)
     {
         int x = Random.Range(1, 4);
-        Debug.Log("Choosing NSWE = " + x);
+        //Debug.Log("Choosing NSWE = " + x);
         if(nswe_helper.Count <= 0)
         {
             nswe_helper.Add(x);
@@ -267,12 +267,12 @@ public class ModularRoomAssembler : MonoBehaviour
             if(res >= size1 || res >= size2)
             {
                 res = size1 - 1;
-                Debug.Log("PHEW");
+                //Debug.Log("PHEW");
             }
-            Debug.Log("res = " + res);
+            //Debug.Log("res = " + res);
             return res;
         }
-        Debug.Log(" :( in Z");
+        //Debug.Log(" :( in Z");
         return 0;
     }
 
@@ -284,19 +284,19 @@ public class ModularRoomAssembler : MonoBehaviour
             if (res >= size1 || res >= size2)
             {
                 res = size1 - 1;
-                Debug.Log("PHEW");
+                //Debug.Log("PHEW");
             }
-            Debug.Log("res = " + res);
+            //Debug.Log("res = " + res);
             return res;
         }
-        Debug.Log(" :( in X");
+        //Debug.Log(" :( in X");
         return 0;
     }
 
     private Vector3 TranslatePartToChosenDirection(int partNo)
     {
         int x = NSWEPartChoose(partNo);
-        Debug.Log("NSWEPartChoose(partNo) = " + x);
+        //Debug.Log("NSWEPartChoose(partNo) = " + x);
         Vector3 partHolderPartNoPos = Vector3.zero;
         switch (x)
         {
@@ -356,7 +356,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 Transform t;
                 if (randGrill == floorCount)
                 {
-                    Debug.Log("floorCount = " + floorCount);
+                    //Debug.Log("floorCount = " + floorCount);
                     t = Instantiate(grill_with_frame).transform;
                     t.GetChild(0).gameObject.SetActive(true);
                     t.parent = floor_holder[partNo];
@@ -445,7 +445,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private int RandomDoorHelper(int partNo)
     {
-        Debug.Log("nswe_helper[partNo] => " + nswe_helper[partNo]);
+        //Debug.Log("nswe_helper[partNo] => " + nswe_helper[partNo]);
         switch (nswe_helper[partNo])
         {
             case 0:
@@ -465,7 +465,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 return Random.Range(0, 2 * (size_x[partNo] + 1) + size_z[partNo] + 1);
 
             default:
-                Debug.LogWarning("nswe_helper error; nswe_helper[partNo] => " + nswe_helper[partNo]);
+                //Debug.LogWarning("nswe_helper error; nswe_helper[partNo] => " + nswe_helper[partNo]);
                 return -1;
 
         }
@@ -485,7 +485,7 @@ public class ModularRoomAssembler : MonoBehaviour
         int randDoor = RandomDoorHelper(partNo);
         int wallCount = 0;
         bool isDoor = false;
-        Debug.Log("randDoor = " + randDoor);
+        //Debug.Log("randDoor = " + randDoor);
         //Debug.Log("2 * (size_x[partNo] + 1 + size_z[partNo] + 1) = " + 2 * (size_x[partNo] + 1 + size_z[partNo] + 1));
         //if (!CheckWallOverlap(partNo, pos, 'X', nswe_helper[partNo]))
         //if (!nswe_helper.Contains(0))
@@ -504,7 +504,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     if (j == 0 && !door_done[partNo]/* && nswe_helper[partNo] != 0*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
-                        Debug.Log("1 in");
+                        //Debug.Log("1 in");
                         DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2, out toSpawn, out offset);
                         isDoor = true;
                     }
@@ -544,7 +544,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 2*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
-                        Debug.Log("2 in");
+                        //Debug.Log("2 in");
                         DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2, out toSpawn, out offset);
                     }
                     t = Instantiate(toSpawn).transform;
@@ -579,7 +579,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 1*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
-                        Debug.Log("3 in");
+                        //Debug.Log("3 in");
                         DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0, out toSpawn, out offset);
                     }
                     t = Instantiate(toSpawn).transform;
@@ -613,7 +613,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     if (j == 0 && !door_done[partNo] /*&& nswe_helper[partNo] != 3*/ && randDoor == wallCount)
                     //if (j == 0 && i == 1)
                     {
-                        Debug.Log("4 in");
+                        //Debug.Log("4 in");
                         DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0, out toSpawn, out offset);
                     }
                     t = Instantiate(toSpawn).transform;
@@ -635,7 +635,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
         if (!door_done[partNo])
         {
-            Debug.LogWarning("no door for partNo " + partNo);
+            //Debug.LogWarning("no door for partNo " + partNo);
             //switch(Random.Range(0, 4))
             //{
             //    case 0:
@@ -652,7 +652,7 @@ public class ModularRoomAssembler : MonoBehaviour
             //        break;
             //}
         }
-        Debug.Log("Time mod room = " + Time.time);
+        //Debug.Log("Time mod room = " + Time.time);
     }
 
     private void DoorSpawnHelper(string doorName, int partNo, bool isWallHolder2, Vector3 posCurr, int xAdd, int zAdd, out GameObject toSpawn, out Vector3 offset)
@@ -708,31 +708,31 @@ public class ModularRoomAssembler : MonoBehaviour
         Swap_NSWE();
         extra_walls_holder = new GameObject("Extra Walls Holder").transform;
         extra_walls_holder.parent = roomHolderTransform;
-        Debug.Log(nswe_helper.Contains(1));
+        //Debug.Log(nswe_helper.Contains(1));
         if (nswe_helper.Contains(1))
         {
             int idx = nswe_helper.IndexOf(1);
             float pos1 = startFloorPosList[idx].z;
-            Debug.Log(pos1);
+            //Debug.Log(pos1);
             float posx = startFloorPosList[0].z;
             float pos2 = startFloorPosList[0].z + size_z[0];
             float pos3 = startFloorPosList[idx].z + size_z[idx];
             float posMax = Mathf.Max(pos2, pos3);
             float posMin = Mathf.Min(pos2, pos3);
-            Debug.Log(pos2);
+            //Debug.Log(pos2);
             int diff = (int)(pos1 - pos2);
             int sign = (diff >= 0) ? 1 : -1;
             float posToSpawn = pos1;
             Transform t;
             Vector3 pos;
-            Debug.Log(sign * posToSpawn > sign * posMax);
+            //Debug.Log(sign * posToSpawn > sign * posMax);
             bool once = true;
             while(sign * posToSpawn > sign * posMax)
             {
                 for (int j = 0; j < height; j++)
                 {
                     pos = new Vector3( startFloorPosList[0].x + size_x[0], 2 + j * 4, posToSpawn);
-                    Debug.Log(pos);
+                    //Debug.Log(pos);
                     t = Instantiate(side_wall).transform;
                     t.parent = extra_walls_holder;
                     t.localPosition = pos;
@@ -770,7 +770,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 //if (meshFilters[i].gameObject.GetComponent<MeshRenderer>())
                     atlasTextures[i] = (Texture2D)meshFilters[i].gameObject.GetComponent<MeshRenderer>().sharedMaterial.mainTexture;
                 //else
-                  //  Debug.Log(meshFilters[i].gameObject.name);
+                  //  //Debug.Log(meshFilters[i].gameObject.name);
             }
             //meshFilters[i].gameObject.GetComponent<Renderer>().material = matNew;
             //Debug.Log("i = " + i + " && meshFilters[i].gameObject.name = " + meshFilters[i].gameObject.name);
@@ -812,7 +812,7 @@ public class ModularRoomAssembler : MonoBehaviour
         meshRenderer.sharedMaterial = matNew;
         meshRenderer.sharedMaterial.mainTextureOffset = new Vector2(rects[2].x, rects[2].y);
         meshRenderer.sharedMaterial.mainTextureScale = new Vector2(rects[2].width, rects[2].height);
-        Debug.Log(rects.Length);
+        //Debug.Log(rects.Length);
         
         matNew.mainTexture = packedTexture;
         meshFilter.gameObject.GetComponent<MeshRenderer>().sharedMaterial = matNew;

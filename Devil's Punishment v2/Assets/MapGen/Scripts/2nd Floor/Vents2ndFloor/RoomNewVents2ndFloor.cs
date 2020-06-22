@@ -27,6 +27,8 @@ public class RoomNewVents2ndFloor : MonoBehaviour
 
     void Start()
     {
+        enabled = false;
+        return;
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
