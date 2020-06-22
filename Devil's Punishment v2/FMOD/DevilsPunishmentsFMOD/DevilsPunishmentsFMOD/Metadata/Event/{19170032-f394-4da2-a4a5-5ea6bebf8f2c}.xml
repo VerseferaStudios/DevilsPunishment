@@ -105,6 +105,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{432b5e8c-601f-4868-9560-e6e201390fc0}">
+		<property name="volume">
+			<value>2.5</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{0d27b8a0-61a0-461b-8be3-155b9f56797c}</destination>
 		</relationship>
@@ -131,7 +134,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{d4913360-c154-4df9-b268-c3103757bd27}">
 		<property name="volume">
-			<value>-42</value>
+			<value>-27.5</value>
 		</property>
 		<property name="name">
 			<value>Loop</value>
@@ -174,6 +177,10 @@
 		<property name="pitchRandomization">
 			<value>0.699999928</value>
 		</property>
+		<relationship name="modulators">
+			<destination>{914f4a35-be5e-4fc7-99ea-8cadae7e24f7}</destination>
+			<destination>{76a7593d-39a2-4a09-af66-1944b24463b5}</destination>
+		</relationship>
 		<relationship name="sound">
 			<destination>{484523c8-36a2-4c6c-9383-679ecca72b9e}</destination>
 		</relationship>
@@ -241,9 +248,6 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{20bad65c-1285-435e-818b-6facbb6b2ee5}">
-		<property name="volume">
-			<value>-4</value>
-		</property>
 		<property name="name">
 			<value>EerieWind</value>
 		</property>
@@ -277,7 +281,17 @@
 			<destination>{21092165-6a65-4f84-84ef-1e4a502cab99}</destination>
 		</relationship>
 	</object>
-	<object class="MixerBusPanner" id="{c80905d1-a2b6-4537-87a4-54d77027e08d}" />
+	<object class="MixerBusPanner" id="{c80905d1-a2b6-4537-87a4-54d77027e08d}">
+		<property name="surroundPanDirection">
+			<value>-27.9382248</value>
+		</property>
+		<property name="overridingOutputFormat">
+			<value>5</value>
+		</property>
+		<property name="outputFormatOverridden">
+			<value>true</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{1db2c143-b3b6-4f7c-9c05-c9382c49f2c0}" />
 	<object class="MixerBusEffectChain" id="{77c6e941-0ec8-4954-a0e1-fa5e97951a73}">
 		<relationship name="effects">
@@ -285,6 +299,22 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{feb251cd-a1a0-4f12-9d1d-acd78b934a98}" />
+	<object class="RandomizerModulator" id="{914f4a35-be5e-4fc7-99ea-8cadae7e24f7}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>volume</value>
+		</property>
+		<property name="amount">
+			<value>4</value>
+		</property>
+	</object>
+	<object class="RandomizerModulator" id="{76a7593d-39a2-4a09-af66-1944b24463b5}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>pitch</value>
+		</property>
+		<property name="amount">
+			<value>5</value>
+		</property>
+	</object>
 	<object class="MultiSound" id="{484523c8-36a2-4c6c-9383-679ecca72b9e}">
 		<relationship name="sounds">
 			<destination>{2f38df68-ea81-44f5-a13d-d073b1d7a9d6}</destination>
