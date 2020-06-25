@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -120,6 +120,39 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &226842933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1841075158073676714, guid: 49b4b1d208cb32845b13db9d7fe330c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 488424923}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &226842936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226842933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e9710279533e34f9c1c65623d98e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomReferencesModular: {fileID: 0}
+  maxSpawnDist: 1.5
+  testGridCube: {fileID: 0}
+  testGridPlane: {fileID: 0}
+  barrelProps:
+  - {fileID: 1000012512741780, guid: f5be68f92137da247b5d8228eab16f79, type: 3}
+  - {fileID: 1000013841662396, guid: 54de15accee1ebe48ac54e7e0aa1c097, type: 3}
+  - {fileID: 1000013650915586, guid: 182ed389c043f694792b11d198a06985, type: 3}
+  barrelPropVar: 3
+  crateProps:
+  - {fileID: 1000012854934452, guid: b36f08aa40d9cf04893f169ffe70b132, type: 3}
+  - {fileID: 1000012548306624, guid: 34087d80786f6d94288218bb721161ec, type: 3}
+  - {fileID: 1000012077440128, guid: 21ece59da74e9154faaad84d39776d64, type: 3}
+  - {fileID: 1000010756568158, guid: 556fb3c58e7712445b32e6b881eb9af2, type: 3}
+  cratePropVar: 4
 --- !u!1 &273238546
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,7 +431,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 488424923}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 226842933}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84b308b2175d6c943ba7ef0707466fcb, type: 3}

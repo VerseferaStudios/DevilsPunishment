@@ -40,6 +40,8 @@ public class ModularRoomAssembler : MonoBehaviour
     [SerializeField]
     private bool[] door_done;
 
+    public ModularPropGen modularPropGen;
+
     public RoomReferencesModular roomReferencesModular;
 
     public float doorProbability = 0.01f;
@@ -48,6 +50,7 @@ public class ModularRoomAssembler : MonoBehaviour
     private List<GameObject> wallColliders;
     private float offsetVal = 0.1f;
     private int floorCount = 0;
+
     
     // Start is called before the first frame update
     void Start()
@@ -379,6 +382,10 @@ public class ModularRoomAssembler : MonoBehaviour
                 t.localPosition = new Vector3(i * 4, height * 4, -j * 4);
             }
         }
+        modularPropGen = GetComponent<ModularPropGen>();
+        modularPropGen.roomReferencesModular = roomHolderTransform.gameObject.GetComponent<RoomReferencesModular>();
+        modularPropGen.Generate();
+        
     }
     /*
     private bool CheckWallOverlap(int partNo, Vector3 pos_to_check, char x_or_z, int nswe)
@@ -473,7 +480,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private void PlaceWall(int partNo)
     {
-
+        
         //Debug.Log("Placing WALL for partNo = " + partNo);
 
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
@@ -816,5 +823,6 @@ public class ModularRoomAssembler : MonoBehaviour
         
         matNew.mainTexture = packedTexture;
         meshFilter.gameObject.GetComponent<MeshRenderer>().sharedMaterial = matNew;
+
     }
 }
