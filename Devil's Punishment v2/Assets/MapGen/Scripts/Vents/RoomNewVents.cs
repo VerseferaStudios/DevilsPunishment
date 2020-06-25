@@ -2,7 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+enum FloorNo
+{
+    _1stFloor,
+    _2ndFloor
+}
 public class RoomNewVents : MonoBehaviour
 {
     //private List<Transform> spawnPoints = new List<Transform>();
@@ -25,12 +29,17 @@ public class RoomNewVents : MonoBehaviour
     //storedOpening is for the next L corridor in line
     private int storedOpening;
 
+
+    [SerializeField] private FloorNo floorNo;
+    [SerializeField] private string spawnPointTag;
+
     void Start()
     {
+        spawnPointTag = floorNo == FloorNo._1stFloor ? Constants.sRef.TAG_VENTSPAWNFLOOR1 : Constants.sRef.TAG_VENTSPAWNFLOOR2;
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
 
         // ------------------- Get array of doors / spawnPoints -------------------
-        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag("Vent Spawn Points");
+        GameObject[] tempSpawnPoints = GameObject.FindGameObjectsWithTag(spawnPointTag);
         Debug.Log("DEBUG VENTS COVER NO = " + tempSpawnPoints.Length);
         //string f = tempSpawnPoints[0].GetComponentsInChildren<Transform>()[0].gameObject.name;
         //GameObjects to transform
