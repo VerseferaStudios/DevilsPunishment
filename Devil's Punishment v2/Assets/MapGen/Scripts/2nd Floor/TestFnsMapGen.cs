@@ -242,9 +242,8 @@ public abstract class TestFnsMapGen : MonoBehaviour
 
     }
 
-    public virtual void Rooms()
+    private void InitialiseSquareGrid(out SquareGrid squareGrid)
     {
-        //Debug.Log("Rooms started");
         int xOverall = (int)xSize * mapSizeX / 4;
         int zOverall = (int)zSize * mapSizeZ / 4;
         //Debug.Log("xOverall = " + xOverall);
@@ -261,7 +260,9 @@ public abstract class TestFnsMapGen : MonoBehaviour
                 {
                     tile = TileType.Floor,
                     corridorIdx = -1,
-                    corridorYRot = -1
+                    corridorYRot = -1,
+                    childEulerZ = -1,
+                    childEulerX = -1
                 };
                 //if (isDevMode)
                 //{
@@ -269,6 +270,15 @@ public abstract class TestFnsMapGen : MonoBehaviour
                 //}
             }
         }
+    }
+
+    public virtual void Rooms()
+    {
+        //Debug.Log("Rooms started");
+
+
+        InitialiseSquareGrid(out squareGrid);
+
 
         /*
         if (ReloadGoodStatesData.isReloadingGoodStates)
@@ -788,7 +798,39 @@ public abstract class TestFnsMapGen : MonoBehaviour
     private IEnumerator AddRoomNewVents(GameObject gb)
     {
         yield return new WaitForSeconds(5f);
-        gb.AddComponent<RoomNewVents>().corridors = vents;
+        RoomNewVents roomNewVents = gb.AddComponent<RoomNewVents>();
+        roomNewVents.corridors = vents;
+
+
+        //roomNewVents = AddRoomNewCorrectly();
+        roomNewVents.vents = vents;
+        roomNewVents.allRooms = allRooms;
+        roomNewVents.ventCover = ventCover;
+        
+        roomNewVents.mapGenHolderTransform = new GameObject("VentsHolder").transform;
+        //roomNewVents.itemGenScript = itemGenScript;
+        roomNewVents.mapSizeX = mapSizeX;
+        roomNewVents.mapSizeZ = mapSizeZ;
+        roomNewVents.roomHeight = roomHeight;
+        roomNewVents.isDevMode = isDevMode;
+        if (isDevMode)
+        {
+            roomNewVents.testGridCube = testGridCube;
+        }
+
+
+
+        roomNewVents.aStarVisualisationTime = aStarVisualisationTime;
+        InitialiseSquareGrid(out SquareGrid squareGrid);
+        roomNewVents.squareGrid = squareGrid;
+        if (isDevMode)
+        {
+            roomNewVents.testGridPlaneHolder = testGridPlaneHolder;
+        }
+        //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
+        //Data.instance.roomNewVents = roomNewVents;
+
+        yield return null;
     }
 
     // ----------------------- Spawn Vent Cover in room -----------------------

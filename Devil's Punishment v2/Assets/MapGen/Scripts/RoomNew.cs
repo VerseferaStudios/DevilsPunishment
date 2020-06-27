@@ -73,15 +73,11 @@ public class RoomNew : MonoBehaviour
     {
         SetCorridorSpawnPointTag();
         Debug.Log("start room new");
-        //StartScript();
+        //StartScript(); its couroutine now man
     }
 
-    public IEnumerator StartScript()
+    protected virtual void SquareGridWallPopulate()
     {
-        
-        yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
-
-        Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
         RoomReferencesModular roomReferencesModular;
         int x, z;
         for (int i = 0; i < Data.instance.roomsFloor1Modular.Count; i++)
@@ -99,6 +95,16 @@ public class RoomNew : MonoBehaviour
                 }
             }
         }
+    }
+
+    public IEnumerator StartScript()
+    {
+        
+        yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
+
+        Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
+
+        SquareGridWallPopulate();
 
 
         //mapGen3 = GameObject.FindGameObjectWithTag("Rooms(MapGen)").GetComponent<MapGen3>();
@@ -384,7 +390,7 @@ public class RoomNew : MonoBehaviour
                 List<int> openings1 = new List<int>();
                 openings1.Add(nextMove);
                 openings1.Add(currMove);
-                AddLCorridorSpawnInfo(openings1, currLoc, zOverall);
+                AddLCorridorSpawnInfo(openings1, currLoc, zOverall, 0, 0);
                 //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
             }
             else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
@@ -431,7 +437,7 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    private int[] GetIdx(Vector3 pos)
+    protected int[] GetIdx(Vector3 pos)
     {
         int x = Mathf.RoundToInt(pos.x / -4);
         int z = Mathf.RoundToInt(pos.z / -4);
@@ -547,11 +553,11 @@ public class RoomNew : MonoBehaviour
         || squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation - 90)
         && !isOverride)*/
         {
-            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI", zOverall);
+            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI", zOverall, c, 0);
         }
     }
 
-    private void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall)
+    protected virtual void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall, int childEulerZ, int childEulerX)
     {
         //Debug.Log("L info");
         float yRotation = Data.instance.ConvertToRotation(openings);
@@ -580,11 +586,11 @@ public class RoomNew : MonoBehaviour
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
         //&& !isOverride)
         {
-            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall);
+            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall, childEulerZ, childEulerX);
         }
     }
 
-    private void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall)
+    protected virtual void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall, int childEulerZ, int childEulerX)
     {
 
 
@@ -610,11 +616,11 @@ public class RoomNew : MonoBehaviour
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
         //&& !isOverride)
         {
-            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT", zOverall);
+            AddCollisionInfoHelper(kIdx, yRotationNew, "CorridorT", zOverall, childEulerZ, childEulerX);
         }
     }
 
-    private void AddXCorridorSpawnInfo(int[] kIdx, int zOverall)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
+    protected void AddXCorridorSpawnInfo(int[] kIdx, int zOverall)//, Vector3 kParentPos, Vector3 lParentPos, List<int> openings)
     {
 
 
@@ -634,7 +640,7 @@ public class RoomNew : MonoBehaviour
         squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = 0;
     }
 
-    private void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName, int zOverall)
+    protected virtual void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName, int zOverall, int childEulerZ, int childEulerX)
     {
         List<int> openings1, openings2;
         openings1 = Data.instance.ConvertToOpenings(corridorName, yRotation, false);
@@ -663,18 +669,44 @@ public class RoomNew : MonoBehaviour
         if (openings1.Count == 3)
         {
             if (corridorName.EndsWith("T"))
+                //&& squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation) //no Need
             {
                 squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 3; //or 4
                 squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotation;
                 return;
             }
             float yRotationNew = Data.instance.ConvertToRotation(openings1);
-            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall);
+            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX);
         }
         else if (openings1.Count == 4)
         {
             AddXCorridorSpawnInfo(kIdx, zOverall);
         }
+    }
+
+    protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI)
+    {
+        currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
+
+        //For now, later remove and put outside this else block
+
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+        {
+            Debug.Log("spawning vent cover at " + posI);
+            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+        }
+
+        // ----------- Item Gen -----------
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+        {
+            itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+            Data.instance.ctr1++;
+        }
+    }
+
+    protected virtual void IRotationHelper(int yRotation, GameObject currentCorridor)
+    {
+        currentCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
     private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos)
@@ -692,22 +724,22 @@ public class RoomNew : MonoBehaviour
         //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currentCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
 
-        currentCorridor.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
+        IRotationHelper(squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, currentCorridor);
         //Data.instance.corridorCount++;
-        currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
 
-        //For now, later remove and put outside this else block
+        HelperIInstantiate(currentCorridor, kIdx, posI);
 
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+    }
+
+    protected virtual void LRotScaleHelper(int yRotation, GameObject currCorridor1, int childEulerZ)
+    {
+        currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        if (yRotation == 0)
         {
-            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
-        }
-
-        // ----------- Item Gen -----------
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
-        {
-            itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
-            Data.instance.ctr1++;
+            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
+            currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
+            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
+            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
         }
     }
 
@@ -717,21 +749,13 @@ public class RoomNew : MonoBehaviour
         currCorridor1.layer = 18;
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
-        currCorridor1.transform.rotation = Quaternion.Euler(0, squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, 0);
-        if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0)
-        {
-            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
-            currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
-            //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = true;
-            currCorridor1.transform.rotation = Quaternion.Euler(0, 90, 0);
-        }
+
+        LRotScaleHelper(squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, currCorridor1, squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ);
+
     }
 
-    private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    protected virtual void HelperTInstantiate(float yRotation, GameObject currCorridor)
     {
-        float yRotation = squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot;
-        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
-        //MapgenProgress.instance.addProgress(1);
         if (yRotation == 0)
         {
             //isErroneousTCorr = true;
@@ -751,8 +775,22 @@ public class RoomNew : MonoBehaviour
             currCorridor.transform.localScale = new Vector3(-1, 1, 1);
             //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
         }
+    }
 
+    protected virtual void TRotationScaleHelper(float yRotation, GameObject currCorridor, int childEulerX)
+    {
         currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
+    {
+        float yRotation = squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot;
+        GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
+        //MapgenProgress.instance.addProgress(1);
+
+        HelperTInstantiate(yRotation, currCorridor);
+
+        TRotationScaleHelper(yRotation, currCorridor, squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX);
 
         //currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
         //currCorridor.GetComponentInChildren<CorridorNew>().rooms.Add(lParentPos);
@@ -773,7 +811,7 @@ public class RoomNew : MonoBehaviour
         //MapgenProgress.instance.addProgress(2);
     }
 
-    private string CorridorsListIdxToCorridorName(int idx)
+    protected string CorridorsListIdxToCorridorName(int idx)
     {
         if (idx == 0)
         {
@@ -797,22 +835,22 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    public NavMeshAgent navMeshAgent;
-    public Vector3 NavMeshAI()
-    {
-        navMeshAgent.enabled = true;
-        if (navMeshAgent.isOnNavMesh)
-        {
-            NavMeshPath path = new NavMeshPath();
-            if(navMeshAgent.CalculatePath(Vector3.zero, path))
-            {
-                navMeshAgent.path = path;
-            }
-        }
-        Vector3 pos = navMeshAgent.steeringTarget;
-        navMeshAgent.enabled = false;
-        return pos;
-    }
+    //public NavMeshAgent navMeshAgent;
+    //public Vector3 NavMeshAI()
+    //{
+    //    navMeshAgent.enabled = true;
+    //    if (navMeshAgent.isOnNavMesh)
+    //    {
+    //        NavMeshPath path = new NavMeshPath();
+    //        if(navMeshAgent.CalculatePath(Vector3.zero, path))
+    //        {
+    //            navMeshAgent.path = path;
+    //        }
+    //    }
+    //    Vector3 pos = navMeshAgent.steeringTarget;
+    //    navMeshAgent.enabled = false;
+    //    return pos;
+    //}
 
 
     public IEnumerator ShowRoomsBeingConnected(int k, int l, Vector3 kPos, Vector3 lPos)
@@ -833,7 +871,7 @@ public class RoomNew : MonoBehaviour
         yield return null;
     }
 
-    private int ChooseLCorridor(float yRotation)
+    protected virtual int ChooseLCorridor(float yRotation)
     {
         return (yRotation == 0 || yRotation == 180) ? 2 : ((yRotation == 90) ? 7 : 1);
     }

@@ -69,6 +69,8 @@ public class Cell
     public TileType tile;
     public int corridorIdx = -1;
     public int corridorYRot = -1;
+    public int childEulerZ = -1;
+    public int childEulerX = -1;
 }
 
 public class SquareGrid
