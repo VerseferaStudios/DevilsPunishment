@@ -39,10 +39,12 @@ public class FlashlightScript : MonoBehaviour
         {
             glow.enabled = false;
             beam.enabled = true;
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Player/Items/Flashlight/Flashlight_On_Player", GetComponent<Transform>().position);
         }
         else if (!glow.enabled && beam.enabled)
         {
             glow.enabled = beam.enabled = false;
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Player/Items/Flashlight/Flashlight_Off_Player", GetComponent<Transform>().position);
         }
         else
         {

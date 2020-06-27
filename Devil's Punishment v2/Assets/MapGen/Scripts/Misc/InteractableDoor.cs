@@ -60,6 +60,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
+                FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/VentDoors/Door_Open_Vent", GetComponent<Transform>().position);
                 Transform t = transform.parent.parent.parent;
                 if (t.tag.StartsWith("Corr"))
                 {
@@ -74,6 +75,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
 
             case DoorType.door:
                 GameState.gameState.addState(triggerState);
+                FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Door_Open_Underground_2D", GetComponent<Transform>().position);
                 Debug.Log("Opening door");
                 StartCoroutine(OpenDoor());
                 break;
