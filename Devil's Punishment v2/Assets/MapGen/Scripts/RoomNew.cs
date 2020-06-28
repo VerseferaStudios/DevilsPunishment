@@ -315,6 +315,11 @@ public class RoomNew : MonoBehaviour
         yield return null;
     }
 
+    protected virtual void VentPos(ref Vector3 currPos)
+    {
+
+    }
+
     public IEnumerator AStarHelper(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //Debug.Log("lName = " + lName);
@@ -353,6 +358,7 @@ public class RoomNew : MonoBehaviour
             if (i == -1)
             {
                 currLoc = kPos;
+                VentPos(ref currLoc);
                 currMove = Data.instance.doorRotationHelper.IndexOf(kName);
                 //Debug.Log("Door " + kName);
                 //Debug.Log("currMove = " + currMove);
@@ -360,6 +366,7 @@ public class RoomNew : MonoBehaviour
             else
             {
                 currLoc = locations[i].vector3() * -4;
+                VentPos(ref currLoc);
                 //Debug.Log("currLoc = " + currLoc);
                 currMove = MoveHelper(prevLoc, currLoc);
             }
@@ -381,8 +388,9 @@ public class RoomNew : MonoBehaviour
             }
             //yield return new WaitForSeconds(0.1f);
 
-            if ((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3) ||
-                (nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2))
+            if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
+                ((nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2)) ||
+                (i == -1 || i + 1 == locations.Count))
             {
                 //L Corridor!!!!!!!
                 //Debug.Log("currMove = " + currMove);
@@ -390,8 +398,17 @@ public class RoomNew : MonoBehaviour
                 List<int> openings1 = new List<int>();
                 openings1.Add(nextMove);
                 openings1.Add(currMove);
-                AddLCorridorSpawnInfo(openings1, currLoc, zOverall, 0, 0);
+                if (i == -1 /*|| i == 0*/ || i + 1 == locations.Count)
+                {
+                    Debug.LogWarning(currLoc);
+                }
+                AddLCorridorSpawnInfo(openings1, currLoc, zOverall, (i == -1 /*|| i == 0*/ || i + 1 == locations.Count /*|| i == locations.Count*/) ? 90 : 0, 0);
                 //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+
+                if (currLoc.x == -116 && currLoc.z == -36)
+                {
+                    Debug.LogWarning("1");
+                }
             }
             else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
                  //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
@@ -399,8 +416,16 @@ public class RoomNew : MonoBehaviour
                 //! Corridor
                 AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
                 //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
-            }
 
+                if (currLoc.x == -116 && currLoc.z == -36)
+                {
+                    Debug.LogWarning("1");
+                }
+            }
+            if(currLoc.x == -116 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
             //Instantiate(testGridSquare, currLoc, Quaternion.identity);
             prevLoc = currLoc;
             //prevMove = currMove;
@@ -445,7 +470,7 @@ public class RoomNew : MonoBehaviour
         return new int[] { x, z };
     }
 
-    private Vector3 GetPos(int[] idx)
+    protected virtual Vector3 GetPos(int[] idx)
     {
         return new Vector3(idx[0] * -4, 0.5f + roomHeight, idx[1] * -4);
     }
@@ -553,7 +578,8 @@ public class RoomNew : MonoBehaviour
         || squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation - 90)
         && !isOverride)*/
         {
-            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI", zOverall, c, 0);
+            AddCollisionInfoHelper(kIdx, yRotation, "CorridorI", zOverall, squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ,
+                                                                           squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX);
         }
     }
 
@@ -581,6 +607,8 @@ public class RoomNew : MonoBehaviour
         {
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = corridorIdx;
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = (int)yRotation;
+            squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
+            squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
@@ -590,9 +618,10 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    protected virtual void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall, int childEulerZ, int childEulerX)
+    protected virtual void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall, int childEulerZ, int childEulerX, bool isOverride)
     {
 
+            Debug.LogWarning("1234");
 
         //Debug corridors AStar
         if (isDevMode)
@@ -607,10 +636,13 @@ public class RoomNew : MonoBehaviour
 
         //Debug.Log("T info");
         if (squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == -1
-           && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1)
+           && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == -1 ||
+           isOverride)
         {
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 3; //or 4
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotationNew;
+            squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
+            squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 3
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
@@ -666,6 +698,7 @@ public class RoomNew : MonoBehaviour
 
         openings1 = openings1.Distinct().ToList();
 
+
         if (openings1.Count == 3)
         {
             if (corridorName.EndsWith("T"))
@@ -676,7 +709,7 @@ public class RoomNew : MonoBehaviour
                 return;
             }
             float yRotationNew = Data.instance.ConvertToRotation(openings1);
-            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX);
+            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX, true);
         }
         else if (openings1.Count == 4)
         {
@@ -734,7 +767,7 @@ public class RoomNew : MonoBehaviour
     protected virtual void LRotScaleHelper(int yRotation, GameObject currCorridor1, int childEulerZ)
     {
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        if (yRotation == 0)
+        if (yRotation == 0) //&& squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ != 0
         {
             //currCorridor1.GetComponentInChildren<BoxCollider>().enabled = false;
             currCorridor1.transform.localScale = new Vector3(-1, 1, 1);
@@ -745,6 +778,7 @@ public class RoomNew : MonoBehaviour
 
     private void InstantiateLCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
     {
+        //posToSpawn.y += (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ != 0) ? 2 : 0;
         GameObject currCorridor1 = Instantiate(corridors[squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx], posToSpawn, Quaternion.identity, Data.instance.mapGenHolderTransform);
         currCorridor1.layer = 18;
         //currCorridor1.GetComponentInChildren<CorridorNew>().rooms.Add(kParentPos);
@@ -785,6 +819,7 @@ public class RoomNew : MonoBehaviour
     private void InstantiateTCorridor(int[] kIdx, Vector3 posToSpawn, Vector3 kParentPos, Vector3 lParentPos)
     {
         float yRotation = squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot;
+        //posToSpawn.y += (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ != 0) ? 2 : 0;
         GameObject currCorridor = Instantiate((yRotation == 0 || yRotation == 270 || yRotation == -90) ? corridors[4] : corridors[3], posToSpawn, Quaternion.identity, mapGenHolderTransform);
         //MapgenProgress.instance.addProgress(1);
 

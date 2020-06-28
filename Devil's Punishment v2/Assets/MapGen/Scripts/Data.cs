@@ -323,13 +323,13 @@ public class Data : MonoBehaviour
     public List<int> ConvertToOpeningsVents(string tag, float yRotation, float holderZRotation, float holderXRotation)
     {
         List<int> openings = new List<int>();
-        if (tag.Equals("VentI"))
+        if (tag.EndsWith("I"))
         {
             openings.Add((int)(yRotation / 90f));
             openings.Add(openings[0] + 2);
             ////Debug.Log(openings[0] + " " + openings[1]);
         }
-        else if (tag.Equals("VentL"))
+        else if (tag.EndsWith("L"))
         {
             if (yRotation == 270 || yRotation == -90)
             {
@@ -356,7 +356,7 @@ public class Data : MonoBehaviour
                 }
             }
         }
-        else if (tag.Equals("VentT"))
+        else if (tag.EndsWith("T"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)
@@ -372,7 +372,7 @@ public class Data : MonoBehaviour
             }
             openings.AddRange(oneToFour);
         }
-        else if (tag.Equals("VentX"))
+        else if (tag.EndsWith("X"))
         {
             List<int> oneToFour = new List<int>();
             for (int i = 0; i < 4; i++)

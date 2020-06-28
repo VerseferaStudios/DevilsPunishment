@@ -47,6 +47,16 @@ public class RoomNewVents : RoomNew
         return 1;
     }
 
+    protected override Vector3 GetPos(int[] idx)
+    {
+        return new Vector3(idx[0] * -4, 0.5f + roomHeight - 2, idx[1] * -4);
+    }
+
+    protected override void VentPos(ref Vector3 currPos)
+    {
+        currPos.y -= 2;
+    }
+
     protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI) { return; }
 
     protected override void HelperTInstantiate(float yRotation, GameObject currCorridor) { return; }
@@ -92,11 +102,13 @@ public class RoomNewVents : RoomNew
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = (int)yRotation;
         Debug.Log("lcorr childEulerZ = " + childEulerZ);
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
+            squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
         //&& !isOverride)
         {
+            Debug.LogWarning("123");
             AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall, childEulerZ, childEulerX);
         }
     }
@@ -135,7 +147,31 @@ public class RoomNewVents : RoomNew
 
         openings1 = openings1.Distinct().ToList();
 
-        if (openings1.Count == 3)
+        Vector3 currLoc = GetPos(kIdx);
+        if (currLoc.x == -112 && currLoc.z == -36)
+        {
+            Debug.LogWarning("1");
+        }
+
+        float yRotationNew = Data.instance.ConvertToRotation(openings1);
+        if(openings1.Count == 2)
+        {
+            if (currLoc.x == -112 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
+            if(squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ != 0)
+            {
+                //T corridor with X 90
+                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true);
+            }
+
+            if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX != 0)
+            {
+                //Already T see if issue is there, if yea delete above grill, else continue
+            }
+        }
+        else if (openings1.Count == 3)
         {
             if (corridorName.EndsWith("T"))
                 //&& squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotation) //no Need
@@ -144,9 +180,27 @@ public class RoomNewVents : RoomNew
                 squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotation;
                 return;
             }
-            float yRotationNew = Data.instance.ConvertToRotation(openings1);
-            AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX);
+            bool isMinusTwo = false;
+            for (int i = 0; i < openings1.Count; i++)
+            {
+                if(openings1[i] == -2)
+                {
+                    isMinusTwo = true;
+                }
+            }
+            if (isMinusTwo)
+            {
+                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true);
+            }
+            else
+            {
+                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX, true);
+            }
 
+            if (currLoc.x == -112 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
 
             //openings1.Sort();
             //bool isThereVentCoverAbove = false;
@@ -226,6 +280,11 @@ public class RoomNewVents : RoomNew
             else
             {
                 AddXCorridorSpawnInfo(kIdx, zOverall);
+
+                if (currLoc.x == -112 && currLoc.z == -36)
+                {
+                    Debug.LogWarning("1");
+                }
             }
 
         }
