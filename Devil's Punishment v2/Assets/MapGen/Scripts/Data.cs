@@ -1223,7 +1223,8 @@ public class Data : MonoBehaviour
                                 StartCoroutine(roomNewScript.AStarHelper(door0Pos, door1Pos
                                                                         , door0.name[4].ToString() + door0.name[5].ToString()
                                                                         , door1.name[4].ToString() + door1.name[5].ToString()
-                                                                        , door0.parent.position, door1.parent.position, true));
+                                                                        , door0.parent.position, door1.parent.position, true
+                                                                        , door0.gameObject, door1.gameObject));
                                 break;
                             }
                             else

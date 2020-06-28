@@ -18,6 +18,11 @@ public enum TileType
 {
     Floor = 1,
     Forest = 5,
+    Forest1 = 10,
+    Forest2 = 15,
+    Forest3 = 20,
+    Forest4 = 25,
+    Forest5 = 30,
     Wall = System.Int32.MaxValue
 }
 
@@ -204,6 +209,37 @@ public class PriorityQueue<T>
 // down to the business of actually finding a path.
 public class AStarSearch
 {
+    public static SquareGrid InitialiseSquareGrid(float xSize, float zSize, int mapSizeX, int mapSizeZ)
+    {
+        int xOverall = (int)xSize * mapSizeX / 4;
+        int zOverall = (int)zSize * mapSizeZ / 4;
+        //Debug.Log("xOverall = " + xOverall);
+        //Debug.Log("zOverall = " + zOverall);
+        SquareGrid squareGrid = new SquareGrid(0, 0, xOverall, zOverall)
+        {
+            tiles = new Cell[xOverall, zOverall]
+        };
+        for (int i = 0; i < xOverall; i++)
+        {
+            for (int j = 0; j < zOverall; j++)
+            {
+                squareGrid.tiles[i, j] = new Cell
+                {
+                    tile = TileType.Floor,
+                    corridorIdx = -1,
+                    corridorYRot = -1,
+                    childEulerZ = -1,
+                    childEulerX = -1
+                };
+                //if (isDevMode)
+                //{
+                //    Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
+                //}
+            }
+        }
+        return squareGrid;
+    }
+
     // Someone suggested making this a 2d field.
     // That will be worth looking at if you run into performance issues.
     public Dictionary<Location, Location> cameFrom = new Dictionary<Location, Location>();

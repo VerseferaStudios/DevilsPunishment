@@ -10,6 +10,9 @@ enum FloorNo
 }
 public class RoomNewVents : RoomNew
 {
+    [Header("Dev Tool")]
+    public Transform sqGridDetails;
+
     //private List<Transform> spawnPoints = new List<Transform>();
     private List<GameObject> spawnPoints = new List<GameObject>();
     //public GameObject[] corridors;
@@ -47,7 +50,7 @@ public class RoomNewVents : RoomNew
         return 1;
     }
 
-    protected override Vector3 GetPos(int[] idx)
+    public override Vector3 GetPos(int[] idx)
     {
         return new Vector3(idx[0] * -4, 0.5f + roomHeight - 2, idx[1] * -4);
     }
@@ -57,7 +60,8 @@ public class RoomNewVents : RoomNew
         currPos.y -= 2;
     }
 
-    protected override void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall)
+    protected override void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall
+        , GameObject kGb, GameObject lGb)
     {
         if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
             ((nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2)) ||
@@ -78,7 +82,32 @@ public class RoomNewVents : RoomNew
             {
                 Debug.LogWarning(currLoc);
             }
-            AddLCorridorSpawnInfo(openings1, currLoc, zOverall, (i == -1 /*|| i == 0*/ || i + 1 == locationsCount /*|| i == locations.Count*/) ? 90 : 0, 0);
+            int childEulerZ, childEulerX = 0;
+
+            if (i == -1 || i + 1 == locationsCount)
+            {
+                childEulerZ = 90;
+            }
+            else
+            {
+                childEulerZ = 0;
+            }
+
+            int[] kIdx = GetIdx(currLoc);
+
+            //if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ == 90)
+            //{
+            //    childEulerZ = 90;
+            //    childEulerX = 90;
+            //}
+            //if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX == 90)
+            //{
+            //    childEulerX = 90;
+            //}
+
+
+            AddLCorridorSpawnInfo(openings1, currLoc, zOverall, childEulerZ, childEulerX
+                ,kGb, lGb);
             //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
 
             if (currLoc.x == -116 && currLoc.z == -36)
@@ -90,7 +119,7 @@ public class RoomNewVents : RoomNew
              //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
         {
             //! Corridor
-            AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
+            AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall, kGb, lGb);
             //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
 
             if (currLoc.x == -116 && currLoc.z == -36)
@@ -124,7 +153,8 @@ public class RoomNewVents : RoomNew
         currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(childEulerX, 0, 0);
     }
 
-    protected override void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall, int childEulerZ, int childEulerX)
+    protected override void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall, int childEulerZ, int childEulerX
+        , GameObject kGb, GameObject lGb)
     {
         //Debug.Log("L info");
         float yRotation = Data.instance.ConvertToRotation(openings);
@@ -151,17 +181,65 @@ public class RoomNewVents : RoomNew
         Debug.Log("lcorr childEulerZ = " + childEulerZ);
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
+            //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
+            squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            // For vents, so that after connecting to vent cover, new connections wont come in
+            //if(Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            //{
+            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            //}
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
         //&& !isOverride)
         {
             Debug.LogWarning("123");
-            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall, childEulerZ, childEulerX);
+            AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall, childEulerZ, childEulerX, kGb, lGb);
         }
     }
 
-    protected override void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName, int zOverall, int childEulerZ, int childEulerX)
+    protected override void AddTCorridorSpawnInfo(int[] kIdx, int yRotationNew, int zOverall, int childEulerZ, int childEulerX, bool isOverride, GameObject kGb, GameObject lGb)
+    {
+        base.AddTCorridorSpawnInfo(kIdx, yRotationNew, zOverall, childEulerZ, childEulerX, isOverride, kGb, lGb);
+        //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
+        //squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+    }
+
+    protected override void AddXCorridorSpawnInfo(int[] kIdx, int zOverall)
+    {
+        base.AddXCorridorSpawnInfo(kIdx, zOverall);
+        //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
+        //squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+    }
+
+    private void DestroyVentCover(GameObject kGb, GameObject lGb)
+    {
+
+        //int idx = (i == -1) ? k : l;
+        //Destroy(spawnPoints[idx]);
+        //spawnPoints.RemoveAt(idx);
+        Debug.LogWarning("Asked to destroy vent!!!!!!!!@ => ");
+        if (i == -1)
+        {
+            //spawnPoints.Remove(kGb);
+            ////Destroy(kGb);
+            //kGb.transform.parent.parent.gameObject.SetActive(false);
+            //k--;
+            Debug.LogWarning("kGb = " + kGb.transform.position);
+        }
+        else
+        {
+            //spawnPoints.Remove(lGb);
+            ////Destroy(lGb);
+            //lGb.transform.parent.parent.gameObject.SetActive(false);
+            //l--;
+            Debug.LogWarning("lGb = " + lGb.transform.position);
+        }
+    }
+
+    protected override void AddCollisionInfoHelper(int[] kIdx, int yRotation, string corridorName, int zOverall, int childEulerZ, int childEulerX
+        , GameObject kGb, GameObject lGb)
     {
         List<int> openings1, openings2;
         openings1 = Data.instance.ConvertToOpeningsVents(corridorName, yRotation, childEulerZ, childEulerX);
@@ -196,22 +274,16 @@ public class RoomNewVents : RoomNew
         openings1 = openings1.Distinct().ToList();
 
         Vector3 currLoc = GetPos(kIdx);
-        if (currLoc.x == -112 && currLoc.z == -36)
-        {
-            Debug.LogWarning("1");
-        }
 
         float yRotationNew = Data.instance.ConvertToRotation(openings1);
         if(openings1.Count == 2)
         {
-            if (currLoc.x == -112 && currLoc.z == -36)
-            {
-                Debug.LogWarning("1");
-            }
+            Debug.LogWarning("warning?");
             if(squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ != 0)
             {
                 //T corridor with X 90
-                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true);
+                //l right?
+                //AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true);
             }
 
             if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX != 0)
@@ -229,75 +301,30 @@ public class RoomNewVents : RoomNew
                 return;
             }
             bool isMinusTwo = false;
-            for (int i = 0; i < openings1.Count; i++)
+            openings1.Sort();
+            if(openings1[0] == -2)
             {
-                if(openings1[i] == -2)
-                {
-                    isMinusTwo = true;
-                }
+                isMinusTwo = true;
             }
             if (isMinusTwo)
             {
-                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true);
+                if((openings1[1] == 0 && openings1[2] == 1) ||
+                   (openings1[1] == 0 && openings1[2] == 3) ||
+                   (openings1[1] == 1 && openings1[2] == 2) ||
+                   (openings1[1] == 2 && openings1[2] == 3))
+                {
+                    //Destroy vent cover
+                    DestroyVentCover(kGb, lGb);
+                }
+                else
+                {
+                    AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true, kGb, lGb);
+                }
             }
             else
             {
-                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX, true);
+                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, childEulerZ, childEulerX, true, kGb, lGb);
             }
-
-            if (currLoc.x == -112 && currLoc.z == -36)
-            {
-                Debug.LogWarning("1");
-            }
-
-            //openings1.Sort();
-            //bool isThereVentCoverAbove = false;
-            //Debug.Log("========");
-            ///*
-            //foreach (var item in openings1)
-            //{
-            //    Debug.Log(item);
-            //}
-            //*/
-            //if (openings1[0] == -2)
-            //{
-            //    isThereVentCoverAbove = true;
-            //    openings1.RemoveAt(0);
-            //    openings1.Add((openings1[1] + 1) % 4);
-            //}
-            ///*
-            //foreach (var item in openings1)
-            //{
-            //    Debug.Log(item);
-            //}
-            //*/
-            //GameObject currCorridor = Instantiate(ventT, spawnAtPos, Quaternion.identity, mapGenHolderTransform);
-            //MapgenProgress.instance.addProgress(2);
-            ///*
-            //if (yRotation == 0)
-            //{
-            //    currCorridor.transform.GetChild(0).localPosition = new Vector3(0.15f, 0, -0.155f);
-            //}
-            //if (yRotation == 270 || yRotation == -90 || yRotation == 180)
-            //{
-
-            //    if (yRotation == -90 || yRotation == 270)
-            //    {
-            //        currCorridor.transform.GetChild(0).localPosition = new Vector3(0.156f, 0, -0.156f);
-            //    }
-
-            //    //MeshCollider bc = currCorridor.GetComponentInChildren<MeshCollider>();
-            //    //Destroy(bc);
-            //    currCorridor.transform.localScale = new Vector3(-1, 1, 1);
-            //    //currCorridor.transform.Find("CollisionDetector").gameObject.AddComponent<MeshCollider>().size = new Vector3(1, 0.5f, 1);
-            //}
-            //*/
-            //if (isThereVentCoverAbove)
-            //{
-            //    currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(90, 0, 0);
-            //}
-            //currCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-            ////Debug.Log("added T VENT at " + currCorridor.transform.position + " with yRot " + yRotation + " and scale " + currCorridor.transform.localScale);
 
         }
         else if (openings1.Count == 4)
@@ -314,6 +341,8 @@ public class RoomNewVents : RoomNew
             {
                 isThereVentCoverAbove = true;
                 openings1.RemoveAt(0);
+                DestroyVentCover(kGb, lGb);
+                AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 0, false, kGb, lGb); //isOverride is false?
                 //if (collidedVents[j].transform.parent.name.EndsWith("L"))
                 //{
                 //    Destroy(collidedVents[j].transform.parent.parent.gameObject); // DONT DESTROY "New Game Object" (put condition)
@@ -328,13 +357,15 @@ public class RoomNewVents : RoomNew
             else
             {
                 AddXCorridorSpawnInfo(kIdx, zOverall);
-
-                if (currLoc.x == -112 && currLoc.z == -36)
-                {
-                    Debug.LogWarning("1");
-                }
             }
 
+        }
+        else if(openings1.Count == 5)
+        {
+            openings1.Sort();
+            openings1.RemoveAt(0);
+            DestroyVentCover(kGb, lGb);
+            AddXCorridorSpawnInfo(kIdx, zOverall);
         }
         else
         {

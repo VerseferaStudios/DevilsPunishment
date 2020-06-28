@@ -12,4 +12,6 @@ public class Constants : MonoBehaviour
 
     public readonly string TAG_VENTSPAWNFLOOR1 = "Vent Spawn Points";
     public readonly string TAG_VENTSPAWNFLOOR2 = "Vent Spawn Points 2nd Floor";
+    public readonly string GBNAME_ROOMNEWVENTS = "RoomNewVents";
+
 }

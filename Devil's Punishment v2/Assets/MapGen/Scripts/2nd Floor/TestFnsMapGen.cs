@@ -140,6 +140,8 @@ public abstract class TestFnsMapGen : MonoBehaviour
         roomNewScript.itemGenScript = itemGenScript;
         roomNewScript.mapSizeX = mapSizeX;
         roomNewScript.mapSizeZ = mapSizeZ;
+        roomNewScript.xSize = xSize;
+        roomNewScript.zSize = zSize;
         roomNewScript.roomHeight = roomHeight;
         roomNewScript.isDevMode = isDevMode;
         if (isDevMode)
@@ -242,42 +244,12 @@ public abstract class TestFnsMapGen : MonoBehaviour
 
     }
 
-    private void InitialiseSquareGrid(out SquareGrid squareGrid)
-    {
-        int xOverall = (int)xSize * mapSizeX / 4;
-        int zOverall = (int)zSize * mapSizeZ / 4;
-        //Debug.Log("xOverall = " + xOverall);
-        //Debug.Log("zOverall = " + zOverall);
-        squareGrid = new SquareGrid(0, 0, xOverall, zOverall)
-        {
-            tiles = new Cell[xOverall, zOverall]
-        };
-        for (int i = 0; i < xOverall; i++)
-        {
-            for (int j = 0; j < zOverall; j++)
-            {
-                squareGrid.tiles[i, j] = new Cell
-                {
-                    tile = TileType.Floor,
-                    corridorIdx = -1,
-                    corridorYRot = -1,
-                    childEulerZ = -1,
-                    childEulerX = -1
-                };
-                //if (isDevMode)
-                //{
-                //    Instantiate(testGridPlane, new Vector3(i * -4, 0, j * -4), Quaternion.identity, testGridPlaneHolder);
-                //}
-            }
-        }
-    }
-
     public virtual void Rooms()
     {
         //Debug.Log("Rooms started");
 
 
-        InitialiseSquareGrid(out squareGrid);
+        squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ);
 
 
         /*
@@ -404,8 +376,10 @@ public abstract class TestFnsMapGen : MonoBehaviour
                 Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
                 Data.instance.roomsFloor1Modular.Add(spawnedRoom);
                 Data.instance.modularRoomAssembler.StartScript();
-                if (i != 1)
-                    SpawnVentCoverInRoom(i, k, roomReferencesModular.ventParent);
+
+                //roomReferencesModular.ventParent.position = roomReferencesModular.roomFloors[Random.Range(0, roomReferencesModular.roomFloors.Count)];
+                //if (i != 1)
+                //    SpawnVentCoverInRoom(i, k, roomReferencesModular.ventParent);
                 //Data.instance.roomsFloor1Modular.Add(spawnedRoom);
 
 
@@ -794,61 +768,24 @@ public abstract class TestFnsMapGen : MonoBehaviour
         }
     }
 
-    // ------------------------ Add RoomNewVents script after delay ------------------------
-    private IEnumerator AddRoomNewVents(GameObject gb)
-    {
-        yield return new WaitForSeconds(5f);
-        RoomNewVents roomNewVents = gb.AddComponent<RoomNewVents>();
-        roomNewVents.corridors = vents;
-
-
-        //roomNewVents = AddRoomNewCorrectly();
-        roomNewVents.vents = vents;
-        roomNewVents.allRooms = allRooms;
-        roomNewVents.ventCover = ventCover;
-        
-        roomNewVents.mapGenHolderTransform = new GameObject("VentsHolder").transform;
-        //roomNewVents.itemGenScript = itemGenScript;
-        roomNewVents.mapSizeX = mapSizeX;
-        roomNewVents.mapSizeZ = mapSizeZ;
-        roomNewVents.roomHeight = roomHeight;
-        roomNewVents.isDevMode = isDevMode;
-        if (isDevMode)
-        {
-            roomNewVents.testGridCube = testGridCube;
-        }
-
-
-
-        roomNewVents.aStarVisualisationTime = aStarVisualisationTime;
-        InitialiseSquareGrid(out SquareGrid squareGrid);
-        roomNewVents.squareGrid = squareGrid;
-        if (isDevMode)
-        {
-            roomNewVents.testGridPlaneHolder = testGridPlaneHolder;
-        }
-        //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
-        //Data.instance.roomNewVents = roomNewVents;
-
-        yield return null;
-    }
-
     // ----------------------- Spawn Vent Cover in room -----------------------
     public virtual void SpawnVentCoverInRoom(int i, int k, Transform ventParentTransform)
     {
         if (Random.Range(0.0f, 1.0f) < ventCoverProbabilty || i == k - 1)
         {
-            if (i == k - 1)
-            {
+            Vector3 ventSpawnPos = ventParentTransform.position;
+            //ventSpawnPos.y = 0.5f; //not really required
+            //if (i == k - 1)
+            //{
                 //GameObject gb = Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                GameObject gb = Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
-                StartCoroutine(AddRoomNewVents(gb));
-            }
-            else
-            {
+            //    GameObject gb = Instantiate(ventCover, ventSpawnPos, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
+                
+            //}
+            //else
+            //{
                 //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                Instantiate(ventCover, ventParentTransform.position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
-            }
+                Instantiate(ventCover, ventSpawnPos, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
+            //}
         }
     }
 
