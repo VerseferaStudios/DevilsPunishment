@@ -320,6 +320,49 @@ public class RoomNew : MonoBehaviour
 
     }
 
+    protected virtual void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall)
+    {
+
+        if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
+            ((nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2)))
+        {
+            //L Corridor!!!!!!!
+            //Debug.Log("currMove = " + currMove);
+            //Debug.Log("nextMove = " + nextMove);
+            List<int> openings1 = new List<int>();
+            openings1.Add(nextMove);
+            openings1.Add(currMove);
+            if (i == -1 /*|| i == 0*/ || i + 1 == locationsCount)
+            {
+                Debug.LogWarning(currLoc);
+            }
+            AddLCorridorSpawnInfo(openings1, currLoc, zOverall, 0, 0); // (i == -1 /*|| i == 0*/ || i + 1 == locationsCount /*|| i == locations.Count*/) ? 90 : 0, 0);
+            //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+
+            if (currLoc.x == -116 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
+        }
+        else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
+             //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
+        {
+            //! Corridor
+            AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
+            //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
+
+            if (currLoc.x == -116 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
+        }
+    }
+
+    protected virtual void DoorHelper(out int move, string doorName)
+    {
+        move = Data.instance.doorRotationHelper.IndexOf(doorName);
+    }
+
     public IEnumerator AStarHelper(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos, bool fromDataSingleton)
     {
         //Debug.Log("lName = " + lName);
@@ -359,7 +402,7 @@ public class RoomNew : MonoBehaviour
             {
                 currLoc = kPos;
                 VentPos(ref currLoc);
-                currMove = Data.instance.doorRotationHelper.IndexOf(kName);
+                DoorHelper(out currMove, kName);
                 //Debug.Log("Door " + kName);
                 //Debug.Log("currMove = " + currMove);
             }
@@ -379,7 +422,7 @@ public class RoomNew : MonoBehaviour
             }
             else
             {
-                nextMove = Data.instance.doorRotationHelper.IndexOf(lName);
+                DoorHelper(out nextMove, lName);
                 nextMove += 2;
                 nextMove %= 4;
                 //Debug.Log("Door " + lName);
@@ -388,40 +431,8 @@ public class RoomNew : MonoBehaviour
             }
             //yield return new WaitForSeconds(0.1f);
 
-            if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
-                ((nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2)) ||
-                (i == -1 || i + 1 == locations.Count))
-            {
-                //L Corridor!!!!!!!
-                //Debug.Log("currMove = " + currMove);
-                //Debug.Log("nextMove = " + nextMove);
-                List<int> openings1 = new List<int>();
-                openings1.Add(nextMove);
-                openings1.Add(currMove);
-                if (i == -1 /*|| i == 0*/ || i + 1 == locations.Count)
-                {
-                    Debug.LogWarning(currLoc);
-                }
-                AddLCorridorSpawnInfo(openings1, currLoc, zOverall, (i == -1 /*|| i == 0*/ || i + 1 == locations.Count /*|| i == locations.Count*/) ? 90 : 0, 0);
-                //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+            ASDFQWERTY(nextMove, currMove, locations.Count, i, currLoc, zOverall);
 
-                if (currLoc.x == -116 && currLoc.z == -36)
-                {
-                    Debug.LogWarning("1");
-                }
-            }
-            else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
-                 //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
-            {
-                //! Corridor
-                AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
-                //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
-
-                if (currLoc.x == -116 && currLoc.z == -36)
-                {
-                    Debug.LogWarning("1");
-                }
-            }
             if(currLoc.x == -116 && currLoc.z == -36)
             {
                 Debug.LogWarning("1");
@@ -538,7 +549,7 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    private void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride, int zOverall)
+    protected void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride, int zOverall)
     {
         //Debug.Log("I info");
         int[] kIdx = GetIdx(posI);

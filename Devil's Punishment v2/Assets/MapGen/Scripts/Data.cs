@@ -147,6 +147,10 @@ public class Data : MonoBehaviour
     public float ConvertToRotation(List<int> corridorOpenings)
     {
         corridorOpenings.Sort();
+        if(corridorOpenings.Count == 2 && corridorOpenings[0] == -2)
+        {
+            corridorOpenings.RemoveAt(0);
+        }
         float yRotation = 0;
         //DeadEnd
         if (corridorOpenings.Count == 1)

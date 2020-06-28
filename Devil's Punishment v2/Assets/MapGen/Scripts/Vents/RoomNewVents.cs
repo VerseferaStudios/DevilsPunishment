@@ -57,6 +57,54 @@ public class RoomNewVents : RoomNew
         currPos.y -= 2;
     }
 
+    protected override void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall)
+    {
+        if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
+            ((nextMove == 1 || nextMove == 3) && (currMove == 0 || currMove == 2)) ||
+            (i == -1 || i + 1 == locationsCount))
+        {
+            //L Corridor!!!!!!!
+            //Debug.Log("currMove = " + currMove);
+            //Debug.Log("nextMove = " + nextMove);
+            List<int> openings1 = new List<int>();
+            openings1.Add(nextMove);
+            openings1.Add(currMove);
+            if (i == -1)
+            {
+                //currMove
+                Debug.LogWarning(currLoc);
+            }
+            if (i + 1 == locationsCount)
+            {
+                Debug.LogWarning(currLoc);
+            }
+            AddLCorridorSpawnInfo(openings1, currLoc, zOverall, (i == -1 /*|| i == 0*/ || i + 1 == locationsCount /*|| i == locations.Count*/) ? 90 : 0, 0);
+            //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
+
+            if (currLoc.x == -116 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
+        }
+        else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
+             //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
+        {
+            //! Corridor
+            AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall);
+            //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
+
+            if (currLoc.x == -116 && currLoc.z == -36)
+            {
+                Debug.LogWarning("1");
+            }
+        }
+    }
+
+    protected override void DoorHelper(out int move, string doorName)
+    {
+        move = -4;
+    }
+
     protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI) { return; }
 
     protected override void HelperTInstantiate(float yRotation, GameObject currCorridor) { return; }
