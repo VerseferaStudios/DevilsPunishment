@@ -90,6 +90,7 @@ public class ModularPropGen : MonoBehaviour
                 CreateClusterHolder(propToSpawn, pos);
             }
         }
+        StartCoroutine(DisableRigidbodiesOnDelay());
     }
 
     private void CreateClusterHolder(Props propToSpawn, Vector3 pos)
@@ -101,7 +102,7 @@ public class ModularPropGen : MonoBehaviour
 
     private void SpawnProps(Props propToSpawn, Vector3 pos, GameObject clusterHolder)
     {
-        int numProps = UnityEngine.Random.Range(1, 6);
+        int numProps = UnityEngine.Random.Range(1, 8);
 
 
         int propCount = 0;
@@ -111,7 +112,7 @@ public class ModularPropGen : MonoBehaviour
             float randomDistance_x = UnityEngine.Random.Range(-maxSpawnDist, maxSpawnDist);
             float randomDistance_z = UnityEngine.Random.Range(-maxSpawnDist, maxSpawnDist);
             int versionToSpawn = UnityEngine.Random.Range(0, propToSpawn.Variants);
-            Vector3 spawnPos = pos + GenerateOffset(randomDistance_x, 2.25f, randomDistance_z);
+            Vector3 spawnPos = pos + GenerateOffset(randomDistance_x, 3.0f, randomDistance_z);
             //---------Testing purposes only------------//
 
             //--------Testing segment concluded--------//
@@ -129,70 +130,81 @@ public class ModularPropGen : MonoBehaviour
            }
             else
             {
-              Debug.Log("Intersected another prop...");
-           }
+                GameObject prop = Instantiate(propToSpawn.Versions[versionToSpawn], pos + GenerateOffset(randomDistance_x, 5.0f, randomDistance_z), Quaternion.identity);
+                prop.transform.parent = clusterHolder.transform;
+                prop.AddComponent<Rigidbody>();
+                prop.tag = "Prop";
+
+                spawnedProps.Add(prop);
+                ++propCount;
+            }
         }
     }
 
     private bool PreventOverlap(Vector3 posToCheck, GameObject objBeingSpawned)
     {
-        bool canSpawn = false;
-        if (spawnedProps.Count == 0)
-        {
-            canSpawn = true;
-        }
-        else {
+        float sphereCastRadius = 0.6f;
+        
+        bool canSpawn = true;
             for (int i = 0; i < spawnedProps.Count; i++)
             {
-                Vector3 centerPoint = spawnedProps[i].transform.position;
-                float radius = spawnedProps[i].transform.GetChild(0).GetComponent<MeshRenderer>().bounds.extents.x;
-                //float height = spawnedProps[i].transform.GetChild(0).GetComponent<MeshRenderer>().bounds.extents.y;   wip
+                RaycastHit hit;
+            Debug.Log("Collider extents = " + objBeingSpawned.GetComponent<Collider>().bounds.extents.x);
 
-                float xExtent = objBeingSpawned.transform.GetChild(0).GetComponent<MeshRenderer>().bounds.extents.x;
-                //float yExtent = objBeingSpawned.GetComponent<LODGroup>().GetLODs()[0].renderers[0].bounds.extents.y;  wip
+            GameObject testSphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            testSphere1.transform.localScale = new Vector3(sphereCastRadius,
+                sphereCastRadius,
+                sphereCastRadius);
+            testSphere1.transform.position = posToCheck + GenerateOffset(0, 3.0f, 0);
 
-                if (posToCheck.x + xExtent > centerPoint.x - radius &&
-                    posToCheck.x + xExtent < centerPoint.x + radius)
+            GameObject testSphere2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            var renderer = testSphere2.GetComponent<MeshRenderer>();
+
+            testSphere2.transform.localScale = new Vector3(sphereCastRadius,
+                sphereCastRadius,
+                sphereCastRadius);
+            testSphere2.transform.position = posToCheck;
+
+            testSphere1.GetComponent<SphereCollider>().enabled = false;
+            testSphere2.GetComponent<SphereCollider>().enabled = false;
+
+            if (Physics.SphereCast(posToCheck + GenerateOffset(0, 3.0f, 0), sphereCastRadius, Vector3.down, out hit, 2.5f))
                 {
                     //if (posToCheck.z + xExtent > centerPoint.z - radius &&
                     //posToCheck.z + xExtent < centerPoint.z + radius)
                     //{
                     //Return that this object will overlap another and as such can not be spawned
                     canSpawn = false;
-                    //}
-                }
-                else if (posToCheck.x - xExtent > centerPoint.x - radius &&
-                  posToCheck.x - xExtent < centerPoint.x + radius)
-                {
-                    //if (posToCheck.z - xExtent > centerPoint.z - radius &&
-                    //posToCheck.z - xExtent < centerPoint.z + radius)
-                    //{
-                        //Return that this object will overlap another and as such can not be spawned
-                        canSpawn = false;
-                    //}
-                }
+                renderer.material.SetColor("_Color", Color.red);
+                //}
+            }
                 else
                 {
-                    canSpawn = true;
+
+                renderer.material.SetColor("_Color", Color.green);
+                canSpawn = true;
                 }
-                Color lineColor;
-                if (canSpawn)
-                {
-                    lineColor = Color.green;
-                }
-                else
-                {
-                    lineColor = Color.red;
-                }
-                Debug.DrawLine(posToCheck, new Vector3(posToCheck.x + xExtent, posToCheck.y, posToCheck.z), lineColor, 10.0f);
-                Debug.DrawLine(posToCheck, new Vector3(posToCheck.x - xExtent, posToCheck.y, posToCheck.z), lineColor, 10.0f);
-                Debug.DrawLine(posToCheck, new Vector3(posToCheck.x, posToCheck.y, posToCheck.z + xExtent), lineColor, 10.0f);
-                Debug.DrawLine(posToCheck, new Vector3(posToCheck.x, posToCheck.y, posToCheck.z - xExtent), lineColor, 10.0f);
-                Debug.Log(objBeingSpawned + " parent of " + objBeingSpawned.transform.GetChild(0).name + " checking for intersection with "
-    + spawnedProps[i].name + " parent of " + spawnedProps[i].transform.GetChild(0).name + "returns: " + canSpawn);
+
+                Debug.Log(objBeingSpawned + " checking for intersection with " + spawnedProps[i].name + "returns: " + canSpawn);
+            }
+        return canSpawn;
+    }
+        
+    private IEnumerator DisableRigidbodiesOnDelay()
+    {
+        float waitTime = 5.0f;
+
+        yield return new WaitForSeconds(waitTime);
+
+        Debug.Log("Disabling rigidbody physics...");
+
+        foreach(GameObject prop in spawnedProps)
+        {
+            if (prop.GetComponent<Rigidbody>() != null)
+            {
+                prop.GetComponent<Rigidbody>().isKinematic = true;
             }
         }
-        return canSpawn;
     }
 
     private Vector3 GenerateOffset(float x, float y, float z)
