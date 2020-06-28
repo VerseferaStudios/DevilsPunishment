@@ -60,7 +60,7 @@ public class RoomNewVents : RoomNew
         currPos.y -= 2;
     }
 
-    protected override void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall
+    protected override void CallIorLSpawnStoreFns(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall
         , GameObject kGb, GameObject lGb)
     {
         if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
@@ -129,8 +129,14 @@ public class RoomNewVents : RoomNew
         }
     }
 
+    /// <summary>
+    /// Finds the move for the vent near a door (not for corridor)
+    /// </summary>
+    /// <param name="move"></param>
+    /// <param name="doorName"></param>
     protected override void DoorHelper(out int move, string doorName)
     {
+        //Debug.Log("using door helper in room new vents");
         move = -4;
     }
 
@@ -143,7 +149,6 @@ public class RoomNewVents : RoomNew
     protected override void LRotScaleHelper(int yRotation, GameObject currCorridor1, int childEulerZ)
     {
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        Debug.Log("childEulerZ = " + childEulerZ);
         currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, childEulerZ);
     }
 
@@ -178,23 +183,21 @@ public class RoomNewVents : RoomNew
         {
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = corridorIdx;
             squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = (int)yRotation;
-        Debug.Log("lcorr childEulerZ = " + childEulerZ);
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
             //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
-            squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            //squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            //if(Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            //{
-            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            //}
+            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            {
+                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            }
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
         //&& !isOverride)
         {
-            Debug.LogWarning("123");
             AddCollisionInfoHelper(kIdx, (int)yRotation, "CorridorL", zOverall, childEulerZ, childEulerX, kGb, lGb);
         }
     }

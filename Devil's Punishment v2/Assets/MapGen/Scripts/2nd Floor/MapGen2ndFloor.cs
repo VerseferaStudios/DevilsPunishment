@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections;
 
-public class MapGen2ndFloor : TestFnsMapGen
+public class MapGen2ndFloor : MapGenBase
 {
     //first we'll see the ground floor
     //10 x 10 cube

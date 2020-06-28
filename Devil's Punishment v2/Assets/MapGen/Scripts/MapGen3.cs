@@ -4,7 +4,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapGen3 : TestFnsMapGen
+public class MapGen3 : MapGenBase
 {
     //first we'll see the ground floor
     //10 x 10 cube

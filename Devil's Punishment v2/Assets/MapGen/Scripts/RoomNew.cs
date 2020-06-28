@@ -77,6 +77,10 @@ public class RoomNew : MonoBehaviour
         //StartScript(); its couroutine now man
     }
 
+    /// <summary>
+    /// For rooms and corridors, check modular rooms and make non traversable by making tileType Wall
+    /// NOT for vents
+    /// </summary>
     protected virtual void SquareGridWallPopulate()
     {
         RoomReferencesModular roomReferencesModular;
@@ -86,7 +90,7 @@ public class RoomNew : MonoBehaviour
             roomReferencesModular = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModular>();
             for (int j = 0; j < roomReferencesModular.roomFloors.Count; j++)
             {
-                //Debug.Log("Time mod room = " + Time.time);
+                Debug.Log("Time mod room = " + Time.time);
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
@@ -98,6 +102,10 @@ public class RoomNew : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starting the script off, storing spawn points in list as well as calling the necessary starting functions for the script
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator StartScript()
     {
         
@@ -195,10 +203,17 @@ public class RoomNew : MonoBehaviour
         StartCoroutine(CallConnectRooms());
     }
 
+    /// <summary>
+    /// Loops through the spawn points list and correctly calls the As+StarHelper for each pair (overlapping pairs are allowed as of now)
+    /// Waits for each pair to finish as well (can try changing that later maybe)
+    /// After Adding Info for all corridors through AStarHelper(), this function also calls InstantiateAllCorridors()
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CallConnectRooms()
     {
         int times = 0;
         bool x;
+
         for (k = 0; k < spawnPoints.Count; k++)//or k+=2 does it matter?
         {
 
@@ -211,12 +226,31 @@ public class RoomNew : MonoBehaviour
             //    continue;
             //}
 
+            //if (visitedRooms.Contains(spawnPoints[k].transform.position))
+            //{
+            //    spawnPoints.RemoveAt(k);
+            //    k--;
+            //    continue;
+            //}
+
             for (l = 0; l < spawnPoints.Count; l++) 
             {
                 if (k == l)
                 {
                     continue;
                 }
+
+                //if (visitedRooms.Contains(spawnPoints[l].transform.position))
+                //{
+                //    spawnPoints.RemoveAt(l);
+                //    l--;
+                //    if (k > l)
+                //    {
+                //        k--;
+                //    }
+                //    continue;
+                //}
+
                 //x = !CheckIfSameOrAdjacentRoom(k, l);
                 //Debug.Log("Counter = " + counter + " ; !CheckIfSameOrAdjacentRoom(k, l) = " + x); 
                 // ------------------------ if k and i are not in the same room ------------------------
@@ -262,6 +296,13 @@ public class RoomNew : MonoBehaviour
                     // ---------------------------------- AStar Trials ----------------------------------
 
                     // ----------------------------------------------------------------------------------
+
+
+                    // Trying removing connected door
+
+                    //visitedRooms.Add(spawnPoints[l].transform.position);
+
+
 
                     //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
                     //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
@@ -358,12 +399,26 @@ public class RoomNew : MonoBehaviour
         yield return null;
     }
 
+    //To set vent y pos, may not be required
     protected virtual void VentPos(ref Vector3 currPos)
     {
 
     }
 
-    protected virtual void ASDFQWERTY(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall, GameObject kGb, GameObject lGb)
+    /// <summary>
+    /// Just so that vents can override this function
+    /// Calls the right I or L functions to add data to the square grid tiles,
+    /// according to the moves calculated in the previous function
+    /// </summary>
+    /// <param name="nextMove"></param>
+    /// <param name="currMove"></param>
+    /// <param name="locationsCount"></param>
+    /// <param name="i"></param>
+    /// <param name="currLoc"></param>
+    /// <param name="zOverall"></param>
+    /// <param name="kGb"></param>
+    /// <param name="lGb"></param>
+    protected virtual void CallIorLSpawnStoreFns(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall, GameObject kGb, GameObject lGb)
     {
 
         if (((nextMove == 0 || nextMove == 2) && (currMove == 1 || currMove == 3)) ||
@@ -401,11 +456,31 @@ public class RoomNew : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Finds the move for the corridor near a door (not for vent!)
+    /// </summary>
+    /// <param name="move"></param>
+    /// <param name="doorName"></param>
     protected virtual void DoorHelper(out int move, string doorName)
     {
+        //Debug.LogWarning("using door helper in room new only");
         move = Data.instance.doorRotationHelper.IndexOf(doorName);
     }
 
+    /// <summary>
+    /// Makes use of the the AstarSearch script to find the shortest path suing A star pathfinding
+    /// Finds the moves index as well (North - 0; East - 1; South - 1; West - 3)
+    /// </summary>
+    /// <param name="kPos"></param>
+    /// <param name="lPos"></param>
+    /// <param name="kName"></param>
+    /// <param name="lName"></param>
+    /// <param name="kParentPos"></param>
+    /// <param name="lParentPos"></param>
+    /// <param name="fromDataSingleton"></param>
+    /// <param name="kGb"></param>
+    /// <param name="lGb"></param>
+    /// <returns></returns>
     public IEnumerator AStarHelper(Vector3 kPos, Vector3 lPos, string kName, string lName, Vector3 kParentPos, Vector3 lParentPos
         , bool fromDataSingleton, GameObject kGb, GameObject lGb)
     {
@@ -476,7 +551,7 @@ public class RoomNew : MonoBehaviour
             }
             //yield return new WaitForSeconds(0.1f);
 
-            ASDFQWERTY(nextMove, currMove, locations.Count, i, currLoc, zOverall, kGb, lGb);
+            CallIorLSpawnStoreFns(nextMove, currMove, locations.Count, i, currLoc, zOverall, kGb, lGb);
 
             if(currLoc.x == -116 && currLoc.z == -36)
             {
@@ -518,6 +593,13 @@ public class RoomNew : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Basic Position to Index function
+    /// Opposite of Vector3 GetPos(int[] idx)
+    /// </summary>
+    /// <param name="pos"> position is the transform position of the particular cell in unity world space </param>
+    /// <returns> returns an int array of length two with array element 0 giving x index / first index of squaregrid.tiles
+    /// and array element 1 giving z (or y) / seconf index squaregrid.tiles; used as `squareGrid.tiles[kIdx[0]][kIdx[1]]` </returns>
     public int[] GetIdx(Vector3 pos)
     {
         int x = Mathf.RoundToInt(pos.x / -4);
@@ -526,11 +608,25 @@ public class RoomNew : MonoBehaviour
         return new int[] { x, z };
     }
 
+    /// <summary>
+    /// Basic Index to Position function
+    /// opposite of int[] GetIdx(Vector3 pos)
+    /// </summary>
+    /// <param name="idx"> idx is an int array of length two with array element 0 giving x index / first index of squaregrid.tiles
+    /// and array element 1 giving z (or y) / seconf index squaregrid.tiles; used as `squareGrid.tiles[kIdx[0]][kIdx[1]]` </param>
+    /// <returns> returns position, which is the transform position of the particular cell in unity world space </returns>
     public virtual Vector3 GetPos(int[] idx)
     {
         return new Vector3(idx[0] * -4, 0.5f + roomHeight, idx[1] * -4);
     }
 
+    /// <summary>
+    /// Instantiates all corridors by calling the suitable functions
+    /// Makes use of GetPos function and CorridorsListIdxToCorridorName function as well
+    /// After all corridors/vents are instantiated, we check if the gameobject is vents related
+    /// If not we'll add the RoomNewVents script to start off the vents spawning
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
         Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -570,7 +666,6 @@ public class RoomNew : MonoBehaviour
         // RoomNewVents script derives from this same class so it should be called again and again
         if (!gameObject.name.Equals(Constants.sRef.GBNAME_ROOMNEWVENTS))
         {
-            Debug.Log("qwerty123");
             StartCoroutine(AddRoomNewVents());
         }
     }
@@ -685,8 +780,6 @@ public class RoomNew : MonoBehaviour
         , GameObject kGb, GameObject lGb)
     {
 
-            Debug.LogWarning("1234");
-
         //Debug corridors AStar
         if (isDevMode)
         {
@@ -708,11 +801,11 @@ public class RoomNew : MonoBehaviour
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            //if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            //{
-            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            //}
+            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            {
+                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            }
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 3
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
