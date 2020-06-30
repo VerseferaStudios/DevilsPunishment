@@ -388,7 +388,7 @@ public class ModularRoomAssembler : MonoBehaviour
         if (generatingProps) {
         modularPropGen = GetComponent<ModularPropGen>();
         modularPropGen.roomReferencesModular = roomHolderTransform.gameObject.GetComponent<RoomReferencesModular>();
-        modularPropGen.Generate();
+        modularPropGen.GenerateTestScatterProps();
         }
 
     }
