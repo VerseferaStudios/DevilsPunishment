@@ -166,7 +166,7 @@ public class RoomNewVents : RoomNew
         squareGrid.tiles[idx[0], idx[1]].allowedDIRS = allowedDIRS;
     }
 
-    protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI) { return; }
+    protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover) { return; }
 
     protected override void HelperTInstantiate(float yRotation, GameObject currCorridor) { return; }
 
@@ -214,11 +214,11 @@ public class RoomNewVents : RoomNew
             //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
             //squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            //if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            //{
-            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            //}
+            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            {
+                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            }
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))

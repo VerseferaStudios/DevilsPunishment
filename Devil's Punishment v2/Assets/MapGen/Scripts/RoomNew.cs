@@ -35,6 +35,7 @@ public class RoomNew : MonoBehaviour
     public ArrayList allRooms = new ArrayList();
     public Transform mapGenHolderTransform;
     public float ventCoverProbabilty = 0.390f;
+    public int ventCoverNumber = 10;
     public GameObject ventCover;
 
     public ItemGen itemGenScript;
@@ -59,6 +60,8 @@ public class RoomNew : MonoBehaviour
     protected string corridorSpawnPointTag = "Corridor Spawn Points";
     public float roomHeight;
     protected bool isSetCorridorSPawnPointTag = false;
+
+    [SerializeField] protected int countICorridors = 0;
 
     public void initSeed(int seed)
     {
@@ -651,6 +654,39 @@ public class RoomNew : MonoBehaviour
     }
 
     /// <summary>
+    /// As name indicates it decides the corridor numbers (I corridor) in which the vent covers will be spawned
+    /// </summary>
+    /// <returns></returns>
+    private List<int> CalcVentCoverSpawnNumbers()
+    {
+        List<int> ventCoverIndices = new List<int>();
+        int i = 0, j = 0;
+        int idx;
+        while (j < ventCoverNumber)
+        {
+            ++i;
+            if (i > 1000)
+            {
+                //safety break;
+                Debug.LogWarning("Not all vent covers got the positions after 1000 tries!");
+                break;
+            }
+
+            idx = UnityEngine.Random.Range(0, countICorridors);
+            if (ventCoverIndices.Contains(idx))
+            {
+                continue;
+            }
+            else
+            {
+                ++j;
+                ventCoverIndices.Add(idx);
+            }
+        }
+        return ventCoverIndices;
+    }
+
+    /// <summary>
     /// Instantiates all corridors by calling the suitable functions
     /// Makes use of GetPos function and CorridorsListIdxToCorridorName function as well
     /// After all corridors/vents are instantiated, we check if the gameobject is vents related
@@ -659,6 +695,13 @@ public class RoomNew : MonoBehaviour
     /// <returns></returns>
     private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
+        //ventCoverProbabilty = (float)ventCoverNumber / countICorridors;
+
+        countICorridors /= 2; //Since overlaps etc cause almost double count
+        List<int> ventCoverIndices = CalcVentCoverSpawnNumbers();
+        int iCorrdorSpawnCtr = 0;
+        bool isSpawnVentCover = false;
+
         Vector3 kParentPos = Vector3.zero;//REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Vector3 lParentPos = Vector3.zero;
         for (int i = 0; i < (int)Data.instance.xSize * mapSizeX / 4; i++)
@@ -674,7 +717,13 @@ public class RoomNew : MonoBehaviour
                     Vector3 pos = GetPos(kIdx);
                     if (corridorName.EndsWith("I"))
                     {
-                        InstantiateICorridor(pos, kParentPos, lParentPos);
+                        if (ventCoverIndices.Contains(iCorrdorSpawnCtr))
+                        {
+                            isSpawnVentCover = true;
+                        }
+                        InstantiateICorridor(pos, kParentPos, lParentPos, isSpawnVentCover);
+                        iCorrdorSpawnCtr++;
+                        isSpawnVentCover = false;
                     }
                     else if (corridorName.EndsWith("L"))
                     {
@@ -698,6 +747,7 @@ public class RoomNew : MonoBehaviour
         {
             StartCoroutine(AddRoomNewVents());
         }
+        Debug.Log("count of all i corridors = " + GameObject.FindGameObjectsWithTag("CorridorI").Length);
     }
 
     private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
@@ -727,6 +777,8 @@ public class RoomNew : MonoBehaviour
 
     protected virtual void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride, int zOverall, GameObject kGb, GameObject lGb)
     {
+        countICorridors++;
+
         //Debug.Log("I info");
         int[] kIdx = GetIdx(posI);
         int yRotation = (movesI == 0 || movesI == 2) ? 0 : 90;
@@ -831,11 +883,11 @@ public class RoomNew : MonoBehaviour
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            //if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            //{
-            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            //}
+            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            {
+                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            }
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 3
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
@@ -913,13 +965,14 @@ public class RoomNew : MonoBehaviour
         }
     }
 
-    protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI)
+    protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover)
     {
         currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
 
         //For now, later remove and put outside this else block
 
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+        //if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
+        if (isSpawnVentCover) 
         {
             Debug.Log("spawning vent cover at " + posI);
             Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
@@ -938,7 +991,7 @@ public class RoomNew : MonoBehaviour
         currentCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
-    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos)
+    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos, bool isSpawnVentCover)
     {
         int[] kIdx = GetIdx(posI);
         GameObject currentCorridor;
@@ -956,7 +1009,7 @@ public class RoomNew : MonoBehaviour
         IRotationHelper(squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, currentCorridor);
         //Data.instance.corridorCount++;
 
-        HelperIInstantiate(currentCorridor, kIdx, posI);
+        HelperIInstantiate(currentCorridor, kIdx, posI, isSpawnVentCover);
 
     }
 
