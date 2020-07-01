@@ -68,8 +68,10 @@ public class RoomNewVents : RoomNew
             (i == -1 || i + 1 == locationsCount))
         {
             //L Corridor!!!!!!!
+            //Debug.Log("decided L");
             //Debug.Log("currMove = " + currMove);
             //Debug.Log("nextMove = " + nextMove);
+            //Debug.Log("currLoc = " + currLoc);
             List<int> openings1 = new List<int>();
             openings1.Add(nextMove);
             openings1.Add(currMove);
@@ -95,15 +97,15 @@ public class RoomNewVents : RoomNew
 
             int[] kIdx = GetIdx(currLoc);
 
-            //if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ == 90)
-            //{
-            //    childEulerZ = 90;
-            //    childEulerX = 90;
-            //}
-            //if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX == 90)
-            //{
-            //    childEulerX = 90;
-            //}
+            if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ == 90)
+            {
+                childEulerZ = 90;
+                childEulerX = 90; // WHy???????????
+            }
+            if (squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX == 90)
+            {
+                childEulerX = 90;
+            }
 
 
             AddLCorridorSpawnInfo(openings1, currLoc, zOverall, childEulerZ, childEulerX
@@ -138,6 +140,30 @@ public class RoomNewVents : RoomNew
     {
         //Debug.Log("using door helper in room new vents");
         move = -4;
+    }
+
+    /// <summary>
+    /// For Vents
+    /// Making sure that only current vent models are asked by the pathfinding
+    /// SO once we connect to a grill/ vent cover we restrict the cells ability to connect on other axes
+    /// </summary>
+    /// <param name="move"></param>
+    /// <param name="loc"></param>
+    protected override void VentBlockDIRSHelper(int move, Vector3 loc)
+    {
+        Location[] allowedDIRS = new Location[2]; 
+        if(move == 0 || move == 2)
+        {
+            allowedDIRS[0] = new Location(1, 0);
+            allowedDIRS[1] = new Location(-1, 0);
+        }
+        else
+        {
+            allowedDIRS[0] = new Location(0, 1);
+            allowedDIRS[1] = new Location(0, -1);
+        }
+        int[] idx = GetIdx(loc);
+        squareGrid.tiles[idx[0], idx[1]].allowedDIRS = allowedDIRS;
     }
 
     protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI) { return; }
@@ -188,11 +214,11 @@ public class RoomNewVents : RoomNew
             //squareGrid.tiles[kIdx[0], kIdx[1]].tile += 1;
             //squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            {
-                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            }
+            //if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            //{
+            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            //}
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == corridorIdx
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == (int)yRotation))
@@ -260,16 +286,17 @@ public class RoomNewVents : RoomNew
         //Debug.Log("T or X pos = " + GetPos(kIdx));
         //Debug.Log("corridorName = " + corridorName);
         //Debug.Log("yRotation = " + yRotation);
-        //Debug.Log("openings1 = " + openings1);
-        //foreach (var item in openings1)
-        //{
-        //    Debug.Log(item);
-        //}
-        //Debug.Log("openings2 = " + openings2);
-        //foreach (var item in openings2)
-        //{
-        //    Debug.Log(item);
-        //}
+        Debug.Log("childEulerX = " + childEulerX);
+        Debug.Log("openings1 = " + openings1);
+        foreach (var item in openings1)
+        {
+            Debug.Log(item);
+        }
+        Debug.Log("openings2 = " + openings2);
+        foreach (var item in openings2)
+        {
+            Debug.Log(item);
+        }
 
 
         openings1.AddRange(openings2);
@@ -321,6 +348,7 @@ public class RoomNewVents : RoomNew
                 }
                 else
                 {
+                    Debug.Log("poi 90 degrees");
                     AddTCorridorSpawnInfo(kIdx, (int)yRotationNew, zOverall, 0, 90, true, kGb, lGb);
                 }
             }

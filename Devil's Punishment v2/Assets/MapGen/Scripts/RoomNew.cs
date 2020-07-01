@@ -468,6 +468,18 @@ public class RoomNew : MonoBehaviour
     }
 
     /// <summary>
+    /// For Vents
+    /// Making sure that only current vent models are asked by the pathfinding
+    /// SO once we connect to a grill/ vent cover we restrict the cells ability to connect on other axes
+    /// </summary>
+    /// <param name="move"></param>
+    /// <param name="loc"></param>
+    protected virtual void VentBlockDIRSHelper(int move, Vector3 loc)
+    {
+
+    }
+
+    /// <summary>
     /// Makes use of the the AstarSearch script to find the shortest path suing A star pathfinding
     /// Finds the moves index as well (North - 0; East - 1; South - 1; West - 3)
     /// </summary>
@@ -508,11 +520,13 @@ public class RoomNew : MonoBehaviour
         List<Location> locations = aStarSearch.FindPath();
         //Debug.Log("Locations count = " + locations.Count);
 
+        kPos = new Vector3(Mathf.Round(kPos.x), Mathf.Round(kPos.y), Mathf.Round(kPos.z));
         Vector3 prevLoc = kPos;
         Vector3 currLoc;
         Vector3 nextLoc;
         //int prevMove = Data.instance.doorRotationHelper.IndexOf(lName);
         int currMove;
+        int prevMove = -1;
         int nextMove;
 
         i = -1;
@@ -539,15 +553,30 @@ public class RoomNew : MonoBehaviour
             {
                 nextLoc = locations[i + 1].vector3() * -4;
                 nextMove = MoveHelper(currLoc, nextLoc);
+                //Debug.Log("currLoc = " + currLoc);
+                //Debug.Log("nextLoc = " + nextLoc);
+                //Debug.Log("nextMove = " + nextMove);
             }
             else
             {
                 DoorHelper(out nextMove, lName);
                 nextMove += 2;
                 nextMove %= 4;
+
+                VentBlockDIRSHelper(currMove, currLoc);
+                Debug.Log("currLoc = " + currLoc);
+                Debug.Log("prevMove = " + prevMove);
+                Debug.Log("currMove = " + currMove);
+
                 //Debug.Log("Door " + lName);
                 //Debug.Log("nextMove = " + nextMove);
                 //Debug.Log("currMove = " + currMove);
+            }
+            if(i == -1)
+            {
+                VentBlockDIRSHelper(nextMove, currLoc);
+                Debug.Log("currLoc = " + currLoc);
+                Debug.Log("nextMove = " + nextMove);
             }
             //yield return new WaitForSeconds(0.1f);
 
@@ -559,6 +588,7 @@ public class RoomNew : MonoBehaviour
             }
             //Instantiate(testGridSquare, currLoc, Quaternion.identity);
             prevLoc = currLoc;
+            prevMove = currMove;
             //prevMove = currMove;
         }
 
@@ -801,11 +831,11 @@ public class RoomNew : MonoBehaviour
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
             squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
             // For vents, so that after connecting to vent cover, new connections wont come in
-            if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
-               Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
-            {
-                squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
-            }
+            //if (Quaternion.Euler(0, 0, childEulerZ) == Quaternion.Euler(0, 0, 90) ||
+            //   Quaternion.Euler(childEulerX, 0, 0) == Quaternion.Euler(90, 0, 0))
+            //{
+            //    squareGrid.tiles[kIdx[0], kIdx[1]].tile = TileType.Forest;
+            //}
         }
         else if (!(squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx == 3
             && squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == yRotationNew))
@@ -870,6 +900,8 @@ public class RoomNew : MonoBehaviour
             {
                 squareGrid.tiles[kIdx[0], kIdx[1]].corridorIdx = 3; //or 4
                 squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot = yRotation;
+                squareGrid.tiles[kIdx[0], kIdx[1]].childEulerZ = childEulerZ;
+                squareGrid.tiles[kIdx[0], kIdx[1]].childEulerX = childEulerX;
                 return;
             }
             float yRotationNew = Data.instance.ConvertToRotation(openings1);

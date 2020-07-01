@@ -76,6 +76,7 @@ public class Cell
     public int corridorYRot = -1;
     public int childEulerZ = -1;
     public int childEulerX = -1;
+    public Location[] allowedDIRS = new Location[0];
 }
 
 public class SquareGrid
@@ -124,6 +125,24 @@ public class SquareGrid
         return (int)tiles[id.x, id.z].tile < System.Int32.MaxValue;
     }
 
+    //To disallow certain moves, for vents mainly
+    public bool IsDIRAllowed(Location next, Location curr)
+    {
+        //Debug.Log("IsDIRAllowed = " + tiles[next.x, next.z]);
+        //Debug.Log("IsDIRAllowed = " + tiles[next.x, next.z].allowedDIRS.Length);
+        for (int i = 0; i < tiles[next.x, next.z].allowedDIRS.Length; i++)
+        {
+            if (tiles[next.x, next.z].allowedDIRS[i].x + next.x == curr.x) 
+            {
+                if (tiles[next.x, next.z].allowedDIRS[i].z + next.z == curr.z)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     // If the heuristic = 2f, the movement is diagonal
     public float Cost(Location a, Location b)
     {
@@ -157,8 +176,11 @@ public class SquareGrid
                 //Debug.Log("Passable(next) = " + Passable(next));
                 if (Passable(next))
                 {
-                    //Debug.Log("returning " + next.vector3());
-                    yield return next;
+                    if (IsDIRAllowed(next, id))
+                    {
+                        //Debug.Log("returning " + next.vector3());
+                        yield return next;
+                    }
                 }
             }
         }
