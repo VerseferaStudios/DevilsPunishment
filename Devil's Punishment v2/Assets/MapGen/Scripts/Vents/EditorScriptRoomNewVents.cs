@@ -31,6 +31,8 @@ public class EditorScriptRoomNewVents : Editor
         Debug.Log("idx[0] = " + idx[0]);
         Debug.Log("idx[1] = " + idx[1]);
         Debug.Log("tiletype = " + cell.tile);
+        Debug.Log("cell.allowedDIRS[0] = " + cell.disallowedDIRS[0].vector3());
+        Debug.Log("cell.allowedDIRS[1] = " + cell.disallowedDIRS[1].vector3());
     }
 
 }

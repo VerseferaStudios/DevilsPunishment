@@ -76,7 +76,7 @@ public class Cell
     public int corridorYRot = -1;
     public int childEulerZ = -1;
     public int childEulerX = -1;
-    public Location[] allowedDIRS = new Location[0];
+    public Location[] disallowedDIRS = new Location[0];
 }
 
 public class SquareGrid
@@ -128,18 +128,48 @@ public class SquareGrid
     //To disallow certain moves, for vents mainly
     public bool IsDIRAllowed(Location next, Location curr)
     {
-        //Debug.Log("IsDIRAllowed = " + tiles[next.x, next.z]);
-        //Debug.Log("IsDIRAllowed = " + tiles[next.x, next.z].allowedDIRS.Length);
-        for (int i = 0; i < tiles[next.x, next.z].allowedDIRS.Length; i++)
+        //Debug.Log("IsDIRAllowed = " + tiles[curr.x, curr.z]);
+        //Debug.Log("IsDIRAllowed = " + tiles[curr.x, curr.z].allowedDIRS.Length);
+        
+        for (int i = 0; i < tiles[next.x, next.z].disallowedDIRS.Length; i++)
         {
-            if (tiles[next.x, next.z].allowedDIRS[i].x + next.x == curr.x) 
+            if (tiles[next.x, next.z].disallowedDIRS[i].vector3() + next.vector3() == curr.vector3())
             {
-                if (tiles[next.x, next.z].allowedDIRS[i].z + next.z == curr.z)
-                {
-                    return false;
-                }
+                //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[0].x + next.x));
+                //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[1].x + next.x));
+                //Debug.Log("isDirsallowed = " + curr.x);
+                //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[0].z + next.z));
+                //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[1].z + next.z));
+                //Debug.Log("isDirsallowed = " + curr.z);
+
+                //Debug.Log("isDirsallowed v3 = " + (tiles[next.x, next.z].allowedDIRS[i].vector3() + next.vector3()) * -4);
+                //Debug.Log("isDirsallowed v3 = " + curr.vector3() * -4);
+
+                //Debug.Log("good its false");
+                return false;
             }
         }
+        for (int i = 0; i < tiles[curr.x, curr.z].disallowedDIRS.Length; i++)
+        {
+            if (tiles[curr.x, curr.z].disallowedDIRS[i].vector3() + curr.vector3() == next.vector3())
+            {
+
+                //Debug.Log("good its false");
+                return false;
+            }
+        }
+        //if(tiles[next.x, next.z].allowedDIRS.Length > 0)
+        //{
+        //    //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[0].x + next.x));
+        //    //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[1].x + next.x));
+        //    //Debug.Log("isDirsallowed = " + curr.x);
+        //    //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[0].z + next.z));
+        //    //Debug.Log("isDirsallowed = " + (tiles[next.x, next.z].allowedDIRS[1].z + next.z));
+        //    //Debug.Log("isDirsallowed = " + curr.z);
+        //    //Debug.Log("isDirsallowed v3 = " + (tiles[next.x, next.z].allowedDIRS[0].vector3() + next.vector3()) * -4);
+        //    //Debug.Log("isDirsallowed v3 = " + (tiles[next.x, next.z].allowedDIRS[1].vector3() + next.vector3()) * -4);
+        //}
+        //Debug.Log("good its true... => curr = " + curr.vector3() * -4 + " next = " + next.vector3() * -4);
         return true;
     }
 
@@ -178,11 +208,12 @@ public class SquareGrid
                 {
                     if (IsDIRAllowed(next, id))
                     {
-                        //Debug.Log("returning " + next.vector3());
+                        //Debug.Log("accepted " + (next.vector3() * -4));
                         yield return next;
                     }
                 }
             }
+            //Debug.Log("kicked " + (next.vector3() * -4));
         }
     }
 }

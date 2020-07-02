@@ -10,7 +10,7 @@ public class RoomNew : MonoBehaviour
     public bool isDevMode = false;
 
     //private List<Transform> spawnPoints = new List<Transform>();
-    [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>();
+    [SerializeField] protected List<GameObject> spawnPoints = new List<GameObject>();
     public GameObject[] corridors;
     public GameObject[] vents;
     private Transform corridorsParent;
@@ -76,7 +76,7 @@ public class RoomNew : MonoBehaviour
     protected virtual void Start()
     {
         SetCorridorSpawnPointTag();
-        Debug.Log("start room new");
+        //Debug.Log("start room new");
         //StartScript(); its couroutine now man
     }
 
@@ -93,7 +93,7 @@ public class RoomNew : MonoBehaviour
             roomReferencesModular = Data.instance.roomsFloor1Modular[i].GetComponent<RoomReferencesModular>();
             for (int j = 0; j < roomReferencesModular.roomFloors.Count; j++)
             {
-                Debug.Log("Time mod room = " + Time.time);
+                //Debug.Log("Time mod room = " + Time.time);
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
                 squareGrid.tiles[x, z].tile = TileType.Wall;
@@ -105,6 +105,11 @@ public class RoomNew : MonoBehaviour
         }
     }
 
+    protected virtual MeshRenderer DevGetRendForVentCover(int idx)
+    {
+        return spawnPoints[idx].transform.parent.GetChild(0).GetComponent<MeshRenderer>();
+    }
+
     /// <summary>
     /// Starting the script off, storing spawn points in list as well as calling the necessary starting functions for the script
     /// </summary>
@@ -114,7 +119,7 @@ public class RoomNew : MonoBehaviour
         
         yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
 
-        Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
+        //Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
 
         SquareGridWallPopulate();
 
@@ -236,7 +241,7 @@ public class RoomNew : MonoBehaviour
             //    continue;
             //}
 
-            for (l = 0; l < spawnPoints.Count; l++) 
+            for (l = k + 1; l < spawnPoints.Count; l++) //k+1 for vents!! change later!!!!!
             {
                 if (k == l)
                 {
@@ -278,6 +283,24 @@ public class RoomNew : MonoBehaviour
                                     spawnPoints[k].name + " " + spawnPoints[l].name + " " +
                                     spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
 
+                    MeshRenderer kRend = null;
+                    MeshRenderer lRend = null;
+                    if (isDevMode)
+                    {
+                        kRend = DevGetRendForVentCover(k);
+                        lRend = DevGetRendForVentCover(l);
+                        Material mat = new Material(kRend.sharedMaterial)
+                        {
+                            color = Color.red
+                        };
+                        kRend.sharedMaterial = mat;
+                        Material mat1 = new Material(lRend.sharedMaterial)
+                        {
+                            color = Color.green
+                        };
+                        lRend.sharedMaterial = mat1;
+                    }
+
 
                     // ----------------------------------------------------------------------------------
 
@@ -307,9 +330,6 @@ public class RoomNew : MonoBehaviour
 
 
 
-                    //spawnPoints[k].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
-                    //spawnPoints[l].transform.parent.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial.color = sample_room_col;
-
                     if (isDevMode)
                     {
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
@@ -320,12 +340,22 @@ public class RoomNew : MonoBehaviour
                     }
 
 
-                    //yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms); // not needed
-                    if (fail_room_connect)
+                    if (isDevMode)
                     {
-                        continue;
+                        kRend.sharedMaterial.color = sample_room_col;
+                        lRend.sharedMaterial.color = sample_room_col;
                     }
-                    break;
+
+
+                    //yield return new WaitUntil(() => Data.instance.isDoneConnectTwoRooms); // not needed
+
+                    //if (fail_room_connect)
+                    //{
+                    //    continue;
+                    //}
+
+                    //commented for vents!! change later!!!!!
+                    //break;
                 }
             }
 
@@ -433,17 +463,10 @@ public class RoomNew : MonoBehaviour
             List<int> openings1 = new List<int>();
             openings1.Add(nextMove);
             openings1.Add(currMove);
-            if (i == -1 /*|| i == 0*/ || i + 1 == locationsCount)
-            {
-                Debug.LogWarning(currLoc);
-            }
+
             AddLCorridorSpawnInfo(openings1, currLoc, zOverall, 0, 0, kGb, lGb); // (i == -1 /*|| i == 0*/ || i + 1 == locationsCount /*|| i == locations.Count*/) ? 90 : 0, 0);
             //InstantiateLCorridor(GetIdx(currLoc), currLoc, Vector3.zero, Vector3.zero);
-
-            if (currLoc.x == -116 && currLoc.z == -36)
-            {
-                Debug.LogWarning("1");
-            }
+            
         }
         else //if((prevMove == 0 && currMove == 2) || (prevMove == 1 || currMove == 3) ||
              //   (prevMove == 2 && currMove == 0) || (prevMove == 3 || currMove == 1))
@@ -451,11 +474,6 @@ public class RoomNew : MonoBehaviour
             //! Corridor
             AddICorridorSpawnInfo(currLoc, nextMove, false, zOverall, kGb, lGb);
             //InstantiateICorridor(currLoc, Vector3.zero, Vector3.zero);
-
-            if (currLoc.x == -116 && currLoc.z == -36)
-            {
-                Debug.LogWarning("1");
-            }
         }
     }
 
@@ -567,9 +585,9 @@ public class RoomNew : MonoBehaviour
                 nextMove %= 4;
 
                 VentBlockDIRSHelper(currMove, currLoc);
-                Debug.Log("currLoc = " + currLoc);
-                Debug.Log("prevMove = " + prevMove);
-                Debug.Log("currMove = " + currMove);
+                //Debug.Log("currLoc = " + currLoc);
+                //Debug.Log("prevMove = " + prevMove);
+                //Debug.Log("currMove = " + currMove);
 
                 //Debug.Log("Door " + lName);
                 //Debug.Log("nextMove = " + nextMove);
@@ -578,17 +596,13 @@ public class RoomNew : MonoBehaviour
             if(i == -1)
             {
                 VentBlockDIRSHelper(nextMove, currLoc);
-                Debug.Log("currLoc = " + currLoc);
-                Debug.Log("nextMove = " + nextMove);
+                //Debug.Log("currLoc = " + currLoc);
+                //Debug.Log("nextMove = " + nextMove);
             }
             //yield return new WaitForSeconds(0.1f);
 
             CallIorLSpawnStoreFns(nextMove, currMove, locations.Count, i, currLoc, zOverall, kGb, lGb);
-
-            if(currLoc.x == -116 && currLoc.z == -36)
-            {
-                Debug.LogWarning("1");
-            }
+            
             //Instantiate(testGridSquare, currLoc, Quaternion.identity);
             prevLoc = currLoc;
             prevMove = currMove;
@@ -750,7 +764,7 @@ public class RoomNew : MonoBehaviour
         {
             StartCoroutine(AddRoomNewVents());
         }
-        Debug.Log("count of all i corridors = " + GameObject.FindGameObjectsWithTag("CorridorI").Length);
+        //Debug.Log("count of all i corridors = " + GameObject.FindGameObjectsWithTag("CorridorI").Length);
     }
 
     private void DistanceHelper(int i, out Vector3 newSpawnPos, Vector3 newSpawnPosOriginal)
@@ -987,7 +1001,7 @@ public class RoomNew : MonoBehaviour
         //if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
         if (isSpawnVentCover) 
         {
-            Debug.Log("spawning vent cover at " + posI);
+            //Debug.Log("spawning vent cover at " + posI);
             Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
         }
 
