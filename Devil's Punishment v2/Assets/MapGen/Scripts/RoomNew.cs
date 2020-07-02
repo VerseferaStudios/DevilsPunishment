@@ -654,7 +654,7 @@ public class RoomNew : MonoBehaviour
     }
 
     /// <summary>
-    /// As name indicates it decides the corridor numbers (I corridor) in which the vent covers will be spawned
+    /// As name indicates it randomly decides the corridor numbers (I corridor) in which the vent covers will be spawned
     /// </summary>
     /// <returns></returns>
     private List<int> CalcVentCoverSpawnNumbers()
@@ -691,12 +691,14 @@ public class RoomNew : MonoBehaviour
     /// Makes use of GetPos function and CorridorsListIdxToCorridorName function as well
     /// After all corridors/vents are instantiated, we check if the gameobject is vents related
     /// If not we'll add the RoomNewVents script to start off the vents spawning
+    /// Vent cover spawning also taken care here when the corridor is I corridor (might be better if its refractored inside the instantiateI() to keep it clean)
     /// </summary>
     /// <returns></returns>
     private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
         //ventCoverProbabilty = (float)ventCoverNumber / countICorridors;
 
+        //Vent cover spawn stuff
         countICorridors /= 2; //Since overlaps etc cause almost double count
         List<int> ventCoverIndices = CalcVentCoverSpawnNumbers();
         int iCorrdorSpawnCtr = 0;
@@ -717,6 +719,7 @@ public class RoomNew : MonoBehaviour
                     Vector3 pos = GetPos(kIdx);
                     if (corridorName.EndsWith("I"))
                     {
+                        //Vent cover spawn stuff
                         if (ventCoverIndices.Contains(iCorrdorSpawnCtr))
                         {
                             isSpawnVentCover = true;
@@ -777,6 +780,7 @@ public class RoomNew : MonoBehaviour
 
     protected virtual void AddICorridorSpawnInfo(Vector3 posI, int movesI, bool isOverride, int zOverall, GameObject kGb, GameObject lGb)
     {
+        //Counting total number of I corridors added, included overlaps (can add an if to remove overlaps later)
         countICorridors++;
 
         //Debug.Log("I info");
@@ -965,6 +969,15 @@ public class RoomNew : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Helps in instantiating an I corridor, adds the holder localPositiion offset
+    /// spawns vent cover according to parameter
+    /// calls item gen to spawn items as well
+    /// </summary>
+    /// <param name="currentCorridor"></param>
+    /// <param name="kIdx"></param>
+    /// <param name="posI"> position of corridor so as to spawn vent cover and items </param>
+    /// <param name="isSpawnVentCover"> should we spawn a vent cover or not </param>
     protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover)
     {
         currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
