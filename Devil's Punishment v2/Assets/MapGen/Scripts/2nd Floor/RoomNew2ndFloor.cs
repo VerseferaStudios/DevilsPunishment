@@ -43,6 +43,47 @@ public class RoomNew2ndFloor : RoomNew
         isSetCorridorSPawnPointTag = true;
     }
 
+    protected override IEnumerator AddRoomNewVents()
+    {
+        yield return new WaitForSeconds(1f);
+        RoomNewVents2ndFloor roomNewVents = new GameObject(Constants.sRef.GBNAME_ROOMNEWVENTS2NDFLOOR).AddComponent<RoomNewVents2ndFloor>(); //Dont change name, its used to not add the script multiple times
+        roomNewVents.corridors = vents;
+
+
+        //roomNewVents = AddRoomNewCorrectly();
+        roomNewVents.vents = vents;
+        roomNewVents.allRooms = allRooms;
+        roomNewVents.ventCover = ventCover;
+
+        roomNewVents.mapGenHolderTransform = new GameObject("VentsHolder").transform;
+        //roomNewVents.itemGenScript = itemGenScript;
+        roomNewVents.mapSizeX = mapSizeX;
+        roomNewVents.mapSizeZ = mapSizeZ;
+        roomNewVents.roomHeight = roomHeight;
+        roomNewVents.corridorSpawnPointTag = ventCoverTag;
+        roomNewVents.isDevMode = isDevMode;
+        if (isDevMode)
+        {
+            roomNewVents.testGridCube = testGridCube;
+        }
+
+
+
+        roomNewVents.aStarVisualisationTime = aStarVisualisationTime;
+
+        SquareGrid squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ);
+
+        roomNewVents.squareGrid = squareGrid;
+        if (isDevMode)
+        {
+            roomNewVents.testGridPlaneHolder = testGridPlaneHolder;
+        }
+        //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
+        //Data.instance.roomNewVents = roomNewVents;
+
+        yield return null;
+    }
+
     //protected override void Start()
     //{
     //    base.Start();
@@ -140,7 +181,7 @@ public class RoomNew2ndFloor : RoomNew
     //        if (Mathf.Abs(Data2ndFloor.instance.connectedRooms[i][0].x - Data2ndFloor.instance.connectedRooms[i][1].x) == Data2ndFloor.instance.xSize 
     //            || Mathf.Abs(Data2ndFloor.instance.connectedRooms[i][0].z - Data2ndFloor.instance.connectedRooms[i][1].z) == Data2ndFloor.instance.zSize)
     //        {
-                    
+
     //        }
 
     //    }

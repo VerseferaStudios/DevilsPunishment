@@ -57,11 +57,13 @@ public class RoomNew : MonoBehaviour
     public SquareGrid squareGrid;
     private bool isDoneAStarHelper = false;
 
-    protected string corridorSpawnPointTag = "Corridor Spawn Points";
+    public string corridorSpawnPointTag = "Corridor Spawn Points";
     public float roomHeight;
     protected bool isSetCorridorSPawnPointTag = false;
 
     [SerializeField] protected int countICorridors = 0;
+
+    public string ventCoverTag;
 
     public void initSeed(int seed)
     {
@@ -392,7 +394,7 @@ public class RoomNew : MonoBehaviour
 
 
     // ------------------------ Add RoomNewVents script after delay ------------------------
-    private IEnumerator AddRoomNewVents()
+    protected virtual IEnumerator AddRoomNewVents()
     {
         yield return new WaitForSeconds(1f);
         RoomNewVents roomNewVents = new GameObject(Constants.sRef.GBNAME_ROOMNEWVENTS).AddComponent<RoomNewVents>(); //Dont change name, its used to not add the script multiple times
@@ -409,6 +411,7 @@ public class RoomNew : MonoBehaviour
         roomNewVents.mapSizeX = mapSizeX;
         roomNewVents.mapSizeZ = mapSizeZ;
         roomNewVents.roomHeight = roomHeight;
+        roomNewVents.corridorSpawnPointTag = ventCoverTag;
         roomNewVents.isDevMode = isDevMode;
         if (isDevMode)
         {
@@ -676,6 +679,7 @@ public class RoomNew : MonoBehaviour
         List<int> ventCoverIndices = new List<int>();
         int i = 0, j = 0;
         int idx;
+        ventCoverNumber = Mathf.CeilToInt(countICorridors / 10f);
         while (j < ventCoverNumber)
         {
             ++i;
@@ -687,7 +691,8 @@ public class RoomNew : MonoBehaviour
             }
 
             idx = UnityEngine.Random.Range(0, countICorridors);
-            if (ventCoverIndices.Contains(idx))
+            //if (ventCoverIndices.Contains(idx))
+            if (CheckOverlapInVentList(idx))
             {
                 continue;
             }
@@ -698,6 +703,22 @@ public class RoomNew : MonoBehaviour
             }
         }
         return ventCoverIndices;
+
+
+
+        bool CheckOverlapInVentList(int index)
+        {
+            for (int k = 0; k < ventCoverIndices.Count; k++)
+            {
+                if(Mathf.Abs(index - ventCoverIndices[k]) <= 2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
     }
 
     /// <summary>
@@ -1002,7 +1023,7 @@ public class RoomNew : MonoBehaviour
         if (isSpawnVentCover) 
         {
             //Debug.Log("spawning vent cover at " + posI);
-            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform);
+            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
         }
 
         // ----------- Item Gen -----------

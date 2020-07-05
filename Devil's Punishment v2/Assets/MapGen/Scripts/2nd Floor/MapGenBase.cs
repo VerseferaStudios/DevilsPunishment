@@ -47,6 +47,7 @@ public abstract class MapGenBase : MonoBehaviour
     public string floorDoorTag;
     public string floorRoomTag;
     public string floorNameForHolder;
+    public string ventCoverTag;
 
     protected virtual void Start()
     {
@@ -54,7 +55,11 @@ public abstract class MapGenBase : MonoBehaviour
         SetDoorTag();
         SetRoomHeight();
         SetFloorNameForHolder();
+        SetVentCoverTag();
     }
+
+    //Set tag for vent cover
+    protected abstract void SetVentCoverTag();
 
     //Set floor name for holder
     protected abstract void SetFloorNameForHolder();
@@ -143,6 +148,7 @@ public abstract class MapGenBase : MonoBehaviour
         roomNewScript.xSize = xSize;
         roomNewScript.zSize = zSize;
         roomNewScript.roomHeight = roomHeight;
+        roomNewScript.ventCoverTag = ventCoverTag;
         roomNewScript.isDevMode = isDevMode;
         if (isDevMode)
         {
@@ -784,7 +790,7 @@ public abstract class MapGenBase : MonoBehaviour
             //else
             //{
                 //Instantiate(ventCover, spawnedRoomTransform.GetChild(0).GetChild(0).position, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), spawnedRoomTransform);
-                Instantiate(ventCover, ventSpawnPos, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform);
+                Instantiate(ventCover, ventSpawnPos, Quaternion.Euler(0, Random.Range(0, 3) * 90, 0), ventParentTransform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
             //}
         }
     }

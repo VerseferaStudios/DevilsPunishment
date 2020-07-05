@@ -37,6 +37,11 @@ public class MapGen3 : MapGenBase
         return gameObject.AddComponent<RoomNew>();
     }
 
+    protected override void SetVentCoverTag()
+    {
+        ventCoverTag = Constants.sRef.TAG_VENTSPAWNFLOOR1;
+    }
+
     protected override void SetFloorNameForHolder()
     {
         floorNameForHolder = "1st Floor";

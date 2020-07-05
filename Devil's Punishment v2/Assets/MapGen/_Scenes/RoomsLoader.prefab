@@ -48,10 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDevMode: 0
-  roomSpawnMethod: 0
-  roomsLoaderPrefab: {fileID: 7846860429511563592}
-  mapGenHolder: {fileID: 0}
   mapGenHolderTransform: {fileID: 0}
+  roomsLoaderPrefab: {fileID: 7846860429511563592}
   numberOfRooms: 6
   staticRooms:
   - {fileID: 3240125094354349590, guid: 97a6c323f3e9a6d44a02117a7a50e0d2, type: 3}
@@ -91,10 +89,6 @@ MonoBehaviour:
   - {fileID: 6633108427632789466, guid: bec97ddb588f3c94a8489c86340f8c16, type: 3}
   ventCover: {fileID: 867967529729384698, guid: aee907b6e2ddcca448d1a5ab68d9fa2d,
     type: 3}
-  StateData: {fileID: 11400000, guid: 17791be384cae3443bc3473f6275131d, type: 2}
-  GoodStates: {fileID: 11400000, guid: 0ab045ae44ee5e64e87f8debbdd33158, type: 2}
-  ReloadGoodStatesData: {fileID: 11400000, guid: 86603a131510b2745be55465605e9a7d,
-    type: 2}
   roomNewScript: {fileID: 0}
   testGridCube: {fileID: 8693691679798549108, guid: 66c73e8b9791d36468aa3348364da022,
     type: 3}
@@ -102,11 +96,19 @@ MonoBehaviour:
   testGridPlaneHolder: {fileID: 0}
   aStarVisualisationTime: 0
   seedText: {fileID: 0}
+  cubes: []
+  floorDoorTag: 
+  floorRoomTag: 
+  floorNameForHolder: 
+  ventCoverTag: 
+  roomSpawnMethod: 0
+  StateData: {fileID: 11400000, guid: 17791be384cae3443bc3473f6275131d, type: 2}
+  GoodStates: {fileID: 11400000, guid: 0ab045ae44ee5e64e87f8debbdd33158, type: 2}
+  ReloadGoodStatesData: {fileID: 11400000, guid: 86603a131510b2745be55465605e9a7d,
+    type: 2}
   mapseed: 0
-  roomReferences: {fileID: 0}
   prevTopRight: {x: 0, y: 0, z: 0}
   prevBottomLeft: {x: 0, y: 0, z: 0}
-  cubes: []
 --- !u!114 &2522176558677017640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,10 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c70e4b3ef5bf374bba42e0a7bbfc24d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GUIProgress: {fileID: 0}
-  roomsLoaderPrefab: {fileID: 7846860429511563592}
-  mapGenHolder: {fileID: 0}
+  isDevMode: 0
   mapGenHolderTransform: {fileID: 0}
+  roomsLoaderPrefab: {fileID: 7846860429511563592}
   numberOfRooms: 6
   staticRooms:
   - {fileID: 8265298613614494518, guid: cdc841e9f42bc134fa7ddd7991067b2a, type: 3}
@@ -131,6 +132,7 @@ MonoBehaviour:
   - {fileID: 2101184536220247379, guid: a7e08de48a506d946a2370583be3fee7, type: 3}
   mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
     type: 3}
+  liftRoom: {fileID: 0}
   generatorRoom: {fileID: 8265298613614494518, guid: cdc841e9f42bc134fa7ddd7991067b2a,
     type: 3}
   startRoom: {fileID: 3240125094354349590, guid: 281cc49b5c8cc2e4c8c3377a6c092f9e,
@@ -156,8 +158,20 @@ MonoBehaviour:
   - {fileID: 8766696067864751312, guid: 57e40344baec35e4bb875809bee09862, type: 3}
   - {fileID: 0}
   - {fileID: 6633108427632789466, guid: bec97ddb588f3c94a8489c86340f8c16, type: 3}
-  ventCover: {fileID: 6430072811184709967, guid: 6f34ec7e6067e0a448db31b203d2c7e4,
+  ventCover: {fileID: 867967529729384698, guid: aee907b6e2ddcca448d1a5ab68d9fa2d,
     type: 3}
+  roomNewScript: {fileID: 0}
+  testGridCube: {fileID: 0}
+  testGridPlane: {fileID: 0}
+  testGridPlaneHolder: {fileID: 0}
+  aStarVisualisationTime: 0
+  seedText: {fileID: 0}
+  cubes: []
+  floorDoorTag: 
+  floorRoomTag: 
+  floorNameForHolder: 
+  ventCoverTag: 
+  GUIProgress: {fileID: 0}
   StateData: {fileID: 11400000, guid: 17791be384cae3443bc3473f6275131d, type: 2}
   GoodStates: {fileID: 11400000, guid: 0ab045ae44ee5e64e87f8debbdd33158, type: 2}
   ReloadGoodStatesData: {fileID: 11400000, guid: 86603a131510b2745be55465605e9a7d,

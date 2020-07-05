@@ -13,11 +13,12 @@ public class RoomNewVents : RoomNew
     [Header("Dev Tool")]
     public Transform sqGridDetails;
 
-    [SerializeField] private FloorNo floorNo;
+    //[SerializeField] private FloorNo floorNo;
 
     protected override void Start()
     {
-        corridorSpawnPointTag = floorNo == FloorNo._1stFloor ? Constants.sRef.TAG_VENTSPAWNFLOOR1 : Constants.sRef.TAG_VENTSPAWNFLOOR2;
+        //corridorSpawnPointTag = floorNo == FloorNo._1stFloor ? Constants.sRef.TAG_VENTSPAWNFLOOR1 : Constants.sRef.TAG_VENTSPAWNFLOOR2;
+        //corridorSpawnPointTag = ventCoverTag;
         base.Start();
 
         StartCoroutine(StartScript());
