@@ -262,10 +262,10 @@ public class PriorityQueue<T>
 // down to the business of actually finding a path.
 public class AStarSearch
 {
-    public static SquareGrid InitialiseSquareGrid(float xSize, float zSize, int mapSizeX, int mapSizeZ)
+    public static SquareGrid InitialiseSquareGrid(float xSize, float zSize, int mapSizeX, int mapSizeZ, out int xOverall, out int zOverall)
     {
-        int xOverall = (int)xSize * mapSizeX / 4;
-        int zOverall = (int)zSize * mapSizeZ / 4;
+        xOverall = (int)xSize * mapSizeX / 4;
+        zOverall = (int)zSize * mapSizeZ / 4;
         //Debug.Log("xOverall = " + xOverall);
         //Debug.Log("zOverall = " + zOverall);
         SquareGrid squareGrid = new SquareGrid(0, 0, xOverall, zOverall)

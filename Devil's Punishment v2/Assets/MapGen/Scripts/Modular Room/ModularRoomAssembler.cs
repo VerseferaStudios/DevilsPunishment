@@ -40,8 +40,6 @@ public class ModularRoomAssembler : MonoBehaviour
     [SerializeField]
     private bool[] door_done;
 
-    public RoomReferencesModular roomReferencesModular;
-
     public float doorProbability = 0.01f;
 
     //List of box colliders to remove after walls are all placed
@@ -55,7 +53,7 @@ public class ModularRoomAssembler : MonoBehaviour
         //StartScript();
     }
 
-    public void StartScript()
+    public void StartScript(RoomReferencesModular roomReferencesModular)
     {
         doors = new GameObject[noOfParts];
         wallColliders = new List<GameObject>();
@@ -119,16 +117,16 @@ public class ModularRoomAssembler : MonoBehaviour
         int rand = Random.Range(0, sumFloors);
         //Debug.Log("randGrill = " + rand);
 
-        PlaceFloor_Ceiling(0, rand);
+        PlaceFloor_Ceiling(0, rand, roomReferencesModular);
         
-        PlaceWall(0);
+        PlaceWall(0, roomReferencesModular);
 
         Swap_NSWE();
 
         for (int i = 1; i < noOfParts; i++)
         {
-            PlaceFloor_Ceiling(i, rand);
-            PlaceWall(i);
+            PlaceFloor_Ceiling(i, rand, roomReferencesModular);
+            PlaceWall(i, roomReferencesModular);
         }
 
 
@@ -346,7 +344,7 @@ public class ModularRoomAssembler : MonoBehaviour
         walls_holder2[partNo].position = startFloorPos + new Vector3(4 * size_x[partNo], 0, 0);
     }
 
-    private void PlaceFloor_Ceiling(int partNo, int randGrill)
+    private void PlaceFloor_Ceiling(int partNo, int randGrill, RoomReferencesModular roomReferencesModular)
     {
         for (int i = 0; i <= size_x[partNo]; i++)
         {
@@ -471,7 +469,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
     }
 
-    private void PlaceWall(int partNo)
+    private void PlaceWall(int partNo, RoomReferencesModular roomReferencesModular)
     {
 
         //Debug.Log("Placing WALL for partNo = " + partNo);
@@ -505,7 +503,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //if (j == 0 && i == 1)
                     {
                         //Debug.Log("1 in");
-                        DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2, out toSpawn, out offset);
+                        DoorSpawnHelper("Door+z", partNo, false, posCurr, 0, 2, out toSpawn, out offset, roomReferencesModular);
                         isDoor = true;
                     }
                     t = Instantiate(toSpawn).transform;
@@ -545,7 +543,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //if (j == 0 && i == 1)
                     {
                         //Debug.Log("2 in");
-                        DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2, out toSpawn, out offset);
+                        DoorSpawnHelper("Door-z", partNo, false, posCurr, 0, -2, out toSpawn, out offset, roomReferencesModular);
                     }
                     t = Instantiate(toSpawn).transform;
                     if (!isDoor)
@@ -580,7 +578,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //if (j == 0 && i == 1)
                     {
                         //Debug.Log("3 in");
-                        DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0, out toSpawn, out offset);
+                        DoorSpawnHelper("Door+x", partNo, true, posCurr, 2, 0, out toSpawn, out offset, roomReferencesModular);
                     }
                     t = Instantiate(toSpawn).transform;
                     if (!isDoor)
@@ -614,7 +612,7 @@ public class ModularRoomAssembler : MonoBehaviour
                     //if (j == 0 && i == 1)
                     {
                         //Debug.Log("4 in");
-                        DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0, out toSpawn, out offset);
+                        DoorSpawnHelper("Door-x", partNo, true, posCurr, -2, 0, out toSpawn, out offset, roomReferencesModular);
                     }
                     t = Instantiate(toSpawn).transform;
                     if (!isDoor)
@@ -655,7 +653,7 @@ public class ModularRoomAssembler : MonoBehaviour
         //Debug.Log("Time mod room = " + Time.time);
     }
 
-    private void DoorSpawnHelper(string doorName, int partNo, bool isWallHolder2, Vector3 posCurr, int xAdd, int zAdd, out GameObject toSpawn, out Vector3 offset)
+    private void DoorSpawnHelper(string doorName, int partNo, bool isWallHolder2, Vector3 posCurr, int xAdd, int zAdd, out GameObject toSpawn, out Vector3 offset, RoomReferencesModular roomReferencesModular)
     {
         toSpawn = wall_with_door;
         offset = Vector3.zero;

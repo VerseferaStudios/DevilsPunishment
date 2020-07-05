@@ -255,7 +255,7 @@ public abstract class MapGenBase : MonoBehaviour
         //Debug.Log("Rooms started");
 
 
-        squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ);
+        squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ, out int xOverall, out int zOverall);
 
 
         /*
@@ -379,9 +379,8 @@ public abstract class MapGenBase : MonoBehaviour
                 roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
 
                 roomReferencesModular.roomFloors = new List<Vector3>();
-                Data.instance.modularRoomAssembler.roomReferencesModular = roomReferencesModular;
                 Data.instance.roomsFloor1Modular.Add(spawnedRoom);
-                Data.instance.modularRoomAssembler.StartScript();
+                Data.instance.modularRoomAssembler.StartScript(roomReferencesModular);
 
                 //roomReferencesModular.ventParent.position = roomReferencesModular.roomFloors[Random.Range(0, roomReferencesModular.roomFloors.Count)];
                 //if (i != 1)
@@ -441,6 +440,11 @@ public abstract class MapGenBase : MonoBehaviour
                     //Debug.Log("X = " + x);
                     //Debug.Log("Z = " + z);
                     //Debug.Log("pos = " + GetPos(new int[] { x, z }));
+                    if (x >= xOverall ||
+                        z >= zOverall)
+                    {
+                        continue;
+                    }
                     squareGrid.tiles[x, z].tile = TileType.Floor;
                 }
                 if (isDevMode)

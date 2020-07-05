@@ -422,7 +422,7 @@ public class RoomNew : MonoBehaviour
 
         roomNewVents.aStarVisualisationTime = aStarVisualisationTime;
 
-        SquareGrid squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ);
+        SquareGrid squareGrid = AStarSearch.InitialiseSquareGrid(xSize, zSize, mapSizeX, mapSizeZ, out int xOverall, out int zOverall);
 
         roomNewVents.squareGrid = squareGrid;
         if (isDevMode)
