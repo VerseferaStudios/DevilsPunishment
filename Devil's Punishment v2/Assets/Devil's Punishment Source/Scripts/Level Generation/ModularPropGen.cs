@@ -182,9 +182,9 @@ public class ModularPropGen : MonoBehaviour
                     new Props("Hospital chair", 100, true, hospitalChairs.Length, hospitalChairs)
                 };
 
-                if (floors.Count < 12)
+                if (floors.Count < 10)
                 {
-                    Debug.LogError("Modular room size too small! Room must have at least 12 tiles to support hospital room type");
+                    Debug.LogError("Modular room size too small! Room must have at least 10 tiles to support hospital room type");
                     floors.RemoveRange(0, floors.Count);
                 }
                 else
@@ -225,6 +225,12 @@ public class ModularPropGen : MonoBehaviour
                         }
                         */
                     }
+                    Props propToSpawn = props[0];
+                    int versionToSpawn = UnityEngine.Random.Range(0, propToSpawn.Variants);
+
+                    float bedSideoffset = 0.5f;
+                    float bedForwardoffset = 1.5f;
+                    float bedYoffset = 0.24f;
 
                     //Get which side of the room is the longest and spawn the beds there.
                     if (Vector3.Distance(startPos, startPos + GenerateOffset(floorXsize[floorToUseIndex] * 4 + 4f, 0, 0)) > Vector3.Distance(startPos, startPos + GenerateOffset(0, 0, floorZsize[floorToUseIndex] * 4 + 4f)))
@@ -237,10 +243,6 @@ public class ModularPropGen : MonoBehaviour
                         {
                             Vector3 k = startPos + GenerateOffset(i * 4, 0, 0);
 
-                            GameObject t = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-                            t.transform.position = GenerateOffset(k.x, k.y, k.z);
-
                             //Check if the bed is next to a wall, if not, destroy it. --this may be changed to simply moving the bed to the opposite wall
                             RaycastHit hit;
                             RaycastHit grillCheck;
@@ -248,6 +250,11 @@ public class ModularPropGen : MonoBehaviour
                             RaycastHit rightDoorCheck;
                             if (Physics.Raycast(k, GenerateOffset(0, 0, 1), out hit, 3.0f))
                             {
+
+                                Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+
+                                GameObject t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedSideoffset, -bedYoffset, bedForwardoffset), faceWall);
+
                                 if (hit.collider.gameObject.name == "Interactable")
                                 {
                                     Debug.Log("Destroying " + t.name);
@@ -277,8 +284,8 @@ public class ModularPropGen : MonoBehaviour
                                         Destroy(t);
                                     }
                                 }
-                            Debug.Log(t.name + "is next to wall.");
-                        }
+                                Debug.Log(t.name + "is next to wall.");
+                            }
                             if (Physics.Raycast(k, GenerateOffset(0, 0, -1), out hit, floorZsize[floorToUseIndex] * 4 + 1))
                             {
                             }
@@ -296,20 +303,20 @@ public class ModularPropGen : MonoBehaviour
                         {
                             Vector3 k = startPos + GenerateOffset(0, 0, -i * 4);
 
-                            GameObject t = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-                            t.transform.position = GenerateOffset(k.x, k.y, k.z);
-
                             RaycastHit hit;
                             RaycastHit grillCheck;
                             RaycastHit leftDoorCheck;
                             RaycastHit rightDoorCheck;
                             if (Physics.Raycast(k, GenerateOffset(-1, 0, 0), out hit, 3.0f)) {
+
+                                Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+
+                                GameObject t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedForwardoffset, -bedYoffset, -bedSideoffset), faceWall);
+
                                 if (hit.collider.gameObject.name == "Interactable")
                                 {
                                     Destroy(t);
                                 }
-                            }
                             if (Physics.Raycast(k, GenerateOffset(0, -1, 0), out grillCheck, 3.0f)) {
                                 if (grillCheck.collider.gameObject.name == "Interactable")
                                 {
@@ -322,10 +329,12 @@ public class ModularPropGen : MonoBehaviour
                                     Destroy(t);
                                 }
                             }
-                                if(Physics.Raycast(k, GenerateOffset(0, 0, 1), out rightDoorCheck, 3.0f)){
-                                if(rightDoorCheck.collider.gameObject.name == "Interactable")
+                                if (Physics.Raycast(k, GenerateOffset(0, 0, 1), out rightDoorCheck, 3.0f))
                                 {
-                                    Destroy(t);
+                                    if (rightDoorCheck.collider.gameObject.name == "Interactable")
+                                    {
+                                        Destroy(t);
+                                    }
                                 }
                                 Debug.Log(t.name + "is next to wall.");
                             }
