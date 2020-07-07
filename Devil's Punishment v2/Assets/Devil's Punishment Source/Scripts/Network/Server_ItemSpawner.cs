@@ -23,7 +23,8 @@ public class Server_ItemSpawner : NetworkBehaviour
     {
         Debug.Log(">>>>>SPAWNED OBJECT ON SERVER");
         // First, spawn the item on the server (or the client who is the server)
-        GameObject newItem = Instantiate(serverInstructions.prefab, serverInstructions.position, Quaternion.Euler(serverInstructions.eulerAngles), serverInstructions.parent);
+        GameObject newItem = Instantiate(serverInstructions.prefab, serverInstructions.position, Quaternion.Euler(serverInstructions.eulerAngles));/*, serverInstructions.parent);*/
+        //newItem.GetComponent<InteractableLoot>().pos = serverInstructions.position;
 
         // Then, spawn the item over the network
         NetworkServer.Spawn(newItem);

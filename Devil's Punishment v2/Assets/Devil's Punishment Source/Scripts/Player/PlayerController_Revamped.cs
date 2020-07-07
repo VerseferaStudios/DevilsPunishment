@@ -69,21 +69,31 @@ public class PlayerController_Revamped : NetworkBehaviour
     public bool shadowOnly = false;
     void Awake() {
 
-        if (!hasAuthority)
-        {
-            enabled = false;
-            return;
-        }
-
-        instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         inventory = GetComponentInChildren<Inventory>();
 
     }
-        
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        //Debug.Log("1 does player have authority over netId = " + netId + " = " + hasAuthority);
+        if (!hasAuthority)
+        {
+            enabled = false;
+            return;
+        }
+        instance = this;
+    }
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        //Debug.Log("2 does player have authority over netId = " + netId + " = " + hasAuthority);
+    }
+
     void Start() {
+        //Debug.Log("3 does player have authority over netId = " + netId + " = " + hasAuthority);
         chcon = GetComponent<CharacterController>();
         Controls = ControlsManager.instance.claimPlayer();
         inputDev = Controls.input;
