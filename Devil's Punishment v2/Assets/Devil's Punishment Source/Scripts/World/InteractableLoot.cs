@@ -5,25 +5,10 @@ using Mirror;
 
 public class InteractableLoot : NetworkBehaviour, IInteractable
 {
-    [SyncVar]
-    public Vector3 pos = Vector3.zero;
 
     public Item item;
     public int stock;
     public float timeToPickUp = .5f;
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        Debug.Log("pos = " + pos);
-        //transform.position = pos;
-    }
-
-    private void Start()
-    {
-        Debug.Log("pos = " + pos);
-    }
-
     public string Prompt() {
         return "Pick up " + item.name + " (" + stock + ")";
     }
