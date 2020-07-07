@@ -30,6 +30,16 @@ using UnityEngine;
 
 public class ItemGen : MonoBehaviour
 {
+    /// <summary>
+    /// Testing
+    /// </summary>
+    public Transform bottomLeft;
+    public Transform topRight;
+    public int noOfSpawns;
+    public Transform roomTransform;
+
+    public Server_ItemSpawner server_ItemSpawner;
+
     #region Variables
     //Define All possible loot locations 
     //Define the possibilty for if its a green light to spawn (50% 20%)
@@ -149,6 +159,96 @@ public class ItemGen : MonoBehaviour
     public int rooms = 0;
     public int startGenPartsAtRoomCount = 79;
 
+    /// <summary>
+    /// For Testing Purpose only
+    /// </summary>
+    //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
+    public void SpawnItems()
+    {
+        Vector3 bottomLeftCorner = bottomLeft.position;
+        Vector3 topRightCorner = topRight.position;
+
+        bool isOverlapping = false;
+        float maxSizeOfItem = 3;
+
+        int k = 0;
+        for (int i = 0; k < noOfSpawns && i < 1000; i++) //Run for more than noOfSpawns times /*while (k < n && l < 1000)*/
+        {
+            float randomPositionX = Random.Range(bottomLeftCorner.x, topRightCorner.x);
+            float randomPositionZ = Random.Range(bottomLeftCorner.z, topRightCorner.z);
+
+            Vector3 currentItemPos = new Vector3(randomPositionX, bottomLeftCorner.y, randomPositionZ);
+
+
+            //Get the size of the itemToSpawn
+
+            //Make sure previous items in the same room do not overlap
+
+            isOverlapping = false;
+            if (bottomLeftCorner.y == 0)
+            {
+                for (int j = 0; j < itemPositions.Count; j++)
+                {
+                    if (Vector3.Distance(currentItemPos, itemPositions[j]) < maxSizeOfItem)
+                    {
+                        isOverlapping = true;
+                    }
+                }
+            }
+            else
+            {
+                for (int j = 0; j < itemPositions2ndFloor.Count; j++)
+                {
+                    if (Vector3.Distance(currentItemPos, itemPositions2ndFloor[j]) < maxSizeOfItem)
+                    {
+                        isOverlapping = true;
+                    }
+                }
+            }
+
+            if (isOverlapping)
+            {
+                continue;
+            }
+            k++;
+
+            // Call a function to spawn the items according to the chance
+            GameObject itemToSpawn = SpawnCorrectItemHelper();
+
+            //Get bounds from script on each item
+            //float bounds = itemToSpawn.GetComponent<ScriptName>().bounds;
+
+
+            if (itemToSpawn != null)
+            {
+                currentItemPos.y += 2;
+                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
+                //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
+                //gb.GetComponent<Rigidbody>().useGravity = false;
+                //gb.GetComponent<Rigidbody>().isKinematic = true;
+                if (bottomLeftCorner.y == 0 + 2)
+                {
+                    itemPositions.Add(currentItemPos);
+                }
+                else
+                {
+                    itemPositions2ndFloor.Add(currentItemPos);
+                }
+            }
+
+            rooms++;
+
+            if (rooms == startGenPartsAtRoomCount)
+            {
+                spawnGenParts();
+            }
+
+        }
+
+
+
+    }
+
     //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
     public void SpawnItems(Vector3 bottomLeftCorner, Vector3 topRightCorner, int noOfSpawns, Transform roomTransform)
     {
@@ -207,8 +307,10 @@ public class ItemGen : MonoBehaviour
             if(itemToSpawn != null)
             {
                 currentItemPos.y += 2;
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
-                    //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
+
+                server_ItemSpawner.Server_SpawnItem(itemToSpawn, /*topRightCorner*/currentItemPos, Vector3.zero, roomTransform);
+                //GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
+                //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
                 if (bottomLeftCorner.y == 0 + 2)
