@@ -38,8 +38,6 @@ public class ItemGen : MonoBehaviour
     public int noOfSpawns;
     public Transform roomTransform;
 
-    public Server_ItemSpawner server_ItemSpawner;
-
     #region Variables
     //Define All possible loot locations 
     //Define the possibilty for if its a green light to spawn (50% 20%)
@@ -222,7 +220,9 @@ public class ItemGen : MonoBehaviour
             if (itemToSpawn != null)
             {
                 currentItemPos.y += 2;
-                GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
+
+                Server_ItemSpawner.sRef.Server_SpawnItem(itemToSpawn, /*topRightCorner*/currentItemPos, Vector3.zero, roomTransform);
+                //GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
                 //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;
                 //gb.GetComponent<Rigidbody>().isKinematic = true;
@@ -308,7 +308,7 @@ public class ItemGen : MonoBehaviour
             {
                 currentItemPos.y += 2;
 
-                server_ItemSpawner.Server_SpawnItem(itemToSpawn, /*topRightCorner*/currentItemPos, Vector3.zero, roomTransform);
+                Server_ItemSpawner.sRef.Server_SpawnItem(itemToSpawn, /*topRightCorner*/currentItemPos, Vector3.zero, roomTransform);
                 //GameObject gb = Instantiate(itemToSpawn, /*topRightCorner*/currentItemPos, Quaternion.identity, roomTransform);
                 //(bottomLeftCorner.y == 0) ? Data.instance.mapGenHolderTransform : Data2ndFloor.instance.mapGenHolderTransform);
                 //gb.GetComponent<Rigidbody>().useGravity = false;

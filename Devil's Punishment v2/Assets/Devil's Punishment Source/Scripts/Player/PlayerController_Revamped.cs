@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class PlayerController_Revamped : MonoBehaviour
+public class PlayerController_Revamped : NetworkBehaviour
 {
     [Range(0f, 30f)]
     public float movementSpeed;
@@ -68,6 +69,11 @@ public class PlayerController_Revamped : MonoBehaviour
     public bool shadowOnly = false;
     void Awake() {
 
+        if (!hasAuthority)
+        {
+            enabled = false;
+            return;
+        }
 
         instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
@@ -90,6 +96,16 @@ public class PlayerController_Revamped : MonoBehaviour
         Network_Transmitter.transmitter.startOnlineGeneration();
         transform.position = new Vector3(-30, 10, -30);
         
+    }
+
+    /// <summary>
+    /// Sending command to server to destroy item which we just picked up
+    /// </summary>
+    /// <param name="item"> item which we just picked, type GameObject </param>
+    [Command]
+    public void Cmd_DestroyItemOnPickup(GameObject item)
+    {
+        Server_ItemSpawner.sRef.Server_DestroyItemOnPickup(item);
     }
 
     Vector3 startVel;

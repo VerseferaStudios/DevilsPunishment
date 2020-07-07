@@ -3,6 +3,12 @@ using Mirror;
 
 public class Server_ItemSpawner : NetworkBehaviour
 {
+    public static Server_ItemSpawner sRef;
+    private void Awake()
+    {
+        sRef = this;
+    }
+
     [Server]
     public void Server_SpawnItem (GameObject prefab, Vector3 position, Vector3 eulerAngles, Transform parent)
     {
@@ -35,6 +41,12 @@ public class Server_ItemSpawner : NetworkBehaviour
 
         // Then, spawn the item over the network
         NetworkServer.Spawn(newItem);
+    }
+
+    [Server]
+    public void Server_DestroyItemOnPickup(GameObject item)
+    {
+        NetworkServer.Destroy(item);
     }
 
 }

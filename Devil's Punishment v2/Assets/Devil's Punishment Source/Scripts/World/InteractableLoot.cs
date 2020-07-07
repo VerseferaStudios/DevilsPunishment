@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class InteractableLoot : MonoBehaviour, IInteractable
+public class InteractableLoot : NetworkBehaviour, IInteractable
 {
 
     public Item item;
@@ -29,7 +30,8 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 		Inventory.instance.AddItem(item, stock);
 		if (gameObject.name.Contains("(Clone)"))
 		{
-			Destroy(gameObject);
+            //Destroy(gameObject);
+            PlayerController_Revamped.instance.Cmd_DestroyItemOnPickup(gameObject);
 		}
 
         //FMOD Gun PU Events
