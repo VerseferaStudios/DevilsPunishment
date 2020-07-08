@@ -25,12 +25,22 @@ public class Infection : MonoBehaviour
 
     private Health health;
 
-    void Awake()
+    
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
     {
         instance = this;
+        StartInfectionLogic();
     }
 
-    void Start()
+    void StartInfectionLogic()
     {
         health = Player.instance.GetComponent<Health>();
         InvokeRepeating("UpdateInfection", 0f, 1f);

@@ -97,7 +97,16 @@ public class GunController : MonoBehaviour
 	public F_Rifle f_RifleScript;
 	public F_Shotgun f_ShotgunScript;
 
-    void Awake() {
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
+    {
         instance = this;
     }
 

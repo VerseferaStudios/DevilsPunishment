@@ -58,11 +58,22 @@ public class PlayerController : MonoBehaviour
     public LaserCutter laserCutterScript;
 
     public bool shadowOnly = false;
+
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
+    {
+        instance = this;
+    }
+
     void Awake()
     {
-
-
-        instance = this;
         characterAnimator = playerModel.GetComponent<Animator>();
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();

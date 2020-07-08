@@ -31,7 +31,14 @@ public class InteractableLoot : NetworkBehaviour, IInteractable
 		if (gameObject.name.Contains("(Clone)"))
 		{
             //Destroy(gameObject);
-            PlayerController_Revamped.instance.Cmd_DestroyItemOnPickup(gameObject);
+            if(PlayerController_Revamped.instance != null)
+            {
+                PlayerController_Revamped.instance.Cmd_DestroyItemOnPickup(gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("non local player interacting on other client! error");
+            }
 		}
 
         //FMOD Gun PU Events

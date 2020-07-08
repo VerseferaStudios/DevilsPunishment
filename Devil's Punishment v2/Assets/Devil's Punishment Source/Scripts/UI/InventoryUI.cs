@@ -22,8 +22,20 @@ public class InventoryUI : MonoBehaviour
     Inventory inventory;
     GunController gunController;
 
-    void Awake() {
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
+    {
         instance = this;
+    }
+
+    void Awake() {
         rectTransform = GetComponent<RectTransform>();
         inventorySlots = GetComponentsInChildren<InventorySlotUI>();
         tooltipPanel.SetActive(false);

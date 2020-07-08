@@ -9,4 +9,9 @@ public class TestPlayer : NetworkBehaviour
     {
         transform.position = 10 * Vector3.one;
     }
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        Debug.Log("client started and hasAuthority = " + hasAuthority + " isLocalPlayer = " + isLocalPlayer);
+    }
 }

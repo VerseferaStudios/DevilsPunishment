@@ -58,7 +58,6 @@ public class Inventory : MonoBehaviour
 
 
     private void Awake() {
-        instance = this;
 		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
 		Debug.Assert(gunController != null, "gunController shouldn't be null!");
         OrganizeInventory();
@@ -67,6 +66,20 @@ public class Inventory : MonoBehaviour
         CompoundInventory();
         CullNulls();
         Sort();
+    }
+
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInventoryInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInventoryInstance;
+    }
+
+    private void AssignInventoryInstance()
+    {
+        instance = this;
     }
 
     private void Start()
@@ -237,7 +250,7 @@ public class Inventory : MonoBehaviour
 
                 } else {
                     inventory[i] = new InventorySlot(item, stack);
-                    Debug.LogError("Item "+item.name + " added to stack " + stack + " in Slot " + i);
+                    Debug.LogWarning("Item "+item.name + " added to stack " + stack + " in Slot " + i);
                     isBreakOuter = true;
                     break;
                 }

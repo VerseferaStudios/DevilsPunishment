@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using System;
 
 public class PlayerController_Revamped : NetworkBehaviour
 {
+    public static event Action CallbackAssignStaticInstances;
+
+    public static PlayerController_Revamped instance;
+
     [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
@@ -60,8 +65,6 @@ public class PlayerController_Revamped : NetworkBehaviour
     private float verticalAngleSubtractive;
 
 
-    public static PlayerController_Revamped instance;
-
     public bool isInteractLaser = false;
     public Vector3 laserSpot, laserMonitor;
     public LaserCutter laserCutterScript;
@@ -85,6 +88,7 @@ public class PlayerController_Revamped : NetworkBehaviour
             return;
         }
         instance = this;
+        CallbackAssignStaticInstances?.Invoke();
     }
     public override void OnStartLocalPlayer()
     {

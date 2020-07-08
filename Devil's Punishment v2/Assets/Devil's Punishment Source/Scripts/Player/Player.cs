@@ -22,7 +22,17 @@ public class Player : MonoBehaviour
 
     //public GameObject playerCameraGb;
 
-    void Awake() {
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+
+    private void AssignInstance()
+    {
         instance = this;
     }
 
