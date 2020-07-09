@@ -7,7 +7,7 @@ public class InteractableLoot : NetworkBehaviour, IInteractable
 {
 
     public Item item;
-    public int stock;
+    [SyncVar] public int stock;
     public float timeToPickUp = .5f;
     public string Prompt() {
         return "Pick up " + item.name + " (" + stock + ")";

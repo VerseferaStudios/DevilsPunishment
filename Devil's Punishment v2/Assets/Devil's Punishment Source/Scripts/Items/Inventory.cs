@@ -272,15 +272,18 @@ public class Inventory : MonoBehaviour
         }
     }
 
-	public GameObject DropGameObject(string ResourceID, int count = 1)
+	public void DropGameObject(string ResourceID, int count = 1)
 	{   
-        if (count < 1) return null;
+        if (count < 1) return;
 		Debug.Log("Creating "+count+" "+ResourceID+"'s from item at "+gameObject.name+"'s position.");
-		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
-		//Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
-		drop.GetComponent<InteractableLoot>().stock = count;
-		drop.SetActive(true);
-		return drop;
+
+        PlayerController_Revamped.instance.Cmd_DropItem(ResourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
+
+        //GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
+		
+        //Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		//drop.GetComponent<InteractableLoot>().stock = count;
+		//drop.SetActive(true);
 	}
 
 	public void DropGun()

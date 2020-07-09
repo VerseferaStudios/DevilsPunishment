@@ -122,6 +122,20 @@ public class PlayerController_Revamped : NetworkBehaviour
         Server_ItemSpawner.sRef.Server_DestroyItemOnPickup(item);
     }
 
+    /// <summary>
+    /// Command sent to server to Drop item from player's inventory and hence spawn in world
+    /// Take care for item duplicating cheats, check in server if player has item in his inventory firstly
+    /// </summary>
+    /// <param name="resourceID"></param>
+    /// <param name="count"></param>
+    /// <param name="position"></param>
+    /// <param name="eulerAngles"></param>
+    [Command]
+    public void Cmd_DropItem(string resourceID, int count, Vector3 position, Vector3 eulerAngles)
+    {
+        Server_ItemSpawner.sRef.Server_SpawnItem(resourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
+    }
+
     Vector3 startVel;
     int stoppingPoint = 0;
 

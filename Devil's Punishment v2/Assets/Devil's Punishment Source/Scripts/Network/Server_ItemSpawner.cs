@@ -18,8 +18,18 @@ public class Server_ItemSpawner : NetworkBehaviour
             );
     }
 
+
     [Server]
-    public void Server_Spawnitem (ItemSpawnInstructions_Server serverInstructions)
+    public void Server_SpawnItem(string resourceID, int count, Vector3 position, Vector3 eulerAngles)
+    {
+        Server_SpawnItemFromClient
+            (
+            new ItemSpawnInstructions_Client(resourceID, count, position, eulerAngles)
+            );
+    }
+
+    [Server]
+    private void Server_Spawnitem (ItemSpawnInstructions_Server serverInstructions)
     {
         Debug.Log(">>>>>SPAWNED OBJECT ON SERVER");
         // First, spawn the item on the server (or the client who is the server)
@@ -31,7 +41,7 @@ public class Server_ItemSpawner : NetworkBehaviour
     }
 
     [Server]
-    public void Server_SpawnItemFromClient (ItemSpawnInstructions_Client clientInstructions)
+    private void Server_SpawnItemFromClient (ItemSpawnInstructions_Client clientInstructions)
     {
         Debug.Log(">>>>>SPAWNED OBJECT ON SERVER, FROM CLIENT");
         // First, spawn the item on the server (or the client who is the server)
@@ -39,6 +49,7 @@ public class Server_ItemSpawner : NetworkBehaviour
 
         // Set the item count
         newItem.GetComponent<InteractableLoot>().stock = clientInstructions.count;
+        newItem.gameObject.SetActive(true);
 
         // Then, spawn the item over the network
         NetworkServer.Spawn(newItem);
