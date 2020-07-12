@@ -412,6 +412,28 @@ public abstract class MapGenBase : MonoBehaviour
                     SpawnVentCoverInRoom(i, k, roomReferencesStatic.ventParent);
             }
 
+            //if RoomDoorsInfo exists
+            if (spawnedRoom.TryGetComponent(out RoomDoorsInfo roomDoorsInfo))
+            {
+                //server
+                if(Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
+                   Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+                {
+                    for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
+                    {
+                        Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[i].gameObject);
+                    }
+                }
+                //client
+                else
+                {
+                    for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
+                    {
+                        roomDoorsInfo.roomDoorsTransform[i].gameObject.SetActive(false);
+                    }
+                }
+            }
+
             //room tag
             spawnedRoom.tag = floorRoomTag;
 

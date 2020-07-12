@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class InteractableDoor : MonoBehaviour, IInteractable
+public class InteractableDoor : NetworkBehaviour, IInteractable
 {
 
     public enum DoorType
@@ -75,7 +76,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             case DoorType.door:
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
-                StartCoroutine(OpenDoor());
+                PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(netId);
+                //StartCoroutine(OpenDoor());
                 break;
 
         }
@@ -99,7 +101,8 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         yield return new WaitForSeconds(0.5f);
     }
 
-    private IEnumerator OpenDoor()
+    [Server]
+    public IEnumerator OpenDoor()
     {
         float t = 0;
 

@@ -277,7 +277,7 @@ public class Inventory : MonoBehaviour
         if (count < 1) return;
 		Debug.Log("Creating "+count+" "+ResourceID+"'s from item at "+gameObject.name+"'s position.");
 
-        PlayerController_Revamped.instance.Cmd_DropItem(ResourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
+        PlayerRemoteCallsBehaviour.instance.Cmd_DropItem(ResourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
 
         //GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
 		

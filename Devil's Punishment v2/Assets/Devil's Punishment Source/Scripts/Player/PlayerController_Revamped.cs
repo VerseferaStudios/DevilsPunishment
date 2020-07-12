@@ -72,7 +72,7 @@ public class PlayerController_Revamped : NetworkBehaviour
     public bool shadowOnly = false;
     void Awake() {
 
-        characterAnimator = playerModel.GetComponent<Animator>();
+        characterAnimator = /*playerModel.*/GetComponent<Animator>();
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         inventory = GetComponentInChildren<Inventory>();
@@ -110,30 +110,6 @@ public class PlayerController_Revamped : NetworkBehaviour
         Network_Transmitter.transmitter.startOnlineGeneration();
         transform.position = new Vector3(-30, 10, -30);
         
-    }
-
-    /// <summary>
-    /// Sending command to server to destroy item which we just picked up
-    /// </summary>
-    /// <param name="item"> item which we just picked, type GameObject </param>
-    [Command]
-    public void Cmd_DestroyItemOnPickup(GameObject item)
-    {
-        Server_ItemSpawner.sRef.Server_DestroyItemOnPickup(item);
-    }
-
-    /// <summary>
-    /// Command sent to server to Drop item from player's inventory and hence spawn in world
-    /// Take care for item duplicating cheats, check in server if player has item in his inventory firstly
-    /// </summary>
-    /// <param name="resourceID"></param>
-    /// <param name="count"></param>
-    /// <param name="position"></param>
-    /// <param name="eulerAngles"></param>
-    [Command]
-    public void Cmd_DropItem(string resourceID, int count, Vector3 position, Vector3 eulerAngles)
-    {
-        Server_ItemSpawner.sRef.Server_SpawnItem(resourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
     }
 
     Vector3 startVel;

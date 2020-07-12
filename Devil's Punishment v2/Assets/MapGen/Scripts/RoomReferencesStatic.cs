@@ -6,6 +6,7 @@ public class RoomReferencesBase : MonoBehaviour
 {
     public GameObject[] doors;
     public Transform ventParent;
+    //public RoomDoorsInfo roomDoorsInfo;
 }
 
 public class RoomReferencesStatic : RoomReferencesBase

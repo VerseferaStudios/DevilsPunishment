@@ -33,7 +33,7 @@ public class InteractableLoot : NetworkBehaviour, IInteractable
             //Destroy(gameObject);
             if(PlayerController_Revamped.instance != null)
             {
-                PlayerController_Revamped.instance.Cmd_DestroyItemOnPickup(gameObject);
+                PlayerRemoteCallsBehaviour.instance.Cmd_DestroyItemOnPickup(gameObject);
             }
             else
             {

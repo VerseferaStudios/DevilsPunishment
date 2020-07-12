@@ -38453,7 +38453,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1609909716}
-  - component: {fileID: 1609909715}
   m_Layer: 10
   m_Name: PlayerModel
   m_TagString: Untagged
@@ -38502,25 +38501,6 @@ Transform:
   m_Father: {fileID: 2090704049}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1609909715
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609909714}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
-  m_Controller: {fileID: 9100000, guid: d97bb27fe8e40d7429d78ba7bcd3b5e7, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1618189708
 GameObject:
   m_ObjectHideFlags: 0
@@ -40935,7 +40915,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -48218,6 +48198,8 @@ GameObject:
   - component: {fileID: 8005975685196651182}
   - component: {fileID: 8732471117017857248}
   - component: {fileID: 7842099695955025379}
+  - component: {fileID: 6771877958562203715}
+  - component: {fileID: 5818767925549755433}
   m_Layer: 10
   m_Name: Player_Revamped
   m_TagString: Player
@@ -48383,9 +48365,9 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090704035}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
+  m_Avatar: {fileID: 9000000, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
+  m_Controller: {fileID: 9100000, guid: d97bb27fe8e40d7429d78ba7bcd3b5e7, type: 2}
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -48586,7 +48568,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   clientAuthority: 1
-  animator: {fileID: 1609909715}
+  animator: {fileID: 2090704039}
 --- !u!114 &7842099695955025379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48605,6 +48587,36 @@ MonoBehaviour:
   chat: {fileID: 348866743}
   shot: {fileID: 0}
   bp: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d, type: 3}
+--- !u!114 &6771877958562203715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090704035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  animator: {fileID: 912896215}
+--- !u!114 &5818767925549755433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090704035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f08205e1c4264468726346c742438f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &2093035216
 GameObject:
   m_ObjectHideFlags: 0
@@ -49355,7 +49367,7 @@ MonoBehaviour:
   shakeDuration: 0.15
   shakeMagnitude: 0.03
   invAmmoDisplay: {fileID: 952692913}
-  playerAnimator: {fileID: 1609909715}
+  playerAnimator: {fileID: 2090704039}
   f_HandgunScript: {fileID: 6210686609669242712}
   f_RifleScript: {fileID: 3724259730309653069}
   f_ShotgunScript: {fileID: 7250340915979967954}

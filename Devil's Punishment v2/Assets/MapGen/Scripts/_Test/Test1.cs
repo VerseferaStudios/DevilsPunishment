@@ -12,6 +12,10 @@ public class Test1 : Test
     //}
     protected override void DebugCall()
     {
+        int[,] arr = new int[20, 20];
+
         Debug.Log("Test1 Script");
+        Debug.Log(arr.Length);
+        Debug.Log(arr.Rank);
     }
 }
