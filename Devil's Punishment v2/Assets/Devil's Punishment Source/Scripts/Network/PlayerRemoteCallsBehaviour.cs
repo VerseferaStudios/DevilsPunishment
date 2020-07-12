@@ -55,7 +55,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         }
         else
         {
-            Debug.LogWarning("No such door on server");
+            Debug.LogWarning("No such door on server; uint netId = " + netId);
         }
     }
 

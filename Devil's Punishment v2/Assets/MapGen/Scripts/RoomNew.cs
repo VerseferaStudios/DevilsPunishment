@@ -98,11 +98,16 @@ public class RoomNew : MonoBehaviour
                 //Debug.Log("Time mod room = " + Time.time);
                 x = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].x / -4);
                 z = Mathf.RoundToInt(roomReferencesModular.roomFloors[j].z / -4);
-                squareGrid.tiles[x, z].tile = TileType.Wall;
-                if (isDevMode)
+
+                if (squareGrid.InBounds(new Location(x, z)))
                 {
-                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                    squareGrid.tiles[x, z].tile = TileType.Wall;
+                    if (isDevMode)
+                    {
+                        Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity);
+                    }
                 }
+
             }
         }
     }

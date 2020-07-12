@@ -31,9 +31,14 @@ public class MapgenProgress : MonoBehaviour
 
     public void addProgress(int prog)
     {
-        prog = (int)(prog / 116f * 100f);
-        percentage += prog;
-        percentageGUI.text = percentage.ToString() + "%";
+
+
+        //prog = (int)(prog / 116f * 100f);
+        //percentage += prog;
+        //percentageGUI.text = percentage.ToString() + "%";
+
+
+
         /*
         float val = 255 - percentage * (255 / 100);
         Color a = new Color(val, 0, val, val);
@@ -46,19 +51,29 @@ public class MapgenProgress : MonoBehaviour
     public void loadedMap()
     {
         //percentage = 100;
-        percentageGUI.text = percentage.ToString() + "%";
+
+
+        //percentageGUI.text = percentage.ToString() + "%";
+
+
         /*
         float val = 255 - percentage * (255 / 100);
         Color a = new Color(val, 0, val, val);
         panel.CrossFadeColor(a, 1f, false, true);
         panel.gameObject.GetComponent<CanvasGroup>().alpha = 1 - percentage * .01f;
         */
-        panel.gameObject.SetActive(false);
+
+
+
+        //panel.gameObject.SetActive(false);
+
+
+
         //Player.instance.playerCameraGb.SetActive(true);
         // NOW WE can build the Navmesh haha
 
-        NavMeshScript.instance.updateNavMesh();
-        NPCManager.instance.OnMapGenerationDone();
+        //NavMeshScript.instance.updateNavMesh();
+        //NPCManager.instance.OnMapGenerationDone();
     }
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Mirror;
 
 public abstract class MapGenBase : MonoBehaviour
 {
@@ -21,10 +22,10 @@ public abstract class MapGenBase : MonoBehaviour
     public GameObject[] corridors;
 
     public ArrayList allRooms = new ArrayList();
-    protected float xSize = 48f, zSize = 48f;
+    [SerializeField] protected float xSize = 48f, zSize = 48f;
 
     protected Vector2 mapCentre;
-    protected int mapSizeX = 4, mapSizeZ = 2;
+    [SerializeField] protected int mapSizeX = 4, mapSizeZ = 2;
 
     //For Vents
     [Header("Vents")]
@@ -48,6 +49,8 @@ public abstract class MapGenBase : MonoBehaviour
     public string floorRoomTag;
     public string floorNameForHolder;
     public string ventCoverTag;
+
+    private ItemGen itemGenScript;
 
     protected virtual void Start()
     {
@@ -135,7 +138,7 @@ public abstract class MapGenBase : MonoBehaviour
 
 
 
-        ItemGen itemGenScript = GetComponent<ItemGen>();
+        itemGenScript = GetComponent<ItemGen>();
         roomNewScript = AddRoomNewCorrectly();
         roomNewScript.corridors = corridors;
         roomNewScript.vents = vents;
@@ -406,7 +409,7 @@ public abstract class MapGenBase : MonoBehaviour
 
 
 
-                //itemGenScript.SpawnItems(roomReferences.bottomLeftCorner.position, roomReferences.topRightCorner.position, 6, spawnedRoom.transform);
+                itemGenScript.SpawnItems(roomReferencesStatic.bottomLeftItemGen.position, roomReferencesStatic.topRightItemGen.position, 6, spawnedRoom.transform);
 
                 if (i != 1)
                     SpawnVentCoverInRoom(i, k, roomReferencesStatic.ventParent);
@@ -416,12 +419,17 @@ public abstract class MapGenBase : MonoBehaviour
             if (spawnedRoom.TryGetComponent(out RoomDoorsInfo roomDoorsInfo))
             {
                 //server
-                if(Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
-                   Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+                if(NetworkManager.singleton.mode == NetworkManagerMode.Host ||
+                   NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
                     for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
                     {
-                        Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[i].gameObject);
+                        roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkIdentity>();
+                        roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkTransform>();
+                        roomDoorsInfo.roomDoorsTransform[r].GetChild(0).gameObject.AddComponent<NetworkTransformChild>();
+                        roomDoorsInfo.roomDoorsTransform[r].GetChild(1).gameObject.AddComponent<NetworkTransformChild>();
+
+                        Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[r].gameObject);
                     }
                 }
                 //client
@@ -429,7 +437,7 @@ public abstract class MapGenBase : MonoBehaviour
                 {
                     for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
                     {
-                        roomDoorsInfo.roomDoorsTransform[i].gameObject.SetActive(false);
+                        roomDoorsInfo.roomDoorsTransform[r].gameObject.SetActive(false);
                     }
                 }
             }

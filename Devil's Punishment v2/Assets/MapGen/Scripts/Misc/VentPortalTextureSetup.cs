@@ -41,14 +41,15 @@ public class VentPortalTextureSetup : MonoBehaviour
 
     private IEnumerator WaitForPlayerJoin()
     {
-        yield return new WaitUntil(() => Player.instance != null);
-        ventCam = Player.instance.transform.GetChild(1).GetChild(1).GetComponent<Camera>();
-        if (ventCam.targetTexture != null)
-        {
-            ventCam.targetTexture.Release();
-        }
+        yield break;
+        //yield return new WaitUntil(() => Player.instance != null);
+        //ventCam = Player.instance.transform.GetChild(1).GetChild(1).GetComponent<Camera>();
+        //if (ventCam.targetTexture != null)
+        //{
+        //    ventCam.targetTexture.Release();
+        //}
 
-        ventCam.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        ventCamMat.mainTexture = ventCam.targetTexture;
+        //ventCam.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        //ventCamMat.mainTexture = ventCam.targetTexture;
     }
 }
