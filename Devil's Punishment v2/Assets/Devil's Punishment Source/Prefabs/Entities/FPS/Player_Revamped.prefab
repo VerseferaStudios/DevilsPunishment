@@ -40890,7 +40890,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526008266}
   m_HandleRect: {fileID: 526008265}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -48163,7 +48163,6 @@ GameObject:
   - component: {fileID: 2090704045}
   - component: {fileID: 2090704044}
   - component: {fileID: 2090704041}
-  - component: {fileID: 2090704039}
   - component: {fileID: 2090704037}
   - component: {fileID: 2090704036}
   - component: {fileID: 4962835557225311095}
@@ -48173,7 +48172,6 @@ GameObject:
   - component: {fileID: 8005975685196651182}
   - component: {fileID: 8732471117017857248}
   - component: {fileID: 7842099695955025379}
-  - component: {fileID: 6771877958562203715}
   - component: {fileID: 5818767925549755433}
   m_Layer: 10
   m_Name: Player_Revamped
@@ -48331,25 +48329,6 @@ MonoBehaviour:
   Third_Person_Model: {fileID: 7585033257444224063}
   chat: {fileID: 2135824620}
   InvView: {fileID: 935088455}
---- !u!95 &2090704039
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090704035}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
-  m_Controller: {fileID: 9100000, guid: d97bb27fe8e40d7429d78ba7bcd3b5e7, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2090704037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48389,7 +48368,7 @@ MonoBehaviour:
   inputAngle: 0
   inputEnabled: 1
   playerModel: {fileID: 1609909714}
-  tpsAnimator: {fileID: 1012332445158494012}
+  tpsAnimator: {fileID: 0}
   isSprinting: 0
   isInteractLaser: 0
   laserSpot: {x: 0, y: 0, z: 0}
@@ -48544,7 +48523,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   clientAuthority: 1
-  animator: {fileID: 2090704039}
+  animator: {fileID: 1012332445158494012}
 --- !u!114 &7842099695955025379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48563,22 +48542,6 @@ MonoBehaviour:
   chat: {fileID: 348866743}
   shot: {fileID: 0}
   bp: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d, type: 3}
---- !u!114 &6771877958562203715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090704035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  animator: {fileID: 1012332445158494012}
 --- !u!114 &5818767925549755433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49343,8 +49306,8 @@ MonoBehaviour:
   shakeDuration: 0.15
   shakeMagnitude: 0.03
   invAmmoDisplay: {fileID: 952692913}
-  tpsAnimator: {fileID: 1012332445158494012}
-  playerAnimator: {fileID: 2090704039}
+  tpsAnimator: {fileID: 0}
+  playerAnimator: {fileID: 0}
   f_HandgunScript: {fileID: 6210686609669242712}
   f_RifleScript: {fileID: 3724259730309653069}
   f_ShotgunScript: {fileID: 7250340915979967954}
@@ -50560,7 +50523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1102669752502141264}
   m_Layer: 10
-  m_Name: FPS
+  m_Name: old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51154,6 +51117,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prisoner_SOURCE
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: da06882d51978c74685915eb6ca3b626,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7169907729681301849, guid: da06882d51978c74685915eb6ca3b626,
         type: 3}
       propertyPath: m_IsActive
@@ -51223,7 +51191,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 76a0078a61e6b274986df3943b2be2c7, type: 2}
+      objectReference: {fileID: 9100000, guid: d97bb27fe8e40d7429d78ba7bcd3b5e7, type: 2}
+    - target: {fileID: -6057140222963153312, guid: da06882d51978c74685915eb6ca3b626,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 409a134434d13c34c866ead4bc59b9c2, type: 3}
     - target: {fileID: 1897860322488716992, guid: da06882d51978c74685915eb6ca3b626,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -51361,12 +51334,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 7e1328b73b815594c8835e1231f8296b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da06882d51978c74685915eb6ca3b626, type: 3}
---- !u!4 &6955393181799342662 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: da06882d51978c74685915eb6ca3b626,
-    type: 3}
-  m_PrefabInstance: {fileID: 2737117588513048924}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1012332445158494012 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: da06882d51978c74685915eb6ca3b626,
@@ -51376,6 +51343,12 @@ Animator:
 --- !u!4 &1014073060479135737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3165616995000231589, guid: da06882d51978c74685915eb6ca3b626,
+    type: 3}
+  m_PrefabInstance: {fileID: 2737117588513048924}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6955393181799342662 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: da06882d51978c74685915eb6ca3b626,
     type: 3}
   m_PrefabInstance: {fileID: 2737117588513048924}
   m_PrefabAsset: {fileID: 0}
