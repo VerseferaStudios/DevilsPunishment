@@ -439,7 +439,7 @@ public abstract class MapGenBase : MonoBehaviour
                    NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
                     Debug.Log("in 4321 host");
-                    for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
+                    for (int r = 0; roomDoorsInfo.roomDoorsTransform != null && r < roomDoorsInfo.roomDoorsTransform.Length; r++)
                     {
                         Debug.Log("in 4321 host loop, r = " + r);
                         //roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkIdentity>();
@@ -477,40 +477,46 @@ public abstract class MapGenBase : MonoBehaviour
 
             int x, z;
             string doorName;
+
             for (int q = 0; q < roomReferencesBase.doors.Length; q++)
             {
                 //tag
                 roomReferencesBase.doors[q].tag = floorDoorTag;
 
+
                 //other stuff xD
                 x = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.x / -4);
                 z = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.z / -4);
-
                 //Debug.Log("X = " + x);
                 //Debug.Log("Z = " + z);
                 //Debug.Log("actual door pos = " + roomReferencesBase.doors[q].transform.position);
                 //Debug.Log("pos = " + GetPos(new int[] { x, z }));
-                doorName = roomReferencesBase.doors[q].name[4].ToString() + roomReferencesBase.doors[q].name[5].ToString();
 
-                squareGrid.tiles[x, z].tile = TileType.Floor;
-                for (int j = 0; j < 2; j++)
+                if (squareGrid.InBounds(new Location(x, z)))
                 {
-                    DoorFurtherHelper(doorName + "");
-                    //Debug.Log("hey doorname = " + doorName);
-                    //Debug.Log("X = " + x);
-                    //Debug.Log("Z = " + z);
-                    //Debug.Log("pos = " + GetPos(new int[] { x, z }));
-                    if (x >= xOverall ||
-                        z >= zOverall)
-                    {
-                        continue;
-                    }
+
+                    doorName = roomReferencesBase.doors[q].name[4].ToString() + roomReferencesBase.doors[q].name[5].ToString();
+
                     squareGrid.tiles[x, z].tile = TileType.Floor;
-                }
-                if (isDevMode)
-                {
-                    Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity)
-                        .transform.GetChild(0).GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+                    for (int j = 0; j < 2; j++)
+                    {
+                        DoorFurtherHelper(doorName + "");
+                        //Debug.Log("hey doorname = " + doorName);
+                        //Debug.Log("X = " + x);
+                        //Debug.Log("Z = " + z);
+                        //Debug.Log("pos = " + GetPos(new int[] { x, z }));
+                        if (x >= xOverall ||
+                            z >= zOverall)
+                        {
+                            continue;
+                        }
+                        squareGrid.tiles[x, z].tile = TileType.Floor;
+                    }
+                    if (isDevMode)
+                    {
+                        Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity)
+                            .transform.GetChild(0).GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+                    }
                 }
             }
 

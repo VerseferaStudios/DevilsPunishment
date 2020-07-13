@@ -74,7 +74,7 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
-                Transform t = transform.parent.parent.parent;
+                Transform t = transform.parent.parent.parent.parent;
                 if (t.tag.StartsWith("Corr"))
                 {
                     t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
