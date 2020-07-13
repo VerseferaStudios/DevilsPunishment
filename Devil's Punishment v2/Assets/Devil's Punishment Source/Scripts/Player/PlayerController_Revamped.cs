@@ -43,6 +43,7 @@ public class PlayerController_Revamped : NetworkBehaviour
     public GameObject playerModel;
     private Animator characterAnimator;
     public Animator CharacterAnimator { get => characterAnimator; set => characterAnimator = value; }
+    public Animator tpsAnimator;
 
     private CharacterController controller;
     private Camera headCamera;
@@ -719,6 +720,12 @@ public class PlayerController_Revamped : NetworkBehaviour
         characterAnimator.SetBool("IsCrouching", isCrouching);
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
+
+        tpsAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
+        tpsAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
+        tpsAnimator.SetBool("IsCrouching", isCrouching);
+        tpsAnimator.SetBool("IsClimbing", isClimbing);
+        tpsAnimator.SetFloat("ClimbSpeed", climbSpeed);
 
         if (Inventory.instance.equippedGun != null){
             switch (Inventory.instance.equippedGun.weaponClassification)

@@ -84,6 +84,7 @@ public class GunController : MonoBehaviour
 	[SerializeField]
 	private InvAmmoDisplay invAmmoDisplay;
     private Animator gunAnimator;
+    public Animator tpsAnimator;
 
 	[SerializeField]
     private Animator playerAnimator;
@@ -178,6 +179,7 @@ public class GunController : MonoBehaviour
 	}
 
 	public void DeactivateWeaponArmsBlendingLayers(){
+        //copy to tps as well
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),0);
@@ -383,7 +385,9 @@ public class GunController : MonoBehaviour
 		{
 			gunAnimator.SetBool("Reload", false);
 			gunAnimator.SetTrigger("Fire");
-			if (weaponIsAssaultRifle())
+            tpsAnimator.SetBool("Reload", false);
+            tpsAnimator.SetTrigger("Fire");
+            if (weaponIsAssaultRifle())
 			{
 				f_RifleScript.PlayRFireEvent();
 			}
@@ -477,6 +481,7 @@ public class GunController : MonoBehaviour
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
+		tpsAnimator.SetTrigger("Reload");
 		float breakPoint = .5f;
         // Wait for other states to finish
         while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -509,6 +514,7 @@ public class GunController : MonoBehaviour
 			else
 			{
 				gunAnimator.SetBool("Reload", false);
+				tpsAnimator.SetBool("Reload", false);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
@@ -522,6 +528,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			tpsAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -533,6 +540,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			tpsAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -550,7 +558,9 @@ public class GunController : MonoBehaviour
             gunAnimator.SetBool("Running", running);
             gunAnimator.SetBool("Raised", raised);
 
-
+            tpsAnimator.SetFloat("Aiming", aiming);
+            tpsAnimator.SetBool("Running", running);
+            tpsAnimator.SetBool("Raised", raised);
 
             //	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
             gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
