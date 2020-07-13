@@ -8,6 +8,7 @@ public abstract class MapGenBase : MonoBehaviour
 {
     [Header("Dev")]
     public bool isDevMode = false;
+    public bool isSampleRoomsMeshRend = false;
 
     public Transform mapGenHolderTransform;
     public GameObject roomsLoaderPrefab;
@@ -153,6 +154,7 @@ public abstract class MapGenBase : MonoBehaviour
         roomNewScript.roomHeight = roomHeight;
         roomNewScript.ventCoverTag = ventCoverTag;
         roomNewScript.isDevMode = isDevMode;
+        roomNewScript.isSampleRoomsMeshRend = isSampleRoomsMeshRend;
         if (isDevMode)
         {
             roomNewScript.testGridCube = testGridCube;
@@ -357,6 +359,12 @@ public abstract class MapGenBase : MonoBehaviour
                 }
             }
 
+
+            //if (isDevMode)
+            //{
+            //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
+            //}
+
             float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord + roomHeight, -((float[])allRooms[i])[0]);
 
@@ -382,8 +390,15 @@ public abstract class MapGenBase : MonoBehaviour
                 roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
 
                 roomReferencesModular.roomFloors = new List<Vector3>();
+
+                RoomDoorsInfo roomDoorsInfo1 = spawnedRoom.AddComponent<RoomDoorsInfo>();
+
                 Data.instance.roomsFloor1Modular.Add(spawnedRoom);
-                Data.instance.modularRoomAssembler.StartScript(roomReferencesModular);
+                Data.instance.modularRoomAssembler.StartScript(roomReferencesModular, roomDoorsInfo1);
+
+#if UNITY_EDITOR
+                roomDoorsInfo1.ConvertTransformToClassInfo();
+#endif
 
                 //roomReferencesModular.ventParent.position = roomReferencesModular.roomFloors[Random.Range(0, roomReferencesModular.roomFloors.Count)];
                 //if (i != 1)
@@ -418,25 +433,40 @@ public abstract class MapGenBase : MonoBehaviour
             //if RoomDoorsInfo exists
             if (spawnedRoom.TryGetComponent(out RoomDoorsInfo roomDoorsInfo))
             {
+                Debug.Log("in 4321");
                 //server
                 if(NetworkManager.singleton.mode == NetworkManagerMode.Host ||
                    NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
+                    Debug.Log("in 4321 host");
                     for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
                     {
-                        roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkIdentity>();
-                        roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkTransform>();
-                        roomDoorsInfo.roomDoorsTransform[r].GetChild(0).gameObject.AddComponent<NetworkTransformChild>();
-                        roomDoorsInfo.roomDoorsTransform[r].GetChild(1).gameObject.AddComponent<NetworkTransformChild>();
+                        Debug.Log("in 4321 host loop, r = " + r);
+                        //roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkIdentity>();
+                        //roomDoorsInfo.roomDoorsTransform[r].gameObject.AddComponent<NetworkTransform>();
+                        //roomDoorsInfo.roomDoorsTransform[r].GetChild(0).gameObject.AddComponent<NetworkTransformChild>();
+                        //roomDoorsInfo.roomDoorsTransform[r].GetChild(1).gameObject.AddComponent<NetworkTransformChild>();
 
-                        Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[r].gameObject);
+                        //Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[r].gameObject);
+                        //Debug.Log("0987 " + spawnedRoom.transform.position);
+                        //Debug.Log("0987 " + roomDoorsInfo.roomDoorsTransformInfo[r].pos);
+                        //Vector3 pos = roomDoorsInfo.roomDoorsTransformInfo[r].pos;
+                        //pos.x *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.x;
+                        //pos.y *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.y;
+                        //pos.z *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.z;
+                        Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[r].position,
+                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].rot,
+                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].scale,
+                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].triggerState);
                     }
                 }
                 //client
                 else
                 {
+                    Debug.Log("in 4321 client");
                     for (int r = 0; r < roomDoorsInfo.roomDoorsTransform.Length; r++)
                     {
+                        Debug.Log("in 4321 client loop, r = " + r);
                         roomDoorsInfo.roomDoorsTransform[r].gameObject.SetActive(false);
                     }
                 }
@@ -798,11 +828,14 @@ public abstract class MapGenBase : MonoBehaviour
             {
                 //Debug.Log("- q, r =" + q + ", " + r);
 
-                squareGrid.tiles[q, r].tile = TileType.Wall;
-                if (isDevMode)
+                if (squareGrid.InBounds(new Location(q, r)))
                 {
-                    cubes.Add(Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity).transform);
-                    //Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                    squareGrid.tiles[q, r].tile = TileType.Wall;
+                    if (isDevMode)
+                    {
+                        cubes.Add(Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity).transform);
+                        //Instantiate(testGridCube, new Vector3(q * -4, 0, r * -4), Quaternion.identity);
+                    }
                 }
             }
         }

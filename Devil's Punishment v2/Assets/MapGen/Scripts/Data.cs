@@ -124,8 +124,11 @@ public class Data : MonoBehaviour
         roomReferencesModular.ventParent = new GameObject("Vent Parent").transform;
 
         roomReferencesModular.roomFloors = new List<Vector3>();
+
+        RoomDoorsInfo roomDoorsInfo1 = spawnedRoom.AddComponent<RoomDoorsInfo>();
+
         Data.instance.roomsFloor1Modular.Add(spawnedRoom);
-        Data.instance.modularRoomAssembler.StartScript(roomReferencesModular);
+        Data.instance.modularRoomAssembler.StartScript(roomReferencesModular, roomDoorsInfo1);
     }
 
     public void StartInstantiateCo()

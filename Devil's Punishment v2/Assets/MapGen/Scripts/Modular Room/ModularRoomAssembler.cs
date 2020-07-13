@@ -53,7 +53,7 @@ public class ModularRoomAssembler : MonoBehaviour
         //StartScript();
     }
 
-    public void StartScript(RoomReferencesModular roomReferencesModular)
+    public void StartScript(RoomReferencesModular roomReferencesModular, RoomDoorsInfo roomDoorsInfo)
     {
         doors = new GameObject[noOfParts];
         wallColliders = new List<GameObject>();
@@ -118,15 +118,16 @@ public class ModularRoomAssembler : MonoBehaviour
         //Debug.Log("randGrill = " + rand);
 
         PlaceFloor_Ceiling(0, rand, roomReferencesModular);
-        
-        PlaceWall(0, roomReferencesModular);
+
+        roomDoorsInfo.roomDoorsTransformModRoom = new List<Transform>();
+        PlaceWall(0, roomReferencesModular, roomDoorsInfo);
 
         Swap_NSWE();
 
         for (int i = 1; i < noOfParts; i++)
         {
             PlaceFloor_Ceiling(i, rand, roomReferencesModular);
-            PlaceWall(i, roomReferencesModular);
+            PlaceWall(i, roomReferencesModular, roomDoorsInfo);
         }
 
 
@@ -469,7 +470,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
     }
 
-    private void PlaceWall(int partNo, RoomReferencesModular roomReferencesModular)
+    private void PlaceWall(int partNo, RoomReferencesModular roomReferencesModular, RoomDoorsInfo roomDoorsInfo)
     {
 
         //Debug.Log("Placing WALL for partNo = " + partNo);
@@ -513,11 +514,15 @@ public class ModularRoomAssembler : MonoBehaviour
                     }
                     else
                     {
+
+                        roomDoorsInfo.roomDoorsTransformModRoom.Add(t);
+
                         isDoor = false;
                     }
                     t.parent = walls_holder[partNo];
                     t.localPosition = posCurr + offset;
                     t.localEulerAngles = new Vector3(t.localEulerAngles.x, t.localEulerAngles.y + 90, t.localEulerAngles.z);
+
                     toSpawn = side_wall;
                 }
                 wallCount++;

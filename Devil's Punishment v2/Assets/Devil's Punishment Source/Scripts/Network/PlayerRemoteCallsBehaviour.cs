@@ -50,8 +50,28 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     {
         if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
         {
+            RemoveDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            Rpc_RemoveDoorTriggerCollider(netId);
             InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
             StartCoroutine(interactableDoor.OpenDoor());
+        }
+        else
+        {
+            Debug.LogWarning("No such door on server; uint netId = " + netId);
+        }
+    }
+    
+    public void RemoveDoorTriggerCollider(BoxCollider boxCollider)
+    {
+        boxCollider.enabled = false;
+    }
+
+    [ClientRpc]
+    private void Rpc_RemoveDoorTriggerCollider(uint netId)
+    {
+        if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
+        {
+            RemoveDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
         }
         else
         {

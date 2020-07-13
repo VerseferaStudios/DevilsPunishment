@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5037023649350734102}
   - component: {fileID: 5037023649350734101}
   - component: {fileID: 5037023649350734100}
+  - component: {fileID: 3474509527381685797}
   m_Layer: 0
   m_Name: CubePlayerTest
   m_TagString: Untagged
@@ -110,6 +111,21 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &3474509527381685797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037023649350734123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba1aa08c495acf4e9de3a604e23d41f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  prefab: {fileID: 8231465403450162058, guid: 1572a3def97b7164bb7c50947d956655, type: 3}
 --- !u!1 &9065048724708639669
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,14 +135,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6563401962813250418}
-  - component: {fileID: 6296538198127330292}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6563401962813250418
 Transform:
   m_ObjectHideFlags: 0
@@ -141,17 +156,3 @@ Transform:
   m_Father: {fileID: 5037023649350734096}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6296538198127330292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9065048724708639669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba1aa08c495acf4e9de3a604e23d41f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1

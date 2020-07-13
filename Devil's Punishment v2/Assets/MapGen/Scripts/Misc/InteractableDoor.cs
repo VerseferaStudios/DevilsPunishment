@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class InteractableDoor : MonoBehaviour, IInteractable
+public class InteractableDoor : NetworkBehaviour, IInteractable
 {
 
     public enum DoorType
@@ -22,6 +23,19 @@ public class InteractableDoor : MonoBehaviour, IInteractable
     private string promptString = "Open vent cover";
 
     public MeshRenderer meshRenderer_renderPlane;
+
+    /*[SyncVar(hook = "UpdateDoorPosOverNetwork")] */
+    public float doorSidePos;
+    private Transform door0;
+    private Transform door1;
+
+    [SyncVar] public Vector3 mainDoorPos;
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        transform.position = mainDoorPos;
+    }
 
     //private int l = 0;
 
@@ -75,7 +89,7 @@ public class InteractableDoor : MonoBehaviour, IInteractable
             case DoorType.door:
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
-                PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(transform.parent.GetComponent<Mirror.NetworkIdentity>().netId);
+                PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
                 //StartCoroutine(OpenDoor());
                 break;
 
@@ -100,15 +114,22 @@ public class InteractableDoor : MonoBehaviour, IInteractable
         yield return new WaitForSeconds(0.5f);
     }
 
+    //private void UpdateDoorPosOverNetwork(float oldPos, float newPos)
+    //{
+    //    door0.position = new Vector3(door0.position.x, door0.position.y, -newPos);
+    //    door1.position = new Vector3(door1.position.x, door1.position.y, newPos);
+    //}
+
     public IEnumerator OpenDoor()
     {
-        if(Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly ||
-           Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host)
+        //if(NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly ||
+        //   NetworkManager.singleton.mode == NetworkManagerMode.Host)
+        if(isServer)
         {
             float t = 0;
 
-            Transform door0 = transform.parent.GetChild(0);
-            Transform door1 = transform.parent.GetChild(1);
+            door0 = transform.GetChild(0);
+            door1 = transform.GetChild(1);
 
             Vector3 velocity = Vector3.zero;
 
@@ -119,9 +140,9 @@ public class InteractableDoor : MonoBehaviour, IInteractable
                 //door1.localPosition = Vector3.Lerp(door1.localPosition, new Vector3(door1.localPosition.x, door1.localPosition.y, door1.localPosition.z + 0.5f), t);
 
                 //door0.localPosition = Vector3.SmoothDamp(door0.localPosition)
-
-                door0.localPosition = new Vector3(door0.localPosition.x, door0.localPosition.y, Mathf.Lerp(-0.5f, -0.5f - 0.5f, t));
-                door1.localPosition = new Vector3(door1.localPosition.x, door1.localPosition.y, Mathf.Lerp(0.5f, 0.5f + 0.5f, t));
+                doorSidePos = Mathf.Lerp(0.5f, 0.5f + 0.5f, t);
+                door0.localPosition = new Vector3(door0.localPosition.x, door0.localPosition.y, -doorSidePos);
+                door1.localPosition = new Vector3(door1.localPosition.x, door1.localPosition.y, doorSidePos);
 
                 //door0.localScale = new Vector3(1, 1, Mathf.Lerp(door0.localScale.z, 0, t));
                 //door1.localScale = new Vector3(1, 1, Mathf.Lerp(door1.localScale.z, 0, t));

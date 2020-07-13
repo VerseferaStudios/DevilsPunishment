@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class RoomNew : MonoBehaviour
 {
     public bool isDevMode = false;
+    public bool isSampleRoomsMeshRend = false;
 
     //private List<Transform> spawnPoints = new List<Transform>();
     [SerializeField] protected List<GameObject> spawnPoints = new List<GameObject>();
@@ -292,7 +293,7 @@ public class RoomNew : MonoBehaviour
 
                     MeshRenderer kRend = null;
                     MeshRenderer lRend = null;
-                    if (isDevMode)
+                    if (isDevMode && isSampleRoomsMeshRend)
                     {
                         kRend = DevGetRendForVentCover(k);
                         lRend = DevGetRendForVentCover(l);
@@ -347,7 +348,7 @@ public class RoomNew : MonoBehaviour
                     }
 
 
-                    if (isDevMode)
+                    if (isDevMode && isSampleRoomsMeshRend)
                     {
                         kRend.sharedMaterial.color = sample_room_col;
                         lRend.sharedMaterial.color = sample_room_col;

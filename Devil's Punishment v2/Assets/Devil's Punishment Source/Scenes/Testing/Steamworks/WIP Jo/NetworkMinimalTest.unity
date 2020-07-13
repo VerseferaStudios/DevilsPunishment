@@ -292,7 +292,9 @@ MonoBehaviour:
   port: 7777
   NoDelay: 1
   serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
   clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
 --- !u!114 &118594594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,6 +317,8 @@ MonoBehaviour:
   transport: {fileID: 118594593}
   networkAddress: localhost
   maxConnections: 4
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 5037023649350734123, guid: c7457c32c0afe0a4aa01751cdeec19c1,
     type: 3}
@@ -335,7 +339,7 @@ MonoBehaviour:
   - {fileID: 967863708, guid: 7783224945ef8734681e0227845bb9cb, type: 3}
   - {fileID: 760858563, guid: e06ec8024936a274da204761607b072f, type: 3}
   - {fileID: 2902966717406714023, guid: a8e90d125b7730d44b7748a1e030659a, type: 3}
-  - {fileID: 0}
+  - {fileID: 8231465403450162058, guid: 1572a3def97b7164bb7c50947d956655, type: 3}
 --- !u!4 &118594595
 Transform:
   m_ObjectHideFlags: 0
@@ -648,6 +652,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestRoom
       objectReference: {fileID: 0}
+    - target: {fileID: 210070987446731531, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
+        type: 3}
+      propertyPath: noOfSpawns
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 210070987446731531, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
+        type: 3}
+      propertyPath: server_ItemSpawner
+      value: 
+      objectReference: {fileID: 1105699585}
     - target: {fileID: 1379226592606493613, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,16 +717,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 210070987446731531, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
+    - target: {fileID: 2907879311785726830, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
         type: 3}
-      propertyPath: noOfSpawns
-      value: 20
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 210070987446731531, guid: bdccaa6b5e5b74f499f42414e3d3b13b,
-        type: 3}
-      propertyPath: server_ItemSpawner
-      value: 
-      objectReference: {fileID: 1105699585}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdccaa6b5e5b74f499f42414e3d3b13b, type: 3}
 --- !u!1001 &1105699584
