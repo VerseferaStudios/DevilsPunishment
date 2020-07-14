@@ -735,18 +735,33 @@ public class PlayerController_Revamped : NetworkBehaviour
                     characterAnimator.SetLayerWeight(1,1);
                     characterAnimator.SetLayerWeight(2,0);
                     characterAnimator.SetLayerWeight(3,0);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 1);
+                    tpsAnimator.SetLayerWeight(2, 0);
+                    tpsAnimator.SetLayerWeight(3, 0);
                     break;
                 case GunItem.WeaponClassification.SHOTGUN:
                     characterAnimator.SetLayerWeight(0,0);
                     characterAnimator.SetLayerWeight(1,0);
                     characterAnimator.SetLayerWeight(2,1);
                     characterAnimator.SetLayerWeight(3,0);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 0);
+                    tpsAnimator.SetLayerWeight(2, 1);
+                    tpsAnimator.SetLayerWeight(3, 0);
                     break;
                 case GunItem.WeaponClassification.ASSAULTRIFLE:
                     characterAnimator.SetLayerWeight(0,0);
                     characterAnimator.SetLayerWeight(1,0);
                     characterAnimator.SetLayerWeight(2,0);
                     characterAnimator.SetLayerWeight(3,1);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 0);
+                    tpsAnimator.SetLayerWeight(2, 0);
+                    tpsAnimator.SetLayerWeight(3, 1);
                     break;
 
                 default: // Pass
@@ -757,6 +772,11 @@ public class PlayerController_Revamped : NetworkBehaviour
             characterAnimator.SetLayerWeight(1,0);
             characterAnimator.SetLayerWeight(2,0);
             characterAnimator.SetLayerWeight(3,0);
+
+            tpsAnimator.SetLayerWeight(0, 1);
+            tpsAnimator.SetLayerWeight(1, 0);
+            tpsAnimator.SetLayerWeight(2, 0);
+            tpsAnimator.SetLayerWeight(3, 0);
         }
     }
 

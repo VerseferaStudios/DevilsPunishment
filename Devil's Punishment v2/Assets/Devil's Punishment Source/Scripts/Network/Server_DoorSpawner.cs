@@ -5,7 +5,6 @@ using Mirror;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEditorInternal;
 #endif
 
 public class Server_DoorSpawner : NetworkBehaviour
@@ -15,8 +14,10 @@ public class Server_DoorSpawner : NetworkBehaviour
     public List<AnimationClip> animClips;
     public List<Object> otherObjects;
 
+#if UNITY_EDITOR
     public AnimatorOverrideController animatorOController;
-
+    public List<KeyValuePair<AnimationClip, AnimationClip>> overrides;
+#endif
 
     public static Server_DoorSpawner instance;
     private void Awake()
@@ -59,22 +60,34 @@ public class EditorScriptAnimation : Editor
             Object[] selectedObjects = Selection.objects;
             server_DoorSpawner.animClips = new List<AnimationClip>();
             server_DoorSpawner.otherObjects = new List<Object>();
-
+            AnimationClip curr;
 
             for (int i = 0; i < selectedObjects.Length; i++)
             {
-                List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-                Debug.Log("count = " + overrides.Count);
-                server_DoorSpawner.animatorOController.GetOverrides(overrides);
-                Debug.Log("count = " + overrides.Count);
+                server_DoorSpawner.overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>(server_DoorSpawner.animatorOController.overridesCount);
+                server_DoorSpawner.animatorOController.GetOverrides(server_DoorSpawner.overrides);
+                //Debug.Log("count = " + overrides.Count);
+                ////AnimationClipPair[] overrideAnimationClips = server_DoorSpawner.animatorOController.clips;
+                //Debug.Log("count = " + overrides.Count);
                 if (selectedObjects[i] is AnimationClip)
                 {
-                    server_DoorSpawner.animClips.Add(selectedObjects[i] as AnimationClip);
+                    curr = selectedObjects[i] as AnimationClip;
+                    server_DoorSpawner.animClips.Add(curr);
+                    Debug.Log("curr name = " + curr.name);
 
-                    for (int i = 0; i < server_DoorSpawner.animatorOController.overridesCount; i++)
+                    Debug.Log("count = " + server_DoorSpawner.animatorOController.overridesCount);
+                    Debug.Log("count = " + server_DoorSpawner.overrides.Count);
+                    for (int r = 0; r < server_DoorSpawner.animatorOController.overridesCount; r++)
                     {
-
+                        //Debug.Log(server_DoorSpawner.overrides[r].Key + " && " + server_DoorSpawner.overrides[r].Value);
+                        if (server_DoorSpawner.overrides[r].Key.ToString().StartsWith(curr.name))
+                        {
+                            Debug.Log("g");
+                            server_DoorSpawner.overrides[r] = new KeyValuePair<AnimationClip, AnimationClip>(server_DoorSpawner.overrides[r].Key, curr);
+                        }
                     }
+
+                    server_DoorSpawner.animatorOController.ApplyOverrides(server_DoorSpawner.overrides);
 
                     Debug.Log("server_DoorSpawner.animatorOController.overridesCount) " + server_DoorSpawner.animatorOController.overridesCount);
                 }
