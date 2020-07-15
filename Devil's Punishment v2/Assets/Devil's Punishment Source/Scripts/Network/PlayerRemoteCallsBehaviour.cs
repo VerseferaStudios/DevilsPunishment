@@ -45,13 +45,17 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         Server_ItemSpawner.sRef.Server_SpawnItem(resourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="netId"></param>
     [Command]
     public void Cmd_OpenDoor(uint netId)
     {
         if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
         {
-            RemoveDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
-            Rpc_RemoveDoorTriggerCollider(netId);
+            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            Rpc_DisableDoorTriggerCollider(netId);
             InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
             StartCoroutine(interactableDoor.OpenDoor());
         }
@@ -61,17 +65,25 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         }
     }
     
-    public void RemoveDoorTriggerCollider(BoxCollider boxCollider)
+    /// <summary>
+    /// Helper function to disable a door collider
+    /// </summary>
+    /// <param name="boxCollider"></param>
+    public void DisableDoorTriggerCollider(BoxCollider boxCollider)
     {
         boxCollider.enabled = false;
     }
 
+    /// <summary>
+    /// Disables the door collider in all clients
+    /// </summary>
+    /// <param name="netId"> The netowrk identity uint of the door whose collider has to be disabled </param>
     [ClientRpc]
-    private void Rpc_RemoveDoorTriggerCollider(uint netId)
+    private void Rpc_DisableDoorTriggerCollider(uint netId)
     {
         if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
         {
-            RemoveDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
         }
         else
         {
