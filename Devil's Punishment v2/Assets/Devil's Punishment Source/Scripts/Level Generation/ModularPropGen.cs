@@ -54,6 +54,10 @@ public class Props
 public class ModularPropGen : MonoBehaviour
 {
 
+    /*Todo: Fix rotation of objects spawning around beds        SpawnBeds()
+     * Add spawning of other objects such as IV's to hospital room spawner
+     */
+
     public RoomReferencesModular roomReferencesModular;
     Vector3 roomPos;
 
@@ -62,6 +66,7 @@ public class ModularPropGen : MonoBehaviour
     public List<int> floorXsize;
     public List<int> floorZsize;
     public List<Transform> floorHolder;
+    private bool bigRoom = false;
 
     [Header("Spawning Positions")]
     List<GameObject> spawnedProps = new List<GameObject>();
@@ -82,6 +87,10 @@ public class ModularPropGen : MonoBehaviour
     [Header("   Hospital props")]
     public GameObject[] hospitalBeds;
     public GameObject[] hospitalChairs;
+    public GameObject[] hospitalMedCab;
+    public GameObject[] hospitaltvChairs;
+    public GameObject[] hospitaltv;
+    public GameObject[] hospitalStretchers;
 
     Props[] props;
 
@@ -125,7 +134,7 @@ public class ModularPropGen : MonoBehaviour
             }
         }
         //Any objects that have rigidbodies enabled, will have their physics disabled after 5 seconds in order to spare performance.
-        StartCoroutine(DisableRigidbodiesOnDelay());
+        //StartCoroutine(DisableRigidbodiesOnDelay()); moved to GenerateProps()
 
         //GenerateProps("Hospital");
     }
@@ -170,6 +179,7 @@ public class ModularPropGen : MonoBehaviour
         floors.AddRange(roomReferencesModular.roomFloors);
         int floorCount = floors.Count;
         int lastFloor = floorCount-=1;
+
         Debug.Log("Last floor tile index = " + lastFloor);
         //Check which room type is being spawned and assign the props to be used accordingly.
         switch (room)
@@ -177,9 +187,15 @@ public class ModularPropGen : MonoBehaviour
 
             case "Hospital":
 
+                List<GameObject> beds = new List<GameObject>();
+
                 props = new Props[] {
                     new Props("Hospital bed", 100, true, hospitalBeds.Length, hospitalBeds),
-                    new Props("Hospital chair", 100, true, hospitalChairs.Length, hospitalChairs)
+                    new Props("Hospital chair", 100, true, hospitalChairs.Length, hospitalChairs),
+                    new Props("Hospital medcab", 100, true, hospitalMedCab.Length, hospitalMedCab),
+                    new Props("Hospital tvChair", 100, false, hospitaltvChairs.Length, hospitaltvChairs),
+                    new Props("Hospital tv", 100, false, hospitaltv.Length, hospitaltv),
+                    new Props("Hospital stretcher", 100, false, hospitalStretchers.Length, hospitalStretchers)
                 };
 
                 if (floors.Count < 10)
@@ -192,7 +208,23 @@ public class ModularPropGen : MonoBehaviour
                     int floor0Area = floorXsize[0] * floorZsize[0];
                     int floor1Area = floorXsize[1] * floorZsize[1];
 
+                    bool useBothFloors = false;
+
+                    if(floors.Count > 18)
+                    {
+                        useBothFloors = true;
+                        bigRoom = true;
+                    }
+
+                    int spawns = UnityEngine.Random.Range(0, 10) <= 8 ? spawns = 2 : spawns = UnityEngine.Random.Range(0, 2);
+
+                    if (floors.Count > 24)
+                    {
+                        spawns = 2;
+                    }
+
                     Vector3 startPos;
+                    Vector3 otherstartPos;
                     int floorToUseIndex;
                     int otherFloor;
 
@@ -200,7 +232,18 @@ public class ModularPropGen : MonoBehaviour
                     if (floor0Area > floor1Area)
                     {
                         Transform _floorHolder = floorHolder[0];
+                        Transform _otherFloorHolder = floorHolder[1];
                         startPos = _floorHolder.localPosition + floors[0] + GenerateOffset(0, 2.5f, 0);
+                        otherstartPos = _otherFloorHolder.localPosition + floors[floor0Area] + GenerateOffset(0, 2.5f, 0);
+                        if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 5.0f))
+                        {
+                            if (hit.collider.gameObject.name == "Interactable")
+                            {
+                                startPos.y -= 4;
+                                otherstartPos.y -= 4;
+                            }
+                        }
+                        Debug.DrawRay(startPos, Vector3.down * 5, Color.red, 10.0f);
                         floorToUseIndex = 0;
                         otherFloor = 1;
                         /*
@@ -214,7 +257,18 @@ public class ModularPropGen : MonoBehaviour
                     } else
                     {
                         Transform _floorHolder = floorHolder[1];
+                        Transform _otherFloorHolder = floorHolder[0];
                         startPos = _floorHolder.localPosition + floors[floor0Area] + GenerateOffset(0, 2.5f, 0);
+                        otherstartPos = _otherFloorHolder.localPosition + floors[0] + GenerateOffset(0, 2.5f, 0);
+                        if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 5.0f))
+                        {
+                            if (hit.collider.gameObject.name == "Interactable")
+                            {
+                                startPos.y -= 4;
+                                otherstartPos.y -= 4;
+                            }
+                        }
+                        Debug.DrawRay(startPos, Vector3.down * 5, Color.red, 10.0f);
                         floorToUseIndex = 1;
                         otherFloor = 0;
                         /*
@@ -225,131 +279,462 @@ public class ModularPropGen : MonoBehaviour
                         }
                         */
                     }
-                    Props propToSpawn = props[0];
-                    int versionToSpawn = UnityEngine.Random.Range(0, propToSpawn.Variants);
 
-                    float bedSideoffset = 0.5f;
-                    float bedForwardoffset = 1.5f;
-                    float bedYoffset = 0.24f;
+                    SpawnBeds(startPos, floorToUseIndex, spawns, beds);
 
-                    //Get which side of the room is the longest and spawn the beds there.
-                    if (Vector3.Distance(startPos, startPos + GenerateOffset(floorXsize[floorToUseIndex] * 4 + 4f, 0, 0)) > Vector3.Distance(startPos, startPos + GenerateOffset(0, 0, floorZsize[floorToUseIndex] * 4 + 4f)))
+                    if (useBothFloors == true)
                     {
-                        Debug.DrawLine(startPos, startPos + GenerateOffset(floorXsize[floorToUseIndex] * 4 - 4f, 0, 0), Color.green, 10.0f);
-                        Debug.Log("Floor " + floorToUseIndex + "'s wall along the X axis is longer");
 
-                        //Spawn a bed at every 4 unit interval as that is the interval the floor tiles are placed at.
-                        for (int i = 0; i < floorXsize[floorToUseIndex]; i++)
-                        {
-                            Vector3 k = startPos + GenerateOffset(i * 4, 0, 0);
+                        SpawnBeds(otherstartPos, otherFloor, spawns, beds);
 
-                            //Check if the bed is next to a wall, if not, destroy it. --this may be changed to simply moving the bed to the opposite wall
-                            RaycastHit hit;
-                            RaycastHit grillCheck;
-                            RaycastHit leftDoorCheck;
-                            RaycastHit rightDoorCheck;
-                            if (Physics.Raycast(k, GenerateOffset(0, 0, 1), out hit, 3.0f))
-                            {
-
-                                Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
-
-                                GameObject t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedSideoffset, -bedYoffset, bedForwardoffset), faceWall);
-
-                                if (hit.collider.gameObject.name == "Interactable")
-                                {
-                                    Debug.Log("Destroying " + t.name);
-                                    Destroy(t);
-                                }
-                                if (Physics.Raycast(k, GenerateOffset(0, -1, 0), out grillCheck, 3.0f))
-                                {
-                                    if (grillCheck.collider.gameObject.name == "Interactable")
-                                    {
-                                        Debug.Log("Destroying " + t.name);
-                                        Destroy(t);
-                                    }
-                                }
-                                if (Physics.Raycast(k, GenerateOffset(-1, 0, 0), out leftDoorCheck, 3.0f))
-                                {
-                                    if (leftDoorCheck.collider.gameObject.name == "Interactable")
-                                    {
-                                        Debug.Log("Destroying " + t.name);
-                                        Destroy(t);
-                                    }
-                                }
-                                if (Physics.Raycast(k, GenerateOffset(1, 0, 0), out rightDoorCheck, 3.0f))
-                                {
-                                    if (rightDoorCheck.collider.gameObject.name == "Interactable")
-                                    {
-                                        Debug.Log("Destroying " + t.name);
-                                        Destroy(t);
-                                    }
-                                }
-                                Debug.Log(t.name + "is next to wall.");
-                            }
-                            if (Physics.Raycast(k, GenerateOffset(0, 0, -1), out hit, floorZsize[floorToUseIndex] * 4 + 1))
-                            {
-                            }
-                            Debug.DrawLine(k, k + GenerateOffset(0, 0, 3), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(-3.0f, 0, 0), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(3.0f, 0, 0), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(0, 0, 1 * -floorZsize[floorToUseIndex] * 4 + 1), Color.red, 10.0f);
-                        }
-                    } else
-                    {
-                        Debug.DrawLine(startPos, startPos + GenerateOffset(0, 0, -floorZsize[floorToUseIndex] * 4 + 4f), Color.green, 10.0f);
-                        Debug.Log("Floor " + floorToUseIndex + "'s wall along the Z axis is longer");
-
-                        for (int i = 0; i < floorZsize[floorToUseIndex]; i++)
-                        {
-                            Vector3 k = startPos + GenerateOffset(0, 0, -i * 4);
-
-                            RaycastHit hit;
-                            RaycastHit grillCheck;
-                            RaycastHit leftDoorCheck;
-                            RaycastHit rightDoorCheck;
-                            if (Physics.Raycast(k, GenerateOffset(-1, 0, 0), out hit, 3.0f)) {
-
-                                Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
-
-                                GameObject t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedForwardoffset, -bedYoffset, -bedSideoffset), faceWall);
-
-                                if (hit.collider.gameObject.name == "Interactable")
-                                {
-                                    Destroy(t);
-                                }
-                            if (Physics.Raycast(k, GenerateOffset(0, -1, 0), out grillCheck, 3.0f)) {
-                                if (grillCheck.collider.gameObject.name == "Interactable")
-                                {
-                                    Destroy(t);
-                                }
-                            }
-                            if (Physics.Raycast(k, GenerateOffset(0, 0, -1), out leftDoorCheck, 3.0f)) {
-                                if (leftDoorCheck.collider.gameObject.name == "Interactable") 
-                                {
-                                    Destroy(t);
-                                }
-                            }
-                                if (Physics.Raycast(k, GenerateOffset(0, 0, 1), out rightDoorCheck, 3.0f))
-                                {
-                                    if (rightDoorCheck.collider.gameObject.name == "Interactable")
-                                    {
-                                        Destroy(t);
-                                    }
-                                }
-                                Debug.Log(t.name + "is next to wall.");
-                            }
-                            if (Physics.Raycast(k, GenerateOffset(1, 0, 0), out hit, floorXsize[floorToUseIndex] * 4 - 1))
-                            {
-                            }
-                            Debug.DrawLine(k, k + GenerateOffset(-3.0f, 0, 0), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
-                            Debug.DrawLine(k, k + GenerateOffset(1 * floorXsize[floorToUseIndex] * 4 - 1, 0, 0), Color.red, 10.0f);
-                        }
                     }
-
+                    SpawnPropsAroundBeds(beds);
+                    
+                    StartCoroutine(DisableRigidbodiesOnDelay());
                 }
                 break;
+        }
+    }
+
+    private void SpawnPropsAroundBeds(List<GameObject> beds)
+    {
+        int stretcherBedIndex = -1;
+        int stretcherBedIndex2 = -1;
+
+        if (bigRoom)
+        {
+            int halfBeds = Mathf.RoundToInt(beds.Count / 2);
+            stretcherBedIndex = UnityEngine.Random.Range(0, halfBeds);
+            stretcherBedIndex2 = UnityEngine.Random.Range(halfBeds, beds.Count);
+        } else
+        {
+            stretcherBedIndex = UnityEngine.Random.Range(0, beds.Count);
+        }
+
+        foreach (GameObject bed in beds)
+        {
+            Props propToSpawn;
+
+            int spawnSide;
+            float zSpawn;
+
+            //Spawn a medicine cabinet next to the bed.
+            propToSpawn = props[2];
+
+            spawnSide = 1;
+            zSpawn = 0.3f;
+            GameObject s = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+            s.transform.parent = bed.transform;
+            s.transform.localPosition = new Vector3(0.5f * spawnSide, 0.7f, zSpawn);
+            s.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, -90));
+            s.transform.localScale = new Vector3(0.193f, 0.193f, 0.193f);
+
+            spawnedProps.Add(s);
+
+            //Spawn a stretcher in front of the bed if it is the designated stretcher bed.
+            if (bed == beds[stretcherBedIndex])
+            {
+                propToSpawn = props[5];
+
+                GameObject st = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+                st.transform.parent = bed.transform;
+                st.transform.localPosition = new Vector3(0, 0.5f, 3.5f);
+                st.transform.Rotate(new Vector3(UnityEngine.Random.Range(0, 45), UnityEngine.Random.Range(0, 180), 0));
+
+                spawnedProps.Add(st);
+            }
+            else if (bigRoom && bed == beds[stretcherBedIndex2])
+            {
+                propToSpawn = props[5];
+
+                GameObject st = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+                st.transform.parent = bed.transform;
+                st.transform.localPosition = new Vector3(0, 0.5f, 4.5f);
+                st.transform.Rotate(new Vector3(UnityEngine.Random.Range(0, 45), UnityEngine.Random.Range(0, 180), 0));
+            } else //Spawn other objects near the bed only if there is no stretcher.
+            {
+                //Spawn 0, 1 or 2 chairs on either side of the bed.
+                propToSpawn = props[1];
+
+                bool chairSpawned = false;
+
+                int objsToSpawn = UnityEngine.Random.Range(2, 10) <= 5 ? objsToSpawn = 0 : objsToSpawn =
+                    UnityEngine.Random.Range(0, 10) <= 6 ? objsToSpawn = 1 : objsToSpawn = 2;
+                if (objsToSpawn > 0)
+                {
+                    chairSpawned = true;
+                }
+
+                int k = 0;
+
+                for (int i = 1; i <= objsToSpawn; i++)
+                {
+                    zSpawn = UnityEngine.Random.Range(0.5f, 1.6f);
+                    spawnSide = UnityEngine.Random.Range(0, 2) == 0 ? spawnSide = 1 : spawnSide = -2;
+
+                    if (i == 1)
+                    {
+                        _ = spawnSide == 1 ? k = -2 : k = 1;
+                    }
+
+                    if (i == 2)
+                    {
+                        spawnSide = k;
+                    }
+
+                    GameObject t = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+
+                    if (PreventOverlap(bed.transform.position + new Vector3(0.8f * spawnSide, 0, zSpawn), propToSpawn.Versions[0]))
+                    {
+                        t.transform.parent = bed.transform;
+                        t.transform.localPosition = new Vector3(0.8f * spawnSide, 0, zSpawn);
+                        t.transform.rotation = Quaternion.LookRotation(new Vector3(t.transform.position.x - bed.transform.position.x,
+                            0, t.transform.position.z - bed.transform.position.z));
+                        t.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(160, 200), 0));
+                        t.AddComponent<Rigidbody>();
+                    }
+                    else
+                    {
+                        t.transform.parent = bed.transform;
+                        t.transform.localPosition = new Vector3(0.8f * spawnSide, 2.0f, zSpawn);
+                        t.transform.rotation = Quaternion.LookRotation(new Vector3(t.transform.position.x - bed.transform.position.x,
+                            0, t.transform.position.z - bed.transform.position.z));
+                        t.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(160, 200), 0));
+                        t.AddComponent<Rigidbody>();
+                    }
+                    spawnedProps.Add(t);
+                    Debug.DrawLine(t.transform.position, new Vector3(bed.transform.position.x,
+                        t.transform.position.y, bed.transform.position.z), Color.cyan, 10.0f);
+                }
+                
+
+                //Spawn a chair with a television on it in front of beds that have chairs.
+                if (chairSpawned)
+                {
+                    propToSpawn = props[3];
+                    GameObject v = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+                    v.transform.parent = bed.transform;
+                    v.transform.localPosition = new Vector3(-0.42f, 0, 2.8f);
+                    v.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, UnityEngine.Random.Range(-120, -100)));
+                    v.transform.localScale = new Vector3(1, 1, 1);
+
+                    propToSpawn = props[4];
+
+                    GameObject tv = Instantiate(propToSpawn.Versions[0], bed.transform.position, Quaternion.identity);
+                    tv.transform.parent = v.transform;
+                    tv.transform.localPosition = new Vector3(-0.011f, -0.075f, 0.512f);
+                    tv.transform.localRotation = Quaternion.Euler(new Vector3(18.425f, -90, -90));
+                    tv.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+
+                    spawnedProps.Add(v);    spawnedProps.Add(tv);
+                }
+            }
+        }
+    }
+
+    private void SpawnBeds(Vector3 startPos, int floorToUse, int spawns, List<GameObject> objList)
+    {
+        Props propToSpawn = props[0];
+        int versionToSpawn = UnityEngine.Random.Range(0, propToSpawn.Variants);
+
+        GameObject t = null;
+
+        float bedSideoffset = 0.5f;
+        float bedForwardoffset = 1.5f;
+        float bedYoffset = 0.24f;
+
+        //Get which side of the room is the longest and spawn the beds there.
+        if (Vector3.Distance(startPos, startPos + GenerateOffset(floorXsize[floorToUse] * 4 + 4f, 0, 0)) > Vector3.Distance(startPos, startPos + GenerateOffset(0, 0, floorZsize[floorToUse] * 4 + 4f)))
+        {
+            //Run this if the X side wall is longer.
+            Debug.DrawLine(startPos, startPos + GenerateOffset(floorXsize[floorToUse] * 4 - 4f, 0, 0), Color.green, 10.0f);
+            Debug.Log("Floor " + floorToUse + "'s wall along the X axis is longer");
+
+            //Spawn a bed at every 4 unit interval as that is the interval the floor tiles are placed at.
+            for (int i = 0; i < floorXsize[floorToUse]; i++)
+            {
+                Vector3 k = startPos + GenerateOffset(i * 4, 0, 0);
+
+                //Check if the bed is next to a wall, if not, destroy it. --this may be changed to simply moving the bed to the opposite wall
+                RaycastHit hit;
+                if (Physics.Raycast(k, GenerateOffset(0, 0, 1), out hit, 3.0f) && spawns != 1)
+                {
+
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+
+                    t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedSideoffset, -bedYoffset, bedForwardoffset), faceWall);
+
+                    t.transform.parent = roomReferencesModular.transform;
+                     
+                    if (hit.collider.gameObject.name == "Interactable")
+                    {
+                        Debug.Log("Destroying " + t.name);
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(0, -1, 0)))
+                    {
+                        Debug.Log("Destroying " + t.name);
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(-1, 0, 0)))
+                    {
+                        Debug.Log("Destroying " + t.name);
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(1, 0, 0)))
+                    {
+                        Debug.Log("Destroying " + t.name);
+                        Destroy(t);
+                    }
+                    else
+                    {
+                        objList.Add(t);
+                    }
+                    Debug.Log(t.name + "is next to wall.");
+                }
+                if (Physics.Raycast(k, GenerateOffset(0, 0, -1), out hit, floorZsize[floorToUse] * 4 + 1))
+                {
+                    Debug.Log("Walls to spawn index: " + spawns);
+                    Vector3 oppPos = new Vector3(k.x, k.y, k.z - floorZsize[floorToUse] * 4 + 4);
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+                    switch (spawns)
+                    {
+                        case 1:
+                            Destroy(t);
+                            if (Physics.Raycast(oppPos, GenerateOffset(0, 0, -1), out hit, 3.0f))
+                            {
+
+                                GameObject p = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], oppPos + GenerateOffset(bedSideoffset, -bedYoffset, -bedForwardoffset - 0.45f), faceWall);
+
+                                p.transform.parent = roomReferencesModular.transform;
+
+                                if (hit.collider.gameObject.name == "Interactable")
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, -1, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(-1, 0, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(1, 0, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                {
+                                    objList.Add(p);
+                                }
+                            }
+                            break;
+
+                        case 2:
+                            if (Physics.Raycast(oppPos, GenerateOffset(0, 0, -1), out hit, 3.0f))
+                            {
+
+                                GameObject p = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], oppPos + GenerateOffset(bedSideoffset, -bedYoffset, -bedForwardoffset - 0.45f), faceWall);
+
+                                p.transform.parent = roomReferencesModular.transform;
+
+                                if (hit.collider.gameObject.name == "Interactable")
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, -1, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(-1, 0, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(1, 0, 0)))
+                                {
+                                    Debug.Log("Destroying " + p.name);
+                                    Destroy(p);
+                                }
+                                else
+                                {
+                                    objList.Add(p);
+                                }
+                            }
+                            break;
+                    }
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(0, 0, -3.0f), Color.black, 10.0f);
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(-3.0f, 0, 0), Color.black, 10.0f);
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(3.0f, 0, 0), Color.black, 10.0f);
+                }
+                Debug.DrawLine(k, k + GenerateOffset(0, 0, 3), Color.blue, 10.0f);
+                Debug.DrawLine(k, k + GenerateOffset(-3.0f, 0, 0), Color.blue, 10.0f);
+                Debug.DrawLine(k, k + GenerateOffset(3.0f, 0, 0), Color.blue, 10.0f);
+                Debug.DrawLine(k, k + GenerateOffset(0, 0, 1 * -floorZsize[floorToUse] * 4 + 1), Color.red, 10.0f);
+            }
+        }
+        else
+        {
+            //Run this if the Z side wall is longer.
+            Debug.DrawLine(startPos, startPos + GenerateOffset(0, 0, -floorZsize[floorToUse] * 4 + 4f), Color.green, 10.0f);
+            Debug.Log("Floor " + floorToUse + "'s wall along the Z axis is longer");
+
+            for (int i = 0; i < floorZsize[floorToUse]; i++)
+            {
+                Vector3 k = startPos + GenerateOffset(0, 0, -i * 4);
+
+                RaycastHit hit;
+                if (Physics.Raycast(k, GenerateOffset(-1, 0, 0), out hit, 3.0f) && spawns != 1)
+                {
+
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+
+                    t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], k + GenerateOffset(-bedForwardoffset, -bedYoffset, -bedSideoffset), faceWall);
+
+                    t.transform.parent = roomReferencesModular.transform;
+
+                    if (hit.collider.gameObject.name == "Interactable")
+                    {
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(0, -1, 0)))
+                    {
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(0, 0, -1)))
+                    {
+                        Destroy(t);
+                    }
+                    else
+                    if (!InteractableCheck(k, GenerateOffset(0, 0, 1)))
+                    {
+                        Destroy(t);
+                    }
+                    else
+                    {
+                        objList.Add(t);
+                    }
+                    Debug.Log(t.name + "is next to wall.");
+                }
+                if (Physics.Raycast(k, GenerateOffset(1, 0, 0), out hit, floorXsize[floorToUse] * 4 - 1))
+                {
+                    Debug.Log("Walls to spawn index: " + spawns);
+                    Vector3 oppPos = new Vector3(k.x + floorXsize[floorToUse] * 4 - 4, k.y, k.z);
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+                    switch (spawns)
+                    {
+                        case 1:
+                            Destroy(t);
+                            if (Physics.Raycast(oppPos, GenerateOffset(1, 0, 0), out hit, 3.0f))
+                            {
+                                GameObject p = Instantiate(propToSpawn.Versions[versionToSpawn], oppPos + GenerateOffset(bedForwardoffset + 0.45f, -bedYoffset, bedSideoffset), faceWall);
+
+                                p.transform.parent = roomReferencesModular.transform;
+
+                                if (hit.collider.gameObject.name == "Interactable")
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, -1, 0)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, 0, -1)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, 0, 1)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                {
+                                    objList.Add(p);
+                                }
+                            }
+                            break;
+
+                        case 2:
+                            if (Physics.Raycast(oppPos, GenerateOffset(1, 0, 0), out hit, 3.0f))
+                            {
+                                GameObject p = Instantiate(propToSpawn.Versions[versionToSpawn], oppPos + GenerateOffset(bedForwardoffset + 0.45f, -bedYoffset, bedSideoffset), faceWall);
+
+                                p.transform.parent = roomReferencesModular.transform;
+
+                                if (hit.collider.gameObject.name == "Interactable")
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, -1, 0)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, 0, -1)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                if (!InteractableCheck(oppPos, GenerateOffset(0, 0, 1)))
+                                {
+                                    Destroy(p);
+                                }
+                                else
+                                {
+                                    objList.Add(p);
+                                }
+                            }
+                            break;
+                    }
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(3.0f, 0, 0), Color.black, 10.0f);
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(0, 0, -3.0f), Color.black, 10.0f);
+                    Debug.DrawLine(oppPos, oppPos + GenerateOffset(0, 0, 3.0f), Color.black, 10.0f);
+                }
+                Debug.DrawLine(k, k + GenerateOffset(-3.0f, 0, 0), Color.blue, 10.0f);
+                Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
+                Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
+                //Debug.DrawLine(k, k + GenerateOffset(1 * floorXsize[floorToUseIndex] * 4 - 1, 0, 0), Color.red, 10.0f);
+            }
+        }
+    }
+
+    private bool InteractableCheck(Vector3 origin, Vector3 direction)
+    {
+        RaycastHit rayHit;
+        if(Physics.Raycast(origin, direction, out rayHit, 3.0f))
+        {
+            if (rayHit.collider.gameObject.name == "Interactable")
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        } else
+        {
+            return true;
         }
     }
 
