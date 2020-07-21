@@ -137,6 +137,8 @@ public class GunController : MonoBehaviour
 	private bool used1 = false;
     void Update()
 	{
+        TestShot();
+
 		UpdateClipStock();
 		GatherInput();
         if(!busyFiringAlready && equippedGun != null)
@@ -151,6 +153,18 @@ public class GunController : MonoBehaviour
 			Animation();
 		}
 	}
+
+    private void TestShot()
+    {
+        if (Input.GetKey(KeyCode.O))
+        {
+            tpsAnimator.SetBool("TestShot", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.O))
+        {
+            tpsAnimator.SetBool("TestShot", false);
+        }
+    }
 
 	public int GetClip() {
         return clip;
