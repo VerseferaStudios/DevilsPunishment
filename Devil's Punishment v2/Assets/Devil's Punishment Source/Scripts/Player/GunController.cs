@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
@@ -98,6 +96,8 @@ public class GunController : MonoBehaviour
 	public F_Rifle f_RifleScript;
 	public F_Shotgun f_ShotgunScript;
 
+    public TPSNetAnimationSyncBehaviour tPSNetAnimSyncScript;
+
     private void OnEnable()
     {
         PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
@@ -124,6 +124,7 @@ public class GunController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
 		InitGun();
+
 	}
 
     void SetFireRate(float f) {
@@ -178,28 +179,19 @@ public class GunController : MonoBehaviour
         return clipStock;
     }
 
-
-    public GameObject[] HANDGUN_PARTS;
-
-    public GameObject[] SHOTGUN_PARTS;
-
-    public GameObject[] ASSAULT_RIFLE_PARTS;
-
-	public void Hide3rdPersonGuns(){
-		foreach (GameObject part in HANDGUN_PARTS.Concat(SHOTGUN_PARTS).Concat(ASSAULT_RIFLE_PARTS))
-		{
-			part.SetActive(false);
-		}
-	}
-
 	public void DeactivateWeaponArmsBlendingLayers(){
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),0);
 
-        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"), 0);
-        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 0);
-        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"), 0);
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 0);
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
+
+        tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"), 0);
+        tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 0);
+        tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
+
     }
 
     public void InitGun() {
@@ -237,35 +229,26 @@ public class GunController : MonoBehaviour
 					clipSize = equippedGun.gunItem.clipSize;
 					clipStock = inventory.GetEquippedGunAmmo();
 
-					Hide3rdPersonGuns();
+					tPSNetAnimSyncScript.SendCmd_HideTpsGuns();
 					DeactivateWeaponArmsBlendingLayers();
 					if (Inventory.instance.equippedGun != null){
 						switch (Inventory.instance.equippedGun.weaponClassification)
 						{
 							case GunItem.WeaponClassification.HANDGUN:
-								foreach (GameObject part in HANDGUN_PARTS)
-								{
-									part.SetActive(true);
-								}
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsPistol();
 								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun"),1);
-								tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun"),1);
-								break;
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun"), 1);
+                                break;
 							case GunItem.WeaponClassification.SHOTGUN:
-								foreach (GameObject part in SHOTGUN_PARTS)
-								{
-									part.SetActive(true);
-								}
-								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
-								tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun"),1);
-								break;
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsShotgun();
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun"), 1);
+                                break;
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
-								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-								{
-									part.SetActive(true);
-								}
-								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
-								tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle"),1);
-								break;
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsRifle();
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle"), 1);
+                                break;
 
 							default: // Pass
 								break;
@@ -286,8 +269,8 @@ public class GunController : MonoBehaviour
 			clip = 0;
 			clipSize = 0;
 			clipStock = 0;
-			Hide3rdPersonGuns();
-			DeactivateWeaponArmsBlendingLayers();
+            tPSNetAnimSyncScript.SendCmd_HideTpsGuns();
+            DeactivateWeaponArmsBlendingLayers();
 		}
 		invAmmoDisplay.SetGunIcons();
 
@@ -709,26 +692,19 @@ public class GunController : MonoBehaviour
 		switch (Inventory.instance.equippedGun.weaponClassification)
 		{
 			case GunItem.WeaponClassification.HANDGUN:
-				foreach (GameObject part in HANDGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
-					tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
-
-				}
-				break;
+				playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+				tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+				//tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+			    break;
 			case GunItem.WeaponClassification.SHOTGUN:
-				foreach (GameObject part in SHOTGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
-                    tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
-				}
+				playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
+                tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+                //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
 				break;
 			case GunItem.WeaponClassification.ASSAULTRIFLE:
-				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
-                    tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
-				}
+				playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
+                tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+                //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
 				break;
 
 			default: // Pass
@@ -755,25 +731,19 @@ public class GunController : MonoBehaviour
 			switch (Inventory.instance.equippedGun.weaponClassification)
 			{
 				case GunItem.WeaponClassification.HANDGUN:
-					foreach (GameObject part in HANDGUN_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
-                        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
-					}
+					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+                    tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+                    //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
 					break;
 				case GunItem.WeaponClassification.SHOTGUN:
-					foreach (GameObject part in SHOTGUN_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
-                        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
-					}
+					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
+                    tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+                    //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
 					break;
 				case GunItem.WeaponClassification.ASSAULTRIFLE:
-					foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
-                        tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
-					}
+					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
+                    tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+                    //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
 					break;
 
 				default: // Pass
