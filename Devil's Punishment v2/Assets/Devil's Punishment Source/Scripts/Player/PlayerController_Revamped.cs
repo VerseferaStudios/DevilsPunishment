@@ -71,6 +71,9 @@ public class PlayerController_Revamped : NetworkBehaviour
     public LaserCutter laserCutterScript;
 
     public bool shadowOnly = false;
+
+    public NetworkAnimator tpsNetAnimator;
+
     void Awake() {
 
         characterAnimator = /*playerModel.*/GetComponent<Animator>();
@@ -95,6 +98,11 @@ public class PlayerController_Revamped : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         //Debug.Log("2 does player have authority over netId = " + netId + " = " + hasAuthority);
+    }
+
+    public void TPSNetAnimatorSendTrigger(string trigger)
+    {
+        tpsNetAnimator.SetTrigger(trigger);
     }
 
     void Start() {

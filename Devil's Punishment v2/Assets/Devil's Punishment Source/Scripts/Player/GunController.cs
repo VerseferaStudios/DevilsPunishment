@@ -407,8 +407,9 @@ public class GunController : MonoBehaviour
 			gunAnimator.SetTrigger("Fire");
             tpsAnimator.SetBool("Reload", false);
             tpsAnimator.SetTrigger("Fire");
+            PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Fire");
             if (weaponIsAssaultRifle())
-			{
+            {
 				f_RifleScript.PlayRFireEvent();
 			}
 			else if (weaponIsHandGun())
@@ -502,6 +503,7 @@ public class GunController : MonoBehaviour
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
 		tpsAnimator.SetTrigger("Reload");
+        PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Reload");
 		float breakPoint = .5f;
         // Wait for other states to finish
         while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -703,6 +705,7 @@ public class GunController : MonoBehaviour
 	{
 		playerAnimator.SetTrigger("Reload");
 		tpsAnimator.SetTrigger("Reload");
+        PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Reload");
 		switch (Inventory.instance.equippedGun.weaponClassification)
 		{
 			case GunItem.WeaponClassification.HANDGUN:
@@ -748,6 +751,7 @@ public class GunController : MonoBehaviour
 		if(shooting){
 			playerAnimator.SetTrigger("Fire");
             tpsAnimator.SetTrigger("Fire");
+            PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Fire");
 			switch (Inventory.instance.equippedGun.weaponClassification)
 			{
 				case GunItem.WeaponClassification.HANDGUN:
