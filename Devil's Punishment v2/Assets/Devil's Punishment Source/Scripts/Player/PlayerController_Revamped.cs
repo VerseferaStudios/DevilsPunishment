@@ -317,7 +317,7 @@ public class PlayerController_Revamped : NetworkBehaviour
     void Movement()
     {
         Vector2 inputDirection = input.normalized;
-        isSprinting = Input.GetKey(KeyCode.LeftShift);// Controls.Run);
+        isSprinting = Input.GetKey(KeyCode.LeftShift) & isMoving;// Controls.Run);
         float speed = ((isSprinting) ? RunSpeed : WalkSpeed) * inputDirection.magnitude;
         float targetRotation;
 
@@ -657,12 +657,12 @@ public class PlayerController_Revamped : NetworkBehaviour
                     if (inputDev == PlayerControls.InputDevice.Keyboard)
                     {
                         Debug.Log("NOT TOGGLE BUT HOLD");
-                        isSprinting = Input.GetButton("Sprint");
+                        isSprinting = Input.GetButton("Sprint") & isMoving;
                     }
                     else if (inputDev == PlayerControls.InputDevice.XBox360)
                     {
                         Debug.Log("NOT TOGGLE BUT HOLD");
-                        isSprinting = Input.GetKey(Controls.Run);
+                        isSprinting = Input.GetKey(Controls.Run) & isMoving;
                     }
                     
                 break;

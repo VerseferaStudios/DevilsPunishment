@@ -811,6 +811,7 @@ GameObject:
   - component: {fileID: 598200114658656118}
   - component: {fileID: 5207373087161055007}
   - component: {fileID: 4673579163931958302}
+  - component: {fileID: 7304561745571345075}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -898,6 +899,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7304561745571345075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018008381325881603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffdfcc4ae9527ca49ba82fc18d702ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiToHide:
+  - ui:
+    - {fileID: 4336077723927230565}
+  keyCodes: 75000000
 --- !u!1 &7516696448287371566
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,6 +1012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDevMode: 0
+  isSampleRoomsMeshRend: 0
   mapGenHolderTransform: {fileID: 0}
   roomsLoaderPrefab: {fileID: 7846860429511563592}
   numberOfRooms: 6
@@ -1023,6 +1041,10 @@ MonoBehaviour:
   - {fileID: 7475365134836359222, guid: 534b1a807c562f54794b31538f43e8a1, type: 3}
   - {fileID: 2711133060991232383, guid: a7358d2a45511b34ba9b3d4a327a35ab, type: 3}
   - {fileID: 342825950719613298, guid: 739e385e28ab8e94cb8262a2802ae471, type: 3}
+  xSize: 48
+  zSize: 48
+  mapSizeX: 4
+  mapSizeZ: 2
   vents:
   - {fileID: 4252666463506747666, guid: f260530c1fa67d84a90015b10a747ad7, type: 3}
   - {fileID: 6633108427632789466, guid: bec97ddb588f3c94a8489c86340f8c16, type: 3}
@@ -1069,6 +1091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDevMode: 0
+  isSampleRoomsMeshRend: 0
   mapGenHolderTransform: {fileID: 0}
   roomsLoaderPrefab: {fileID: 7846860429511563592}
   numberOfRooms: 6
@@ -1096,6 +1119,10 @@ MonoBehaviour:
   - {fileID: 7475365134836359222, guid: 534b1a807c562f54794b31538f43e8a1, type: 3}
   - {fileID: 2711133060991232383, guid: a7358d2a45511b34ba9b3d4a327a35ab, type: 3}
   - {fileID: 342825950719613298, guid: 739e385e28ab8e94cb8262a2802ae471, type: 3}
+  xSize: 48
+  zSize: 48
+  mapSizeX: 4
+  mapSizeZ: 2
   vents:
   - {fileID: 4252666463506747666, guid: f260530c1fa67d84a90015b10a747ad7, type: 3}
   - {fileID: 6633108427632789466, guid: bec97ddb588f3c94a8489c86340f8c16, type: 3}
