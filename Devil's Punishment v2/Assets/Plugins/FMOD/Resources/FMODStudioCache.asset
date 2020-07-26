@@ -250,6 +250,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 933
+--- !u!114 &-8003716559406241828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Jumping/groundlayer
+  m_EditorClassIdentifier: 
+  Name: groundlayer
+  Min: 0
+  Max: 4
+  Default: 1
+  Exists: 1
 --- !u!114 &-7979407697296672079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1000,7 +1017,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1152
 --- !u!114 &-5629882002567255919
@@ -2287,11 +2304,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\04_Repos\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.bank
   SubDir: 
-  lastModified: 637306013415976683
+  lastModified: 637313843273097876
   LoadResult: 0
   FileSizes:
-  - Name: Desktop
-    Value: 3154784
+  - Name: 
+    Value: 3212768
   Exists: 1
 --- !u!114 &-71604976777960463
 MonoBehaviour:
@@ -2366,12 +2383,14 @@ MonoBehaviour:
   - {fileID: -4468093084611789600}
   - {fileID: 1868667175566587490}
   - {fileID: -6766779301323695282}
+  - {fileID: 7534622908521300910}
+  - {fileID: 4659504474297196024}
   EditorParameters: []
   MasterBanks:
   - {fileID: -327575767267611343}
   StringsBanks:
   - {fileID: 4936932559520855030}
-  stringsBankWriteTime: 637306013415996639
+  stringsBankWriteTime: 637313843273272571
   cacheVersion: 3
 --- !u!114 &68587855900673161
 MonoBehaviour:
@@ -6174,6 +6193,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 16500
+--- !u!114 &975217831156928368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Footsteps/groundlayer
+  m_EditorClassIdentifier: 
+  Name: groundlayer
+  Min: 0
+  Max: 4
+  Default: 1
+  Exists: 1
 --- !u!114 &981115018473048447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6495,6 +6531,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4562
+--- !u!114 &2230233844173826707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Footsteps/move_status
+  m_EditorClassIdentifier: 
+  Name: move_status
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &2238206393518195247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6564,6 +6617,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1000
+--- !u!114 &2449669227885667746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Footsteps/move_status
+  m_EditorClassIdentifier: 
+  Name: move_status
+  Min: 0
+  Max: 3
+  Default: 0
+  Exists: 1
 --- !u!114 &2502227207978303339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7341,6 +7411,30 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1100
+--- !u!114 &4659504474297196024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Movement/Player_Jumping
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Movement/Player_Jumping
+  guid: fc409d17b8f5bc458e55c65a09248264
+  Banks:
+  - {fileID: -327575767267611343}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -8003716559406241828}
+  MinDistance: 0
+  MaxDistance: 20
+  Length: 1100
 --- !u!114 &4684559197820926221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7424,11 +7518,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: D:\04_Repos\DevilsPunishment\DevilsPunishment\Devil's Punishment v2\FMOD\DevilsPunishmentsFMOD\DevilsPunishmentsFMOD\Build\Desktop\Master.strings.bank
   SubDir: 
-  lastModified: 637306013415996639
+  lastModified: 637313843273272571
   LoadResult: 0
   FileSizes:
-  - Name: Desktop
-    Value: 3046
+  - Name: 
+    Value: 3184
   Exists: 1
 --- !u!114 &4978290947550425674
 MonoBehaviour:
@@ -7720,8 +7814,7 @@ MonoBehaviour:
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
-  Parameters:
-  - {fileID: -5272738852762464687}
+  Parameters: []
   MinDistance: 0
   MaxDistance: 0
   Length: 910
@@ -8134,6 +8227,31 @@ MonoBehaviour:
   Max: 4
   Default: 1
   Exists: 0
+--- !u!114 &7534622908521300910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Movement/Player_Footsteps
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Movement/Player_Footsteps
+  guid: 94f12d27c0c95f4fa64146232ed614f1
+  Banks:
+  - {fileID: -327575767267611343}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 2230233844173826707}
+  - {fileID: 8188626292979900673}
+  MinDistance: 0
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &7616969800621026951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8266,6 +8384,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &8188626292979900673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Footsteps/groundlayer
+  m_EditorClassIdentifier: 
+  Name: groundlayer
+  Min: 0
+  Max: 4
+  Default: 1
+  Exists: 1
 --- !u!114 &8257432071651039754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8382,6 +8517,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1100
+--- !u!114 &8819220582672073477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Player_Jumping/groundlayer
+  m_EditorClassIdentifier: 
+  Name: groundlayer
+  Min: 0
+  Max: 4
+  Default: 1
+  Exists: 1
 --- !u!114 &8900554859604477312
 MonoBehaviour:
   m_ObjectHideFlags: 0
