@@ -377,6 +377,7 @@ public class GunController : MonoBehaviour
 			StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
 		}
 
+
 		//void wait4ReloadAsync()
 		//{
 		do
@@ -407,7 +408,7 @@ public class GunController : MonoBehaviour
 			{
 				Debug.LogWarning("Unrecognised gun!");
 			}
-			await Task.Delay(1);
+            await Task.Delay(1); // < timeBetweenShots ? 1 : (int)timeBetweenShots);
 		} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 
 		//}
@@ -443,7 +444,7 @@ public class GunController : MonoBehaviour
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
                 Debug.Log("SHOOTIN");
-                networkPlayer.Cmdbroadcast_Shots(hit.point, Quaternion.LookRotation(hit.normal));
+                networkPlayer.SendCmd_Broadcast_Shots(hit.point, Quaternion.LookRotation(hit.normal));
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
 				//IfEnemyHit(hit);

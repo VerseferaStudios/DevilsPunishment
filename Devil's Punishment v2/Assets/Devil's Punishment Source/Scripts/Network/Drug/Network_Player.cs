@@ -45,12 +45,18 @@ public class Network_Player : NetworkBehaviour
     }
 
     public GameObject bp; // bulletpoint
+
+    public void SendCmd_Broadcast_Shots(Vector3 start, Quaternion rot)
+    {
+        Cmdbroadcast_Shots(start, rot);
+    }
+
     [Command]
-    public void Cmdbroadcast_Shots(Vector3 start, Quaternion rot)
+    private void Cmdbroadcast_Shots(Vector3 start, Quaternion rot)
     {
         GameObject shotRandy = Instantiate(bp);
-     //   shotRandy.transform.position = start;
-      //  shotRandy.transform.rotation = rot;
+        shotRandy.transform.position = start;
+        shotRandy.transform.rotation = rot;
 
 
         NetworkServer.Spawn(shotRandy);
