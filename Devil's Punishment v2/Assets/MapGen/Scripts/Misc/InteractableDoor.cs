@@ -74,6 +74,7 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
+                FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
                 Transform t = transform.parent.parent.parent.parent; // get rid of this
                 if (t.tag.StartsWith("Corr"))
                 {
@@ -89,6 +90,7 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
             case DoorType.door:
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
+                FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
                 PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
                 //StartCoroutine(OpenDoor());
                 break;
