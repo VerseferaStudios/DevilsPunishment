@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.00.00">
-	<object class="ParameterPreset" id="{90aa8786-cd05-48cc-bcba-8b0bdc3150d1}">
+	<object class="ParameterPreset" id="{1d772a62-1727-4efb-a178-4eebe05a9d3e}">
 		<property name="name">
-			<value>groundlayer</value>
+			<value>move_status</value>
 		</property>
 		<relationship name="folder">
 			<destination>{dd2aaa15-6110-4144-9604-c1dda2894954}</destination>
 		</relationship>
 		<relationship name="parameter">
-			<destination>{85c5f568-4ed9-4a28-b2c2-a05ae6db5e09}</destination>
+			<destination>{1a3ba899-d709-4133-9065-644e60f9312c}</destination>
 		</relationship>
 	</object>
-	<object class="GameParameter" id="{85c5f568-4ed9-4a28-b2c2-a05ae6db5e09}">
+	<object class="GameParameter" id="{1a3ba899-d709-4133-9065-644e60f9312c}">
 		<property name="parameterType">
 			<value>2</value>
 		</property>
 		<property name="maximum">
-			<value>4</value>
+			<value>3</value>
 		</property>
 		<property name="enumerationLabels">
-			<value>vents</value>
-			<value>stone</value>
-			<value>ladder</value>
-			<value>metal</value>
-		</property>
-		<property name="isHeld">
-			<value>true</value>
+			<value>walk</value>
+			<value>run</value>
+			<value>crouch</value>
 		</property>
 		<property name="initialValue">
-			<value>1</value>
+			<value>0</value>
 		</property>
 	</object>
 </objects>

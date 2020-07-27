@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 28421591}
   - component: {fileID: 8410159754957809380}
   - component: {fileID: 6325146215877696225}
+  - component: {fileID: 234706734517167935}
   m_Layer: 10
   m_Name: Camera
   m_TagString: MainCamera
@@ -281,7 +282,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28421589}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &28421592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +414,19 @@ MonoBehaviour:
   lod2Distance: 0
   lightProbes: 0
   probeRadius: 0
+--- !u!114 &234706734517167935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28421589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: 0
 --- !u!1 &38208685
 GameObject:
   m_ObjectHideFlags: 0
@@ -48186,12 +48200,12 @@ GameObject:
   - component: {fileID: 2090704036}
   - component: {fileID: 4962835557225311095}
   - component: {fileID: 1774744181688220165}
-  - component: {fileID: 5608082727505175081}
   - component: {fileID: 4478069301448544368}
   - component: {fileID: 8005975685196651182}
   - component: {fileID: 8732471117017857248}
   - component: {fileID: 7842099695955025379}
   - component: {fileID: 5818767925549755433}
+  - component: {fileID: 477648198652701885}
   - component: {fileID: 2258670557233047294}
   - component: {fileID: 7552161034704138202}
   m_Layer: 10
@@ -48347,7 +48361,7 @@ MonoBehaviour:
   - {fileID: 352705552134410082}
   - {fileID: 2034932738}
   - {fileID: 1158868955}
-  _DevModeIsShowTPS: 1
+  _DevModeIsShowTPS: 0
   Third_Person_Model: {fileID: 7585033257444224063}
   chat: {fileID: 2135824620}
   InvView: {fileID: 935088455}
@@ -48442,24 +48456,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5608082727505175081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090704035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ae146f793cbe3545b258967e736c0b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkingsound: event:/Player/Movement/Player_Walk
-  runningsound: event:/Player/Movement/Player_Run
-  crouchingsound: event:/Player/Movement/Player_Crouch
-  walkingspeed: 0.6
-  runningspeed: 0.3
-  crouchingspeed: 0.9
 --- !u!114 &4478069301448544368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48579,6 +48575,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &477648198652701885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090704035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5781b517c7f9154ba750e66e3868bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FootstepsEvent: event:/Player/Movement/Player_Footsteps
+  JumpingEvent: event:/Player/Movement/Player_Jumping
+  GroundLayerParameter: groundlayer
+  SpeedParameter: move_status
+  JumpParameter: 
+  StepDistance: 1
+  RayDistance: 1.5
+  StartRunningTime: 0.3
 --- !u!95 &2258670557233047294
 Animator:
   serializedVersion: 3
