@@ -1,4 +1,4 @@
-﻿//Author: David Bird
+//Author: David Bird
 //Date:
     //Last Edited:
         //By: David Bird
@@ -49,7 +49,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void SingleSart()
     {
-        SceneManager.LoadScene(scenes[1]);
+        SceneManager.LoadSceneAsync(scenes[1]);
     }
 
     public void MultiStart()

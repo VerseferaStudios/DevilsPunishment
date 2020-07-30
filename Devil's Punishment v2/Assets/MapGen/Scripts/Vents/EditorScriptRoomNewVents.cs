@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(RoomNewVents))]
@@ -140,3 +141,5 @@ private string checkCollisions(Vector3 From, Vector3 to)
                 spawnPoints[k + 1].GetComponent<Renderer>().material.color = Color.cyan;
             }
             */
+#endif
+
