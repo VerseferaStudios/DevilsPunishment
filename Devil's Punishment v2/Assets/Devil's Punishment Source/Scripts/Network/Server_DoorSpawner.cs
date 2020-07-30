@@ -62,6 +62,10 @@ public class EditorScriptAnimation : Editor
             server_DoorSpawner.otherObjects = new List<Object>();
             string copyFromName;
             bool isSuccess = false;
+
+            ModelImporter modelImporter = new ModelImporter();
+            //modelImporter.importAnimation =  
+
             for (int q = 0; q < server_DoorSpawner.copyFromAnimClips.Count; q++)
             {
                 copyFromName = server_DoorSpawner.copyFromAnimClips[q].name;
@@ -81,6 +85,7 @@ public class EditorScriptAnimation : Editor
                         //}
                         //server_DoorSpawner.animClips[e].localBounds = server_DoorSpawner.copyFromAnimClips[q].localBounds;
 
+                        //EditorUtility.SetDirty(server_DoorSpawner.parentFbx);
 
                         //EditorUtility.SetDirty(server_DoorSpawner.animClips[e]);
                         //EditorUtility.SetDirty(server_DoorSpawner.parentFbx);

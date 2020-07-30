@@ -507,13 +507,13 @@ public class PlayerController_Revamped : NetworkBehaviour
         if (isCrouching && !Physics.Raycast(transform.position, Vector3.up, .75f))
         {
             isCrouching = false;
-            CrouchControllerColliderHeight();
+            CrouchControllerColliderAndModelHeight();
                 
         }   
         else 
         {
             isCrouching = true;
-            CrouchControllerColliderHeight();
+            CrouchControllerColliderAndModelHeight();
             
         }
         
@@ -796,13 +796,15 @@ public class PlayerController_Revamped : NetworkBehaviour
     }
     Vector3 controllerCenter;
 
-    void CrouchControllerColliderHeight() {
+    void CrouchControllerColliderAndModelHeight() {
         if(isCrouching) {
            // controller.center = Vector3.up * .625f;
             controller.height = .6f;
+            playerModel.transform.position = playerModel.transform.position + new Vector3(0, .486f /*0.96f - 0.474f*/, 0);
         } else {
           //  controller.center = controllerCenter;
             controller.height = 1.8f;
+            playerModel.transform.position = playerModel.transform.position - new Vector3(0, .486f /*0.96f - 0.474f*/, 0);
         }
     }
 
