@@ -8,41 +8,54 @@
 //Notes: Further information can be found at http://www.nolocationyet.com (Dead link)
 
 
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class OptionsMenuController : MonoBehaviour
 {
     AudioController sound;
-    public GameObject playerCont;
+    //public GameObject playerCont;
     public GameObject optionsPanel;
     public GameObject menuPanel;
     public GameObject contactPanel;
-    public GameObject controlPanel;
+    //public GameObject controlPanel;
     public Button close;
     public Button contact;
     public Button controls;
-    Resolution[] resolutions;
-    public Dropdown resolutionOptions;
-    public GameObject statusCanvas;
+    //Resolution[] resolutions;
+    List<Resolution> resolutions;
+    public TMP_Dropdown resolutionOptions;
 
     // Start is called before the first frame update
     void Start()
     {
-        statusCanvas.SetActive(false);
-        controlPanel.SetActive(false);
-        optionsPanel.SetActive(false);
-        resolutions = Screen.resolutions;
+        //controlPanel.SetActive(false);
+        //optionsPanel.SetActive(false);
+        resolutions = Screen.resolutions.ToList();
+        //Resolution newRes = new Resolution();
+        //newRes.width = 800;
+        //newRes.height = 640;
+        //newRes.refreshRate = 30;
+
+        //resolutions.Add(newRes);
+
+        //newRes = new Resolution();
+        //newRes.width = 1000;
+        //newRes.height = 1000;
+        //newRes.refreshRate = 30;
+
+        //resolutions.Add(newRes);
 
         resolutionOptions.ClearOptions();
 
         List<string> options = new List<string>();
 
         int currentResOption = 0;
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < resolutions.Count; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
             options.Add(option);
@@ -55,6 +68,7 @@ public class OptionsMenuController : MonoBehaviour
         resolutionOptions.AddOptions(options);
         resolutionOptions.value = currentResOption;
         resolutionOptions.RefreshShownValue();
+        Debug.Log("res options no = " + resolutions.Count);
     }
 
 
@@ -63,19 +77,18 @@ public class OptionsMenuController : MonoBehaviour
         //play audio click.
         optionsPanel.SetActive(false);
         menuPanel.SetActive(true);
-        statusCanvas.SetActive(true);
     }
 
     public void ControlClose()
     {
         //play audio click.
-        controlPanel.SetActive(false);
+        //controlPanel.SetActive(false);
     }
 
     public void Controls()
     {
         //play audio click.
-        controlPanel.SetActive(true);
+        //controlPanel.SetActive(true);
     }
 
     public void Contact()
@@ -100,13 +113,4 @@ public class OptionsMenuController : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            controlPanel.SetActive(false);
-            statusCanvas.SetActive(true);
-        }
-    }
 }

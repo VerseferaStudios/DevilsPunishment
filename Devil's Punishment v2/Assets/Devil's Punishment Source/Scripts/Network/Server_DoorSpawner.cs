@@ -63,6 +63,7 @@ public class EditorScriptAnimation : Editor
 
 
 
+            //------------------- Copy to AOC -------------------
 
             Object[] selectedObjects = Selection.objects;
             server_DoorSpawner.animClips = new List<AnimationClip>();
@@ -108,6 +109,7 @@ public class EditorScriptAnimation : Editor
 
 
 
+            // ------------------- Copy between two sets of anim clips -------------------
 
             //server_DoorSpawner.otherObjects = new List<Object>();
             //string copyFromName;
