@@ -163,12 +163,14 @@ public class RoomNewVents : RoomNew
     {
         currCorridor1.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         currCorridor1.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, childEulerZ);
+        currCorridor1.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
     }
 
     protected override void TRotationScaleHelper(float yRotation, GameObject currCorridor, int childEulerX)
     {
         base.TRotationScaleHelper(yRotation, currCorridor, childEulerX);
         currCorridor.transform.GetChild(0).localEulerAngles = new Vector3(childEulerX, 0, 0);
+        currCorridor.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
     }
 
     protected override void AddLCorridorSpawnInfo(List<int> openings, Vector3 posToSpawn, int zOverall, int childEulerZ, int childEulerX
