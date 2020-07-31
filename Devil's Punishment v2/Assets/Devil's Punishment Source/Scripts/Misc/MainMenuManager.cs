@@ -37,14 +37,27 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        singlePlayer.GetComponent<Button>().enabled = true;
-        multiPlayer.GetComponent<Button>().enabled = true;
-        credits.GetComponent<Button>().enabled = true;
-        reportBug.GetComponent<Button>().enabled = true;
-        settings.GetComponent<Button>().enabled = true;
-        quit.GetComponent<Button>().enabled = true;
-        reportPanel.SetActive(false);
-        settingsCanvas.SetActive(false);
+        //singlePlayer.GetComponent<Button>().enabled = true;
+        //multiPlayer.GetComponent<Button>().enabled = true;
+        //credits.GetComponent<Button>().enabled = true;
+        //reportBug.GetComponent<Button>().enabled = true;
+        //settings.GetComponent<Button>().enabled = true;
+        //quit.GetComponent<Button>().enabled = true;
+        //reportPanel.SetActive(false);
+        //settingsCanvas.SetActive(false);
+    }
+
+    public void SetRoomsNo(string n)
+    {
+        if (int.TryParse(n, out int res))
+        {
+            ScenesDataTransfer.numberOfRooms = res;
+            Debug.Log("input for number of rooms = " + res);
+        }
+        else
+        {
+            Debug.LogError("couldn't parse input for number of rooms");
+        }
     }
 
     public void SingleSart()

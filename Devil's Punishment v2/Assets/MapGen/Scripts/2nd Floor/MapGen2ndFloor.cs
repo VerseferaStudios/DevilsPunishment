@@ -19,8 +19,12 @@ public class MapGen2ndFloor : MapGenBase
 
     protected override void Start()
     {
+        if(ScenesDataTransfer.numberOfRooms != 0)
+        {
+            numberOfRooms = ScenesDataTransfer.numberOfRooms;
+        }
+        Debug.Log("mapgen2ndfloor & nFromMenu = " + ScenesDataTransfer.numberOfRooms);
         base.Start();
-        Debug.Log("mapgen2ndfloor");
     }
 
     protected override RoomNew AddRoomNewCorrectly()

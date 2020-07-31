@@ -30,8 +30,8 @@ public class OptionsMenuController : MonoBehaviour
     List<Resolution> resolutions;
     public TMP_Dropdown resolutionOptions;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void OnEnable()
     {
         //controlPanel.SetActive(false);
         //optionsPanel.SetActive(false);

@@ -28,8 +28,12 @@ public class MapGen3 : MapGenBase
 
     protected override void Start()
     {
+        if (ScenesDataTransfer.numberOfRooms != 0)
+        {
+            numberOfRooms = ScenesDataTransfer.numberOfRooms;
+        }
+        Debug.Log("mapgen3 & nFromMenu = " + ScenesDataTransfer.numberOfRooms);
         base.Start();
-        Debug.Log("mapgen3");
     }
 
     protected override RoomNew AddRoomNewCorrectly()

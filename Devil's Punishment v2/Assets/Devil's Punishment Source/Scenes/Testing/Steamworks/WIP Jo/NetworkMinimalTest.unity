@@ -640,6 +640,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 300942285}
   m_CullTransparentMesh: 0
+--- !u!1 &861521877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 861521879}
+  - component: {fileID: 861521878}
+  m_Layer: 0
+  m_Name: Mapgentest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &861521878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861521877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39da8c9a5ce759c4a9d1315ce56b55a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDevMode: 0
+  isSampleRoomsMeshRend: 0
+  mapGenHolderTransform: {fileID: 0}
+  roomsLoaderPrefab: {fileID: 0}
+  numberOfRooms: 6
+  staticRooms: []
+  mainRoomIndicator: {fileID: 4418631179859521793, guid: dec88b6c04480fb428cf863f5d42a97c,
+    type: 3}
+  liftRoom: {fileID: 0}
+  generatorRoom: {fileID: 0}
+  startRoom: {fileID: 0}
+  endRoom: {fileID: 0}
+  laserRoom: {fileID: 0}
+  corridors: []
+  xSize: 48
+  zSize: 48
+  mapSizeX: 4
+  mapSizeZ: 2
+  vents: []
+  ventCover: {fileID: 0}
+  roomNewScript: {fileID: 0}
+  testGridCube: {fileID: 0}
+  testGridPlane: {fileID: 0}
+  testGridPlaneHolder: {fileID: 0}
+  aStarVisualisationTime: 0
+  seedText: {fileID: 0}
+  cubes: []
+  floorDoorTag: 
+  floorRoomTag: 
+  floorNameForHolder: 
+  ventCoverTag: 
+  roomSpawnMethod: 0
+  StateData: {fileID: 0}
+  GoodStates: {fileID: 0}
+  ReloadGoodStatesData: {fileID: 0}
+  mapseed: 0
+  prevTopRight: {x: 0, y: 0, z: 0}
+  prevBottomLeft: {x: 0, y: 0, z: 0}
+--- !u!4 &861521879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861521877}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1003939159
 PrefabInstance:
   m_ObjectHideFlags: 0
