@@ -9,6 +9,7 @@ public abstract class MapGenBase : MonoBehaviour
     [Header("Dev")]
     public bool isDevMode = false;
     public bool isSampleRoomsMeshRend = false;
+    public bool isNoNetMan = false;
 
     public Transform mapGenHolderTransform;
     public GameObject roomsLoaderPrefab;
@@ -77,6 +78,12 @@ public abstract class MapGenBase : MonoBehaviour
     //Set room Height
     protected abstract void SetRoomHeight();
 
+    protected virtual int HandleKStartForFloors()
+    {
+        //for floor one only
+        return 1;
+    }
+
     //not for 1st floor (1st floor returns always false)
     protected virtual bool AddingLiftForHigherFloors(int k)
     {
@@ -120,6 +127,7 @@ public abstract class MapGenBase : MonoBehaviour
 
 
         FirstFloorExtraInitRoom();
+            Debug.Log("allrooms count = " + allRooms.Count);
         CreateHolderForMapGen();
         //Random.InitState(100);
         //Rooms();
@@ -181,6 +189,7 @@ public abstract class MapGenBase : MonoBehaviour
         while (k < n && l < 1000)
         {
 
+            Debug.Log("allrooms count = " + allRooms.Count + " & k = " + k);
 
             // Lift stuff
             if (AddingLiftForHigherFloors(k))
@@ -191,6 +200,7 @@ public abstract class MapGenBase : MonoBehaviour
                 continue;
             }
 
+            Debug.Log("allrooms count = " + allRooms.Count + " & k = " + k);
 
             float[] arr = new float[2];
 
@@ -276,7 +286,7 @@ public abstract class MapGenBase : MonoBehaviour
         }
         */
         //Make this while and next loop into one? will Collisions be a prob?
-        int k = 0, l = 0;
+        int k = HandleKStartForFloors(), l = 0;
 
         RoomPos(ref k, l);
 
@@ -364,7 +374,7 @@ public abstract class MapGenBase : MonoBehaviour
             //{
             //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
             //}
-
+            Debug.Log("allrooms count = " + allRooms.Count + " & k = " + k + " & i = " + i);
             float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
             Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord + roomHeight, -((float[])allRooms[i])[0]);
 
@@ -435,7 +445,7 @@ public abstract class MapGenBase : MonoBehaviour
             {
                 Debug.Log("in 4321");
                 //server
-                if(NetworkManager.singleton.mode == NetworkManagerMode.Host ||
+                if(isNoNetMan || NetworkManager.singleton.mode == NetworkManagerMode.Host ||
                    NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
                     Debug.Log("in 4321 host");

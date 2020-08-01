@@ -64,6 +64,11 @@ public class MapGen2ndFloor : MapGenBase
         startMapGeneration(seed);
     }
 
+    protected override int HandleKStartForFloors()
+    {
+        return 0;
+    }
+
     //change to an appropriate general fn name
     protected override void FirstFloorExtraInitRoom()
     {
