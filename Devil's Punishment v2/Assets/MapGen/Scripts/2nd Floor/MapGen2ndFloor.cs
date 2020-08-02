@@ -61,7 +61,7 @@ public class MapGen2ndFloor : MapGenBase
     {
         Random.InitState(seed);
         //StartGen();
-        startMapGeneration(seed);
+        StartCoroutine(StartScriptAfterDelay(seed));
     }
 
     protected override int HandleKStartForFloors()
@@ -93,7 +93,7 @@ public class MapGen2ndFloor : MapGenBase
 
         //Random.state = GoodStates.states[0];
         //StateData.states.Add(Random.state);
-        StartCoroutine(StartScriptAfterDelay());
+        StartCoroutine(StartScriptAfterDelay(0));//0seed xD
         Data2ndFloor.instance.roomsLoaderPrefab = roomsLoaderPrefab;
         Data2ndFloor.instance.corridorT1 = corridors[3];
         Data2ndFloor.instance.corridorT2 = corridors[4];
@@ -126,18 +126,19 @@ public class MapGen2ndFloor : MapGenBase
 
         //CreateHolderForMapGen();
 
-        StartCoroutine(StartScriptAfterDelay());
+        StartCoroutine(StartScriptAfterDelay(0)); // 0 seed lol
 
         //rooms();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // ------------- Start Script after delay (to wait for lift room) -------------
-    private IEnumerator StartScriptAfterDelay()
+    private IEnumerator StartScriptAfterDelay(int seed)
     {
         yield return new WaitForSeconds(5f);
-        Data.instance.canStartCorridorTestSpawner = false;
-        Rooms();
+        startMapGeneration(seed);
+        //Data.instance.canStartCorridorTestSpawner = false;
+        //Rooms();
     }
 
     //public override void Rooms()
@@ -313,7 +314,7 @@ public class MapGen2ndFloor : MapGenBase
     //        //gameObjectDetails.Add(roomScript);
 
     //    }
-        
+
 
     //    /*
     //    ////Debug ALL ROOM POSITIONS
@@ -332,7 +333,7 @@ public class MapGen2ndFloor : MapGenBase
     //    Data2ndFloor.instance.xSize = xSize;
     //    Data2ndFloor.instance.zSize = zSize;
 
-        
+
     //}
 
     // ------------------------ Add RoomNewVents script after delay ------------------------
@@ -351,7 +352,7 @@ public class MapGen2ndFloor : MapGenBase
         //-48, 0, -24
         for (int i = 0; i < allRooms.Count; i++)
         {
-            float current = -48 + ((float[])allRooms[i])[1] + -24 + ((float[])allRooms[i])[0];
+            float current = -48 + allRooms[i][0] + -24 + allRooms[i][1];
             if(current < min)
             {
                 min = current;
@@ -360,7 +361,7 @@ public class MapGen2ndFloor : MapGenBase
         }
         if(minIdx != -1)
         {
-            roomNew2ndFloorScript.ConnectTwoRooms(new Vector3(-((float[])allRooms[minIdx])[1] + 24, Data2ndFloor.instance.floor2Height + 1, -((float[])allRooms[minIdx])[0]), new Vector3(-48, Data2ndFloor.instance.floor2Height + 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, Data2ndFloor.instance.floor2Height + 1, -24 + 24), true); 
+            roomNew2ndFloorScript.ConnectTwoRooms(new Vector3(-allRooms[minIdx][0] + 24, Data2ndFloor.instance.floor2Height + 1, -allRooms[minIdx][1]), new Vector3(-48, Data2ndFloor.instance.floor2Height + 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, Data2ndFloor.instance.floor2Height + 1, -24 + 24), true); 
         }
         else
         {

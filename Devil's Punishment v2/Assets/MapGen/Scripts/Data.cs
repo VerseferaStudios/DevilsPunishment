@@ -9,7 +9,7 @@ public class Data : MonoBehaviour
     public Transform mapGenHolderTransform;
 
     public static Data instance = null;
-    public ArrayList allRooms = new ArrayList();
+    public List<Vector2> allRooms = new List<Vector2>();
     public float xSize, zSize, corridorSize = 4;
     //public int collisionCount = 0, corridorCount = 0;
     //public bool isCollided = false;

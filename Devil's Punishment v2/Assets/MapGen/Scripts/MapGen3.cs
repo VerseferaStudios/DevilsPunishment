@@ -82,12 +82,10 @@ public class MapGen3 : MapGenBase
 
     protected override void FirstFloorExtraInitRoom()
     {
-        float[] arr = new float[2];
+        Vector2 arr = new Vector2();
         arr[0] = 28;
         arr[1] = 28;
         allRooms.Add(arr);
-            Debug.Log("allrooms count = " + allRooms.Count);
-        Debug.Log("added first floor init room");
     }
 
     private IEnumerator WaitForaWhile()

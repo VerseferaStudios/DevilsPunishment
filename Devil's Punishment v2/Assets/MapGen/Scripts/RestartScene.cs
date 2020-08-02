@@ -8,7 +8,7 @@ public class RestartScene : MonoBehaviour
     public void restartScene()
     {
         //Data.instance.collisionCount = Data.instance.corridorCount = 0;
-        Data.instance.allRooms = new ArrayList();
+        Data.instance.allRooms = new List<Vector2>();
         Data.instance.startTime = Time.time;
         //Data.instance.isCollided = false;
         Data.instance.collidedCorridors = new List<GameObject>();

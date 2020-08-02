@@ -23,7 +23,7 @@ public abstract class MapGenBase : MonoBehaviour
     public GameObject mainRoomIndicator, liftRoom, generatorRoom, startRoom, endRoom, laserRoom;
     public GameObject[] corridors;
 
-    public ArrayList allRooms = new ArrayList();
+    public List<Vector2> allRooms = new List<Vector2>();
     [SerializeField] protected float xSize = 48f, zSize = 48f;
 
     protected Vector2 mapCentre;
@@ -90,9 +90,9 @@ public abstract class MapGenBase : MonoBehaviour
         //Debug.Log("lift stuff in base for 2nd floor");
         if(k == 0)
         {
-            float[] arr1 = new float[2];
-            arr1[0] = -Data2ndFloor.instance.liftRoomPos.z;
-            arr1[1] = -Data2ndFloor.instance.liftRoomPos.x;
+            Vector2 arr1 = new Vector2();
+            arr1[0] = -Data2ndFloor.instance.liftRoomPos.x;
+            arr1[1] = -Data2ndFloor.instance.liftRoomPos.z;
             allRooms.Add(arr1);
             n++;
             return true;
@@ -202,7 +202,7 @@ public abstract class MapGenBase : MonoBehaviour
 
             Debug.Log("allrooms count = " + allRooms.Count + " & k = " + k);
 
-            float[] arr = new float[2];
+            Vector2 arr = new Vector2();
 
             // ------------------- BOUNDS or SIZE of the grid -------------------
 
@@ -218,8 +218,8 @@ public abstract class MapGenBase : MonoBehaviour
             // 0 + 28 = 28 (MIN)
             //Increments of 40
 
-            arr[0] = 48 * Random.Range(0, mapSizeZ) + 28;  //9 coz -> 9 * 48 + 28 = 460
-            arr[1] = 48 * Random.Range(0, mapSizeX) + 28;
+            arr[0] = 48 * Random.Range(0, mapSizeX) + 28;  //9 coz -> 9 * 48 + 28 = 460
+            arr[1] = 48 * Random.Range(0, mapSizeZ) + 28;
 
             //arr[0] = Random.Range(/*11*/ + 1 + (int)(zSize/2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
             //arr[1] = Random.Range(/*11*/ + 1 + (int)(zSize / 2), /*-11*/ -1 + 399 - (int)(xSize / 2)); //0,0 is the top left cell
@@ -375,8 +375,8 @@ public abstract class MapGenBase : MonoBehaviour
             //    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.L));
             //}
             Debug.Log("allrooms count = " + allRooms.Count + " & k = " + k + " & i = " + i);
-            float yRotation = LookToMapCentre(new Vector2(-((float[])allRooms[i])[1], -((float[])allRooms[i])[0]));//Random.Range(0, 4) * 90;
-            Vector3 roomPos = new Vector3(-((float[])allRooms[i])[1], yCoord + roomHeight, -((float[])allRooms[i])[0]);
+            float yRotation = LookToMapCentre(new Vector2(-allRooms[i][0], -allRooms[i][1]));//Random.Range(0, 4) * 90;
+            Vector3 roomPos = new Vector3(-allRooms[i][0], yCoord + roomHeight, -allRooms[i][1]);
 
             AddLiftPosForLowerRoom(i, roomPos);
 
@@ -887,11 +887,11 @@ public abstract class MapGenBase : MonoBehaviour
     }
 
     // --------------------------------- Checks for collisions between ROOMS ---------------------------------
-    protected bool NoCollisions(float[] arr)
+    protected bool NoCollisions(Vector2 arr)
     {
         for (int i = 0; i < allRooms.Count; i++)
         {
-            if ((Mathf.Abs(arr[0] - ((float[])allRooms[i])[0]) < xSize) && (Mathf.Abs(arr[1] - ((float[])allRooms[i])[1]) < zSize))
+            if ((Mathf.Abs(arr[0] - allRooms[i][0]) < xSize) && (Mathf.Abs(arr[1] - allRooms[i][1]) < zSize))
             {
                 return false;
             }

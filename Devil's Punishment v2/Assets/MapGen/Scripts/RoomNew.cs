@@ -33,7 +33,7 @@ public class RoomNew : MonoBehaviour
     //storedOpening is for the next L corridor in line
     private int storedOpening;
 
-    public ArrayList allRooms = new ArrayList();
+    public List<Vector2> allRooms = new List<Vector2>();
     public Transform mapGenHolderTransform;
     public float ventCoverProbabilty = 0.390f;
     public int ventCoverNumber = 10;
