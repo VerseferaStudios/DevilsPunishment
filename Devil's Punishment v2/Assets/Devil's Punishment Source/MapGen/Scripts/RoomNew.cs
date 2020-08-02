@@ -66,6 +66,8 @@ public class RoomNew : MonoBehaviour
 
     public string ventCoverTag;
 
+    public bool isDoneSpawningAllCorridorsOrVents = false;
+
     public void initSeed(int seed)
     {
         UnityEngine.Random.InitState(seed);
@@ -395,6 +397,8 @@ public class RoomNew : MonoBehaviour
             //Debug.LogError(Data.instance.ctr1);
 
         }
+
+        isDoneSpawningAllCorridorsOrVents = true;
         yield return null;
     }
 

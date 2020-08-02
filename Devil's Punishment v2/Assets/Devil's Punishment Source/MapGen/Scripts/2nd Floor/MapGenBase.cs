@@ -24,7 +24,7 @@ public abstract class MapGenBase : MonoBehaviour
     public GameObject[] corridors;
 
     public List<Vector2> allRooms = new List<Vector2>();
-    [SerializeField] protected float xSize = 48f, zSize = 48f;
+    [SerializeField] public float xSize = 48f, zSize = 48f;
 
     protected Vector2 mapCentre;
     [SerializeField] protected int mapSizeX = 4, mapSizeZ = 2;
