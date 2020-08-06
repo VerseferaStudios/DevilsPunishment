@@ -21,7 +21,7 @@ public class RoomNewVents : RoomNew
         //corridorSpawnPointTag = ventCoverTag;
         base.Start();
 
-        StartCoroutine(StartScript());
+        //StartCoroutine(StartScript());
 
     }
 
@@ -62,7 +62,7 @@ public class RoomNewVents : RoomNew
             }
             if (i + 1 == locationsCount)
             {
-                Debug.LogWarning(currLoc);
+                //Debug.LogWarning(currLoc);
             }
             int childEulerZ, childEulerX = 0;
 

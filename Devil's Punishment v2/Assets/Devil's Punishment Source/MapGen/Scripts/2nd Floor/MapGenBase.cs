@@ -265,6 +265,8 @@ public abstract class MapGenBase : MonoBehaviour
 
     }
 
+    protected abstract bool IsFloor1();
+
     public virtual void Rooms()
     {
         //Debug.Log("Rooms started");
@@ -488,44 +490,51 @@ public abstract class MapGenBase : MonoBehaviour
             int x, z;
             string doorName;
 
-            for (int q = 0; q < roomReferencesBase.doors.Length; q++)
+            if(IsFloor1() && i == 1)
             {
-                //tag
-                roomReferencesBase.doors[q].tag = floorDoorTag;
-
-
-                //other stuff xD
-                x = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.x / -4);
-                z = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.z / -4);
-                //Debug.Log("X = " + x);
-                //Debug.Log("Z = " + z);
-                //Debug.Log("actual door pos = " + roomReferencesBase.doors[q].transform.position);
-                //Debug.Log("pos = " + GetPos(new int[] { x, z }));
-
-                if (squareGrid.InBounds(new Location(x, z)))
+                //spawned lift room floor 1, so dont change door tags
+            }
+            else
+            {
+                for (int q = 0; q < roomReferencesBase.doors.Length; q++)
                 {
+                    //tag
+                    roomReferencesBase.doors[q].tag = floorDoorTag;
 
-                    doorName = roomReferencesBase.doors[q].name[4].ToString() + roomReferencesBase.doors[q].name[5].ToString();
 
-                    squareGrid.tiles[x, z].tile = TileType.Floor;
-                    for (int j = 0; j < 2; j++)
+                    //other stuff xD
+                    x = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.x / -4);
+                    z = Mathf.RoundToInt(roomReferencesBase.doors[q].transform.position.z / -4);
+                    //Debug.Log("X = " + x);
+                    //Debug.Log("Z = " + z);
+                    //Debug.Log("actual door pos = " + roomReferencesBase.doors[q].transform.position);
+                    //Debug.Log("pos = " + GetPos(new int[] { x, z }));
+
+                    if (squareGrid.InBounds(new Location(x, z)))
                     {
-                        DoorFurtherHelper(doorName + "");
-                        //Debug.Log("hey doorname = " + doorName);
-                        //Debug.Log("X = " + x);
-                        //Debug.Log("Z = " + z);
-                        //Debug.Log("pos = " + GetPos(new int[] { x, z }));
-                        if (x >= xOverall ||
-                            z >= zOverall)
-                        {
-                            continue;
-                        }
+
+                        doorName = roomReferencesBase.doors[q].name[4].ToString() + roomReferencesBase.doors[q].name[5].ToString();
+
                         squareGrid.tiles[x, z].tile = TileType.Floor;
-                    }
-                    if (isDevMode)
-                    {
-                        Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity)
-                            .transform.GetChild(0).GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+                        for (int j = 0; j < 2; j++)
+                        {
+                            DoorFurtherHelper(doorName + "");
+                            //Debug.Log("hey doorname = " + doorName);
+                            //Debug.Log("X = " + x);
+                            //Debug.Log("Z = " + z);
+                            //Debug.Log("pos = " + GetPos(new int[] { x, z }));
+                            if (x >= xOverall ||
+                                z >= zOverall)
+                            {
+                                continue;
+                            }
+                            squareGrid.tiles[x, z].tile = TileType.Floor;
+                        }
+                        if (isDevMode)
+                        {
+                            Instantiate(testGridCube, new Vector3(x * -4, 2, z * -4), Quaternion.identity)
+                                .transform.GetChild(0).GetComponent<Renderer>().sharedMaterial.color = Color.blue;
+                        }
                     }
                 }
             }

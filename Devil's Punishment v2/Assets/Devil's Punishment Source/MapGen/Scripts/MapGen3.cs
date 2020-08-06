@@ -80,6 +80,11 @@ public class MapGen3 : MapGenBase
         }
     }
 
+    protected override bool IsFloor1()
+    {
+        return true;
+    }
+
     protected override void FirstFloorExtraInitRoom()
     {
         Vector2 arr = new Vector2();

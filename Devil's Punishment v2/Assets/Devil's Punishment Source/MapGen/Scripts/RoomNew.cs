@@ -442,6 +442,8 @@ public class RoomNew : MonoBehaviour
         //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
         //Data.instance.roomNewVents = roomNewVents;
 
+        StartCoroutine(roomNewVents.StartScript());
+
         yield return null;
     }
 
@@ -1037,7 +1039,9 @@ public class RoomNew : MonoBehaviour
         }
 
         // ----------- Item Gen -----------
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+        if ((Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
+            Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
+            UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
         {
             itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
             Data.instance.ctr1++;

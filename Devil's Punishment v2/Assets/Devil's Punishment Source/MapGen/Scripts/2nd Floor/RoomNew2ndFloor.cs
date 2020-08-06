@@ -81,6 +81,8 @@ public class RoomNew2ndFloor : RoomNew
         //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
         //Data.instance.roomNewVents = roomNewVents;
 
+        StartCoroutine(roomNewVents.StartScript());
+
         yield return null;
     }
 

@@ -78,6 +78,11 @@ public class MapGen2ndFloor : MapGenBase
         }
     }
 
+    protected override bool IsFloor1()
+    {
+        return false;
+    }
+
     private void StartGen()
     {
         n = numberOfRooms - 1;
