@@ -9,6 +9,13 @@ public class Server_ItemSpawner : NetworkBehaviour
         sRef = this;
     }
 
+    public ItemGen itemGenScript;
+
+    private void Start()
+    {
+        itemGenScript = GetComponent<ItemGen>();
+    }
+
     [Server]
     public void Server_SpawnItem (GameObject prefab, Vector3 position, Vector3 eulerAngles, Transform parent)
     {

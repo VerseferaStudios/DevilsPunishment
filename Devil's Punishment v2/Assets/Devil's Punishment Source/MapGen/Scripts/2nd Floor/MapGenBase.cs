@@ -52,8 +52,6 @@ public abstract class MapGenBase : MonoBehaviour
     public string floorNameForHolder;
     public string ventCoverTag;
 
-    private ItemGen itemGenScript;
-
     protected virtual void Start()
     {
         SetRoomTag();
@@ -146,15 +144,12 @@ public abstract class MapGenBase : MonoBehaviour
         Random.InitState(seed);
 
 
-
-        itemGenScript = GetComponent<ItemGen>();
         roomNewScript = AddRoomNewCorrectly();
         roomNewScript.corridors = corridors;
         roomNewScript.vents = vents;
         roomNewScript.allRooms = allRooms;
         roomNewScript.ventCover = ventCover;
         roomNewScript.mapGenHolderTransform = mapGenHolderTransform;
-        roomNewScript.itemGenScript = itemGenScript;
         roomNewScript.mapSizeX = mapSizeX;
         roomNewScript.mapSizeZ = mapSizeZ;
         roomNewScript.xSize = xSize;
@@ -435,8 +430,11 @@ public abstract class MapGenBase : MonoBehaviour
                 #endregion
 
 
-
-                itemGenScript.SpawnItems(roomReferencesStatic.bottomLeftItemGen.position, roomReferencesStatic.topRightItemGen.position, 6, spawnedRoom.transform);
+                if (NetworkManager.singleton.mode == NetworkManagerMode.Host ||
+                    NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
+                {
+                    Server_ItemSpawner.sRef.itemGenScript.SpawnItems(roomReferencesStatic.bottomLeftItemGen.position, roomReferencesStatic.topRightItemGen.position, 6, spawnedRoom.transform);
+                }
 
                 if (i != 1)
                     SpawnVentCoverInRoom(i, k, roomReferencesStatic.ventParent);
