@@ -91,4 +91,47 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Command running at server, when player crouches
+    /// </summary>
+    /// <param name="newOffset"></param>
+    [Command]
+    public void Cmd_PlayerCrouchOffset(float newOffset, NetworkIdentity netIdPlayer)
+    {
+        PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
+        Vector3 newPos = playerRefsData.playerModel.transform.position + new Vector3(0, newOffset, 0); ;
+        StartCoroutine(LerpCrouchHelper(playerRefsData.playerModel.transform, newPos)); //needed?
+        //Rpc_ShowCrouchOffsetToAllClients(newPos, netIdPlayer);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newOffset"></param>
+    //[ClientRpc]
+    //private void Rpc_ShowCrouchOffsetToAllClients(Vector3 newPos, NetworkIdentity netIdPlayer)
+    //{
+    //    PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
+    //    Debug.Log("lerp started + newPos = " + newPos);
+    //    //playerRefsData.playerModel.transform.position = newPos;
+    //    StartCoroutine(LerpCrouchHelper(newPos));
+    //}
+
+    public float crouchLerpSmooth = 1;
+    private IEnumerator LerpCrouchHelper(Transform playerModel, Vector3 endPos)
+    {
+        //Transform playerModel = GetComponent<PlayerRefsDataBehaviour>().playerModel.transform;
+        Vector3 startPos = playerModel.position;
+        float t = 0;
+
+        while (t < 1)
+        {
+            playerModel.position = Vector3.Lerp(startPos, endPos, t);//new Vector3(endPos.x, Mathf.Lerp(startPos.y, endPos.y, t), endPos.z);
+            t += Time.deltaTime / crouchLerpSmooth;
+            yield return null;
+        }
+        playerModel.position = endPos;
+        Debug.Log("lerp done; endPos = " + endPos);
+    }
+
 }

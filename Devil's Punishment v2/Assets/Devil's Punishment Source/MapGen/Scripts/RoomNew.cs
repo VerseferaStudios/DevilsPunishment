@@ -1043,7 +1043,7 @@ public class RoomNew : MonoBehaviour
             Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
             UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
         {
-            itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+            Server_ItemSpawner.sRef.itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
             Data.instance.ctr1++;
         }
     }

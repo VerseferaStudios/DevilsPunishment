@@ -40,7 +40,6 @@ public class PlayerController_Revamped : NetworkBehaviour
     private bool isClimbing;
     private float originalHeight;
 
-    public GameObject playerModel;
     private Animator characterAnimator;
     public Animator CharacterAnimator { get => characterAnimator; set => characterAnimator = value; }
     public Animator tpsAnimator;
@@ -73,6 +72,8 @@ public class PlayerController_Revamped : NetworkBehaviour
     public bool shadowOnly = false;
 
     public NetworkAnimator tpsNetAnimator;
+
+    public PlayerRefsDataBehaviour playerRefsScript;
 
     void Awake() {
 
@@ -712,12 +713,12 @@ public class PlayerController_Revamped : NetworkBehaviour
 
     void Animation() {
         if(shadowOnly){
-            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (SkinnedMeshRenderer part in playerRefsScript.playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
             }
         } else {
-            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (SkinnedMeshRenderer part in playerRefsScript.playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
             }
@@ -797,15 +798,21 @@ public class PlayerController_Revamped : NetworkBehaviour
     Vector3 controllerCenter;
 
     void CrouchControllerColliderAndModelHeight() {
+        float newOffset;
         if(isCrouching) {
            // controller.center = Vector3.up * .625f;
             controller.height = .6f;
-            playerModel.transform.position = playerModel.transform.position + new Vector3(0, .486f /*0.96f - 0.474f*/, 0);
+            newOffset = + .486f; /*0.96f - 0.474f*/
+
         } else {
           //  controller.center = controllerCenter;
             controller.height = 1.8f;
-            playerModel.transform.position = playerModel.transform.position - new Vector3(0, .486f /*0.96f - 0.474f*/, 0);
+            newOffset = - .486f; /*0.96f - 0.474f*/
         }
+
+        //Calls cmd to make crouch offset take effect
+        PlayerRemoteCallsBehaviour.instance.Cmd_PlayerCrouchOffset(newOffset, netIdentity);
+
     }
 
     public void ChangePlayerSpeed(Slider slider)
