@@ -260,6 +260,10 @@ public abstract class MapGenBase : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// override function to check if it is floor 1
+    /// </summary>
+    /// <returns></returns>
     protected abstract bool IsFloor1();
 
     public virtual void Rooms()
@@ -428,8 +432,11 @@ public abstract class MapGenBase : MonoBehaviour
                 DoorHelper2(roomReferencesStatic, isDevMode, ref squareGrid, ref cubes, testGridCube);
 
                 #endregion
-
-
+                
+                // --------------------- Item Gen ---------------------
+                /// <summary>
+                /// Checks if it's server and if yes, it spawns items correctly
+                /// </summary>
                 if (NetworkManager.singleton.mode == NetworkManagerMode.Host ||
                     NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
@@ -488,6 +495,7 @@ public abstract class MapGenBase : MonoBehaviour
             int x, z;
             string doorName;
 
+            //Is it floor 1 and lift in floor 1 (i == 1)
             if(IsFloor1() && i == 1)
             {
                 //spawned lift room floor 1, so dont change door tags

@@ -9,6 +9,7 @@ public class Server_ItemSpawner : NetworkBehaviour
         sRef = this;
     }
 
+    //variable for item gen script since now item gen script is only there in server (currently as a component of the same gameobject as this script, Server_ItemSpawner)
     public ItemGen itemGenScript;
 
     private void Start()

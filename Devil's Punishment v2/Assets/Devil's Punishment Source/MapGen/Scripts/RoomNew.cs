@@ -38,8 +38,6 @@ public class RoomNew : MonoBehaviour
     public float ventCoverProbabilty = 0.390f;
     public int ventCoverNumber = 10;
     public GameObject ventCover;
-
-    public ItemGen itemGenScript;
     
     private int counter = 0;
 
@@ -442,6 +440,8 @@ public class RoomNew : MonoBehaviour
         //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
         //Data.instance.roomNewVents = roomNewVents;
 
+        //RoomNewVents Start Script is called here for getting proper timing
+        //so that all vent covers and spawn and also given proper tag
         StartCoroutine(roomNewVents.StartScript());
 
         yield return null;
@@ -1038,7 +1038,10 @@ public class RoomNew : MonoBehaviour
             Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
         }
 
-        // ----------- Item Gen -----------
+        // --------------------- Item Gen ---------------------
+        /// <summary>
+        /// Checks if it's server and if yes, it spawns items correctly
+        /// </summary>
         if ((Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
             Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
             UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)

@@ -48209,7 +48209,6 @@ GameObject:
   - component: {fileID: 2258670557233047294}
   - component: {fileID: 7552161034704138202}
   - component: {fileID: 195438649232895975}
-  - component: {fileID: 4359996473553921763}
   m_Layer: 10
   m_Name: Player_Revamped
   m_TagString: Player
@@ -48651,47 +48650,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerModel: {fileID: 1609909714}
---- !u!114 &4359996473553921763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090704035}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f65214da13a861f4a8ae309d3daea1c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  excludeOwnerUpdate: 1
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 1
-  interpolatePosition: 1
-  interpolateRotation: 1
-  interpolateScale: 1
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
-  lastPosition: {x: 0, y: 0, z: 0}
-  lastRotation: {x: 0, y: 0, z: 0, w: 0}
-  lastScale: {x: 0, y: 0, z: 0}
-  start:
-    timeStamp: 0
-    localPosition: {x: 0, y: 0, z: 0}
-    localRotation: {x: 0, y: 0, z: 0, w: 0}
-    localScale: {x: 0, y: 0, z: 0}
-    movementSpeed: 0
-  goal:
-    timeStamp: 0
-    localPosition: {x: 0, y: 0, z: 0}
-    localRotation: {x: 0, y: 0, z: 0, w: 0}
-    localScale: {x: 0, y: 0, z: 0}
-    movementSpeed: 0
-  target: {fileID: 1609909716}
 --- !u!1 &2093035216
 GameObject:
   m_ObjectHideFlags: 0
@@ -55444,9 +55402,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4f3ea091da1d2740a775eafba5a40ba, type: 3}
---- !u!1 &352705552134410082 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8990758627394148854, guid: b4f3ea091da1d2740a775eafba5a40ba,
+--- !u!4 &352705552134410080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8990758627394148852, guid: b4f3ea091da1d2740a775eafba5a40ba,
     type: 3}
   m_PrefabInstance: {fileID: 8656086170576148116}
   m_PrefabAsset: {fileID: 0}
@@ -55462,9 +55420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &352705552134410080 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8990758627394148852, guid: b4f3ea091da1d2740a775eafba5a40ba,
+--- !u!1 &352705552134410082 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8990758627394148854, guid: b4f3ea091da1d2740a775eafba5a40ba,
     type: 3}
   m_PrefabInstance: {fileID: 8656086170576148116}
   m_PrefabAsset: {fileID: 0}

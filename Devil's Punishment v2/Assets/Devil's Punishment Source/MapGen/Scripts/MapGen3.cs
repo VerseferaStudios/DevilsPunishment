@@ -80,6 +80,10 @@ public class MapGen3 : MapGenBase
         }
     }
 
+    /// <summary>
+    /// override function to check if it is floor 1
+    /// </summary>
+    /// <returns></returns>
     protected override bool IsFloor1()
     {
         return true;

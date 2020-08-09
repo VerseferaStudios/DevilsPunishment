@@ -81,6 +81,8 @@ public class RoomNew2ndFloor : RoomNew
         //roomNewVents.ventCoverProbabilty = ventCoverProbabilty;
         //Data.instance.roomNewVents = roomNewVents;
 
+        //RoomNewVents Start Script is called here for getting proper timing
+        //so that all vent covers and spawn and also given proper tag
         StartCoroutine(roomNewVents.StartScript());
 
         yield return null;
