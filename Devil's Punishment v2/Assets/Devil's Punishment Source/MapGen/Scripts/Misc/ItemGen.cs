@@ -161,10 +161,12 @@ public class ItemGen : MonoBehaviour
     public int rooms = 0;
     public int startGenPartsAtRoomCount = 79;
 
+#if UNITY_EDITOR
+    // ----------------------- FOR TEST -----------------------
     /// <summary>
     /// For Testing Purpose only
+    /// Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
     /// </summary>
-    //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
     public void SpawnItems()
     {
         if (!isDoNotSpawnItems)
@@ -256,6 +258,7 @@ public class ItemGen : MonoBehaviour
 
 
     }
+#endif
 
     //Spawn "noOfSpawns" number of items in the given room indicated by bottomLeftCorner and topRightCorner
     public void SpawnItems(Vector3 bottomLeftCorner, Vector3 topRightCorner, int noOfSpawns, Transform roomTransform)

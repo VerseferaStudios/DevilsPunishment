@@ -440,7 +440,16 @@ public abstract class MapGenBase : MonoBehaviour
                 if (NetworkManager.singleton.mode == NetworkManagerMode.Host ||
                     NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
                 {
-                    Server_ItemSpawner.sRef.itemGenScript.SpawnItems(roomReferencesStatic.bottomLeftItemGen.position, roomReferencesStatic.topRightItemGen.position, 6, spawnedRoom.transform);
+                    // Try catch block in case Server Spawn Scripts Gameobject isnt there in scene
+                    try
+                    {
+                        Server_ItemSpawner.sRef.itemGenScript.SpawnItems(roomReferencesStatic.bottomLeftItemGen.position, roomReferencesStatic.topRightItemGen.position, 6, spawnedRoom.transform);
+                    }
+                    catch(System.Exception e)
+                    {
+                        Debug.LogError("Couldn't spawn items on server (hence client)");
+                        Debug.LogError(e.StackTrace);
+                    }
                 }
 
                 if (i != 1)

@@ -356,26 +356,26 @@ public class MapGen2ndFloor : MapGenBase
     // ---------------------------- Connect init pos to map gen nearest room ----------------------------
     private void ConnectToMapGen(RoomNew2ndFloor roomNew2ndFloorScript)
     {
-        float min = 9999;
-        int minIdx = -1;
-        //-48, 0, -24
-        for (int i = 0; i < allRooms.Count; i++)
-        {
-            float current = -48 + allRooms[i][0] + -24 + allRooms[i][1];
-            if(current < min)
-            {
-                min = current;
-                minIdx = i;
-            }
-        }
-        if(minIdx != -1)
-        {
-            roomNew2ndFloorScript.ConnectTwoRooms(new Vector3(-allRooms[minIdx][0] + 24, Data2ndFloor.instance.floor2Height + 1, -allRooms[minIdx][1]), new Vector3(-48, Data2ndFloor.instance.floor2Height + 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, Data2ndFloor.instance.floor2Height + 1, -24 + 24), true); 
-        }
-        else
-        {
-            Debug.Log("ERROR!!!!");
-        }
+        //float min = 9999;
+        //int minIdx = -1;
+        ////-48, 0, -24
+        //for (int i = 0; i < allRooms.Count; i++)
+        //{
+        //    float current = -48 + allRooms[i][0] + -24 + allRooms[i][1];
+        //    if(current < min)
+        //    {
+        //        min = current;
+        //        minIdx = i;
+        //    }
+        //}
+        //if(minIdx != -1)
+        //{
+        //    //roomNew2ndFloorScript.ConnectTwoRooms(new Vector3(-allRooms[minIdx][0] + 24, Data2ndFloor.instance.floor2Height + 1, -allRooms[minIdx][1]), new Vector3(-48, Data2ndFloor.instance.floor2Height + 1, -24), "Door+x", "Door-z", Vector3.zero, new Vector3(-44, Data2ndFloor.instance.floor2Height + 1, -24 + 24), true); 
+        //}
+        //else
+        //{
+        //    Debug.Log("ERROR!!!!");
+        //}
     }
 
     // ----------------------- Spawn Vent Cover in room -----------------------

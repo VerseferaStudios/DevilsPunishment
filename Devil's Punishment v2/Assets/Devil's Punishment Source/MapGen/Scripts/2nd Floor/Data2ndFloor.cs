@@ -1171,7 +1171,7 @@ public class Data2ndFloor : MonoBehaviour
                                 door1Pos.z = Mathf.Round(door1Pos.z);
 
                                 //Debug.Log(door0.parent.position + " " + door1.parent.position);
-                                StartCoroutine(roomNew2ndFloorScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true));
+                                //StartCoroutine(roomNew2ndFloorScript.ConnectTwoRooms(door0Pos, door1Pos, door0.name, door1.name, door0.parent.position, door1.parent.position, true));
                                 break;
                             }
                             else

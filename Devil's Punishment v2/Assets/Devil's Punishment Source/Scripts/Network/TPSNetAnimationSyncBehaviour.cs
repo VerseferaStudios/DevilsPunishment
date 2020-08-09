@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using Mirror;
+using System.Collections.Generic;
 
 public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 {
@@ -11,24 +12,56 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 
     public GameObject[] ASSAULT_RIFLE_PARTS;
 
+    //private Dictionary<int, int> gunLayerWeights;
+    //private Dictionary<int, bool> gunVisible;
+    [SerializeField] private GunItem.WeaponClassification activeGun; // only in server?
+
+    public override void OnStartAuthority()
+    {
+        switch (activeGun)
+        {
+            case GunItem.WeaponClassification.NONE:
+                Cmd_Hide3rdPersonGuns();
+                //do layer all weights 0 too
+                break;
+            case GunItem.WeaponClassification.ASSAULTRIFLE:
+                Cmd_ShowTPSRifle();
+                //layer stuff too
+                break;
+
+        }
+        base.OnStartAuthority();
+    }
+
     public void SendCmd_HideTpsGuns()
     {
+        activeGun = GunItem.WeaponClassification.NONE;
         Cmd_Hide3rdPersonGuns();
+
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"), 0);
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 0);
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
     }
 
     public void SendCmd_ShowTpsRifle()
     {
+        activeGun = GunItem.WeaponClassification.ASSAULTRIFLE;
         Cmd_ShowTPSRifle();
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"), 1);
     }
 
     public void SendCmd_ShowTpsShotgun()
     {
+        activeGun = GunItem.WeaponClassification.SHOTGUN;
         Cmd_ShowTPSShotgun();
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 1);
     }
 
     public void SendCmd_ShowTpsPistol()
     {
+        activeGun = GunItem.WeaponClassification.HANDGUN;
         Cmd_ShowTPSPistol();
+        SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"), 1);
     }
 
     [Command]
@@ -95,7 +128,7 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 
     public Animator tpsAnimator;
 
-    public void SendCmd_LayerWeightAnim(int layerIdx, int weight)
+    private void SendCmd_LayerWeightAnim(int layerIdx, int weight)
     {
         Cmd_SetLayerWeight(layerIdx, weight);
     }

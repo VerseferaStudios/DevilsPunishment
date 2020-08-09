@@ -1046,8 +1046,17 @@ public class RoomNew : MonoBehaviour
             Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
             UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
         {
-            Server_ItemSpawner.sRef.itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
-            Data.instance.ctr1++;
+            // Try catch block in case Server Spawn Scripts Gameobject isnt there in scene
+            try
+            {
+                Server_ItemSpawner.sRef.itemGenScript.SpawnItems(posI - new Vector3(1, 0, 1), posI + new Vector3(1, 0, 1), 1, currentCorridor.transform);
+                Data.instance.ctr1++;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Couldn't spawn items on server (hence client)");
+                Debug.LogError(e.StackTrace);
+            }
         }
     }
 
