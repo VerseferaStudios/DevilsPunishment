@@ -6,6 +6,7 @@ using Mirror;
 public class PlayerRemoteCallsBehaviour : NetworkBehaviour
 {
     public static PlayerRemoteCallsBehaviour instance;
+    public PlayerRefsDataBehaviour playerRefsData;
 
     private void OnEnable()
     {
@@ -92,45 +93,70 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     }
 
     /// <summary>
-    /// Command running at server, when player crouches
+    /// Command running at server, when player crouches, for player model visual offset
     /// </summary>
-    /// <param name="newOffset"></param>
+    /// <param name="newPosY"></param>
     [Command]
-    public void Cmd_PlayerCrouchOffset(float newOffset, NetworkIdentity netIdPlayer)
+    public void Cmd_PlayerCrouchOffset(float newPosY, NetworkIdentity netIdPlayer)
     {
-        PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
-        Vector3 newPos = playerRefsData.playerModel.transform.position + new Vector3(0, newOffset, 0); ;
-        StartCoroutine(LerpCrouchHelper(playerRefsData.playerModel.transform, newPos)); //needed?
-        //Rpc_ShowCrouchOffsetToAllClients(newPos, netIdPlayer);
+        //PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
+        Vector3 playerModelPos = playerRefsData.playerModel.transform.localPosition;
+        Vector3 newPos = new Vector3(playerModelPos.x, newPosY, playerModelPos.z);
+        //if (i % 4 == 0 || i % 4 == 1)
+        //{
+        //StartCoroutine(LerpCrouchHelper(newPos)); //needed when using rpc?.. but it IS needed when using net transform(child)
+        //}
+        //else
+        //{
+        //    LerpHelperFn(newPos);
+        //}
+        //++i;
+        Rpc_ShowCrouchOffsetToAllClients(newPos, netIdPlayer);
     }
 
     /// <summary>
-    /// 
+    /// Rpc fuction to show the crouch offset on player model to all client inclusing current one
+    /// This is used when not using Network Transform (Child)
+    /// In this case there's no need to move the player model on the server.. (make sure)
     /// </summary>
     /// <param name="newOffset"></param>
-    //[ClientRpc]
-    //private void Rpc_ShowCrouchOffsetToAllClients(Vector3 newPos, NetworkIdentity netIdPlayer)
-    //{
-    //    PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
-    //    Debug.Log("lerp started + newPos = " + newPos);
-    //    //playerRefsData.playerModel.transform.position = newPos;
-    //    StartCoroutine(LerpCrouchHelper(newPos));
-    //}
-
-    public float crouchLerpSmooth = 1;
-    private IEnumerator LerpCrouchHelper(Transform playerModel, Vector3 endPos)
+    [ClientRpc]
+    private void Rpc_ShowCrouchOffsetToAllClients(Vector3 newPos, NetworkIdentity netIdPlayer)
     {
-        //Transform playerModel = GetComponent<PlayerRefsDataBehaviour>().playerModel.transform;
-        Vector3 startPos = playerModel.position;
+        PlayerRefsDataBehaviour playerRefsData = GetComponent<PlayerRefsDataBehaviour>();//netIdPlayer.GetComponent<PlayerRefsDataBehaviour>();
+        Debug.Log("lerp started + newPos = " + newPos);
+        //playerRefsData.playerModel.transform.position = newPos;
+        StartCoroutine(LerpCrouchHelper(newPos));
+    }
+
+    private void LerpHelperFn(Vector3 endPos)
+    {
+        playerRefsData.playerModel.transform.localPosition = endPos;
+        Debug.Log("quick move done; endPos = " + endPos);
+    }
+
+    private int i = 0;
+    private float crouchLerpSmooth = 0.25f;
+
+    /// <summary>
+    /// Lerp to smoothly move the player model which crouching
+    /// </summary>
+    /// <param name="playerModel"></param>
+    /// <param name="endPos"></param>
+    /// <returns></returns>
+    private IEnumerator LerpCrouchHelper(Vector3 endPos)
+    {
+        Transform playerModel = playerRefsData.playerModel.transform;
+        Vector3 startPos = new Vector3(endPos.x, endPos.y == -0.96f ? -0.474f : -0.96f, endPos.z);
         float t = 0;
 
         while (t < 1)
         {
-            playerModel.position = Vector3.Lerp(startPos, endPos, t);//new Vector3(endPos.x, Mathf.Lerp(startPos.y, endPos.y, t), endPos.z);
+            playerModel.localPosition = Vector3.Lerp(startPos, endPos, t);//new Vector3(endPos.x, Mathf.Lerp(startPos.y, endPos.y, t), endPos.z);
             t += Time.deltaTime / crouchLerpSmooth;
             yield return null;
         }
-        playerModel.position = endPos;
+        playerModel.localPosition = endPos;
         Debug.Log("lerp done; endPos = " + endPos);
     }
 

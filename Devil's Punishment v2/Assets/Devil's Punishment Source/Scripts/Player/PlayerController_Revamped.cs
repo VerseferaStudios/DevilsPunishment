@@ -798,20 +798,20 @@ public class PlayerController_Revamped : NetworkBehaviour
     Vector3 controllerCenter;
 
     void CrouchControllerColliderAndModelHeight() {
-        float newOffset;
+        float newPosY;
         if(isCrouching) {
            // controller.center = Vector3.up * .625f;
             controller.height = .6f;
-            newOffset = + .486f; /*0.96f - 0.474f*/
+            newPosY = -0.474f;
 
         } else {
           //  controller.center = controllerCenter;
             controller.height = 1.8f;
-            newOffset = - .486f; /*0.96f - 0.474f*/
+            newPosY = -0.96f;
         }
 
         //Calls cmd to make crouch offset take effect
-        PlayerRemoteCallsBehaviour.instance.Cmd_PlayerCrouchOffset(newOffset, netIdentity);
+        PlayerRemoteCallsBehaviour.instance.Cmd_PlayerCrouchOffset(newPosY, netIdentity);
 
     }
 
