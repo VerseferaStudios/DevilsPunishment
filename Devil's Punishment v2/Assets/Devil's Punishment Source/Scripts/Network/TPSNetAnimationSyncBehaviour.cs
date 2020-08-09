@@ -18,18 +18,18 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-        switch (activeGun)
-        {
-            case GunItem.WeaponClassification.NONE:
-                Cmd_Hide3rdPersonGuns();
-                //do layer all weights 0 too
-                break;
-            case GunItem.WeaponClassification.ASSAULTRIFLE:
-                Cmd_ShowTPSRifle();
-                //layer stuff too
-                break;
+        //switch (activeGun)
+        //{
+        //    case GunItem.WeaponClassification.NONE:
+        //        SendCmd_HideTpsGuns();
+        //        //do layer all weights 0 too
+        //        break;
+        //    case GunItem.WeaponClassification.ASSAULTRIFLE:
+        //        SendCmd_ShowTpsRifle();
+        //        //layer stuff too
+        //        break;
 
-        }
+        //}
         base.OnStartAuthority();
     }
 
