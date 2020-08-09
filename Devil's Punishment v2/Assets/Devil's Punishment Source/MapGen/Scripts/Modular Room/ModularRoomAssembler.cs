@@ -40,12 +40,17 @@ public class ModularRoomAssembler : MonoBehaviour
     [SerializeField]
     private bool[] door_done;
 
+    public bool generatingProps;
+
+    public ModularPropGen modularPropGen;
+
     public float doorProbability = 0.01f;
 
     //List of box colliders to remove after walls are all placed
     private List<GameObject> wallColliders;
     private float offsetVal = 0.1f;
     private int floorCount = 0;
+
     
     // Start is called before the first frame update
     void Start()
@@ -86,6 +91,14 @@ public class ModularRoomAssembler : MonoBehaviour
         nswe_helper = new List<int>();
         //nswe_helper.Add(-1); //Since main room part doesnt have nswe //To keep (idx of list) PartNo intact
 
+        //For prop generation
+        //Start prop generation
+        if (generatingProps)
+        {
+            modularPropGen = GetComponent<ModularPropGen>();
+            modularPropGen.roomReferencesModular = roomHolderTransform.gameObject.GetComponent<RoomReferencesModular>();
+        }
+
         for (int i = 0; i < noOfParts; i++)
         {
             ChooseSize(i);
@@ -119,8 +132,10 @@ public class ModularRoomAssembler : MonoBehaviour
 
         PlaceFloor_Ceiling(0, rand, roomReferencesModular);
 
-        roomDoorsInfo.roomDoorsTransformModRoom = new List<Transform>();
-        PlaceWall(0, roomReferencesModular, roomDoorsInfo);
+        modularPropGen.floorHolder = floor_holder;        
+	roomDoorsInfo.roomDoorsTransformModRoom = new List<Transform>();
+        
+	PlaceWall(0, roomReferencesModular, roomDoorsInfo);
 
         Swap_NSWE();
 
@@ -140,6 +155,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
 
         //Debug.Log("Time mod room = " + Time.time);
+
 
         //Remove trigger colliders
         StartCoroutine(RemoveWallTriggerColliders());
@@ -235,7 +251,11 @@ public class ModularRoomAssembler : MonoBehaviour
         }
         size_x.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2)); //Change to 36 units max size if needed
         size_z.Add(Random.Range((8 / 4) / 2, (40 / 4) / 2));
-        //Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
+        Debug.Log("partno " + partNo + "; size_x =" + size_x[partNo] + "; size_z =" + size_z[partNo]);
+        //Prop gen
+        modularPropGen.floorXsize.Add(size_x[partNo]);
+        modularPropGen.floorZsize.Add(size_z[partNo]);
+        //
         size_x[partNo]--;
         size_z[partNo]--;
         if(size_x[partNo] < 0 || size_z[partNo] < 0)
@@ -378,6 +398,7 @@ public class ModularRoomAssembler : MonoBehaviour
                 t.localPosition = new Vector3(i * 4, height * 4, -j * 4);
             }
         }
+
     }
     /*
     private bool CheckWallOverlap(int partNo, Vector3 pos_to_check, char x_or_z, int nswe)
@@ -472,7 +493,7 @@ public class ModularRoomAssembler : MonoBehaviour
 
     private void PlaceWall(int partNo, RoomReferencesModular roomReferencesModular, RoomDoorsInfo roomDoorsInfo)
     {
-
+        
         //Debug.Log("Placing WALL for partNo = " + partNo);
 
         Vector3 startWallPos = new Vector3(roomHolderTransform.position.x, roomHolderTransform.position.y, roomHolderTransform.position.z - 4 / 2);
@@ -704,6 +725,10 @@ public class ModularRoomAssembler : MonoBehaviour
                 wallColliders[i].SetActive(false);
             }
         }
+        if (generatingProps)
+        {
+            modularPropGen.GenerateProps("Hospital");
+        }
     }
 
     private void PlaceRemainingWalls()
@@ -819,5 +844,6 @@ public class ModularRoomAssembler : MonoBehaviour
         
         matNew.mainTexture = packedTexture;
         meshFilter.gameObject.GetComponent<MeshRenderer>().sharedMaterial = matNew;
+
     }
 }

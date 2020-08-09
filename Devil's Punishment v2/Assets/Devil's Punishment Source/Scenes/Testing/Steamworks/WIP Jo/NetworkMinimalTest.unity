@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -120,6 +120,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &226842933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1841075158073676714, guid: 49b4b1d208cb32845b13db9d7fe330c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 488424923}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &226842936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226842933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e9710279533e34f9c1c65623d98e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomReferencesModular: {fileID: 0}
+  maxSpawnDist: 1.5
+  floorXsize: 
+  floorZsize: 
+  floorHolder: []
+  testGridCube: {fileID: 0}
+  testGridPlane: {fileID: 0}
+  barrelProps:
+  - {fileID: 1000012512741780, guid: f5be68f92137da247b5d8228eab16f79, type: 3}
+  - {fileID: 1000013841662396, guid: 54de15accee1ebe48ac54e7e0aa1c097, type: 3}
+  - {fileID: 1000013650915586, guid: 182ed389c043f694792b11d198a06985, type: 3}
+  barrelPropVar: 3
+  crateProps:
+  - {fileID: 1000012854934452, guid: b36f08aa40d9cf04893f169ffe70b132, type: 3}
+  - {fileID: 1000012548306624, guid: 34087d80786f6d94288218bb721161ec, type: 3}
+  - {fileID: 1000012077440128, guid: 21ece59da74e9154faaad84d39776d64, type: 3}
+  cratePropVar: 3
+  hospitalBeds:
+  - {fileID: 139254, guid: b824aaed17ffe22428df9247a126182a, type: 3}
+  hospitalChairs:
+  - {fileID: 1303484912985492, guid: 962b799cb3076c9449425f236220538b, type: 3}
+  hospitalMedCab:
+  - {fileID: 183500, guid: b01fa194940f0624ca7e3df13bed1969, type: 3}
+  hospitaltvChairs:
+  - {fileID: 105792, guid: 8df5a1b2e3c572a47bbfc86761d73a9b, type: 3}
+  hospitaltv:
+  - {fileID: 196382, guid: 25beedb48c9ce254daab389f65673a66, type: 3}
+  hospitalStretchers:
+  - {fileID: 143668, guid: 381bdf9c7f27cce46b2699033a9b735a, type: 3}
+  hospitalTrolleys:
+  - {fileID: 4423371531705976171, guid: 27c008224f6b40f439cbd800c1ccf68d, type: 3}
+  hospitalLights:
+  - {fileID: 123514, guid: fbe805f365083554fb036c9d12c7f81b, type: 3}
+  commonRoomSofas:
+  - {fileID: 161872, guid: 77718866f414879468144684f0304c4f, type: 3}
+  commonRoomTVs:
+  - {fileID: 189024, guid: d0bd8c282c04079498689c97fc865c70, type: 3}
+  commonRoomTables:
+  - {fileID: 121126, guid: cd1f750021f84e845aa8bc59ec80fb8e, type: 3}
 --- !u!1 &23324379
 GameObject:
   m_ObjectHideFlags: 0
