@@ -86,9 +86,9 @@ public class CuffController : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     private bool x = true;
-#endif
+//#endif
 
     private void Update()
     {
@@ -97,7 +97,7 @@ public class CuffController : MonoBehaviour
            playerController.SetIsClimbing(false);
         }
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         // ----------------------- FOR TEST -----------------------
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -112,7 +112,7 @@ public class CuffController : MonoBehaviour
 
             x = !x;
         }
-#endif
+//#endif
     }
 
 //#if UNITY_EDITOR

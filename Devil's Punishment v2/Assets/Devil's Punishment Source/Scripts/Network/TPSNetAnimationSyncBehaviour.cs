@@ -11,28 +11,39 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
     public GameObject[] SHOTGUN_PARTS;
 
     public GameObject[] ASSAULT_RIFLE_PARTS;
-
+    
     //private Dictionary<int, int> gunLayerWeights;
     //private Dictionary<int, bool> gunVisible;
-    [SerializeField] private GunItem.WeaponClassification activeGun; // only in server?
+    [SerializeField] private GunItem.WeaponClassification activeGun; // only in server? sync var??
 
-    public override void OnStartAuthority()
+    private void Start()
     {
-        //switch (activeGun)
-        //{
-        //    case GunItem.WeaponClassification.NONE:
-        //        SendCmd_HideTpsGuns();
-        //        //do layer all weights 0 too
-        //        break;
-        //    case GunItem.WeaponClassification.ASSAULTRIFLE:
-        //        SendCmd_ShowTpsRifle();
-        //        //layer stuff too
-        //        break;
-
-        //}
+        //Not only for local player
+        //This code is necessary for when a player joins a game, and he needs to see the right gun in all other players
+        switch (activeGun)
+        {
+            case GunItem.WeaponClassification.NONE:
+                HidetpsGunsInThisClient();
+                break;
+            case GunItem.WeaponClassification.ASSAULTRIFLE:
+                ShowtpsRifleInThisClient();
+                break;
+            case GunItem.WeaponClassification.SHOTGUN:
+                ShowtpsShotgunInThisClient();
+                break;
+            case GunItem.WeaponClassification.HANDGUN:
+                ShowtpsPistolInThisClient();
+                break;
+            default:
+                break;
+        }
         base.OnStartAuthority();
     }
 
+    /// <summary>
+    /// Send command to hide all guns
+    /// Also does layer weight stuff (all layer weights 0)
+    /// </summary>
     public void SendCmd_HideTpsGuns()
     {
         activeGun = GunItem.WeaponClassification.NONE;
@@ -43,6 +54,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
         SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
     }
 
+    /// <summary>
+    /// Send command to show rifle
+    /// Also does layer weight stuff (rifle layer weight 1)
+    /// </summary>
     public void SendCmd_ShowTpsRifle()
     {
         activeGun = GunItem.WeaponClassification.ASSAULTRIFLE;
@@ -50,6 +65,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
         SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"), 1);
     }
 
+    /// <summary>
+    /// Send command to show shotgun
+    /// Also does layer weight stuff (shotgun layer weight 1)
+    /// </summary>
     public void SendCmd_ShowTpsShotgun()
     {
         activeGun = GunItem.WeaponClassification.SHOTGUN;
@@ -57,6 +76,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
         SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 1);
     }
 
+    /// <summary>
+    /// Send command to show pistol
+    /// Also does layer weight stuff (pistol layer weight 1)
+    /// </summary>
     public void SendCmd_ShowTpsPistol()
     {
         activeGun = GunItem.WeaponClassification.HANDGUN;
@@ -91,6 +114,11 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
     [ClientRpc]
     private void Rpc_HidetpsGunsInClients()
     {
+        HidetpsGunsInThisClient();
+    }
+    private void HidetpsGunsInThisClient()
+    {
+        Debug.Log("hiding all guns for player " + netId);
         foreach (GameObject part in HANDGUN_PARTS.Concat(SHOTGUN_PARTS).Concat(ASSAULT_RIFLE_PARTS))
         {
             part.SetActive(false);
@@ -99,6 +127,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 
     [ClientRpc]
     public void Rpc_ShowtpsRifleInClients()
+    {
+        ShowtpsRifleInThisClient();
+    }
+    public void ShowtpsRifleInThisClient()
     {
         foreach (GameObject part in ASSAULT_RIFLE_PARTS)
         {
@@ -109,6 +141,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
     [ClientRpc]
     public void Rpc_ShowtpsShotgunInClients()
     {
+        ShowtpsShotgunInThisClient();
+    }
+    public void ShowtpsShotgunInThisClient()
+    {
         foreach (GameObject part in SHOTGUN_PARTS)
         {
             part.SetActive(true);
@@ -117,6 +153,10 @@ public class TPSNetAnimationSyncBehaviour : NetworkBehaviour
 
     [ClientRpc]
     public void Rpc_ShowtpsPistolInClients()
+    {
+        ShowtpsPistolInThisClient();
+    }
+    public void ShowtpsPistolInThisClient()
     {
         foreach (GameObject part in HANDGUN_PARTS)
         {

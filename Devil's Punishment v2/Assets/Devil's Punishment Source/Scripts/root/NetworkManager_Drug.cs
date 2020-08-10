@@ -92,14 +92,16 @@ public class NetworkManager_Drug : NetworkManager
 
 
 
-    private void OnApplicationQuit()
+    public override void OnApplicationQuit()
     {
         m_ShuttingDown = true;
+        base.OnApplicationQuit();
     }
 
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         m_ShuttingDown = true;
     }
 

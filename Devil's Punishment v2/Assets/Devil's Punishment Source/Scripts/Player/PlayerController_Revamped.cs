@@ -118,7 +118,6 @@ public class PlayerController_Revamped : NetworkBehaviour
         }
 
         Network_Transmitter.transmitter.startOnlineGeneration();
-        transform.position = new Vector3(-30, 10, -30);
         
     }
 
