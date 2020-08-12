@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +6,8 @@ using UnityEngine.AI;
 
 public class RoomNew : MonoBehaviour
 {
+    public static System.Action MapGenCorridorsDone;
+
     public bool isDevMode = false;
     public bool isSampleRoomsMeshRend = false;
 
@@ -124,9 +125,12 @@ public class RoomNew : MonoBehaviour
     /// <returns></returns>
     public IEnumerator StartScript()
     {
-        
-        yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
 
+        int seed = Network_Transmitter.transmitter.getSeed();
+        Random.InitState(seed);
+        //Random.InitState(seed);
+        yield return new WaitUntil(() => isSetCorridorSPawnPointTag);
+        Debug.Log("RandSeed = " + Random.value);
         //Debug.Log("corridors spawn tag = " + corridorSpawnPointTag);
 
         SquareGridWallPopulate();
@@ -395,6 +399,8 @@ public class RoomNew : MonoBehaviour
             //Debug.LogError(Data.instance.ctr1);
 
         }
+
+        MapGenCorridorsDone?.Invoke();
 
         isDoneSpawningAllCorridorsOrVents = true;
         yield return null;
@@ -702,7 +708,7 @@ public class RoomNew : MonoBehaviour
                 break;
             }
 
-            idx = UnityEngine.Random.Range(0, countICorridors);
+            idx = Random.Range(0, countICorridors); //PlayerRemoteCallsBehaviour.instance.Cmd_Random(0, countICorridors);
             //if (ventCoverIndices.Contains(idx))
             if (CheckOverlapInVentList(idx))
             {
@@ -1035,7 +1041,7 @@ public class RoomNew : MonoBehaviour
         if (isSpawnVentCover) 
         {
             //Debug.Log("spawning vent cover at " + posI);
-            Instantiate(ventCover, posI, Quaternion.Euler(0, UnityEngine.Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
+            Instantiate(ventCover, posI, Quaternion.Euler(0, /*PlayerRemoteCallsBehaviour.instance.Cmd_Random*/Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
         }
 
         // --------------------- Item Gen ---------------------
@@ -1044,7 +1050,7 @@ public class RoomNew : MonoBehaviour
         /// </summary>
         if ((Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
             Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
-            UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f)
+            /*PlayerRemoteCallsBehaviour.instance.Cmd_Random*/ Random.Range(0.0f, 1.0f) < 0.1f)
         {
             // Try catch block in case Server Spawn Scripts Gameobject isnt there in scene
             try

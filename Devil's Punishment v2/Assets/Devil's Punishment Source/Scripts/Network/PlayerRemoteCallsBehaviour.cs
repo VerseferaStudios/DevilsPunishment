@@ -7,6 +7,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
 {
     public static PlayerRemoteCallsBehaviour instance;
     public PlayerRefsDataBehaviour playerRefsData;
+    public int seed;
 
     private void OnEnable()
     {
@@ -21,6 +22,13 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     {
         instance = this;
     }
+
+    //public override void OnStartServer()
+    //{
+    //    seed = Network_Transmitter.transmitter.getSeed();
+    //    Random.InitState(seed);
+    //    base.OnStartServer();
+    //}
 
     /// <summary>
     /// Sending command to server to destroy item which we just picked up
@@ -159,5 +167,29 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         playerModel.localPosition = endPos;
         Debug.Log("lerp done; endPos = " + endPos);
     }
+    
+    ///// <summary>
+    ///// Return a random float number between min [inclusive] and max [inclusive] (Read Only).
+    ///// </summary>
+    ///// <param name="min"></param>
+    ///// <param name="max"></param>
+    ///// <returns></returns>
+    //[Command]
+    //public float Cmd_Random(float min, float max)
+    //{
+    //    return Random.Range(min, max);
+    //}
+
+    ///// <summary>
+    ///// Return a random integer number between min [inclusive] and max [exclusive] (Read Only).
+    ///// </summary>
+    ///// <param name="min"></param>
+    ///// <param name="max"></param>
+    ///// <returns></returns>
+    //[Command]
+    //public int Cmd_Random(int min, int max)
+    //{
+    //    return Random.Range(min, max);
+    //}
 
 }

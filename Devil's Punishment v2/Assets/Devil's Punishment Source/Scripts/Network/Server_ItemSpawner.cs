@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
+using System.Collections.Generic;
 
 public class Server_ItemSpawner : NetworkBehaviour
 {
@@ -9,8 +10,20 @@ public class Server_ItemSpawner : NetworkBehaviour
         sRef = this;
     }
 
+    private void OnEnable()
+    {
+        RoomNew.MapGenCorridorsDone += ItemRigidbodiesReEnableGravity;
+    }
+
+    private void OnDisable()
+    {
+        RoomNew.MapGenCorridorsDone -= ItemRigidbodiesReEnableGravity;
+    }
+
     //variable for item gen script since now item gen script is only there in server (currently as a component of the same gameobject as this script, Server_ItemSpawner)
     public ItemGen itemGenScript;
+
+    private List<Rigidbody> itemRigidbodies;
 
     private void Start()
     {
@@ -44,10 +57,22 @@ public class Server_ItemSpawner : NetworkBehaviour
         GameObject newItem = Instantiate(serverInstructions.prefab, serverInstructions.position, Quaternion.Euler(serverInstructions.eulerAngles));/*, serverInstructions.parent);*/
         //newItem.GetComponent<InteractableLoot>().pos = serverInstructions.position;
 
+        if(newItem.TryGetComponent(out Rigidbody rigidbody))
+        {
+            itemRigidbodies.Add(rigidbody);
+        }
+        else
+        {
+            Debug.Log("Error in finding item rigidbody, destroying item");
+            Destroy(newItem);
+            return;
+        }
+
         // Then, spawn the item over the network
         NetworkServer.Spawn(newItem);
     }
 
+    //check if its used..
     [Server]
     private void Server_SpawnItemFromClient (ItemSpawnInstructions_Client clientInstructions)
     {
@@ -59,6 +84,17 @@ public class Server_ItemSpawner : NetworkBehaviour
         newItem.GetComponent<InteractableLoot>().stock = clientInstructions.count;
         newItem.gameObject.SetActive(true);
 
+        if (newItem.TryGetComponent(out Rigidbody rigidbody))
+        {
+            itemRigidbodies.Add(rigidbody);
+        }
+        else
+        {
+            Debug.Log("Error in finding item rigidbody, destroying item");
+            Destroy(newItem);
+            return;
+        }
+
         // Then, spawn the item over the network
         NetworkServer.Spawn(newItem);
     }
@@ -67,6 +103,14 @@ public class Server_ItemSpawner : NetworkBehaviour
     public void Server_DestroyItemOnPickup(GameObject item)
     {
         NetworkServer.Destroy(item);
+    }
+
+    private void ItemRigidbodiesReEnableGravity()
+    {
+        for (int i = 0; i < itemRigidbodies.Count; i++)
+        {
+            itemRigidbodies[i].useGravity = true;
+        }
     }
 
 }
