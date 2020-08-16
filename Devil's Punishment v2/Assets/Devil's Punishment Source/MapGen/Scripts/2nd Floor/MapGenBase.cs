@@ -480,10 +480,17 @@ public abstract class MapGenBase : MonoBehaviour
                         //pos.x *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.x;
                         //pos.y *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.y;
                         //pos.z *= roomDoorsInfo.roomDoorsTransformInfo[r].scale.z;
+
+                        Vector3 scale = roomDoorsInfo.roomDoorsTransform[r].localScale;
+                        scale.x *= roomDoorsInfo.roomDoorsTransform[r].parent.localScale.x;
+                        scale.y *= roomDoorsInfo.roomDoorsTransform[r].parent.localScale.y;
+                        scale.z *= roomDoorsInfo.roomDoorsTransform[r].parent.localScale.z;
+
                         Server_DoorSpawner.instance.Spawn_ServerDoor(roomDoorsInfo.roomDoorsTransform[r].position,
-                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].rot,
-                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].scale,
-                                                                     roomDoorsInfo.roomDoorsTransformInfo[r].triggerState);
+                            roomDoorsInfo.roomDoorsTransform[r].eulerAngles,
+                            scale,
+                            roomDoorsInfo.roomDoorsTransformInfo[r].triggerState,
+                            false);
                     }
                 }
                 //client

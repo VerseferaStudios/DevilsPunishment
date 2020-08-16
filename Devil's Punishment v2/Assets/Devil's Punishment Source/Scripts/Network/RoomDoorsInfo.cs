@@ -37,30 +37,30 @@ public class RoomDoorsInfo : MonoBehaviour
     public void ConvertTransformToClassInfo()
     {
 
-        //if(roomDoorsTransformModRoom.Count != 0)
-        //{
-        //    roomDoorsTransform = roomDoorsTransformModRoom.ToArray();
-        //}
-        //roomDoorsTransformInfo = new RoomDoorsTransform[roomDoorsTransform.Length];
+        if (roomDoorsTransformModRoom.Count != 0)
+        {
+            roomDoorsTransform = roomDoorsTransformModRoom.ToArray();
+        }
+        roomDoorsTransformInfo = new RoomDoorsTransform[roomDoorsTransform.Length];
 
-        //for (int i = 0; i < roomDoorsTransform.Length; i++)
-        //{
-        //    InteractableDoor interactableDoor = null;
-        //    if (roomDoorsTransform[i].childCount >= 3)
-        //    {
-        //        roomDoorsTransform[i].GetChild(2).TryGetComponent(out interactableDoor);
-        //    }
+        for (int i = 0; i < roomDoorsTransform.Length; i++)
+        {
+            InteractableDoor interactableDoor = null;
+            if (roomDoorsTransform[i].childCount >= 3)
+            {
+                roomDoorsTransform[i].GetChild(2).TryGetComponent(out interactableDoor);
+            }
 
-        //    roomDoorsTransformInfo[i] = new RoomDoorsTransform
-        //    {
-        //        pos = roomDoorsTransform[i].position,
-        //        rot = roomDoorsTransform[i].eulerAngles,
-        //        scale = roomDoorsTransform[i].localScale,
-        //        triggerState = interactableDoor != null ? interactableDoor.triggerState : 0
+            roomDoorsTransformInfo[i] = new RoomDoorsTransform
+            {
+                pos = roomDoorsTransform[i].position,
+                rot = roomDoorsTransform[i].eulerAngles,
+                scale = roomDoorsTransform[i].localScale,
+                triggerState = interactableDoor != null ? interactableDoor.triggerState : 0
 
-        //    };
-        //}
-        //EditorUtility.SetDirty(this);
+            };
+        }
+        EditorUtility.SetDirty(this);
     }
 
 #endif

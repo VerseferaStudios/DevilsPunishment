@@ -1051,6 +1051,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 565208284}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &580916995
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Spotlight : Cookie Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 5
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &585922331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,12 +1209,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6897807121909891961, guid: e3709c2d418d3e74b8d4f3d88aed08e1,
+    - target: {fileID: 6897807121328381025, guid: e3709c2d418d3e74b8d4f3d88aed08e1,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6897807121328381025, guid: e3709c2d418d3e74b8d4f3d88aed08e1,
+    - target: {fileID: 6897807121909891961, guid: e3709c2d418d3e74b8d4f3d88aed08e1,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -6332,11 +6367,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8806916277942838311, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd,
-        type: 3}
-      propertyPath: sceneId
-      value: 1320841965
-      objectReference: {fileID: 0}
     - target: {fileID: 1106244656143250966, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -6369,14 +6399,6 @@ PrefabInstance:
     - target: {fileID: 2073071226, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1217204557, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
-      propertyPath: m_ShowToolkit
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1217204557, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
-      propertyPath: m_ShowCustomSorter
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1590306984, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
       propertyPath: m_IsActive
@@ -6518,18 +6540,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1219334274, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
       propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
-      propertyPath: crosshairColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
-      propertyPath: crosshairColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
-      propertyPath: crosshairColor.b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2120398065, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
@@ -7022,6 +7032,31 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8806916277942838311, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd,
+        type: 3}
+      propertyPath: sceneId
+      value: 1320841965
+      objectReference: {fileID: 0}
+    - target: {fileID: 1217204557, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
+      propertyPath: m_ShowToolkit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1217204557, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
+      propertyPath: m_ShowCustomSorter
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
+      propertyPath: crosshairColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
+      propertyPath: crosshairColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073071227, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
+      propertyPath: crosshairColor.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1038658, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5fbd45aeec2a53a41a4ecb0e820fd7cd, type: 3}
@@ -7031,41 +7066,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 935640412}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &958451386
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Spotlight : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &967863706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7281,9 +7281,9 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 958451386}
+  shadowMapRenderTexture: {fileID: 1717234126}
   useCookie: 1
-  cookieMapRenderTexture: {fileID: 1751843511}
+  cookieMapRenderTexture: {fileID: 580916995}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.1
   outOfPhaseColor: {r: 0, g: 1, b: 1, a: 1}
@@ -12865,6 +12865,41 @@ Transform:
   m_Father: {fileID: 1241434595}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1717234126
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Spotlight : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &1737076888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12933,41 +12968,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1737076888}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &1751843511
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Spotlight : Cookie Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 5
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1794658584
 GameObject:
   m_ObjectHideFlags: 0
@@ -13712,6 +13712,46 @@ PrefabInstance:
       propertyPath: sceneId
       value: 130862528
       objectReference: {fileID: 0}
+    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.data[1]
+      value: 
+      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
+        type: 3}
+    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.data[2]
+      value: 
+      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
+        type: 3}
+    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.data[0]
+      value: 
+      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
+        type: 3}
+    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.data[1]
+      value: 
+      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
+        type: 3}
+    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
+        type: 3}
+      propertyPath: staticRooms.Array.data[2]
+      value: 
+      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
+        type: 3}
     - target: {fileID: 8471895404834424268, guid: 1cf8b035c4a62604da5245eae813201d,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -13752,53 +13792,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -41.76
       objectReference: {fileID: 0}
-    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[0]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[1]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    - target: {fileID: 4781242897114793635, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[2]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[0]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[1]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    - target: {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d,
-        type: 3}
-      propertyPath: staticRooms.Array.data[2]
-      value: 
-      objectReference: {fileID: 3240125094354349590, guid: a80eeb4ba3fc0e54899fb96bf392fcd0,
-        type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 990603759073287109, guid: 1cf8b035c4a62604da5245eae813201d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1cf8b035c4a62604da5245eae813201d, type: 3}
 --- !u!1 &2114144068476197919 stripped
 GameObject:

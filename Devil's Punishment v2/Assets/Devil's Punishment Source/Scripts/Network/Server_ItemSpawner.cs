@@ -28,6 +28,7 @@ public class Server_ItemSpawner : NetworkBehaviour
     private void Start()
     {
         itemGenScript = GetComponent<ItemGen>();
+        itemRigidbodies = new List<Rigidbody>();
     }
 
     [Server]

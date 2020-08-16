@@ -28,11 +28,12 @@ public class Server_DoorSpawner : NetworkBehaviour
     }
 
     public GameObject roomDoorPrefab;
+    public GameObject roomDoorStartRoomPrefab;
 
     [Server]
-    public void Spawn_ServerDoor(Vector3 pos, Vector3 rot, Vector3 scale, GameState.gameStateType triggerState)
+    public void Spawn_ServerDoor(Vector3 pos, Vector3 rot, Vector3 scale, GameState.gameStateType triggerState, bool isStartRoom)
     {
-        GameObject roomDoor = Instantiate(roomDoorPrefab, pos, Quaternion.Euler(rot));
+        GameObject roomDoor = Instantiate(isStartRoom ? roomDoorStartRoomPrefab : roomDoorPrefab, pos, Quaternion.Euler(rot));
         roomDoor.transform.localScale = scale;
         Debug.Log("0987 " + pos);
         if (roomDoor.TryGetComponent(out InteractableDoor interactableDoor))
