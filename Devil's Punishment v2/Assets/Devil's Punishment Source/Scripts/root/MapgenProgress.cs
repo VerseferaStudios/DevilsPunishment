@@ -29,6 +29,16 @@ public class MapgenProgress : MonoBehaviour
     }
     #endregion
 
+    private void OnEnable()
+    {
+        RoomNewVents.Floor1VentsDone += _100PerCentLoad;
+    }
+
+    private void OnDisable()
+    {
+        RoomNewVents.Floor1VentsDone -= _100PerCentLoad;
+    }
+
     public void addProgress(int prog)
     {
 
@@ -46,6 +56,12 @@ public class MapgenProgress : MonoBehaviour
         panel.gameObject.GetComponent<CanvasGroup>().alpha = 1-percentage * .01f;
         */
 
+    }
+
+    private void _100PerCentLoad()
+    {
+        percentageGUI.text = "100%";
+        percentageGUI.color = Color.blue;
     }
 
     public void loadedMap()

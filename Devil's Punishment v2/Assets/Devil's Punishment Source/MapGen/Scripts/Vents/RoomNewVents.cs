@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 enum FloorNo
@@ -10,6 +8,8 @@ enum FloorNo
 }
 public class RoomNewVents : RoomNew
 {
+    public static System.Action Floor1VentsDone;
+
     [Header("Dev Tool")]
     public Transform sqGridDetails;
 
@@ -38,6 +38,12 @@ public class RoomNewVents : RoomNew
     protected override void VentPos(ref Vector3 currPos)
     {
         currPos.y -= 2;
+    }
+
+    protected override void CurrentScriptGenDone()
+    {
+        //base.CurrentScriptGenDone();
+        Floor1VentsDone?.Invoke();
     }
 
     protected override void CallIorLSpawnStoreFns(int nextMove, int currMove, int locationsCount, int i, Vector3 currLoc, int zOverall

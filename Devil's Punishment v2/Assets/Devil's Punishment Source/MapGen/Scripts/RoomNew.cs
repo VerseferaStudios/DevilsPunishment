@@ -77,6 +77,11 @@ public class RoomNew : MonoBehaviour
         isSetCorridorSPawnPointTag = true;
     }
 
+    protected virtual void CurrentScriptGenDone()
+    {
+        MapGenCorridorsDone?.Invoke();
+    }
+
     protected virtual void Start()
     {
         SetCorridorSpawnPointTag();
@@ -399,8 +404,6 @@ public class RoomNew : MonoBehaviour
             //Debug.LogError(Data.instance.ctr1);
 
         }
-
-        MapGenCorridorsDone?.Invoke();
 
         isDoneSpawningAllCorridorsOrVents = true;
         yield return null;
@@ -803,6 +806,9 @@ public class RoomNew : MonoBehaviour
         {
             StartCoroutine(AddRoomNewVents());
         }
+
+        CurrentScriptGenDone();
+
         //Debug.Log("count of all i corridors = " + GameObject.FindGameObjectsWithTag("CorridorI").Length);
     }
 
