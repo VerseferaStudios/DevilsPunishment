@@ -35,7 +35,7 @@ public class Server_DoorSpawner : NetworkBehaviour
     {
         GameObject roomDoor = Instantiate(isStartRoom ? roomDoorStartRoomPrefab : roomDoorPrefab, pos, Quaternion.Euler(rot));
         roomDoor.transform.localScale = scale;
-        Debug.Log("0987 " + pos);
+        //Debug.Log("0987 " + pos);
         if (roomDoor.TryGetComponent(out InteractableDoor interactableDoor))
         {
             interactableDoor.triggerState = triggerState;

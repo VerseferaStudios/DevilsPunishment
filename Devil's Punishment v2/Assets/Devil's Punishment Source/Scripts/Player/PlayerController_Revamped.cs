@@ -448,12 +448,12 @@ public class PlayerController_Revamped : NetworkBehaviour
     {
         if (!isClimbing)
         {
-            Debug.Log("not is Climbing");
+            //Debug.Log("not is Climbing");
             chcon.Move(Vector3.down * Time.deltaTime * 9.81f);
         }
         else
         {
-            Debug.Log("yes is Climbing");
+            //Debug.Log("yes is Climbing");
             chcon.Move(Vector3.up * Time.deltaTime * movementInputRaw.y);
             climbSpeed = movementInputRaw.y >= 0 ? 1 : -1;
         }

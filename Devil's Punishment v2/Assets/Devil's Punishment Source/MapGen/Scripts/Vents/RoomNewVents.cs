@@ -64,7 +64,7 @@ public class RoomNewVents : RoomNew
             if (i == -1)
             {
                 //currMove
-                Debug.LogWarning(currLoc);
+                //Debug.LogWarning(currLoc);
             }
             if (i + 1 == locationsCount)
             {
@@ -152,7 +152,7 @@ public class RoomNewVents : RoomNew
         squareGrid.tiles[idx[0], idx[1]].disallowedDIRS = allowedDIRS;
     }
 
-    protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover) { return; }
+    protected override void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover, int iCorrdorSpawnCtr) { return; }
 
     protected override void HelperTInstantiate(float yRotation, GameObject currCorridor) { return; }
 

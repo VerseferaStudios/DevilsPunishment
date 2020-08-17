@@ -13,10 +13,11 @@ public class VentCoverHelper
     /// <returns></returns>
     public int[] CalcVentCoverSpawnNumbers(int countICorridors, int ventCoverNumber) // do in server and give it to clients (thru rpc maybe)
     {
+        ventCoverNumber = Mathf.CeilToInt(countICorridors / 10f);
         int[] ventCoverIndices = new int[ventCoverNumber];
         int i = 0, j = 0;
         int idx;
-        ventCoverNumber = Mathf.CeilToInt(countICorridors / 10f);
+        Debug.Log("vent cover number = " + ventCoverNumber);
         while (j < ventCoverNumber)
         {
             ++i;
@@ -133,9 +134,26 @@ public class RoomNew : MonoBehaviour
         isSetCorridorSPawnPointTag = true;
     }
 
+    /// <summary>
+    /// Check if current script is for floor 1 or not
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool IsFloor1()
+    {
+        return true;
+    }
+
     protected virtual void CurrentScriptGenDone()
     {
         MapGenCorridorsDone?.Invoke();
+        if (IsFloor1())
+        {
+            Data.instance.ventToCorridorDict = ventToCorridorDict;
+        }
+        else
+        {
+            Data2ndFloor.instance.ventToCorridorDict = ventToCorridorDict;
+        }
     }
 
     protected virtual void Start()
@@ -352,9 +370,9 @@ public class RoomNew : MonoBehaviour
                         lParentPos = spawnPoints[l].transform.parent.parent.position;
                     }
                     if (lParentPos == kParentPos) continue;
-                    Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
-                                    spawnPoints[k].name + " " + spawnPoints[l].name + " " +
-                                    spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
+                    //Debug.Log("B444444 CONNECT TWO ROOMS = " + spawnPoints[k].transform.position + " " + spawnPoints[l].transform.position + " " +
+                    //                spawnPoints[k].name + " " + spawnPoints[l].name + " " +
+                    //                spawnPoints[k].transform.parent.position + " " + spawnPoints[l].transform.parent.position);
 
                     MeshRenderer kRend = null;
                     MeshRenderer lRend = null;
@@ -757,21 +775,40 @@ public class RoomNew : MonoBehaviour
     /// <returns></returns>
     private IEnumerator InstantiateAllCorridors()//Vector3 kParentPos, Vector3 lParentPos)
     {
-        //ventCoverProbabilty = (float)ventCoverNumber / countICorridors;
-
-        //Vent cover spawn stuff
-        countICorridors /= 2; //Since overlaps etc cause almost double count
         int[] ventCoverIndices;
-        if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
-           Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+        if (!gameObject.name.Equals(Constants.sRef.GBNAME_ROOMNEWVENTS))
         {
-            ventCoverIndices = (new VentCoverHelper()).CalcVentCoverSpawnNumbers(countICorridors, ventCoverNumber);
+            //ventCoverProbabilty = (float)ventCoverNumber / countICorridors;
+
+            //Vent cover spawn stuff
+            countICorridors /= 2; //Since overlaps etc cause almost double count
+            //if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
+            //   Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+            {
+                ventCoverIndices = (new VentCoverHelper()).CalcVentCoverSpawnNumbers(countICorridors, ventCoverNumber);
+                //PlayerRemoteCallsBehaviour.instance.Rpc_VentCoverIndicies(ventCoverIndices);
+                //NetworkManager_Drug.instance.CallRpcOnAllPlayers(ventCoverIndices);
+            }
+            //else
+            //{
+            //    WaitForSeconds wait1Sec = new WaitForSeconds(1f);
+            //    // waiting 20secs max for vent cover indices to arrive from server
+            //    for (int i = 0; i < 20; i++)
+            //    {
+            //        yield return wait1Sec;
+            //        if(PlayerRemoteCallsBehaviour.instance.ventCoverIndices.Length != 0)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    ventCoverIndices = PlayerRemoteCallsBehaviour.instance.ventCoverIndices;
+            //}
         }
         else
         {
-            ventCoverIndices = PlayerRemoteCallsBehaviour.instance.ventCoverIndices;
+            ventCoverIndices = new int[0];
         }
-        
+
         int iCorrdorSpawnCtr = 0;
         bool isSpawnVentCover = false;
 
@@ -795,7 +832,7 @@ public class RoomNew : MonoBehaviour
                         {
                             isSpawnVentCover = true;
                         }
-                        InstantiateICorridor(pos, kParentPos, lParentPos, isSpawnVentCover);
+                        InstantiateICorridor(pos, kParentPos, lParentPos, isSpawnVentCover, iCorrdorSpawnCtr);
                         iCorrdorSpawnCtr++;
                         isSpawnVentCover = false;
                     }
@@ -1044,6 +1081,13 @@ public class RoomNew : MonoBehaviour
     }
 
     /// <summary>
+    /// Stores all the vent to corridor key values, vent int idx to corridor transform
+    /// the key, vent int idx is the corridor spawn idx of the corridor to which that vent cover is connected 
+    /// used for InteractableDoor (for vents) and in PlayerRemoteCallsBehaviour (opening vent cover etc)
+    /// </summary>
+    public Dictionary<int, Transform> ventToCorridorDict = new Dictionary<int, Transform>();
+
+    /// <summary>
     /// Helps in instantiating an I corridor, adds the holder localPositiion offset
     /// spawns vent cover according to parameter
     /// calls item gen to spawn items as well
@@ -1052,17 +1096,22 @@ public class RoomNew : MonoBehaviour
     /// <param name="kIdx"></param>
     /// <param name="posI"> position of corridor so as to spawn vent cover and items </param>
     /// <param name="isSpawnVentCover"> should we spawn a vent cover or not </param>
-    protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover)
+    protected virtual void HelperIInstantiate(GameObject currentCorridor, int[] kIdx, Vector3 posI, bool isSpawnVentCover, int iCorrdorSpawnCtr)
     {
         currentCorridor.transform.GetChild(0).localPosition = new Vector3(0, 0, (squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot == 0) ? -0.08f : 0.226f);
 
         //For now, later remove and put outside this else block
 
         //if (UnityEngine.Random.Range(0.0f, 1.0f) < ventCoverProbabilty)
-        if (isSpawnVentCover) 
+        if (isSpawnVentCover)
         {
-            //Debug.Log("spawning vent cover at " + posI);
-            Instantiate(ventCover, posI, Quaternion.Euler(0, /*PlayerRemoteCallsBehaviour.instance.Cmd_Random*/Random.Range(0, 3) * 90, 0), currentCorridor.transform).transform.GetChild(1).GetChild(1).tag = ventCoverTag;
+            ventToCorridorDict.Add(iCorrdorSpawnCtr, currentCorridor.transform);
+            //Only done in host
+            if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
+                Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+            {
+                PlayerRemoteCallsBehaviour.instance.VentCoverSpawnHelper(posI, ventCoverTag, ventCover, iCorrdorSpawnCtr);
+            }
         }
 
         // --------------------- Item Gen ---------------------
@@ -1092,7 +1141,7 @@ public class RoomNew : MonoBehaviour
         currentCorridor.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
-    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos, bool isSpawnVentCover)
+    private void InstantiateICorridor(Vector3 posI, Vector3 kParentPos, Vector3 lParentPos, bool isSpawnVentCover, int iCorrdorSpawnCtr)
     {
         int[] kIdx = GetIdx(posI);
         GameObject currentCorridor;
@@ -1110,7 +1159,7 @@ public class RoomNew : MonoBehaviour
         IRotationHelper(squareGrid.tiles[kIdx[0], kIdx[1]].corridorYRot, currentCorridor);
         //Data.instance.corridorCount++;
 
-        HelperIInstantiate(currentCorridor, kIdx, posI, isSpawnVentCover);
+        HelperIInstantiate(currentCorridor, kIdx, posI, isSpawnVentCover, iCorrdorSpawnCtr);
 
     }
 

@@ -63,7 +63,9 @@ public class Data2ndFloor : MonoBehaviour
 
     public bool isStartData2ndFloor = false;
 
-   // public GameObject Loader;
+    public Dictionary<int, Transform> ventToCorridorDict;
+
+    // public GameObject Loader;
 
     //public bool isPipeAtLeft = true;
 

@@ -106,7 +106,10 @@ MonoBehaviour:
     type: 3}
   meshRenderer_renderPlane: {fileID: 5078932999066121222}
   doorSidePos: 0
+  isDisregardMainDoorPosSinceItIsntSpawnedInCode: 0
   mainDoorPos: {x: 0, y: 0, z: 0}
+  ventCorridorIdx: -1
+  grillCollider: {fileID: 6032759384738061306}
 --- !u!54 &4732200856468398690
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -306,6 +309,12 @@ Transform:
 --- !u!4 &1684942775003991526 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4708392103948042544, guid: 6f34ec7e6067e0a448db31b203d2c7e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6212028675637546198}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6032759384738061306 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 400017278807955244, guid: 6f34ec7e6067e0a448db31b203d2c7e4,
     type: 3}
   m_PrefabInstance: {fileID: 6212028675637546198}
   m_PrefabAsset: {fileID: 0}

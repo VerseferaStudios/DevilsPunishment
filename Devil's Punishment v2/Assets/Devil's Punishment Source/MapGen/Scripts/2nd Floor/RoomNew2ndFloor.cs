@@ -43,6 +43,15 @@ public class RoomNew2ndFloor : RoomNew
         isSetCorridorSPawnPointTag = true;
     }
 
+    /// <summary>
+    /// Check if current script is for floor 1 or not
+    /// </summary>
+    /// <returns></returns>
+    protected override bool IsFloor1()
+    {
+        return false;
+    }
+
     protected override IEnumerator AddRoomNewVents()
     {
         yield return new WaitForSeconds(1f);

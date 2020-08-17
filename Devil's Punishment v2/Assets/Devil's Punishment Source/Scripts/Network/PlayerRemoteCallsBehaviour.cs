@@ -55,19 +55,53 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         Server_ItemSpawner.sRef.Server_SpawnItem(resourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
     }
 
-    /// <summary>
-    /// List to store already opened vent covers, to avoid two different players opening it simultaneously (maybe not very important but still)
-    /// </summary>
-    private List<uint> doorOrVentCoverNetIds = new List<uint>();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="objectNetId"></param>
     [Command]
-    public void Cmd_OpenDoorOrVentCover(uint objectNetId)
+    public void Cmd_OpenDoor(uint objectNetId)
     {
-        if (doorOrVentCoverNetIds.Contains(objectNetId))
+        if (NetworkIdentity.spawned.TryGetValue(objectNetId, out NetworkIdentity netIdentity))
+        {
+            //if the door or vent cover netId exists, on the server
+
+            ventCoverNetIds.Add(objectNetId);
+
+
+            DisableDoorOrVentCoverTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            Rpc_DisableDoorOrVentCoverTriggerCollider(objectNetId);
+            InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
+            StartCoroutine(interactableDoor.OpenDoor());
+
+            ////enable net transform and net transform child just b4 starting to open door?
+            //Rpc_OpenDoorOrVentCoverInOtherClients(objectNetId);
+        }
+        else
+        {
+            //if the door or vent cover netId doesn't exist, on the server
+            Debug.LogWarning("No such door on server; uint netId = " + objectNetId);
+        }
+    }
+
+
+    /// <summary>
+    /// List to store already opened vent covers, to avoid two different players opening it simultaneously (maybe not very important but still)
+    /// </summary>
+    private List<uint> ventCoverNetIds = new List<uint>();
+
+    /// <summary>
+    /// Main Command to open a vent cover
+    /// Calls functions to disable trigger collider, and rpc for the same
+    /// Calls the actual lerp to open vent cover (Server)
+    /// Also calls rpc for vent open helper functions `Rpc_VentCoverOpenHelper(uint netIdObject)`
+    /// </summary>
+    /// <param name="objectNetId"></param>
+    [Command]
+    public void Cmd_OpenVentCover(uint objectNetId)
+    {
+        if (ventCoverNetIds.Contains(objectNetId))
         {
             //If door or vent cover was already opened
             Debug.LogWarning("Already opened door, or vent cover");
@@ -78,34 +112,98 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
 
             if (NetworkIdentity.spawned.TryGetValue(objectNetId, out NetworkIdentity netIdentity))
             {
-                //if the door or vent cover netId exists, on the client
+                //if the door or vent cover netId exists, on the server
 
-                doorOrVentCoverNetIds.Add(objectNetId);
+                ventCoverNetIds.Add(objectNetId);
 
-                //enable net transform and net transform child just b4 starting to open door?
-                Rpc_OpenDoorOrVentCoverInOtherClients(objectNetId);
+
+                DisableDoorOrVentCoverTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+                Rpc_DisableDoorOrVentCoverTriggerCollider(objectNetId);
+                InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
+
+                //Calls the actual lerp to open vent cover (Server)
+                StartCoroutine(interactableDoor.OpenVentCover());
+
+                Rpc_VentCoverOpenHelper(objectNetId);
+
+                ////enable net transform and net transform child just b4 starting to open door?
+                //Rpc_OpenDoorOrVentCoverInOtherClients(objectNetId);
             }
             else
             {
-                //if the door or vent cover netId doesn't exist, on the client
+                //if the door or vent cover netId doesn't exist, on the server
                 Debug.LogWarning("No such door on server; uint netId = " + objectNetId);
             }
         }
     }
 
-    [ClientRpc(excludeOwner = true)]
-    private void Rpc_OpenDoorOrVentCoverInOtherClients(uint objectNetId)
+    /// <summary>
+    /// Rpc to all clients, this takes care of vent cover opening side functions, helper functions like broken floor colliders etc
+    /// Note that vent cover opening is handled in server only and network transform (child) takes care of the rest
+    /// </summary>
+    /// <param name="netIdObject"></param>
+    [ClientRpc]
+    private void Rpc_VentCoverOpenHelper(uint netIdObject)
     {
-        if (NetworkIdentity.spawned.TryGetValue(objectNetId, out NetworkIdentity netIdentity))
+
+        if (NetworkIdentity.spawned.TryGetValue(netIdObject, out NetworkIdentity netIdentity))
         {
-            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
-            Rpc_DisableDoorTriggerCollider(objectNetId);
+            //if the door or vent cover netId exists, on the server
+
             InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
-            interactableDoor.OnInteract();
+
+            //grill box collider size decrease
+            interactableDoor.ReduceGrillColliderSize();
+
+            Debug.Log("netIdentity.transform.position.y = " + netIdentity.transform.position.y);
+            Debug.Log("interactableDoor.ventCorridorIdx = " + interactableDoor.ventCorridorIdx);
+
+            //Debug.Log("Data.instance.ventToCorridorDict.Count = " + Data.instance.ventToCorridorDict.Count);
+            //Debug.Log(Data.instance.ventToCorridorDict.Keys);
+            //Debug.Log(Data.instance.ventToCorridorDict.Keys.Count);
+
+            //Debug.Log("Data2ndFloor.instance.ventToCorridorDict.Count = " + Data2ndFloor.instance.ventToCorridorDict.Count);
+            //Debug.Log(Data2ndFloor.instance.ventToCorridorDict.Keys);
+            //Debug.Log(Data2ndFloor.instance.ventToCorridorDict.Keys.Count);
+
+            Transform t = (netIdentity.transform.position.y < 10) ?
+                Data.instance.ventToCorridorDict[interactableDoor.ventCorridorIdx] :
+                Data2ndFloor.instance.ventToCorridorDict[interactableDoor.ventCorridorIdx];
+            //Debug.Log("t name  = " + t.name);
+            //Debug.Log("t tag  = " + t.tag);
+            //Debug.Log("t position  = " + t.position);
+            if (t.tag.StartsWith("Corr"))
+            {
+                t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
+                Instantiate(interactableDoor.brokenFloorCollidors, t.position, t.rotation, t.parent);
+                t.gameObject.SetActive(false);
+            }
+
+            //timeToPickUp = float.MaxValue;
+            interactableDoor.meshRenderer_renderPlane.enabled = true; // this disappears the thing?
         }
         else
         {
-            Debug.LogWarning("No such door on client; uint netId = " + objectNetId);
+            //if the door or vent cover netId doesn't exist, on the server
+            Debug.LogWarning("No such door on client; uint netId = " + netIdObject);
+        }
+
+    }
+
+    [ClientRpc]
+    public void Rpc_ReEnableVentCover(uint netIdObject)
+    {
+        if (NetworkIdentity.spawned.TryGetValue(netIdObject, out NetworkIdentity netIdentity))
+        {
+            //if the door or vent cover netId exists, on the server
+            //Transform holderT = transform.GetChild(1).GetChild(0);
+            netIdentity.GetComponent<BoxCollider>().enabled = true;
+            //holderT.gameObject.SetActive(true);
+        }
+        else
+        {
+            //if the door or vent cover netId doesn't exist, on the server
+            Debug.LogWarning("No such door on client; uint netId = " + netIdObject);
         }
     }
     
@@ -113,7 +211,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     /// Helper function to disable a door collider
     /// </summary>
     /// <param name="boxCollider"></param>
-    public void DisableDoorTriggerCollider(BoxCollider boxCollider)
+    public void DisableDoorOrVentCoverTriggerCollider(BoxCollider boxCollider)
     {
         boxCollider.enabled = false;
     }
@@ -123,11 +221,11 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     /// </summary>
     /// <param name="netId"> The netowrk identity uint of the door whose collider has to be disabled </param>
     [ClientRpc]
-    private void Rpc_DisableDoorTriggerCollider(uint netId)
+    private void Rpc_DisableDoorOrVentCoverTriggerCollider(uint netId)
     {
         if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
         {
-            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            DisableDoorOrVentCoverTriggerCollider(netIdentity.GetComponent<BoxCollider>());
         }
         else
         {
@@ -239,17 +337,45 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         Rpc_PlaySoundOneShot(path, pos);
     }
 
-    [ClientRpc(excludeOwner = true)]
+    [ClientRpc]
     private void Rpc_PlaySoundOneShot(string path, Vector3 pos)
     {
         Debug.Log("Rpc here");
         FMODUnity.RuntimeManager.PlayOneShot(path, pos);
     }
 
-    [ClientRpc(excludeOwner = true)]
-    public void Rpc_VentCoverIndicies(int[] ventCoverIndices)
+    //[ClientRpc/*(excludeOwner = true)*/]
+    //public void Rpc_VentCoverIndicies(int[] ventCoverIndices)
+    //{
+    //    this.ventCoverIndices = ventCoverIndices;
+    //}
+
+    /// <summary>
+    /// Helper function for vent cover spawn
+    /// </summary>
+    /// <param name="posI"></param>
+    /// <param name="ventCoverTag"></param>
+    /// <param name="ventCover"></param>
+    /// <param name="iCorrdorSpawnCtrForVent"> the corridor spawn idx of the corridor to which this vent cover is connected </param>
+    [Server]
+    public void VentCoverSpawnHelper(Vector3 posI, string ventCoverTag, GameObject ventCover, int iCorrdorSpawnCtrForVent)
     {
-        this.ventCoverIndices = ventCoverIndices;
+        Debug.Log("spawning vent cover at " + posI);
+        GameObject ventCoverGb = Instantiate(ventCover, posI, Quaternion.Euler(0, /*PlayerRemoteCallsBehaviour.instance.Cmd_Random*/Random.Range(0, 3) * 90, 0)/*, currentCorridor.transform*/);
+        ventCoverGb.transform.GetChild(1).GetChild(1).tag = ventCoverTag;
+        if (ventCoverGb.TryGetComponent(out InteractableDoor interactableDoor))
+        {
+            //interactableDoor.triggerState = triggerState;
+            interactableDoor.mainDoorPos = posI;
+            Debug.Log("iCorrdorSpawnCtrForVent = " + iCorrdorSpawnCtrForVent);
+            interactableDoor.ventCorridorIdx = iCorrdorSpawnCtrForVent;
+        }
+        else
+        {
+            //error
+            Debug.LogError("Cant find InteractableDoor component on root of grill with frame on server");
+        }
+        NetworkServer.Spawn(ventCoverGb);
     }
 
 }

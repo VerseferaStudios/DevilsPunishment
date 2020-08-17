@@ -42,9 +42,35 @@ public class NetworkManager_Drug : NetworkManager
     }
 
 
+    /// <summary>
+    /// Should only be there on server!
+    /// </summary>
+    public List<Transform> playerList = new List<Transform>();
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        //base.OnServerAddPlayer(conn);
+        Transform startPos = GetStartPosition();
+        GameObject player = startPos != null
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
 
+        playerList.Add(player.transform);
 
+        NetworkServer.AddPlayerForConnection(conn, player);
+    }
 
+    ////[Server]
+    ///// <summary>
+    ///// Call Rpc for vent cover indices on all players, should be called on server only
+    ///// </summary>
+    ///// <param name="ventCoverIndices"></param>
+    //public void CallRpcOnAllPlayers(int[] ventCoverIndices)
+    //{
+    //    for (int l = 0; l < playerList.Count; l++)
+    //    {
+    //        playerList[l].GetComponent<PlayerRemoteCallsBehaviour>().Rpc_VentCoverIndicies(ventCoverIndices);
+    //    }
+    //}
 
 
 

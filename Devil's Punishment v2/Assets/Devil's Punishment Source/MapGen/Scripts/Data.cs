@@ -75,6 +75,8 @@ public class Data : MonoBehaviour
     public bool isDoneConnectTwoRooms = false;
     public bool isDoneModularRoom = false;
 
+    public Dictionary<int, Transform> ventToCorridorDict;
+
     private void Awake()
     {
         if(instance == null)

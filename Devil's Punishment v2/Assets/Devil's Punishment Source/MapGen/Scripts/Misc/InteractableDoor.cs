@@ -30,7 +30,22 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     private Transform door1;
 
     public bool isDisregardMainDoorPosSinceItIsntSpawnedInCode = false;
+
+    /// <summary>
+    /// Main posiiton of door or vent cover
+    /// </summary>
     [SyncVar] public Vector3 mainDoorPos;
+
+    /// <summary>
+    /// For vents; the corridor spawn idx of the corridor to which this vent cover is connected. 
+    /// Look up the ventToCorridor List Data and Data2ndFloor to get the Transform of the corridors for 1st and 2nd floors respectively
+    /// </summary>
+    [SyncVar] public int ventCorridorIdx = -1;
+
+    /// <summary>
+    /// For vents; grill box collider (non trigger)
+    /// </summary>
+    [SerializeField] private BoxCollider grillCollider;
 
     public override void OnStartClient()
     {
@@ -78,37 +93,31 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     public void OnInteract()
     {
         gameObject.GetComponent<BoxCollider>().enabled = false;
-        PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoorOrVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
         switch (doorType)
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
-                FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
-                //PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
-                Transform t = transform.parent; // get rid of this
-                if (t.tag.StartsWith("Corr"))
-                {
-                    t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
-                    Instantiate(brokenFloorCollidors, t.position, t.rotation, t.parent);
-                    t.gameObject.SetActive(false);
-                }
-                //timeToPickUp = float.MaxValue;
-                meshRenderer_renderPlane.enabled = true;
-                StartCoroutine(OpenVentCover());
+                //FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
+                PlayerRemoteCallsBehaviour.instance.Cmd_OpenVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
+                PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
+                //StartCoroutine(OpenVentCover());
                 break;
 
             case DoorType.door:
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
+                PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
                 FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
-                //PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
+                //PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoorOrVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
+                PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
                 //StartCoroutine(OpenDoor());
                 break;
 
         }
     }
 
-    private IEnumerator OpenVentCover()
+    [Server]
+    public IEnumerator OpenVentCover()
     {
         float t = 0;
 
@@ -121,9 +130,33 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
             t += Time.deltaTime * 0.4f;
             yield return new WaitForSeconds(0.01f);
         }
-        holderT.gameObject.SetActive(false);
+        PlayerRemoteCallsBehaviour.instance.Rpc_ReEnableVentCover(netId);
 
         yield return new WaitForSeconds(0.5f);
+    }
+
+    private float grillColliderSizeZ, grillColliderCentreZ;
+
+    /// <summary>
+    /// Reduce the grill collider size when opening so that it doesnt hinder players
+    /// </summary>
+    public void ReduceGrillColliderSize()
+    {
+        grillColliderSizeZ = grillCollider.size.z;
+        grillCollider.size = new Vector3(grillCollider.size.x / 2, grillCollider.size.y / 2, .001f);
+        grillColliderCentreZ = grillCollider.center.z;
+        grillCollider.center = new Vector3(grillCollider.center.x / 2, grillCollider.center.y / 2, 0);
+    }
+
+    /// <summary>
+    /// Increase back the grill collider size so that players cant stick their head cam up the vent to see into the corridor
+    /// </summary>
+    public void IncreaseGrillColliderSize()
+    {
+        grillColliderSizeZ = grillCollider.size.z;
+        grillCollider.size = new Vector3(grillCollider.size.x * 2, grillCollider.size.y * 2, grillColliderSizeZ);
+        grillColliderCentreZ = grillCollider.center.z;
+        grillCollider.center = new Vector3(grillCollider.center.x * 2, grillCollider.center.y * 2, grillColliderCentreZ);
     }
 
     //private void UpdateDoorPosOverNetwork(float oldPos, float newPos)
@@ -132,6 +165,7 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     //    door1.position = new Vector3(door1.position.x, door1.position.y, newPos);
     //}
 
+    [Server]
     public IEnumerator OpenDoor()
     {
         //if(NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly ||
