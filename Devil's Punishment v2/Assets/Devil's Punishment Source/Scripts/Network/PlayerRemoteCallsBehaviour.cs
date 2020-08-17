@@ -8,6 +8,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     public static PlayerRemoteCallsBehaviour instance;
     public PlayerRefsDataBehaviour playerRefsData;
     public int seed;
+    public int[] ventCoverIndices;
 
     private void OnEnable()
     {
@@ -55,22 +56,56 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     }
 
     /// <summary>
+    /// List to store already opened vent covers, to avoid two different players opening it simultaneously (maybe not very important but still)
+    /// </summary>
+    private List<uint> doorOrVentCoverNetIds = new List<uint>();
+
+    /// <summary>
     /// 
     /// </summary>
-    /// <param name="netId"></param>
+    /// <param name="objectNetId"></param>
     [Command]
-    public void Cmd_OpenDoor(uint netId)
+    public void Cmd_OpenDoorOrVentCover(uint objectNetId)
     {
-        if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity netIdentity))
+        if (doorOrVentCoverNetIds.Contains(objectNetId))
         {
-            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
-            Rpc_DisableDoorTriggerCollider(netId);
-            InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
-            StartCoroutine(interactableDoor.OpenDoor());
+            //If door or vent cover was already opened
+            Debug.LogWarning("Already opened door, or vent cover");
         }
         else
         {
-            Debug.LogWarning("No such door on server; uint netId = " + netId);
+            //If door or vent cover wasn't already opened
+
+            if (NetworkIdentity.spawned.TryGetValue(objectNetId, out NetworkIdentity netIdentity))
+            {
+                //if the door or vent cover netId exists, on the client
+
+                doorOrVentCoverNetIds.Add(objectNetId);
+
+                //enable net transform and net transform child just b4 starting to open door?
+                Rpc_OpenDoorOrVentCoverInOtherClients(objectNetId);
+            }
+            else
+            {
+                //if the door or vent cover netId doesn't exist, on the client
+                Debug.LogWarning("No such door on server; uint netId = " + objectNetId);
+            }
+        }
+    }
+
+    [ClientRpc(excludeOwner = true)]
+    private void Rpc_OpenDoorOrVentCoverInOtherClients(uint objectNetId)
+    {
+        if (NetworkIdentity.spawned.TryGetValue(objectNetId, out NetworkIdentity netIdentity))
+        {
+            DisableDoorTriggerCollider(netIdentity.GetComponent<BoxCollider>());
+            Rpc_DisableDoorTriggerCollider(objectNetId);
+            InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
+            interactableDoor.OnInteract();
+        }
+        else
+        {
+            Debug.LogWarning("No such door on client; uint netId = " + objectNetId);
         }
     }
     
@@ -167,7 +202,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         playerModel.localPosition = endPos;
         Debug.Log("lerp done; endPos = " + endPos);
     }
-    
+
     ///// <summary>
     ///// Return a random float number between min [inclusive] and max [inclusive] (Read Only).
     ///// </summary>
@@ -191,5 +226,30 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     //{
     //    return Random.Range(min, max);
     //}
+
+    // ================================ SOUNDS ================================ 
+    //private enum Sound
+    //{
+    //    Door,
+    //    VentCover
+    //}
+    [Command]
+    public void Cmd_PlaySoundOneShotOnOtherClients(string path, Vector3 pos)
+    {
+        Rpc_PlaySoundOneShot(path, pos);
+    }
+
+    [ClientRpc(excludeOwner = true)]
+    private void Rpc_PlaySoundOneShot(string path, Vector3 pos)
+    {
+        Debug.Log("Rpc here");
+        FMODUnity.RuntimeManager.PlayOneShot(path, pos);
+    }
+
+    [ClientRpc(excludeOwner = true)]
+    public void Rpc_VentCoverIndicies(int[] ventCoverIndices)
+    {
+        this.ventCoverIndices = ventCoverIndices;
+    }
 
 }

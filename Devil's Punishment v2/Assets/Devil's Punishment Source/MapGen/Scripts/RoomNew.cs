@@ -4,6 +4,62 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
+public class VentCoverHelper
+{
+
+    /// <summary>
+    /// As name indicates it randomly decides the corridor numbers (I corridor) in which the vent covers will be spawned
+    /// </summary>
+    /// <returns></returns>
+    public int[] CalcVentCoverSpawnNumbers(int countICorridors, int ventCoverNumber) // do in server and give it to clients (thru rpc maybe)
+    {
+        int[] ventCoverIndices = new int[ventCoverNumber];
+        int i = 0, j = 0;
+        int idx;
+        ventCoverNumber = Mathf.CeilToInt(countICorridors / 10f);
+        while (j < ventCoverNumber)
+        {
+            ++i;
+            if (i > 1000)
+            {
+                //safety break;
+                Debug.LogWarning("Not all vent covers got the positions after 1000 tries!");
+                break;
+            }
+
+            idx = Random.Range(0, countICorridors); //PlayerRemoteCallsBehaviour.instance.Cmd_Random(0, countICorridors);
+            //if (ventCoverIndices.Contains(idx))
+            if (CheckOverlapInVentList(idx))
+            {
+                continue;
+            }
+            else
+            {
+                Debug.Log("ventCoverIndices.Length = " + ventCoverIndices.Length);
+                Debug.Log("j = " + j);
+                ventCoverIndices[j] = idx;
+                ++j;
+            }
+        }
+        return ventCoverIndices;
+
+
+
+        bool CheckOverlapInVentList(int index)
+        {
+            for (int k = 0; k < ventCoverIndices.Length; k++)
+            {
+                if (Mathf.Abs(index - ventCoverIndices[k]) <= 2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
+}
+
 public class RoomNew : MonoBehaviour
 {
     public static System.Action MapGenCorridorsDone;
@@ -692,57 +748,6 @@ public class RoomNew : MonoBehaviour
     }
 
     /// <summary>
-    /// As name indicates it randomly decides the corridor numbers (I corridor) in which the vent covers will be spawned
-    /// </summary>
-    /// <returns></returns>
-    private List<int> CalcVentCoverSpawnNumbers()
-    {
-        List<int> ventCoverIndices = new List<int>();
-        int i = 0, j = 0;
-        int idx;
-        ventCoverNumber = Mathf.CeilToInt(countICorridors / 10f);
-        while (j < ventCoverNumber)
-        {
-            ++i;
-            if (i > 1000)
-            {
-                //safety break;
-                Debug.LogWarning("Not all vent covers got the positions after 1000 tries!");
-                break;
-            }
-
-            idx = Random.Range(0, countICorridors); //PlayerRemoteCallsBehaviour.instance.Cmd_Random(0, countICorridors);
-            //if (ventCoverIndices.Contains(idx))
-            if (CheckOverlapInVentList(idx))
-            {
-                continue;
-            }
-            else
-            {
-                ++j;
-                ventCoverIndices.Add(idx);
-            }
-        }
-        return ventCoverIndices;
-
-
-
-        bool CheckOverlapInVentList(int index)
-        {
-            for (int k = 0; k < ventCoverIndices.Count; k++)
-            {
-                if(Mathf.Abs(index - ventCoverIndices[k]) <= 2)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-    }
-
-    /// <summary>
     /// Instantiates all corridors by calling the suitable functions
     /// Makes use of GetPos function and CorridorsListIdxToCorridorName function as well
     /// After all corridors/vents are instantiated, we check if the gameobject is vents related
@@ -756,7 +761,17 @@ public class RoomNew : MonoBehaviour
 
         //Vent cover spawn stuff
         countICorridors /= 2; //Since overlaps etc cause almost double count
-        List<int> ventCoverIndices = CalcVentCoverSpawnNumbers();
+        int[] ventCoverIndices;
+        if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
+           Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+        {
+            ventCoverIndices = (new VentCoverHelper()).CalcVentCoverSpawnNumbers(countICorridors, ventCoverNumber);
+        }
+        else
+        {
+            ventCoverIndices = PlayerRemoteCallsBehaviour.instance.ventCoverIndices;
+        }
+        
         int iCorrdorSpawnCtr = 0;
         bool isSpawnVentCover = false;
 
@@ -1055,7 +1070,7 @@ public class RoomNew : MonoBehaviour
         /// Checks if it's server and if yes, it spawns items correctly
         /// </summary>
         if ((Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host ||
-            Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.Host) &&
+            Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly) &&
             /*PlayerRemoteCallsBehaviour.instance.Cmd_Random*/ Random.Range(0.0f, 1.0f) < 0.1f)
         {
             // Try catch block in case Server Spawn Scripts Gameobject isnt there in scene

@@ -29,12 +29,20 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     private Transform door0;
     private Transform door1;
 
+    public bool isDisregardMainDoorPosSinceItIsntSpawnedInCode = false;
     [SyncVar] public Vector3 mainDoorPos;
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-        transform.position = mainDoorPos;
+        if (isDisregardMainDoorPosSinceItIsntSpawnedInCode)
+        {
+
+        }
+        else
+        {
+            transform.position = mainDoorPos;
+        }
     }
 
     //private int l = 0;
@@ -70,12 +78,14 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     public void OnInteract()
     {
         gameObject.GetComponent<BoxCollider>().enabled = false;
+        PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoorOrVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
         switch (doorType)
         {
             case DoorType.ventCover:
                 Debug.Log("Opening vent cover");
                 FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
-                Transform t = transform.parent.parent.parent.parent; // get rid of this
+                //PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
+                Transform t = transform.parent; // get rid of this
                 if (t.tag.StartsWith("Corr"))
                 {
                     t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
@@ -91,7 +101,7 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
                 GameState.gameState.addState(triggerState);
                 Debug.Log("Opening door");
                 FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
-                PlayerRemoteCallsBehaviour.instance.Cmd_OpenDoor(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
+                //PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Door_Open_Underground", transform.position);
                 //StartCoroutine(OpenDoor());
                 break;
 
@@ -102,16 +112,16 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     {
         float t = 0;
 
-        Transform parentGb = transform.parent;
-        while (transform.parent.localEulerAngles.z < 90 && t < 1.1f)
+        Transform holderT = transform.GetChild(1).GetChild(0);
+        while (holderT.localEulerAngles.z < 90 && t < 1.1f)
         {
-            parentGb.localEulerAngles = new Vector3(parentGb.localEulerAngles.x, parentGb.localEulerAngles.y, Mathf.Lerp(0, 90, t));
+            holderT.localEulerAngles = new Vector3(holderT.localEulerAngles.x, holderT.localEulerAngles.y, Mathf.Lerp(0, 90, t));
             //gameObject.SetActive(false);
             Debug.Log("t = " + t);
             t += Time.deltaTime * 0.4f;
             yield return new WaitForSeconds(0.01f);
         }
-        transform.parent.gameObject.SetActive(false);
+        holderT.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
     }
