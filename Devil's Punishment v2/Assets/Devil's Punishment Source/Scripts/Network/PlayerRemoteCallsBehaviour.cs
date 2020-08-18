@@ -99,12 +99,12 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     /// </summary>
     /// <param name="objectNetId"></param>
     [Command]
-    public void Cmd_OpenVentCover(uint objectNetId)
+    public void Cmd_OpenVentCover(uint objectNetId, bool isOpening)
     {
         if (ventCoverNetIds.Contains(objectNetId))
         {
             //If door or vent cover was already opened
-            Debug.LogWarning("Already opened door, or vent cover");
+            Debug.LogWarning("Vent cover is already being opened");
         }
         else
         {
@@ -122,9 +122,9 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
                 InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
 
                 //Calls the actual lerp to open vent cover (Server)
-                StartCoroutine(interactableDoor.OpenVentCover());
+                StartCoroutine(interactableDoor.OpenCloseVentCover(isOpening));
 
-                Rpc_VentCoverOpenHelper(objectNetId);
+                Rpc_VentCoverOpenHelper(objectNetId, isOpening);
 
                 ////enable net transform and net transform child just b4 starting to open door?
                 //Rpc_OpenDoorOrVentCoverInOtherClients(objectNetId);
@@ -143,7 +143,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
     /// </summary>
     /// <param name="netIdObject"></param>
     [ClientRpc]
-    private void Rpc_VentCoverOpenHelper(uint netIdObject)
+    private void Rpc_VentCoverOpenHelper(uint netIdObject, bool isOpening)
     {
 
         if (NetworkIdentity.spawned.TryGetValue(netIdObject, out NetworkIdentity netIdentity))
@@ -152,9 +152,19 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
 
             InteractableDoor interactableDoor = netIdentity.GetComponent<InteractableDoor>();
 
-            //grill box collider size decrease
-            interactableDoor.ReduceGrillColliderSize();
-            interactableDoor.MoveInteractTriggerCollider(true);
+            if (isOpening)
+            {
+                //grill box collider size decrease
+                interactableDoor.ReduceGrillColliderSize();
+            }
+            else
+            {
+                //grill box collider size increase
+                interactableDoor.IncreaseGrillColliderSize();
+            }
+
+            //moving the interactable trigger collider correctly (in clients)
+            interactableDoor.MoveInteractTriggerCollider(isOpening);
 
             Debug.Log("netIdentity.transform.position.y = " + netIdentity.transform.position.y);
             Debug.Log("interactableDoor.ventCorridorIdx = " + interactableDoor.ventCorridorIdx);
@@ -173,6 +183,9 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
             //Debug.Log("t name  = " + t.name);
             //Debug.Log("t tag  = " + t.tag);
             //Debug.Log("t position  = " + t.position);
+
+            // ------------------ WRONG PLACE to do Broken Floor Collider instantiation, move to vent spawn helper function, not open close function ------------------
+
             if (t.tag.StartsWith("Corr"))
             {
                 t = t.GetChild(2).GetChild(0); //WILL WORK ON CORRIDOR ONLY!!! TAKE ROOM SEPARATE
@@ -205,6 +218,25 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
         {
             //if the door or vent cover netId doesn't exist, on the server
             Debug.LogWarning("No such door on client; uint netId = " + netIdObject);
+        }
+    }
+
+    [Server]
+    public void Server_VentCoverOpenCloseLerpDone(uint netIdObject)
+    {
+        bool isFound = false;
+        for (int i = 0; i < ventCoverNetIds.Count; i++)
+        {
+            if(ventCoverNetIds[i] == netIdObject)
+            {
+                ventCoverNetIds.RemoveAt(i);
+                isFound = true;
+                break;
+            }
+        }
+        if (!isFound)
+        {
+            Debug.LogWarning("Didnt find vent cover in the list being opened or closed");
         }
     }
     

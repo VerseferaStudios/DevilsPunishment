@@ -49,6 +49,8 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
 
     [SerializeField] private BoxCollider interactTriggerCollider;
 
+    [SerializeField] private bool isOpen = false;
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -98,9 +100,9 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
         switch (doorType)
         {
             case DoorType.ventCover:
-                Debug.Log("Opening vent cover");
+                Debug.Log("Opening/Closing vent cover");
                 //FMODUnity.RuntimeManager.PlayOneShot("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
-                PlayerRemoteCallsBehaviour.instance.Cmd_OpenVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId);
+                PlayerRemoteCallsBehaviour.instance.Cmd_OpenVentCover(/*transform.parent.GetComponent<NetworkIdentity>().*/netId, !isOpen);
                 PlayerRemoteCallsBehaviour.instance.Cmd_PlaySoundOneShotOnOtherClients("event:/World/Doors/Underground/Vent_Open_Underground", transform.position);
                 //StartCoroutine(OpenVentCover());
                 break;
@@ -116,23 +118,39 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
                 break;
 
         }
+        isOpen = !isOpen;
     }
 
     [Server]
-    public IEnumerator OpenVentCover()
+    public IEnumerator OpenCloseVentCover(bool isOpening)
     {
         float t = 0;
 
-        Transform holderT = transform.GetChild(1).GetChild(0);
-        while (holderT.localEulerAngles.z < 90 && t < 1.1f)
+        int startRot, endRot;
+        if (isOpening)
         {
-            holderT.localEulerAngles = new Vector3(holderT.localEulerAngles.x, holderT.localEulerAngles.y, Mathf.Lerp(0, 90, t));
+            startRot = 0;
+            endRot = 90;
+        }
+        else
+        {
+            startRot = 90;
+            endRot = 0;
+        }
+
+        Transform holderT = transform.GetChild(1).GetChild(0);
+        WaitForSeconds waitLerp = new WaitForSeconds(0.01f);
+        while ((isOpening ? holderT.localEulerAngles.z < 90 : holderT.localEulerAngles.z > 0) && t < 1.1f)
+        {
+            holderT.localEulerAngles = new Vector3(holderT.localEulerAngles.x, holderT.localEulerAngles.y, Mathf.Lerp(startRot, endRot, t));
             //gameObject.SetActive(false);
             Debug.Log("t = " + t);
             t += Time.deltaTime * 0.4f;
-            yield return new WaitForSeconds(0.01f);
+            yield return waitLerp;
         }
+        holderT.localEulerAngles = new Vector3(holderT.localEulerAngles.x, holderT.localEulerAngles.y, endRot);
         PlayerRemoteCallsBehaviour.instance.Rpc_ReEnableVentCover(netId);
+        PlayerRemoteCallsBehaviour.instance.Server_VentCoverOpenCloseLerpDone(netId);
 
         yield return new WaitForSeconds(0.5f);
     }
