@@ -154,6 +154,7 @@ public class PlayerRemoteCallsBehaviour : NetworkBehaviour
 
             //grill box collider size decrease
             interactableDoor.ReduceGrillColliderSize();
+            interactableDoor.MoveInteractTriggerCollider(true);
 
             Debug.Log("netIdentity.transform.position.y = " + netIdentity.transform.position.y);
             Debug.Log("interactableDoor.ventCorridorIdx = " + interactableDoor.ventCorridorIdx);

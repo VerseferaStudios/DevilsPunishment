@@ -47,6 +47,8 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
     /// </summary>
     [SerializeField] private BoxCollider grillCollider;
 
+    [SerializeField] private BoxCollider interactTriggerCollider;
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -157,6 +159,15 @@ public class InteractableDoor : NetworkBehaviour, IInteractable
         grillCollider.size = new Vector3(grillCollider.size.x * 2, grillCollider.size.y * 2, grillColliderSizeZ);
         grillColliderCentreZ = grillCollider.center.z;
         grillCollider.center = new Vector3(grillCollider.center.x * 2, grillCollider.center.y * 2, grillColliderCentreZ);
+    }
+
+    /// <summary>
+    /// Move the interact Trigger Collider correctly when opening and closing a vent cover
+    /// </summary>
+    /// <param name="isOpening"> Are we opening the vent cover, if yes we have to move the interact Trigger Collider up </param>
+    public void MoveInteractTriggerCollider(bool isOpening)
+    {
+        interactTriggerCollider.center += new Vector3(-.7f, .7f, 0) * (isOpening ? 1 : -1);
     }
 
     //private void UpdateDoorPosOverNetwork(float oldPos, float newPos)
