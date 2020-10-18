@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class InteractableLoot : MonoBehaviour, IInteractable
+public class InteractableLoot : NetworkBehaviour, IInteractable
 {
 
     public Item item;
-    public int stock;
+    [SyncVar] public int stock;
     public float timeToPickUp = .5f;
     public string Prompt() {
         return "Pick up " + item.name + " (" + stock + ")";
@@ -29,7 +30,15 @@ public class InteractableLoot : MonoBehaviour, IInteractable
 		Inventory.instance.AddItem(item, stock);
 		if (gameObject.name.Contains("(Clone)"))
 		{
-			Destroy(gameObject);
+            //Destroy(gameObject);
+            if(PlayerController_Revamped.instance != null)
+            {
+                PlayerRemoteCallsBehaviour.instance.Cmd_DestroyItemOnPickup(gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("non local player interacting on other client! error");
+            }
 		}
 
         //FMOD Gun PU Events

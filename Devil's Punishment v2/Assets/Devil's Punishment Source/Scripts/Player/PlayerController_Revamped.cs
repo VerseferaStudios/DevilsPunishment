@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
+using System;
 
-public class PlayerController_Revamped : MonoBehaviour
+public class PlayerController_Revamped : NetworkBehaviour
 {
+    public static event Action CallbackAssignStaticInstances;
+
+    public static PlayerController_Revamped instance;
+
     [Range(0f, 30f)]
     public float movementSpeed;
     public float movementSmoothingSpeed = 4.0f;
@@ -34,9 +40,9 @@ public class PlayerController_Revamped : MonoBehaviour
     private bool isClimbing;
     private float originalHeight;
 
-    public GameObject playerModel;
     private Animator characterAnimator;
     public Animator CharacterAnimator { get => characterAnimator; set => characterAnimator = value; }
+    public Animator tpsAnimator;
 
     private CharacterController controller;
     private Camera headCamera;
@@ -59,25 +65,49 @@ public class PlayerController_Revamped : MonoBehaviour
     private float verticalAngleSubtractive;
 
 
-    public static PlayerController_Revamped instance;
-
     public bool isInteractLaser = false;
     public Vector3 laserSpot, laserMonitor;
     public LaserCutter laserCutterScript;
 
     public bool shadowOnly = false;
+
+    public NetworkAnimator tpsNetAnimator;
+
+    public PlayerRefsDataBehaviour playerRefsScript;
+
     void Awake() {
 
-
-        instance = this;
-        characterAnimator = playerModel.GetComponent<Animator>();
+        characterAnimator = /*playerModel.*/GetComponent<Animator>();
         headCamera = GetComponentInChildren<Camera>();
         controller = GetComponent<CharacterController>();
         inventory = GetComponentInChildren<Inventory>();
 
     }
-        
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        //Debug.Log("1 does player have authority over netId = " + netId + " = " + hasAuthority);
+        if (!hasAuthority)
+        {
+            enabled = false;
+            return;
+        }
+        instance = this;
+        CallbackAssignStaticInstances?.Invoke();
+    }
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        //Debug.Log("2 does player have authority over netId = " + netId + " = " + hasAuthority);
+    }
+
+    public void TPSNetAnimatorSendTrigger(string trigger)
+    {
+        tpsNetAnimator.SetTrigger(trigger);
+    }
+
     void Start() {
+        //Debug.Log("3 does player have authority over netId = " + netId + " = " + hasAuthority);
         chcon = GetComponent<CharacterController>();
         Controls = ControlsManager.instance.claimPlayer();
         inputDev = Controls.input;
@@ -296,7 +326,7 @@ public class PlayerController_Revamped : MonoBehaviour
     void Movement()
     {
         Vector2 inputDirection = input.normalized;
-        isSprinting = Input.GetKey(KeyCode.LeftShift);// Controls.Run);
+        isSprinting = Input.GetKey(KeyCode.LeftShift) & isMoving;// Controls.Run);
         float speed = ((isSprinting) ? RunSpeed : WalkSpeed) * inputDirection.magnitude;
         float targetRotation;
 
@@ -478,13 +508,13 @@ public class PlayerController_Revamped : MonoBehaviour
         if (isCrouching && !Physics.Raycast(transform.position, Vector3.up, .75f))
         {
             isCrouching = false;
-            CrouchControllerColliderHeight();
+            CrouchControllerColliderAndModelHeight();
                 
         }   
         else 
         {
             isCrouching = true;
-            CrouchControllerColliderHeight();
+            CrouchControllerColliderAndModelHeight();
             
         }
         
@@ -636,12 +666,12 @@ public class PlayerController_Revamped : MonoBehaviour
                     if (inputDev == PlayerControls.InputDevice.Keyboard)
                     {
                         Debug.Log("NOT TOGGLE BUT HOLD");
-                        isSprinting = Input.GetButton("Sprint");
+                        isSprinting = Input.GetButton("Sprint") & isMoving;
                     }
                     else if (inputDev == PlayerControls.InputDevice.XBox360)
                     {
                         Debug.Log("NOT TOGGLE BUT HOLD");
-                        isSprinting = Input.GetKey(Controls.Run);
+                        isSprinting = Input.GetKey(Controls.Run) & isMoving;
                     }
                     
                 break;
@@ -683,12 +713,12 @@ public class PlayerController_Revamped : MonoBehaviour
 
     void Animation() {
         if(shadowOnly){
-            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (SkinnedMeshRenderer part in playerRefsScript.playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
             }
         } else {
-            foreach (SkinnedMeshRenderer part in playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (SkinnedMeshRenderer part in playerRefsScript.playerModel.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 part.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
             }
@@ -700,6 +730,12 @@ public class PlayerController_Revamped : MonoBehaviour
         characterAnimator.SetBool("IsClimbing", isClimbing);
         characterAnimator.SetFloat("ClimbSpeed", climbSpeed);
 
+        tpsAnimator.SetFloat("ForwardSpeed", forwardAnimationSpeed);
+        tpsAnimator.SetFloat("RightSpeed", rightAnimationSpeed);
+        tpsAnimator.SetBool("IsCrouching", isCrouching);
+        tpsAnimator.SetBool("IsClimbing", isClimbing);
+        tpsAnimator.SetFloat("ClimbSpeed", climbSpeed);
+
         if (Inventory.instance.equippedGun != null){
             switch (Inventory.instance.equippedGun.weaponClassification)
             {
@@ -708,18 +744,33 @@ public class PlayerController_Revamped : MonoBehaviour
                     characterAnimator.SetLayerWeight(1,1);
                     characterAnimator.SetLayerWeight(2,0);
                     characterAnimator.SetLayerWeight(3,0);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 1);
+                    tpsAnimator.SetLayerWeight(2, 0);
+                    tpsAnimator.SetLayerWeight(3, 0);
                     break;
                 case GunItem.WeaponClassification.SHOTGUN:
                     characterAnimator.SetLayerWeight(0,0);
                     characterAnimator.SetLayerWeight(1,0);
                     characterAnimator.SetLayerWeight(2,1);
                     characterAnimator.SetLayerWeight(3,0);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 0);
+                    tpsAnimator.SetLayerWeight(2, 1);
+                    tpsAnimator.SetLayerWeight(3, 0);
                     break;
                 case GunItem.WeaponClassification.ASSAULTRIFLE:
                     characterAnimator.SetLayerWeight(0,0);
                     characterAnimator.SetLayerWeight(1,0);
                     characterAnimator.SetLayerWeight(2,0);
                     characterAnimator.SetLayerWeight(3,1);
+
+                    tpsAnimator.SetLayerWeight(0, 0);
+                    tpsAnimator.SetLayerWeight(1, 0);
+                    tpsAnimator.SetLayerWeight(2, 0);
+                    tpsAnimator.SetLayerWeight(3, 1);
                     break;
 
                 default: // Pass
@@ -730,6 +781,11 @@ public class PlayerController_Revamped : MonoBehaviour
             characterAnimator.SetLayerWeight(1,0);
             characterAnimator.SetLayerWeight(2,0);
             characterAnimator.SetLayerWeight(3,0);
+
+            tpsAnimator.SetLayerWeight(0, 1);
+            tpsAnimator.SetLayerWeight(1, 0);
+            tpsAnimator.SetLayerWeight(2, 0);
+            tpsAnimator.SetLayerWeight(3, 0);
         }
     }
 
@@ -741,14 +797,22 @@ public class PlayerController_Revamped : MonoBehaviour
     }
     Vector3 controllerCenter;
 
-    void CrouchControllerColliderHeight() {
+    void CrouchControllerColliderAndModelHeight() {
+        float newPosY;
         if(isCrouching) {
            // controller.center = Vector3.up * .625f;
             controller.height = .6f;
+            newPosY = -0.474f;
+
         } else {
           //  controller.center = controllerCenter;
             controller.height = 1.8f;
+            newPosY = -0.96f;
         }
+
+        //Calls cmd to make crouch offset take effect
+        PlayerRemoteCallsBehaviour.instance.Cmd_PlayerCrouchOffset(newPosY, netIdentity);
+
     }
 
     public void ChangePlayerSpeed(Slider slider)

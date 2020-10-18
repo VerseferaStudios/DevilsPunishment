@@ -66,6 +66,8 @@ public class IOClod : IOCcomp {
 	}
 	
 	void Start () {
+		enabled = false;
+		return;
 		UpdateValues();
 		if(transform.Find("Lod_0"))
 		{
@@ -141,6 +143,8 @@ public class IOClod : IOCcomp {
 		gameObject.layer = currentLayer;
 	}
 	void Update () {
+		enabled = false;
+		return;
 		frameInterval = Time.frameCount % 4;
 		if(frameInterval == 0)
 		{

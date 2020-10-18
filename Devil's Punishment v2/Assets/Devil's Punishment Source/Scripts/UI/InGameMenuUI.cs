@@ -10,7 +10,17 @@ public class InGameMenuUI : MonoBehaviour
 
     public Image backgroundPanel;
     public Color backGroundPanelColor;
-    void Awake() 
+
+
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
     {
         instance = this;
     }

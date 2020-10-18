@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
@@ -84,6 +82,7 @@ public class GunController : MonoBehaviour
 	[SerializeField]
 	private InvAmmoDisplay invAmmoDisplay;
     private Animator gunAnimator;
+    public Animator tpsAnimator;
 
 	[SerializeField]
     private Animator playerAnimator;
@@ -97,7 +96,18 @@ public class GunController : MonoBehaviour
 	public F_Rifle f_RifleScript;
 	public F_Shotgun f_ShotgunScript;
 
-    void Awake() {
+    public TPSNetAnimationSyncBehaviour tPSNetAnimSyncScript;
+
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInstance;
+    }
+    private void AssignInstance()
+    {
         instance = this;
     }
 
@@ -114,6 +124,7 @@ public class GunController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
 		InitGun();
+
 	}
 
     void SetFireRate(float f) {
@@ -127,6 +138,8 @@ public class GunController : MonoBehaviour
 	private bool used1 = false;
     void Update()
 	{
+        TestShot();
+
 		UpdateClipStock();
 		GatherInput();
         if(!busyFiringAlready && equippedGun != null)
@@ -142,6 +155,18 @@ public class GunController : MonoBehaviour
 		}
 	}
 
+    private void TestShot()
+    {
+        if (Input.GetKey(KeyCode.O))
+        {
+            tpsAnimator.SetBool("TestShot", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.O))
+        {
+            tpsAnimator.SetBool("TestShot", false);
+        }
+    }
+
 	public int GetClip() {
         return clip;
     }
@@ -154,25 +179,16 @@ public class GunController : MonoBehaviour
         return clipStock;
     }
 
-
-    public GameObject[] HANDGUN_PARTS;
-
-    public GameObject[] SHOTGUN_PARTS;
-
-    public GameObject[] ASSAULT_RIFLE_PARTS;
-
-	public void Hide3rdPersonGuns(){
-		foreach (GameObject part in HANDGUN_PARTS.Concat(SHOTGUN_PARTS).Concat(ASSAULT_RIFLE_PARTS))
-		{
-			part.SetActive(false);
-		}
-	}
-
 	public void DeactivateWeaponArmsBlendingLayers(){
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),0);
 		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),0);
-	}
+
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"), 0);
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"), 0);
+        //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"), 0);
+
+    }
 
     public void InitGun() {
 
@@ -209,32 +225,29 @@ public class GunController : MonoBehaviour
 					clipSize = equippedGun.gunItem.clipSize;
 					clipStock = inventory.GetEquippedGunAmmo();
 
-					Hide3rdPersonGuns();
+					tPSNetAnimSyncScript.SendCmd_HideTpsGuns();
 					DeactivateWeaponArmsBlendingLayers();
 					if (Inventory.instance.equippedGun != null){
 						switch (Inventory.instance.equippedGun.weaponClassification)
 						{
 							case GunItem.WeaponClassification.HANDGUN:
-								foreach (GameObject part in HANDGUN_PARTS)
-								{
-									part.SetActive(true);
-								}
-								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun"),1);
-								break;
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsPistol();
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"), 1);
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun"),1);
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun"), 1);
+                                break;
 							case GunItem.WeaponClassification.SHOTGUN:
-								foreach (GameObject part in SHOTGUN_PARTS)
-								{
-									part.SetActive(true);
-								}
-								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
-								break;
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsShotgun();
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"), 1);
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun"),1);
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun"), 1);
+                                break;
 							case GunItem.WeaponClassification.ASSAULTRIFLE:
-								foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-								{
-									part.SetActive(true);
-								}
-								playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
-								break;
+                                tPSNetAnimSyncScript.SendCmd_ShowTpsRifle();
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"), 1);
+                                playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle"),1);
+                                tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle"), 1);
+                                break;
 
 							default: // Pass
 								break;
@@ -255,8 +268,8 @@ public class GunController : MonoBehaviour
 			clip = 0;
 			clipSize = 0;
 			clipStock = 0;
-			Hide3rdPersonGuns();
-			DeactivateWeaponArmsBlendingLayers();
+            tPSNetAnimSyncScript.SendCmd_HideTpsGuns();
+            DeactivateWeaponArmsBlendingLayers();
 		}
 		invAmmoDisplay.SetGunIcons();
 
@@ -363,6 +376,7 @@ public class GunController : MonoBehaviour
 			StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
 		}
 
+
 		//void wait4ReloadAsync()
 		//{
 		do
@@ -374,8 +388,11 @@ public class GunController : MonoBehaviour
 		{
 			gunAnimator.SetBool("Reload", false);
 			gunAnimator.SetTrigger("Fire");
-			if (weaponIsAssaultRifle())
-			{
+            tpsAnimator.SetBool("Reload", false);
+            tpsAnimator.SetTrigger("Fire");
+            PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Fire");
+            if (weaponIsAssaultRifle())
+            {
 				f_RifleScript.PlayRFireEvent();
 			}
 			else if (weaponIsHandGun())
@@ -390,7 +407,7 @@ public class GunController : MonoBehaviour
 			{
 				Debug.LogWarning("Unrecognised gun!");
 			}
-			await Task.Delay(1);
+            await Task.Delay(1); // < timeBetweenShots ? 1 : (int)timeBetweenShots);
 		} while (gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Basic"));
 
 		//}
@@ -426,7 +443,7 @@ public class GunController : MonoBehaviour
 				GameObject bp = Instantiate(hitParticles, hit.point, Quaternion.LookRotation(hit.normal));
 				bp.transform.SetParent(hit.collider.transform);
                 Debug.Log("SHOOTIN");
-                networkPlayer.Cmdbroadcast_Shots(hit.point, Quaternion.LookRotation(hit.normal));
+                networkPlayer.SendCmd_Broadcast_Shots(hit.point, Quaternion.LookRotation(hit.normal));
 
 				//This is just for testing a thing in the elimination system, can be removed later / SkitzFist
 				//IfEnemyHit(hit);
@@ -468,6 +485,8 @@ public class GunController : MonoBehaviour
 		reloading = true;
 		//Debug.Log("ReloadTriggered!");
 		gunAnimator.SetTrigger("Reload");
+		tpsAnimator.SetTrigger("Reload");
+        PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Reload");
 		float breakPoint = .5f;
         // Wait for other states to finish
         while (!gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
@@ -500,6 +519,7 @@ public class GunController : MonoBehaviour
 			else
 			{
 				gunAnimator.SetBool("Reload", false);
+				tpsAnimator.SetBool("Reload", false);
 				//Wait for animation to finish
 				yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 				reloading = false;
@@ -513,6 +533,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ amt,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			tpsAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -524,6 +545,7 @@ public class GunController : MonoBehaviour
 			inventory.DropItem(ammoName,/*ammount*/ clipStock,/*consume*/true);
 			clipStock = inventory.GetEquippedGunAmmo();
 			gunAnimator.SetBool("Reload", false);
+			tpsAnimator.SetBool("Reload", false);
 			//Wait for animation to finish
 			yield return new WaitForSeconds(0.5f * (gunAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + gunAnimator.GetCurrentAnimatorStateInfo(0).length));
 			reloading = false;
@@ -540,8 +562,6 @@ public class GunController : MonoBehaviour
             gunAnimator.SetFloat("Aiming", aiming);
             gunAnimator.SetBool("Running", running);
             gunAnimator.SetBool("Raised", raised);
-
-
 
             //	Commenting these lines out  (and the "standardPosition=... in the update()") allow you to use the Unity Gizmo to find the position. Just make sure to uncomment it when you're done.
             gunAnimator.transform.localPosition = Vector3.Lerp(standardPosition, equippedGun.gameObject.GetComponent<OffsetTransform>().position, aiming);
@@ -667,31 +687,29 @@ public class GunController : MonoBehaviour
 	public void ReloadAnimationBehvioursOnStateEnterCallback()
 	{
 		playerAnimator.SetTrigger("Reload");
-		switch (Inventory.instance.equippedGun.weaponClassification)
-		{
-			case GunItem.WeaponClassification.HANDGUN:
-				foreach (GameObject part in HANDGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+		tpsAnimator.SetTrigger("Reload");
+        PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Reload");
+		//switch (Inventory.instance.equippedGun.weaponClassification)
+		//{
+		//	case GunItem.WeaponClassification.HANDGUN:
+		//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+		//		tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+		//		//tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+		//	    break;
+		//	case GunItem.WeaponClassification.SHOTGUN:
+		//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
+  //              tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+  //              //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+		//		break;
+		//	case GunItem.WeaponClassification.ASSAULTRIFLE:
+		//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
+  //              tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+  //              //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+		//		break;
 
-				}
-				break;
-			case GunItem.WeaponClassification.SHOTGUN:
-				foreach (GameObject part in SHOTGUN_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
-				}
-				break;
-			case GunItem.WeaponClassification.ASSAULTRIFLE:
-				foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-				{
-					playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
-				}
-				break;
-
-			default: // Pass
-				break;
-		}
+		//	default: // Pass
+		//		break;
+		//}
     }
 
 	public void ReloadAnimationBehvioursOnStateExitCallback()
@@ -699,6 +717,7 @@ public class GunController : MonoBehaviour
 		reloading = gunAnimator.GetBool("Reload");
 		if(!reloading){
 		playerAnimator.SetBool("Reload", reloading);
+        tpsAnimator.SetBool("Reload", reloading);
 		}
     }
 
@@ -707,30 +726,29 @@ public class GunController : MonoBehaviour
 		bool shooting = gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shoot");
 		if(shooting){
 			playerAnimator.SetTrigger("Fire");
-			switch (Inventory.instance.equippedGun.weaponClassification)
-			{
-				case GunItem.WeaponClassification.HANDGUN:
-					foreach (GameObject part in HANDGUN_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
-					}
-					break;
-				case GunItem.WeaponClassification.SHOTGUN:
-					foreach (GameObject part in SHOTGUN_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
-					}
-					break;
-				case GunItem.WeaponClassification.ASSAULTRIFLE:
-					foreach (GameObject part in ASSAULT_RIFLE_PARTS)
-					{
-						playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
-					}
-					break;
+            tpsAnimator.SetTrigger("Fire");
+            PlayerController_Revamped.instance.TPSNetAnimatorSendTrigger("Fire");
+			//switch (Inventory.instance.equippedGun.weaponClassification)
+			//{
+			//	case GunItem.WeaponClassification.HANDGUN:
+			//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Handgun - Arms"),1);
+   //                 tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+   //                 //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Handgun - Arms"),1);
+			//		break;
+			//	case GunItem.WeaponClassification.SHOTGUN:
+			//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Shotgun - Arms"),1);
+   //                 tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+   //                 //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Shotgun - Arms"),1);
+			//		break;
+			//	case GunItem.WeaponClassification.ASSAULTRIFLE:
+			//		playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Rifle - Arms"),1);
+   //                 tPSNetAnimSyncScript.SendCmd_LayerWeightAnim(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+   //                 //tpsAnimator.SetLayerWeight(tpsAnimator.GetLayerIndex("Rifle - Arms"),1);
+			//		break;
 
-				default: // Pass
-					break;
-			}
+			//	default: // Pass
+			//		break;
+			//}
 		}
     }
 
@@ -739,6 +757,7 @@ public class GunController : MonoBehaviour
 		bool shooting = gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shoot");
 		if(!shooting){
 			playerAnimator.SetBool("Fire",shooting);
+            tpsAnimator.SetBool("Fire",shooting);
 		}
     }
 

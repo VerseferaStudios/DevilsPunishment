@@ -9,6 +9,7 @@ public  class Network_Disable_Component : NetworkBehaviour
     [SerializeField]
     public List<Behaviour> objects_to_disable = new List<Behaviour>();
     public List<GameObject> UIThings = new List<GameObject>();
+    public bool _DevModeIsShowTPS = false;
     public GameObject Third_Person_Model;
     public GameObject chat;
     public GameObject InvView;
@@ -42,7 +43,15 @@ public  class Network_Disable_Component : NetworkBehaviour
         else
         {
             InvView.SetActive(true);
-            Third_Person_Model.SetActive(false);
+            //Third_Person_Model.SetActive(false);
+            if (!_DevModeIsShowTPS)
+            {
+                Renderer[] rends = Third_Person_Model.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < rends.Length; i++)
+                {
+                    rends[i].enabled = false;
+                }
+            }
         }
 
     }

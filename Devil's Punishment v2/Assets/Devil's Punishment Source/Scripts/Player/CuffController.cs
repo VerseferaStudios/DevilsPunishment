@@ -28,7 +28,7 @@ public class CuffController : MonoBehaviour
     {
         //StartCoroutine(StartAfterDelay());
         playerController = GetComponent<PlayerController_Revamped>();
-        Uncuff();
+        Cuff();
     }
 
     private IEnumerator StartAfterDelay()
@@ -42,11 +42,12 @@ public class CuffController : MonoBehaviour
     //Can that item get picked up?
     public void Cuff()
     {
-        isCuffed = false;
+        isCuffed = true;
         pisLocked = true;
         risLocked = true;
         sisLocked = true;
         playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 1.0f);
+        playerController.tpsAnimator.SetFloat("isCuffed_Normalized", 1.0f);
         //Add a on screen or audio cue for failure.
         //Debug.Log("Cuffed, find a way to get your cuffs off!");
     }
@@ -58,6 +59,7 @@ public class CuffController : MonoBehaviour
         risLocked = false;
         sisLocked = false;
         playerController.CharacterAnimator.SetFloat("isCuffed_Normalized", 0.0f);
+        playerController.tpsAnimator.SetFloat("isCuffed_Normalized", 0.0f);
         //Debug.Log("You have picked up a gun.");
     }
 
@@ -84,12 +86,46 @@ public class CuffController : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+    private bool x = true;
+#endif
+
     private void Update()
     {
         if (playerController.GetIsClimbing() && Input.GetKey(KeyCode.Space))
         {
            playerController.SetIsClimbing(false);
         }
+
+#if UNITY_EDITOR
+        // ----------------------- FOR TEST -----------------------
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (x)
+            {
+                Uncuff();
+            }
+            else
+            {
+                Cuff();
+            }
+
+            x = !x;
+        }
+#endif
     }
 
+//#if UNITY_EDITOR
+
+//    private void OnEnable()
+//    {
+//        UnCuffDevTestScript.UnCuffCurrPlayer += Uncuff;
+//    }
+
+//    private void OnDisable()
+//    {
+//        UnCuffDevTestScript.UnCuffCurrPlayer -= Uncuff;
+//    }
+
+//#endif
 }

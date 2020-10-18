@@ -533,7 +533,11 @@
 	</object>
 	<object class="MixerBusPanner" id="{8f3ad827-0a65-496b-93d7-8450739be1b9}" />
 	<object class="MixerBusFader" id="{a22301b2-b5d2-4d81-8be2-341b6a100f27}" />
-	<object class="SpatialiserEffect" id="{4ae4998d-9df6-43d9-ad60-f96e47c6445a}" />
+	<object class="SpatialiserEffect" id="{4ae4998d-9df6-43d9-ad60-f96e47c6445a}">
+		<property name="minimumDistance">
+			<value>0</value>
+		</property>
+	</object>
 	<object class="SFXReverbEffect" id="{9b98be22-dbaf-4fc0-a6e3-7c55b532c829}">
 		<property name="bypass">
 			<value>true</value>

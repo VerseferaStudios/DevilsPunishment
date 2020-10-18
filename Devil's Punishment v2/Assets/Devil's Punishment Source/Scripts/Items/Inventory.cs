@@ -58,7 +58,6 @@ public class Inventory : MonoBehaviour
 
 
     private void Awake() {
-        instance = this;
 		gunController = gameObject.transform.parent.GetComponentInChildren<GunController>();
 		Debug.Assert(gunController != null, "gunController shouldn't be null!");
         OrganizeInventory();
@@ -67,6 +66,20 @@ public class Inventory : MonoBehaviour
         CompoundInventory();
         CullNulls();
         Sort();
+    }
+
+    private void OnEnable()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances += AssignInventoryInstance;
+    }
+    private void OnDestroy()
+    {
+        PlayerController_Revamped.CallbackAssignStaticInstances -= AssignInventoryInstance;
+    }
+
+    private void AssignInventoryInstance()
+    {
+        instance = this;
     }
 
     private void Start()
@@ -237,7 +250,7 @@ public class Inventory : MonoBehaviour
 
                 } else {
                     inventory[i] = new InventorySlot(item, stack);
-                    Debug.LogError("Item "+item.name + " added to stack " + stack + " in Slot " + i);
+                    Debug.LogWarning("Item "+item.name + " added to stack " + stack + " in Slot " + i);
                     isBreakOuter = true;
                     break;
                 }
@@ -259,15 +272,18 @@ public class Inventory : MonoBehaviour
         }
     }
 
-	public GameObject DropGameObject(string ResourceID, int count = 1)
+	public void DropGameObject(string ResourceID, int count = 1)
 	{   
-        if (count < 1) return null;
+        if (count < 1) return;
 		Debug.Log("Creating "+count+" "+ResourceID+"'s from item at "+gameObject.name+"'s position.");
-		GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
-		//Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
-		drop.GetComponent<InteractableLoot>().stock = count;
-		drop.SetActive(true);
-		return drop;
+
+        PlayerRemoteCallsBehaviour.instance.Cmd_DropItem(ResourceID, count, gameObject.transform.position, gameObject.transform.eulerAngles);
+
+        //GameObject drop = Instantiate(ResourceManager.instance.getResource(ResourceID), gameObject.transform.position, gameObject.transform.rotation);
+		
+        //Debug.Assert(drop != null, "drop shouldn't be null. It didn't load correctly as a resource.");
+		//drop.GetComponent<InteractableLoot>().stock = count;
+		//drop.SetActive(true);
 	}
 
 	public void DropGun()
