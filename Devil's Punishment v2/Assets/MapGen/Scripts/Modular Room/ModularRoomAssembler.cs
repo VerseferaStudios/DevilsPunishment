@@ -724,7 +724,7 @@ public class ModularRoomAssembler : MonoBehaviour
         }
         if (generatingProps)
         {
-            modularPropGen.GenerateProps("Hospital");
+            modularPropGen.GenerateProps("Common Room");
         }
     }
 

@@ -51,6 +51,30 @@ public class Props
     }
 }
 
+public class WallEdge
+{
+    Vector3 tilePos;
+    Quaternion wallDirection;
+
+    public WallEdge(Vector3 TilePos, Quaternion WallDirection)
+    {
+        tilePos = TilePos;
+        wallDirection = WallDirection;
+    }
+
+    public Vector3 TilePos
+    {
+        get { return tilePos; }
+        set { tilePos = value; }
+    }
+
+    public Quaternion WallDirection
+    {
+        get { return wallDirection; }
+        set { wallDirection = value; }
+    }
+}
+
 public class ModularPropGen : MonoBehaviour
 {
 
@@ -92,12 +116,13 @@ public class ModularPropGen : MonoBehaviour
     public GameObject[] hospitaltv;
     public GameObject[] hospitalStretchers;
     public GameObject[] hospitalTrolleys;
-    public GameObject[] hospitalLights;
+    public GameObject[] hospitalLights; 
 
     [Header("   Common Room props")]
     public GameObject[] commonRoomSofas;
     public GameObject[] commonRoomTVs;
     public GameObject[] commonRoomTables;
+    public GameObject[] commonRoomLockers;
 
     Props[] props;
 
@@ -311,23 +336,167 @@ public class ModularPropGen : MonoBehaviour
 
             case "Common Room":
 
-                props = new Props[]
+                if (floors.Count >= 10)
                 {
+                    props = new Props[]
+                    {
                     new Props("Sofa", 100, false, commonRoomSofas.Length, commonRoomSofas),
                     new Props("TV", 100, false, commonRoomTVs.Length, commonRoomTVs),
-                    new Props("CoffeeTable", 100, false, commonRoomTables.Length, commonRoomTables)
-                };
+                    new Props("CoffeeTable", 100, false, commonRoomTables.Length, commonRoomTables),
+                    new Props("Lockers", 100, false, commonRoomLockers.Length, commonRoomLockers)
+                    };
 
-                _floorHolder = floorHolder[0];
-                _otherFloorHolder = floorHolder[1];
-                floor0Area = floorXsize[0] * floorZsize[0];
-                floor1Area = floorXsize[1] * floorZsize[1];
-                startPos = _floorHolder.localPosition + floors[0] + GenerateOffset(0, 2.5f, 0);
-                otherstartPos = _otherFloorHolder.localPosition + floors[floor0Area] + GenerateOffset(0, 2.5f, 0);
+                    bigRoom = false;
+
+                    List<Vector3> WallTiles = new List<Vector3>();
+                    List<Vector3> availTiles = new List<Vector3>();
+
+                    _floorHolder = floorHolder[0];
+                    _otherFloorHolder = floorHolder[1];
+                    floor0Area = floorXsize[0] * floorZsize[0];
+                    floor1Area = floorXsize[1] * floorZsize[1];
+                    startPos = _floorHolder.localPosition + floors[0] + GenerateOffset(0, 2.5f, 0);
+                    otherstartPos = _otherFloorHolder.localPosition + floors[floor0Area] + GenerateOffset(0, 2.5f, 0);
+
+                    if (floors.Count > 14)
+                        bigRoom = true;
+
+                    foreach (Vector3 floor in floors)
+                    {
+                        Debug.Log("Checking floor pos: " + floor);
+                        if (WallCheck(floor + GenerateOffset(0, 3, 0)).Item1 && WallCheck(floor + GenerateOffset(0, 3, 0)).Item2 < 2)
+                        {
+                            WallTiles.Add(floor);
+                        } else if(!WallCheck(floor + GenerateOffset(0, 3, 0)).Item5 && WallCheck(floor + GenerateOffset(0, 3, 0)).Item2 < 1)
+                        {
+                            availTiles.Add(floor);
+                        }
+                    }
+                    Debug.Log("Wall Tile Count: " + WallTiles.Count);
+                    List<GameObject> tvs = new List<GameObject>();
+
+                    GameObject tvProp = props[1].Versions[0];
+                    Debug.Log("Wall Tile Count: " + WallTiles.Count);
+                    int tvSpawnIndex = UnityEngine.Random.Range(0, WallTiles.Count - 1);
+
+                    GameObject tv = SpawnProp(tvProp, WallTiles[tvSpawnIndex] + GenerateOffset(0, 5, 0), WallCheck(WallTiles[tvSpawnIndex] + GenerateOffset(0, 5, 0)).Item4, GenerateOffset(1.628875f, 0.9346116f, 1.16411f),
+                        WallCheck(WallTiles[tvSpawnIndex] + GenerateOffset(0, 5, 0)).Item3, GenerateOffset(-90, 0, 0), null, tvs, false, false, null);
+
+                    GameObject sofa = props[0].Versions[0];
+
+                    GameObject _sofa = Instantiate(sofa, WallTiles[tvSpawnIndex] + GenerateOffset(0, 2.23f, 0), WallCheck(WallTiles[tvSpawnIndex] + GenerateOffset(0, 5, 0)).Item4);
+                    _sofa.transform.Rotate(new Vector3(-90, 0, 90));
+                    _sofa.transform.SetParent(tv.transform, true);
+                    //Move back
+                    _sofa.transform.localPosition -= new Vector3(0, 1, 0);
+                    //Move to the left relatively
+                    _sofa.transform.localPosition += new Vector3(0.78f, 0, 0);
+
+                    WallTiles.RemoveAt(tvSpawnIndex);
+
+                    if (bigRoom)
+                    {
+                        int tvSpawnIndex2 = UnityEngine.Random.Range(0, WallTiles.Count);
+
+                        tv = SpawnProp(tvProp, WallTiles[tvSpawnIndex2] + GenerateOffset(0, 5, 0), WallCheck(WallTiles[tvSpawnIndex2] + GenerateOffset(0, 5, 0)).Item4, GenerateOffset(1.628875f, 0.9346116f, 1.16411f),
+                            WallCheck(WallTiles[tvSpawnIndex2] + GenerateOffset(0, 5, 0)).Item3, GenerateOffset(-90, 0, 0), null, tvs, false, false, null);
+
+                        _sofa = Instantiate(sofa, WallTiles[tvSpawnIndex2] + GenerateOffset(0, 2.23f, 0), WallCheck(WallTiles[tvSpawnIndex2] + GenerateOffset(0, 5, 0)).Item4);
+                        _sofa.transform.Rotate(new Vector3(-90, 0, 90));
+                        _sofa.transform.SetParent(tv.transform, true);
+                        //Move back
+                        _sofa.transform.localPosition -= new Vector3(0, 1, 0);
+                        //Move to the left relatively
+                        _sofa.transform.localPosition += new Vector3(0.78f, 0, 0);
+
+                        WallTiles.RemoveAt(tvSpawnIndex2);
+                    }
+
+                    int lockersToSpawnNum;
+
+                    if (bigRoom)
+                        lockersToSpawnNum = 4;
+                    else
+                        lockersToSpawnNum = 2;
 
 
+                    for (int i = 0; i < lockersToSpawnNum; i++)
+                    {
+                        int lockersSpawnIndex = UnityEngine.Random.Range(0, WallTiles.Count);
+                        GameObject lockersPrefab = props[3].Versions[0];
+                        GameObject lockers = Instantiate(lockersPrefab, WallTiles[lockersSpawnIndex] + GenerateOffset(0, 2.2f, 0), WallCheck(WallTiles[lockersSpawnIndex] + GenerateOffset(0, 2.4f, 0)).Item4);
+                        //lockers.transform.SetParent(WallCheck(WallTiles[lockersSpawnIndex] + GenerateOffset(0, 2.4f, 0)).Item6, true);
+                        lockers.transform.position = WallCheck(WallTiles[lockersSpawnIndex] + GenerateOffset(0, 2.25f, 0)).Item3;
+                        lockers.transform.Rotate(GenerateOffset(0, -90, 0));
+                        WallTiles.RemoveAt(lockersSpawnIndex);
+                    }
+
+                    //This is just here for debugging purposes, remove later.
+                    foreach (Vector3 tile in availTiles)
+                    {
+                        GameObject k = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        k.SetActive(false);
+                        k.transform.position = tile + GenerateOffset(0, 3, 0);
+                    }
+
+                    if(availTiles.Count > 0) 
+                    {
+                    GameObject coffeTableProp = props[2].Versions[0];
+                    int sofaSpawnIndex = UnityEngine.Random.Range(0, availTiles.Count);
+
+                    //I'm not using the spawn prop method here because it is a really long winded method and I don't really need it here
+                    GameObject coffeeTable = Instantiate(coffeTableProp, availTiles[sofaSpawnIndex] + GenerateOffset(0, 2.228f, 0), Quaternion.identity);
+
+                    //Using this variable here just makes it easier to spawn a sofa on either side of the coffee table by multiplying the localPosition change by 1 or -1 i.e x.
+                    int x = -1;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            GameObject cSofa = Instantiate(sofa, coffeeTable.transform.position, Quaternion.identity);
+                            cSofa.transform.SetParent(coffeeTable.transform, true);
+                            cSofa.transform.rotation = Quaternion.Euler(GenerateOffset(-90, 0, 0));
+                            cSofa.transform.localPosition += Vector3.left * -9.5f * x;
+                            if (x == 1)
+                            {
+                                cSofa.transform.Rotate(GenerateOffset(0, 0, 180));
+                                cSofa.transform.localPosition += Vector3.back * 4;
+                            }
+                            else
+                            {
+                                cSofa.transform.localPosition -= Vector3.back * 4;
+                            }
+
+
+                            x = 1;
+                        }
+                    }
+
+
+
+                }
                 break;
+
         }
+    }
+
+    private GameObject SpawnProp(GameObject spawnObj, Vector3 spawnPos, Quaternion spawnRot, Vector3 objScale, Vector3 movePos, Vector3 postRot, Transform parentObj, List<GameObject> propList, bool moveLocally, bool lookAtObj, GameObject lookObj)
+    {
+        spawnObj = Instantiate(spawnObj, spawnPos, spawnRot);
+        spawnObj.transform.SetParent(parentObj, true);
+        if (moveLocally)
+        {
+            spawnObj.transform.localPosition = movePos;
+            //spawnObj.transform.localScale = objScale;
+        } else
+        {
+            spawnObj.transform.position = movePos;
+        }
+        if (lookAtObj)
+        {
+            spawnObj.transform.rotation = Quaternion.LookRotation(GenerateOffset(spawnObj.transform.position.x - lookObj.transform.position.x, lookObj.transform.localPosition.y, spawnObj.transform.position.z - lookObj.transform.position.z));
+        }
+        spawnObj.transform.Rotate(postRot);
+        propList.Add(spawnObj);
+        return spawnObj;
     }
 
     private void SpawnPropsAroundBeds(List<GameObject> beds)
@@ -490,7 +659,22 @@ public class ModularPropGen : MonoBehaviour
         float bedForwardoffset = 1.5f;
         float bedYoffset = 0.24f;
 
-        //Get which side of the room is the longest and spawn the beds there.
+        //List<WallEdge> bedSpawns = new List<WallEdge>();
+
+        //bedSpawns = EdgeFloors(startPos, floorToUse, spawns);
+        /*
+        foreach(WallEdge pos in bedSpawns)
+        {
+            Quaternion faceWall = pos.WallDirection;
+            t = GameObject.Instantiate(propToSpawn.Versions[versionToSpawn], pos.TilePos, faceWall);
+            t.transform.parent = roomReferencesModular.transform;
+            t.transform.localPosition = new Vector3(t.transform.localPosition.x - 4, t.transform.localPosition.y, t.transform.localPosition.z);
+
+            objList.Add(t);
+        }
+        */
+        
+        //Get which side of the room is the longest and spawn the beds there. --THIS CODE WILL BE REPLACED WITH AN EDGE WALL MAPPER WITH ONLY INSTANTIATION HANDLED IN THIS FUNCTION--
         if (Vector3.Distance(startPos, startPos + GenerateOffset(floorXsize[floorToUse] * 4 + 4f, 0, 0)) > Vector3.Distance(startPos, startPos + GenerateOffset(0, 0, floorZsize[floorToUse] * 4 + 4f)))
         {
             //Run this if the X side wall is longer.
@@ -538,7 +722,6 @@ public class ModularPropGen : MonoBehaviour
 
                                 objList.Add(p);
                             }
-
                             
                             break;
 
@@ -638,6 +821,111 @@ public class ModularPropGen : MonoBehaviour
             }
         }
     }
+    
+    //This function will check if there is a wall on either side of the object and return that walls position and a rotation needed for the object to face the wall
+    private (bool, int, Vector3, Quaternion, bool, Transform) WallCheck(Vector3 posToCheck)
+    {
+        bool x1 = false;
+        bool x2 = false;
+        bool z1 = false;
+        bool z2 = false;
+        bool doorPresent = false;
+        int adjacentWalls = 0;
+        Vector3 wallPos = posToCheck;
+        Quaternion faceWall = Quaternion.identity;
+        Transform wallT = null;
+        bool canSpawn = false;
+        //GameObject testCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //testCube.transform.position = posToCheck;
+        //Bitshift to only hit game objects on the default layer;
+        int layerMask = 1 << 0;
+
+        RaycastHit hit;
+        if(Physics.Raycast(posToCheck, Vector3.right, out hit, 4.0f, layerMask) && InteractableCheck(posToCheck, Vector3.right))
+        {
+            x1 = true;
+            adjacentWalls++;
+            wallPos = hit.point;
+            wallT = hit.collider.gameObject.transform;
+            faceWall = Quaternion.LookRotation(posToCheck - hit.point);
+            Debug.Log("collider hit " + hit.collider.gameObject.name);
+        } else if(!InteractableCheck(posToCheck, Vector3.right))
+        {
+            doorPresent = true;
+        }
+        Debug.Log("x1 returns: " + x1);
+        if (Physics.Raycast(posToCheck, Vector3.left, out hit, 4.0f, layerMask) && InteractableCheck(posToCheck, Vector3.left))
+        {
+            x2 = true;
+            adjacentWalls++;
+            wallPos = hit.point;
+            wallT = hit.collider.gameObject.transform;
+            faceWall = Quaternion.LookRotation(posToCheck - hit.point);
+            Debug.Log("collider hit " + hit.collider.gameObject.name);
+        } else if (!InteractableCheck(posToCheck, Vector3.left))
+        {
+            doorPresent = true;
+        }
+        Debug.Log("x2 returns: " + x2);
+        if (Physics.Raycast(posToCheck, Vector3.forward, out hit, 4.0f, layerMask) && InteractableCheck(posToCheck, Vector3.forward))
+        {
+            z1 = true;
+            adjacentWalls++;
+            wallPos = hit.point;
+            wallT = hit.collider.gameObject.transform;
+            faceWall = Quaternion.LookRotation(posToCheck - hit.point);
+            Debug.Log("collider hit " + hit.collider.gameObject.name);
+        } else if (!InteractableCheck(posToCheck, Vector3.forward))
+        {
+            doorPresent = true;
+        }
+        Debug.Log("z1 returns: " + z1);
+        if (Physics.Raycast(posToCheck, Vector3.back, out hit, 4.0f, layerMask) && InteractableCheck(posToCheck, Vector3.back))
+        {
+            z2 = true;
+            adjacentWalls++;
+            wallPos = hit.point;
+            wallT = hit.collider.gameObject.transform;
+            faceWall = Quaternion.LookRotation(posToCheck - hit.point);
+            Debug.Log("collider hit " + hit.collider.gameObject.name);
+        } else if (!InteractableCheck(posToCheck, Vector3.back))
+        {
+            doorPresent = true;
+        }
+        
+        if(Physics.Raycast(posToCheck, Vector3.down, out hit, 6.0f))
+        {
+            if (hit.collider.gameObject.name == "Interactable" || hit.collider.gameObject.name == "RenderPlane")
+                doorPresent = true;
+        }
+
+        Debug.Log("z2 returns: " + z2);
+        Debug.Log("doorPresent returns: " + doorPresent);
+        /*  Debug lines
+        Debug.DrawLine(posToCheck, posToCheck + (Vector3.back * 4.0f), Color.red, 10.0f);
+        Debug.DrawLine(posToCheck, posToCheck + (Vector3.forward * 4.0f), Color.red, 10.0f);
+        Debug.DrawLine(posToCheck, posToCheck + (Vector3.left * 4.0f), Color.red, 10.0f);
+        Debug.DrawLine(posToCheck, posToCheck + (Vector3.right * 4.0f), Color.red, 10.0f);
+        */
+        switch (doorPresent)
+        {
+            case false:
+                if (x1 == true || x2 == true || z1 == true || z2 == true)
+                {
+                    //Destroy(testCube);
+                    canSpawn = true;
+                }
+                else canSpawn = false;
+                break;
+
+            case true:
+                canSpawn = false;
+                break;
+        }
+        Debug.Log("canSpawn returns: " + canSpawn);
+        Debug.Log("Num of adjacent walls: " + adjacentWalls);
+        return (canSpawn, adjacentWalls, wallPos, faceWall, doorPresent, wallT);
+    }
 
     private void SpawnMedicineTrolleys(Transform bedT)
     {
@@ -695,10 +983,116 @@ public class ModularPropGen : MonoBehaviour
 
     }
 
+    /* This function will map the edges of the room(s). startPos is the position of the floorholder obj, floorToUse is the int value of the floor to use, the edges list will hold all the vector positions of the edges of the room,
+    spawns dictates which walls will be used to map the edges, 0 means the longest wall, 1 means the wall opposite to the longest and 2 means both, mapBothRooms is a bool where true will map the edges of both the smaller and bigger room
+    */
+
+    private List<WallEdge> EdgeFloors(Vector3 startPos, int floorToUse, int spawns)
+    {
+        List<WallEdge> edges = new List<WallEdge>();
+        WallEdge z = null;
+
+        if (Vector3.Distance(startPos, startPos + GenerateOffset(floorXsize[floorToUse] * 4 + 4f, 0, 0)) > Vector3.Distance(startPos, startPos + GenerateOffset(0, 0, floorZsize[floorToUse] * 4 + 4f)))
+        {
+            for (int i = 0; i < floorXsize[floorToUse]; i++)
+            {
+                Vector3 k = startPos + GenerateOffset(i * 4, 0, 0);
+
+                if (GoodSpawn(k, GenerateOffset(0, 0, 1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), 1, 3).Item1)
+                {
+                    z = new WallEdge(k, GoodSpawn(k, GenerateOffset(0, 0, 1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), 1, 3).Item2);
+                    edges.Add(z);
+                }
+
+                RaycastHit hit;
+                if (Physics.Raycast(k, GenerateOffset(0, 0, -1), out hit, floorZsize[floorToUse] * 4 + 1))
+                {
+                    Debug.Log("Walls to spawn index: " + spawns);
+                    Vector3 oppPos = new Vector3(k.x, k.y, k.z - floorZsize[floorToUse] * 4 + 4);
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+                    switch (spawns)
+                    {
+                        case 1:
+                            edges.Remove(z);
+                            if (GoodSpawn(oppPos, GenerateOffset(0, 0, -1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), spawns, 3).Item1)
+                            {
+                                z = new WallEdge(oppPos, GoodSpawn(oppPos, GenerateOffset(0, 0, -1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), spawns, 3).Item2);
+                                edges.Add(z);
+                            }
+
+                            break;
+
+                        case 2:
+
+                            if (GoodSpawn(oppPos, GenerateOffset(0, 0, -1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), spawns, 3).Item1)
+                            {
+                                z = new WallEdge(oppPos, GoodSpawn(oppPos, GenerateOffset(0, 0, -1), GenerateOffset(-1, 0, 0), GenerateOffset(1, 0, 0), GenerateOffset(0, -1, 0), spawns, 3).Item2);
+                                edges.Add(z);
+                            }
+
+                            break;
+                    }
+                }
+            }
+        } else
+        {
+            for (int i = 0; i < floorZsize[floorToUse]; i++)
+            {
+                Vector3 k = startPos + GenerateOffset(0, 0, -i * 4);
+
+                if (GoodSpawn(k, GenerateOffset(-1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 1).Item1)
+                {
+                    z = new WallEdge(k, GoodSpawn(k, GenerateOffset(-1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 1).Item2);
+                    edges.Add(z);
+                }
+
+                RaycastHit hit;
+                if (Physics.Raycast(k, GenerateOffset(1, 0, 0), out hit, floorXsize[floorToUse] * 4 - 1))
+                {
+                    Debug.Log("Walls to spawn index: " + spawns);
+                    Vector3 oppPos = new Vector3(k.x + floorXsize[floorToUse] * 4 - 4, k.y, k.z);
+                    Quaternion faceWall = Quaternion.LookRotation(k - hit.point);
+                    switch (spawns)
+                    {
+                        case 1:
+                            edges.Remove(z);
+
+                            if (GoodSpawn(oppPos, GenerateOffset(1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 3).Item1)
+                            {
+                                z = new WallEdge(oppPos, GoodSpawn(oppPos, GenerateOffset(1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 3).Item2);
+                                edges.Add(z);
+                            }
+
+                            break;
+
+                        case 2:
+
+                            if (GoodSpawn(oppPos, GenerateOffset(1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 3).Item1)
+                            {
+                                z = new WallEdge(oppPos, GoodSpawn(oppPos, GenerateOffset(1, 0, 0), GenerateOffset(0, 0, -1), GenerateOffset(0, 0, 1), GenerateOffset(0, -1, 0), spawns, 3).Item2);
+                                edges.Add(z);
+                            }
+                            break;
+                    }
+                    //Debug.DrawLine(oppPos, oppPos + GenerateOffset(3.0f, 0, 0), Color.black, 10.0f);
+                    //Debug.DrawLine(oppPos, oppPos + GenerateOffset(0, 0, -3.0f), Color.black, 10.0f);
+                    //Debug.DrawLine(oppPos, oppPos + GenerateOffset(0, 0, 3.0f), Color.black, 10.0f);
+                }
+                //Debug.DrawLine(k, k + GenerateOffset(-3.0f, 0, 0), Color.blue, 10.0f);
+                //Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
+                //Debug.DrawLine(k, k + GenerateOffset(0, 0, -3.0f), Color.blue, 10.0f);
+            }
+        }
+        return edges;
+    }
+
     private bool InteractableCheck(Vector3 origin, Vector3 direction)
     {
         RaycastHit rayHit;
-        if(Physics.Raycast(origin, direction, out rayHit, 3.0f))
+        int mapGenLayer = 1 << 18;
+        mapGenLayer = ~mapGenLayer;
+
+        if(Physics.Raycast(origin, direction, out rayHit, 3.0f, mapGenLayer))
         {
             if (rayHit.collider.gameObject.name == "Interactable")
             {
